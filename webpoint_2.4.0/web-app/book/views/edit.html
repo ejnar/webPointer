@@ -1,0 +1,35 @@
+<div>
+	<form class="navbar-form”>
+		<h1 class="page-header">Edit Book({{book.id}})</h1>
+		<fieldset>
+			<div class="control-group">
+				<label class="control-label" for="title">Title</label>
+				<div class="controls">
+					<textarea id="title" class="form-control"
+						rows="10"
+						required="true" ng-model="book.title"></textarea>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="author">Author</label>
+				<div class="controls">
+					<input id="author" type="text" class="input-block-level"
+						required="true" ng-model="book.author"></input>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="price">Price</label>
+				<div class="controls">
+					<input id="price" type="number" class="input-block-level"
+						required="true" ng-model="book.price"></input>
+				</div>
+			</div>
+			
+			
+		</fieldset>
+		<div class="form-actions">
+			<button ng-click="updateBook()" class="btn btn-primary">Update
+				Book</button>
+		</div>
+	</form>
+</div>
