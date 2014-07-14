@@ -72,7 +72,7 @@ grails.project.dependency.resolution = {
 		
 		compile ":mongodb:3.0.1"
 		compile ":routing:1.3.2"
-//		compile ":spring-security-core:2.0-RC4"
+		compile ":spring-security-core:2.0-RC4"
 //		compile ":spring-security-rest:1.3.4", {    // 1.4.0.M1
 //    		excludes: 'spring-security-core'
 //		}
