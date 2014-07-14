@@ -1,7 +1,5 @@
 import se.webpoint.domain.Book
 import se.webpoint.domain.Setting
-import se.webpoint.domain.auth.Role
-import se.webpoint.domain.auth.User
 
 class BootStrap {
 
@@ -12,16 +10,16 @@ class BootStrap {
 		new Setting(id:1, title:"Book List").save()
 		
 		
-		Role roleAdmin = Role.findByAuthority("ROLE_ADMIN") ?:
-		new Role(authority: "ROLE_ADMIN").save(failOnError: true)
-
-
-		User.findByUsername("admin") ?:
-			new User(username: 'admin',
-				password: 'admin123',
-				email: 'eaakerman@gmail.com',
-				name: 'Ejnar Akerman',
-				authorities: [roleAdmin]).save(failOnError: true)
+//		Role roleAdmin = Role.findByAuthority("ROLE_ADMIN") ?:
+//		new Role(authority: "ROLE_ADMIN").save(failOnError: true)
+//
+//
+//		User.findByUsername("admin") ?:
+//			new User(username: 'admin',
+//				password: 'admin123',
+//				email: 'eaakerman@gmail.com',
+//				name: 'Ejnar Akerman',
+//				authorities: [roleAdmin]).save(failOnError: true)
 		
 		
     }
