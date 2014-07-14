@@ -1,0 +1,43 @@
+<div>
+	<form>
+		<h1 class="page-header">New Book</h1>
+		<fieldset>
+			<div class="control-group">
+				<label class="control-label" for="title">Title</label>
+				<div class="controls">
+					<input id="title" type="text" class="input-block-level"
+						required="true" ng-model="book.title"></input>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="title">Author</label>
+				<div class="controls">
+					<input id="title" type="text" class="input-block-level"
+						required="true" ng-model="book.author"></input>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="title">Price</label>
+				<div class="controls">
+					<input id="title" type="number" class="input-block-level"
+						required="true" ng-model="book.price"></input>
+				</div>
+			</div>
+	
+			<div class="control-group">
+				<label class="control-label" for="datepicker">Popup</label>
+        		<div class="controls">
+		              <input id="datepicker" type="text" class="input-block-level" datepicker-popup="dd-MMMM-yyyy" ng-model="dt" is-open="opened" 
+		              min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" 
+		              ng-required="true" close-text="Close" />
+		              <button type="button" class="btn btn-default" ng-click="openDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+        		</div>
+    		</div>
+    					
+		</fieldset>
+		<div class="form-actions">
+			<button class="btn btn-primary" ng-click="saveBook()">Add
+				Book</button>
+		</div>
+	</form>
+</div>
