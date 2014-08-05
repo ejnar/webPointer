@@ -14,8 +14,8 @@ class UrlMappings {
 		"/api/partcollections"(resources:"partcollection")
 		
         
-
-        "/"(view:"/index")
+		"/"(view:"/book/index")
+//        "/"(view:"/index")
         "500"(view:'/error')
 	}
 }
