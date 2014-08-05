@@ -1,5 +1,6 @@
 import se.webpoint.auth.Role
 import se.webpoint.auth.User
+import se.webpoint.auth.UserRole
 import se.webpoint.domain.data.Book
 
 class BootStrap {
@@ -11,17 +12,18 @@ class BootStrap {
 		
 		
 		Role roleAdmin = Role.findByAuthority("ROLE_ADMIN") ?:
-		new Role(authority: "ROLE_ADMIN").save(failOnError: true)
+		new Role(authority: "ROLE_ADMIN").save(failOnError: true, flush:true)
 
 
-		User.findByUsername("admin") ?:
+		User user = User.findByUsername("admin") ?:
 			new User(username: 'admin',
 				password: 'admin123',
 				email: 'hussain.engr@gmail.com',
 				name: 'Hussain Fakhruddin',
-				authorities: [roleAdmin]).save(failOnError: true)
+				authorities: [roleAdmin]).save(failOnError: true, flush:true)
 		
-		
+				
+		UserRole.get(user.id, roleAdmin.id) ?: UserRole.create(user,roleAdmin, true)
 		
 //		Role roleAdmin = Role.findByAuthority("ROLE_ADMIN") ?:
 //		new Role(authority: "ROLE_ADMIN").save(failOnError: true)

@@ -65,14 +65,11 @@ grails.project.dependency.resolution = {
         // plugins for the compile step
         compile ":scaffolding:2.1.2"
         compile ':cache:1.1.7'
-		compile ":asset-pipeline:1.9.3"
-//		runtime ":cors:1.1.6"
-		
+		compile ":asset-pipeline:1.9.3"	
 		compile ":spring-security-core:2.0-RC4"
 		compile ":spring-security-rest:1.4.0.RC5", {    // 1.4.0.RC5  1.4.0.M1
 			excludes: 'spring-security-core'
 		}
-		
 		compile ":mongodb:3.0.1"
 		compile ":routing:1.3.2"
 

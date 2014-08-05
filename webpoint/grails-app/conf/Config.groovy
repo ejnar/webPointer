@@ -102,7 +102,6 @@ log4j.main = {
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
-
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
@@ -115,7 +114,6 @@ log4j.main = {
 //           'org.hibernate',
            'net.sf.ehcache.hibernate'
     debug  'se.webpointer',
-		   'org.springframework',
 		   'org.springframework.security',
 		   'grails.plugin.springsecurity'
 }
@@ -127,36 +125,59 @@ grails.mongo.default.mapping = {
 
 
 // Added by the Spring Security Core plugin:
-grails.plugin.springsecurit
-y.userLookup.userDomainClassName = 'se.webpoint.auth.User'
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'se.webpoint.auth.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'se.webpoint.auth.UserRole'
 grails.plugin.springsecurity.authority.className = 'se.webpoint.auth.Role'
 grails.plugin.springsecurity.securityConfigType = 'InterceptUrlMap'
 grails.plugin.springsecurity.interceptUrlMap = [
 		'/':                    ['permitAll'],
-		'/assets/**':           ['permitAll']
-		
-//		'/admin/':              ['permitAll'],
-//		'/admin/assets/**':     ['permitAll'],
-//		'/admin/views/**':      ['permitAll'],
-//		'/admin/api/login*/**': ['permitAll'],
-//		'/**':                  ['permitAll']
+		'/assets/**':           ['permitAll'],	
+		'/api/guest/**':        ['permitAll'],
+		'/api/**':            	['isFullyAuthenticated()'],
+		'/**':                  ['permitAll']
 ]
 
 //grails.plugin.springsecurity.rejectIfNoRule = false
 //grails.plugin.springsecurity.fii.rejectPublicInvocations = false
 
 grails.plugin.springsecurity.rememberMe.persistent = false
+
 grails.plugin.springsecurity.rest.login.useJsonCredentials = true
 grails.plugin.springsecurity.rest.login.endpointUrl =	'/auth/api/login'
-grails.plugin.springsecurity.rest.logout.endpointUrl =	'/auth/api/logout'
+grails.plugin.springsecurity.rest.logout.endpointUrl =	'/auth/api/logout'     // api/
+
+
+//default is true
+grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = true
+grails.plugin.springsecurity.rest.login.usernameParameter='customusername'
+grails.plugin.springsecurity.rest.login.passwordParameter='custompassword'
+
+
 grails.plugin.springsecurity.rest.token.storage.useGorm = true
 grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName = 'se.webpoint.auth.AuthenticationToken'
 grails.plugin.springsecurity.rest.token.storage.gorm.tokenValuePropertyName = 'token'
 grails.plugin.springsecurity.rest.token.storage.gorm.usernamePropertyName = 'username'
 
-grails.plugin.springsecurity.rest.token.validation.useBearerToken = false
+grails {
+	plugin {
+		springsecurity {
+			filterChain {
+				chainMap = [
+					'/api/guest/**': 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor',    // Stateless chain
+					'/api/**': 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter',
+					'/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'    // Traditional chain
+				]
+			}
 
+//Other Spring Security settings //...
+
+rest { token { validation { enableAnonymousAccess = true } } } 
+rest { token { validation { useBearerToken = false } } }
+} } }
+
+//grails.plugin.springsecurity.rest.token.validation.useBearerToken = false
+//grails.plugin.springsecurity.rest.token.validation.headerName = 'X-Auth-Token'
+//grails.plugin.springsecurity.rest.token.validation.enableAnonymousAccess = true
 
 //// Added by the Spring Security Core plugin:
 //grails.plugin.springsecurity.userLookup.userDomainClassName = 'se.webpoint.auth.User'

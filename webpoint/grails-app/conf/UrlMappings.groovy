@@ -7,6 +7,8 @@ class UrlMappings {
 			}
 		}
 		"/api/books"(resources:"book")
+		"/api/guest/books"(resources:"book")   
+		
 		
 		"/api/parts"(resources:"part")
 		"/api/partcollections"(resources:"partcollection")

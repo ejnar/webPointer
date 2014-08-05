@@ -26,17 +26,17 @@ class User {
 		UserRoleGroup.findAllByUser(this).collect { it.roleGroup }
 	}
 
-	def beforeInsert() {
-		encodePassword()
-	}
-
-	def beforeUpdate() {
-		if (isDirty('password')) {
-			encodePassword()
-		}
-	}
-
-	protected void encodePassword() {
-		password = springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
-	}
+//	def beforeInsert() {
+//		encodePassword()
+//	}
+//
+//	def beforeUpdate() {
+//		if (isDirty('password')) {
+//			encodePassword()
+//		}
+//	}
+//
+//	protected void encodePassword() {
+//		password = springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
+//	}
 }
