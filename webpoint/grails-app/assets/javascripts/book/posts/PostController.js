@@ -25,6 +25,9 @@ bookController.controller('ListBookCtrl', ['$scope', '$location', '$timeout', '$
 //    	      console.error(msg);
 //    	    });
     		
+//    		api = BookApi.getResources();
+    		
+    		
     		var promise = BookApi.list(
     				function (resp) {
     					$scope.books = resp;

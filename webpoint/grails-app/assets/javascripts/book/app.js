@@ -3,6 +3,7 @@
 /* App Module */
 
 var gambApp = angular.module('webApp', [
+	'http-auth-interceptor',                                    
     'ngRoute',
     'ngResource',
     'ngSanitize',
@@ -14,7 +15,7 @@ gambApp.config(['$routeProvider', '$httpProvider',
     function ($routeProvider, $httpProvider) {
         $routeProvider.
         	when('/login', {
-        		templateUrl: 'book/views/login.html',
+        		templateUrl: 'admin/views/auth/login.html',
         		controller: 'LoginController'
         	}).
             when('/books', {
@@ -39,71 +40,54 @@ gambApp.config(['$routeProvider', '$httpProvider',
 
 
 
-//gambApp.config(function($httpProvider) {
-//    //configure $http to catch message responses and show them
-//    $httpProvider.responseInterceptors.push(
-//            function($q) {
-//                console.log('call response interceptor and set message...');
-//                var setMessage = function(response) {
-//                    //if the response has a text and a type property, it is a message to be shown
-//                    //console.log('@data'+response.data);
-//                    if (response.data.message) {
-//                        message = {
-//                            text: response.data.message.text,
-//                            type: response.data.message.type,
-//                            show: true
-//                        };
-//                    }
-//                };
-//                return function(promise) {
-//                    return promise.then(
-//                            //this is called after each successful server request
-//                                    function(response) {
-//                                        setMessage(response);
-//                                        return response;
-//                                    },
-//                                    //this is called after each unsuccessful server request
-//                                            function(response) {
-//                                                setMessage(response);
-//                                                return $q.reject(response);
-//                                            }
-//                                    );
-//                                };
-//                    });
-//
-//            //configure $http to show a login dialog whenever a 401 unauthorized response arrives
-//            $httpProvider.responseInterceptors.push(
-//                    function($rootScope, $q) {
-//                        console.log('call response interceptor...');
-//                        return function(promise) {
-//                            return promise.then(
-//                                    //success -> don't intercept			
-//                                            function(response) {
-//                                                console.log('dont intercept...');
-//                                                return response;
-//                                            },
-//                                            //error -> if 401 save the request and broadcast an event
-//                                                    function(response) {
-//                                                        console.log('execute interceptor, response@' + response.status);
-//                                                        if (response.status === 401) {
-//                                                            console.log('catching http status:401');
-//                                                            var deferred = $q.defer(),
-//                                                                    req = {
-//                                                                        config: response.config,
-//                                                                        deferred: deferred
-//                                                                    };
-//                                                            $rootScope.requests401.push(req);
-//                                                            $rootScope.$broadcast('event:loginRequired');
-//                                                            return deferred.promise;
-//                                                        }
-//                                                        return $q.reject(response);
-//                                                    }
-//                                            );
-//                                        };
-//                            });
-//                    httpHeaders = $httpProvider.defaults.headers;
-//                    //console.log('http headers:'+ httpHeaders);
-//                });
-//
-//            }());
+function getLocalToken() {
+    return sessionStorage["authToken"];
+}
 
+function setLocalToken(value) {
+    sessionStorage["authToken"] = value;
+}
+
+function getHttpConfig() {
+    return {
+        headers: {
+            'X-Auth-Token': getLocalToken()
+        }
+    };
+}
+
+function getAuthenticateHttpConfig() {
+	console.log('getAuthenticateHttpConfig --------');
+    return {
+        ignoreAuthModule: true
+    };
+}
+
+gambApp.run(['$rootScope', '$http', '$location',
+    function ($rootScope, $http, $location) {
+        $http.defaults.headers.common['X-AUTH-TOKEN'] = getLocalToken();
+
+        $rootScope.$on('event:auth-loginRequired', function () {
+            console.log('showing login form');
+            $location.path('/login');
+        });
+        $rootScope.$on('event:auth-loginFailed', function () {
+            console.log('showing login error message');
+            $('#login-error').show();
+        });
+        $rootScope.$on('event:auth-loginConfirmed', function () {
+            console.log('redirecting to home');
+            $http.defaults.headers.common['X-AUTH-TOKEN'] = getLocalToken();
+            $location.path('/');
+        });
+        $rootScope.$on('event:auth-logoutRequest', function () {
+            console.log('Logging out user');
+            delete $http.defaults.headers.common["X-AUTH-TOKEN"]
+            $rootScope.isAuthenticated = false;
+            $rootScope.currentUser = null;
+            sessionStorage.clear();
+            $location.path("/login")
+        });
+    }]);
+
+console.log('gamb app load complete');

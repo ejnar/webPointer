@@ -19,6 +19,7 @@
 //= require book/posts/PostController
 //= require book/posts/PostService
 
+//= require common/auth/AuthController
 
 //= require_tree views
 //= require_self
