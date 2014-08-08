@@ -11,15 +11,13 @@ authController.controller('LoginController', ['$rootScope', '$scope', '$http', '
         $scope.logIn = function () {
             console.log('logIn called - ' + $scope.authData.username);
 
-            $http.post('auth/login', { username: $scope.authData.username, password: $scope.authData.password }, getAuthenticateHttpConfig).
+            $http.post('auth/api/login', { username: $scope.authData.username, password: $scope.authData.password }, getAuthenticateHttpConfig).
                 success(function (data) {
-//                	json = JSON.parse(data);
-//                	console.log(json);
-                    console.log('authentication token: ' + data.token);
+                    console.log('authentication token: ' + data.access_token);
                     console.log('authentication username: ' + data.username);
                     $rootScope.isAuthenticated = true;
                     $rootScope.currentUser = data.username;
-                    setLocalToken(data.token);
+                    setLocalToken(data.access_token);
                     authService.loginConfirmed({}, function (config) {
                         if (!config.headers["X-Auth-Token"]) {
                             console.log('X-Auth-Token not on original request; adding it');

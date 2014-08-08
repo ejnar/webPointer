@@ -1,4 +1,4 @@
-package se.webpoint.auth.group
+package se.webpoint.auth
 
 import org.apache.commons.lang.builder.HashCodeBuilder
 

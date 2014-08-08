@@ -113,9 +113,13 @@ log4j.main = {
            'org.springframework',
 //           'org.hibernate',
            'net.sf.ehcache.hibernate'
-    debug  'se.webpointer',
-		   'org.springframework.security',
-		   'grails.plugin.springsecurity'
+    debug  'org.springframework.security',
+		   'com.odobo',
+		   'grails.app.controllers.com.odobo',
+		   'grails.app.services.com.odobo',
+		   'org.pac4j',
+		   'se.webpointer'
+		   
 }
 
 grails.mongo.default.mapping = {
@@ -123,51 +127,32 @@ grails.mongo.default.mapping = {
 	'*'(reference:true)
 }
 
-
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'se.webpoint.auth.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'se.webpoint.auth.UserRole'
 grails.plugin.springsecurity.authority.className = 'se.webpoint.auth.Role'
+grails.plugin.springsecurity.authority.groupAuthorityNameField = 'authorities'
+grails.plugin.springsecurity.useRoleGroups = true
 grails.plugin.springsecurity.securityConfigType = 'InterceptUrlMap'
 grails.plugin.springsecurity.interceptUrlMap = [
-		'/':                    ['permitAll'],
-		'/assets/**':           ['permitAll'],	
-		'/api/guest/**':        ['permitAll'],
-		'/auth/log*/**':		['permitAll'],
-//		'/auth/api/login*/**':		['permitAll'],
-		'/api/**':            	['isFullyAuthenticated()'],
-		'/**':                  ['permitAll']     			//isFullyAuthenticated()
+		'/':                    	['permitAll'],
+		'/assets/**':           	['permitAll'],
+		'/**/js/**':                ['permitAll'],
+		'/**/css/**':               ['permitAll'],
+		'/**/images/**':            ['permitAll'],
+		'/**/favicon.ico':          ['permitAll'],
+		'/api/guest/**':        	['permitAll'],
+		'/book/views/**':			['permitAll'],
+		'/api/**':            		['isFullyAuthenticated()'],
+		'/**':                  	['permitAll']     			
 ]
 
-
-//grails.plugin.springsecurity.rejectIfNoRule = false
-//grails.plugin.springsecurity.fii.rejectPublicInvocations = false
-
 grails.plugin.springsecurity.rememberMe.persistent = false
+grails.plugin.springsecurity.rest.login.active = true
 grails.plugin.springsecurity.rest.login.useJsonCredentials = true
 grails.plugin.springsecurity.rest.login.failureStatusCode = 401
-grails.plugin.springsecurity.rest.login.endpointUrl =	'/auth/login'
-grails.plugin.springsecurity.rest.logout.endpointUrl =	'/auth/logout'     // api/
-
-
-//default is true
-//grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = true
-//grails.plugin.springsecurity.rest.login.usernameParameter='customusername'
-//grails.plugin.springsecurity.rest.login.passwordParameter='custompassword'
-
-
-grails.plugin.springsecurity.rest.token.storage.useGorm = true
-grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName = 'se.webpoint.auth.AuthenticationToken'
-grails.plugin.springsecurity.rest.token.storage.gorm.tokenValuePropertyName = 'token'
-grails.plugin.springsecurity.rest.token.storage.gorm.usernamePropertyName = 'username'
-//grails.plugin.springsecurity.rest.token.validation.useBearerToken = false
-
-//grails.plugin.springsecurity.filterChain.chainMap = [
-//	'/api/**': 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter', // Stateless chain
-//	'/data/**': 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter', // Stateless chain
-//	'/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter,-restLogoutFilter,-restAuthenticationFilter' // Traditional chain
-//]
-
+grails.plugin.springsecurity.rest.login.endpointUrl = '/auth/api/login'
+grails.plugin.springsecurity.rest.logout.endpointUrl = '/auth/api/logout'   
 
 grails {
 	plugin {
@@ -175,67 +160,21 @@ grails {
 			filterChain {
 				chainMap = [
 					'/api/guest/**': 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor',    // Stateless chain
-					'/api/**': 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter',
-					'/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter,-restLogoutFilter'    // Traditional chain
+					'/api/**': 'JOINED_FILTERS, -anonymousAuthenticationFilter,  -exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter',    // Stateless chain
+					'/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'    // Traditional chain
 				]
 			}
-
 //Other Spring Security settings //...
-rest { token { validation { enableAnonymousAccess = true } } } 
+rest { token { validation { enableAnonymousAccess = true } } }
 rest { token { validation { useBearerToken = false } } }
-//rest { token { validation { headerName = 'X-AUTH-TOKEN' } } }
+rest { token { validation { headerName = 'X-Auth-Token' } } }
 } } }
 
+grails.plugin.springsecurity.rest.token.storage.useGorm = true
+grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName = 'se.webpoint.auth.AuthenticationToken'
+grails.plugin.springsecurity.rest.token.storage.gorm.tokenValuePropertyName = 'token'
+grails.plugin.springsecurity.rest.token.storage.gorm.usernamePropertyName = 'username'
+grails.plugin.springsecurity.rest.token.generation.useSecureRandom = true
+grails.plugin.springsecurity.rest.token.generation.useUUID = false
+// Working
 
-//grails.plugin.springsecurity.rest.token.validation.headerName = 'X-Auth-Token'
-//grails.plugin.springsecurity.rest.token.validation.enableAnonymousAccess = true
-
-//// Added by the Spring Security Core plugin:
-//grails.plugin.springsecurity.userLookup.userDomainClassName = 'se.webpoint.auth.User'
-//grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'se.webpoint.auth.UserRole'
-//grails.plugin.springsecurity.authority.className = 'se.webpoint.auth.Role'
-//grails.plugin.springsecurity.authority.groupAuthorityNameField = 'authorities'
-//grails.plugin.springsecurity.useRoleGroups = true
-//grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-//	'/':                              ['permitAll'],
-//	'/index':                         ['permitAll'],
-//	'/index.gsp':                     ['permitAll'],
-//	'/api/**':                        ['permitAll'],
-//	'/assets/**':                     ['permitAll'],
-//	'/**/js/**':                      ['permitAll'],
-//	'/**/css/**':                     ['permitAll'],
-//	'/**/images/**':                  ['permitAll'],
-//	'/**/favicon.ico':                ['permitAll']
-//	
-//]
-//
-////Enable Basic Auth Filter
-//grails.plugins.springsecurity.useBasicAuth = true
-//grails.plugins.springsecurity.basic.realmName = "JSON API Example"
-////grails.plugin.springsecurity.rejectIfNoRule = true
-////grails.plugin.springsecurity.fii.rejectPublicInvocations = false
-//
-//grails.plugin.springsecurity.filterChain.chainMap = [
-////	'/api/**': 'JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter',  // Stateless chain
-////	'/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'     
-//	'/**': 'JOINED_FILTERS,-anonymousAuthenticationFilter'                                     // Traditional chain
-//]
-//grails.plugin.springsecurity.rest.token.validation.useBearerToken = false
-
-
-//grails.plugin.springsecurity.logout.postOnly = false
-//grails.plugin.springsecurity.rejectIfNoRule = true
-//grails.plugin.springsecurity.fii.rejectPublicInvocations = false
-////Enable Basic Auth Filter
-//grails.plugin.springsecurity.useBasicAuth = true
-//grails.plugin.springsecurity.basic.realmName = "Example"
-//grails.plugin.springsecurity.filterChain.chainMap = [
-//		'/secure/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-//		'app/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
-//]
-
-
-//default is true
-//grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = true
-//grails.plugin.springsecurity.rest.login.usernameParameter=customusername
-//grails.plugin.springsecurity.rest.login.passwordParameter=custompassword

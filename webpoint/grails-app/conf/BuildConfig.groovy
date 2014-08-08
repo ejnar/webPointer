@@ -41,7 +41,7 @@ grails.project.dependency.resolution = {
         grailsCentral()
         mavenCentral()
 		mavenRepo 'http://repo.spring.io/milestone'
-//		mavenRepo 'https://oss.sonatype.org/content/repositories/snapshots'
+		mavenRepo 'https://oss.sonatype.org/content/repositories/snapshots'
         // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
@@ -67,9 +67,11 @@ grails.project.dependency.resolution = {
         compile ':cache:1.1.7'
 		compile ":asset-pipeline:1.9.3"	
 		compile ":spring-security-core:2.0-RC4"
-		compile ":spring-security-rest:1.4.0.RC5", {    // 1.4.0.RC5  1.4.0.M1
-			excludes: 'spring-security-core'
-		}
+		compile ":spring-security-rest:1.4.0.RC5"
+//		, {    // spring-security-rest:1.4.0.RC5  spring-security-rest:1.3.4
+////			excludes: 'spring-security-core'
+//			excludes ('cors','spring-security-core')
+//		}
 		compile ":mongodb:3.0.1"
 		compile ":routing:1.3.2"
 

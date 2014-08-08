@@ -6,28 +6,24 @@ class User {
 
 	String username
 	String password
-    String email
-    String name
 	boolean enabled = true
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
-    String md5HashEmail
-
-    Set<Role> authorities
-    static embedded = ['authorities']
 
 	static transients = ['springSecurityService']
 
 	static constraints = {
 		username blank: false, unique: true
-        password blank: false, size: 6..64
-        email blank: false, nullable: false
-        name blank: false
+		password blank: false
 	}
 
 	static mapping = {
 		password column: '`password`'
+	}
+
+	Set<RoleGroup> getAuthorities() {
+		UserRoleGroup.findAllByUser(this).collect { it.roleGroup }
 	}
 
 	def beforeInsert() {
@@ -41,10 +37,6 @@ class User {
 	}
 
 	protected void encodePassword() {
-		password = springSecurityService.encodePassword(password)
+		password = springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
 	}
-
-    public String getMd5HashEmail() {
-        return this.email?.trim().encodeAsMD5()
-    }
 }

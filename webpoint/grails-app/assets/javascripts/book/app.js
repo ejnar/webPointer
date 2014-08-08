@@ -15,7 +15,7 @@ gambApp.config(['$routeProvider', '$httpProvider',
     function ($routeProvider, $httpProvider) {
         $routeProvider.
         	when('/login', {
-        		templateUrl: 'admin/views/auth/login.html',
+        		templateUrl: 'book/views/auth/login.html',
         		controller: 'LoginController'
         	}).
             when('/books', {
@@ -65,6 +65,7 @@ function getAuthenticateHttpConfig() {
 
 gambApp.run(['$rootScope', '$http', '$location',
     function ($rootScope, $http, $location) {
+		console.log(' --- startup --------' + getLocalToken());
         $http.defaults.headers.common['X-AUTH-TOKEN'] = getLocalToken();
 
         $rootScope.$on('event:auth-loginRequired', function () {
