@@ -52,10 +52,9 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
         // runtime 'mysql:mysql-connector-java:5.1.29'
         // runtime 'org.postgresql:postgresql:9.3-1101-jdbc41'
-        test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
-//		compile "org.springframework:spring-orm:$springVersion"
-		
+        
 		compile "net.sf.ehcache:ehcache-core:2.4.8"
+		test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
     }
 
     plugins {
@@ -65,7 +64,7 @@ grails.project.dependency.resolution = {
         // plugins for the compile step
         compile ":scaffolding:2.1.2"
         compile ':cache:1.1.7'
-		compile ":asset-pipeline:1.9.3"	
+		compile ":asset-pipeline:1.9.6"	
 		compile ":spring-security-core:2.0-RC4"
 		compile ":spring-security-rest:1.4.0.RC5"
 //		, {    // spring-security-rest:1.4.0.RC5  spring-security-rest:1.3.4
