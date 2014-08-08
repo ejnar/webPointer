@@ -21,6 +21,27 @@
 	                    </ul>
 	                </li>
 	            </ul>
+	            <ul class="nav navbar-nav navbar-right">
+	                <li class="dropdown user-avatar">
+	                    <a data-toggle="dropdown" class="dropdown-toggle">
+	                        <span>
+	                            <img src="http://www.gravatar.com/avatar/{{currentUser.md5HashEmail}}?s=20&amp;d=mm&amp;r=g">
+	                            <span>
+	                                {{user.name}}
+	                                <i class="caret"></i>
+	                            </span>
+	                        </span>
+	                    </a>
+		                <ul class="dropdown-menu">
+		                    
+		                    <li>
+		                        <a ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i>
+		                            <span>Log out</span>
+		                        </a>
+		                    </li>
+		                </ul>
+	                </li>
+            	</ul>
 	            
 	        </nav><!--/.nav-collapse -->
 	  

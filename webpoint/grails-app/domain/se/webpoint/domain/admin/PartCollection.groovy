@@ -1,10 +1,10 @@
-package se.webpoint.domain.data
+package se.webpoint.domain.admin
 
 import grails.rest.Resource
 import se.webpoint.type.CategoryType
 
 
-//@Resource(formats=['json', 'xml'])
+@Resource(formats=['json', 'xml'])
 class PartCollection {
 
 	static mapWith="mongo"
