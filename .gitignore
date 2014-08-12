@@ -1,47 +1,47 @@
 # .gitignore for Grails 1.2 and 1.3
 
 # web application files
-/webpoint*/web-app/WEB-INF
+#web-app/WEB-INF
 
 # IDE support files
-/webpoint*/.classpath
-/webpoint*/.launch
-/webpoint*/.project
-/webpoint*/.settings
-/webpoint*/*.launch
-/webpoint*/*.tmproj
-/webpoint*/ivy*
-/webpoint*/eclipse
+.classpath
+.launch
+.project
+.settings
+*.launch
+*.tmproj
+ivy*
+eclipse
 
 # default HSQL database files for production mode
-/webpoint*/prodDb.*
+prodDb.*
 
 # general HSQL database files
 *Db.properties
 *Db.script
 
 # logs
-/webpoint*/stacktrace.log
-/webpoint*/test/reports
-/webpoint*/logs
+stacktrace.log
+test/reports
+logs
 
 # project release file
-/webpoint*/*.war
+*.war
 
 # plugin release file
-/webpoint*/*.zip
+*.zip
 
 # older plugin install locations
-/plugins
-/webpoint*/web-app/plugins
-/webpoint*/web-app/WEB-INF/classes
+plugins
+web-app/plugins
+web-app/WEB-INF/classes
 
 # "temporary" build files
-/webpoint*/target
+target
 
 # other
 *.iws
 
 # Session file 
-/webpoint*/SESSIONS.ser
+SESSIONS.ser
 

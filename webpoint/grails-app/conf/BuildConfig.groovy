@@ -46,6 +46,7 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
+		mavenRepo "http://jcenter.bintray.com"
     }
 
     dependencies {
@@ -54,6 +55,11 @@ grails.project.dependency.resolution = {
         // runtime 'org.postgresql:postgresql:9.3-1101-jdbc41'
         
 		compile "net.sf.ehcache:ehcache-core:2.4.8"
+		
+		compile "org.projectreactor:reactor-spring:1.0.1.RELEASE", {
+			excludes "spring-core", "spring-expression", "spring-beans", "spring-context", "spring-context-support"
+		}
+		
 		test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
     }
 
@@ -74,6 +80,8 @@ grails.project.dependency.resolution = {
 		compile ":mongodb:3.0.1"
 		compile ":routing:1.3.2"
 
+		
+		compile ":spring-websocket:1.1.0"
 		
         // plugins needed at runtime but not for compilation
 //        runtime ":hibernate4:4.3.5.4" // or ":hibernate:3.6.10.16"
