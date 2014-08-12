@@ -1,4 +1,4 @@
-package se.webpoint.domain.admin
+package se.webpoint.domain.data
 
 import grails.rest.Resource
 import se.webpoint.type.CategoryType

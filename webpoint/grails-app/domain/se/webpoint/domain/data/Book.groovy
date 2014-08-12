@@ -1,6 +1,7 @@
 package se.webpoint.domain.data
 
-import grails.rest.Resource;
+import grails.rest.Resource
+
 
 @Resource(formats=['json', 'xml'])
 class Book {
