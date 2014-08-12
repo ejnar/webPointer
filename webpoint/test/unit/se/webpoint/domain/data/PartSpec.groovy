@@ -1,7 +1,6 @@
 package se.webpoint.domain.data
 
-import grails.test.mixin.TestFor
-import se.webpoint.domain.admin.Part;
+import grails.test.mixin.*
 import spock.lang.Specification
 
 /**
