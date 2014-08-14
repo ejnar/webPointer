@@ -17,13 +17,17 @@ sectionController.controller('ListGroupsOfSectionsCtrl', ['$scope', '$location',
     		var promise = GroupsOfSectionsApi.list(
     				function (resp) {
     					$scope.sections = resp;
+    					
                         console.log("success");
                     }, function (resp) {
                         console.log("error");
                     }).$promise;
     		
+    		
+    		
     		$q.all([promise]).then(function(data) {
     			$scope.viewLoading = false;
+    			console.log($scope.sections);
     	    });
     		$scope.orderProp = 'title';
     	}

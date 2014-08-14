@@ -1,4 +1,4 @@
-package se.webpoint.domain.data
+package se.webpoint.data
 
 import grails.rest.Resource
 

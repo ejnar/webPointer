@@ -1,4 +1,4 @@
-package se.webpoint.domain.view
+package se.webpoint.view
 
 import grails.rest.Resource
 

@@ -1,11 +1,9 @@
-package se.webpoint.domain.data
-
-import grails.rest.Resource
-import se.webpoint.type.CategoryType
+package se.webpoint.data
 
 
-@Resource(formats=['json', 'xml'])
-class GroupsOfSections {
+
+//@Resource(formats=['json', 'xml'])
+class GroupOfSection {
 
 	static mapWith="mongo"
 	
@@ -13,7 +11,10 @@ class GroupsOfSections {
 	String title
 	String originalTitle
 	String category
+
+	List<Section> sections = new ArrayList()
 	
+//	static embedded = ['sections']
 	static hasMany = [sections : Section]
 	
     static constraints = {

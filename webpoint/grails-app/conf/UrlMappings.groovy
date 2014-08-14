@@ -9,10 +9,14 @@ class UrlMappings {
 		"/api/books"(resources:"book")
 		"/api/guest/books"(resources:"book")   
 		
-//		"/api/guest/groupsofsections"(resources:"groupsOfSections")
+		"/api/guest/groupsofsections"(controller:"groupOfSection")
+		
+		
+//		"/api/groupsofsections/$action?"(controller: 'groupOfSection')
+		
 		
 		"/api/sections"(resources:"section")
-		"/api/groupsofsections"(resources:"groupsOfSections"){
+		"/api/groupsofsections"(resources:"GroupOfSection"){
 			"/sections"(resources:"section")
 		}
 		

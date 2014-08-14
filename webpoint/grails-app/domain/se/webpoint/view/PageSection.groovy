@@ -1,10 +1,11 @@
-package se.webpoint.domain.view
+package se.webpoint.view
 
-import se.webpoint.domain.data.Section
+import se.webpoint.data.Section
 
 
 
-class PagePart {
+
+class PageSection {
 
 	static mapWith="mongo"
 	

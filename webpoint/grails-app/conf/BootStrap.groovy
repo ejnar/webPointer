@@ -4,7 +4,8 @@ import se.webpoint.auth.RoleGroupRole
 import se.webpoint.auth.User
 import se.webpoint.auth.UserRole
 import se.webpoint.auth.UserRoleGroup
-import se.webpoint.domain.data.Book
+import se.webpoint.data.Book
+
 
 class BootStrap {
 
@@ -38,7 +39,7 @@ class BootStrap {
 		RoleGroupRole.create(groupAdmin, roleAdmin, true)
 		
 		User user = User.findByUsername("admin") ?:
-		new User(username: 'admin', password: 'admin123').save(failOnError: true)
+		new User(username: 'admin', password: '123').save(failOnError: true)
 				
 		UserRole.get(user.id, roleAdmin.id) ?:
 		UserRole.create(user, roleAdmin, true)

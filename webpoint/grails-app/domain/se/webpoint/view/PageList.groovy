@@ -1,4 +1,4 @@
-package se.webpoint.domain.view
+package se.webpoint.view
 
 
 class PageList {
@@ -10,7 +10,7 @@ class PageList {
 	Date dueDate
 	String style
 	
-	List<PagePart> pageParts
+	List<PageSection> pageParts
 	
 	static embedded = [ 'pageParts' ]
 	
