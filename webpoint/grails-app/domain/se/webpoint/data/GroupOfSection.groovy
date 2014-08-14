@@ -14,7 +14,7 @@ class GroupOfSection {
 
 	List<Section> sections = new ArrayList()
 	
-//	static embedded = ['sections']
+	static embedded = ['sections']
 	static hasMany = [sections : Section]
 	
     static constraints = {
