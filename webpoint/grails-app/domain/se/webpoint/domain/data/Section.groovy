@@ -4,7 +4,7 @@ import grails.rest.Resource
 import se.webpoint.type.DataType
 
 @Resource(formats=['json', 'xml'])
-class Part {
+class Section {
 	
 	static mapWith="mongo"
 	
@@ -13,14 +13,12 @@ class Part {
 	String lang
 	DataType type = DataType.TEXT
 	
-//	PartCollection partCollection
-	
-	static belongsTo = [partCollection: PartCollection ]
+	static belongsTo = [sections: GroupsOfSections ]
 	
 	static constraints = {
 		type(blank: false)
 		lang(blank:false, size:2..5)
-		data(blank: false,  widget:'textarea', rows:20, cols:40)
+		data(blank: false)      //widget:'textarea', rows:20, cols:40
 	}
 	
 	String toString(){

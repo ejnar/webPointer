@@ -142,7 +142,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
 		'/**/images/**':            ['permitAll'],
 		'/**/favicon.ico':          ['permitAll'],
 		'/api/guest/**':        	['permitAll'],
-		'/book/views/**':			['permitAll'],
+//		'/book/views/**':			['permitAll'],
 		'/api/**':            		['isFullyAuthenticated()'],
 		'/**':                  	['permitAll']     			
 ]

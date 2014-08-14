@@ -11,13 +11,10 @@
 //= require bootstrap/js/collapse
 //= require spin.js/spin
 
-//= require book/app
-//= require book/common/AppController
-//= require book/common/AppService
-//= require book/common/AppDirectives
-//= require book/common/AuthController
-//= require book/posts/PostController
-//= require book/posts/PostService
+//= require user/app
+//= require user/AppController
+//= require user/sections/SectionController
+//= require user/sections/SectionService
 
 //= require common/auth/AuthController
 

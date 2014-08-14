@@ -9,14 +9,16 @@ class UrlMappings {
 		"/api/books"(resources:"book")
 		"/api/guest/books"(resources:"book")   
 		
+//		"/api/guest/groupsofsections"(resources:"groupsOfSections")
 		
-		"/api/parts"(resources:"part")
-		"/api/partcollections"(resources:"partcollection"){
-			"/parts"(resources:"part")
+		"/api/sections"(resources:"section")
+		"/api/groupsofsections"(resources:"groupsOfSections"){
+			"/sections"(resources:"section")
 		}
 		
         
-		"/"(view:"/book/index")
+		"/test"(view:"/book/index")
+		"/"(view:"/user/index")
 //        "/"(view:"/index")
         "500"(view:'/error')
 	}

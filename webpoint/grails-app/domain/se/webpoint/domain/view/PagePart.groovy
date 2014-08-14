@@ -1,6 +1,6 @@
 package se.webpoint.domain.view
 
-import se.webpoint.domain.data.Part
+import se.webpoint.domain.data.Section
 
 
 
@@ -13,7 +13,7 @@ class PagePart {
 	String style
 	String color
 	
-	Part part
+	Section part
 	
 	static constraints = {
 		title(blank: true)

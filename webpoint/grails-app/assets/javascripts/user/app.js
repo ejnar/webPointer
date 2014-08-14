@@ -2,7 +2,7 @@
 
 /* App Module */
 
-var gambApp = angular.module('webApp', [
+var gambApp = angular.module('userApp', [
 	'http-auth-interceptor',                                    
     'ngRoute',
     'ngResource',
@@ -18,24 +18,24 @@ gambApp.config(['$routeProvider', '$httpProvider',
         		templateUrl: 'common/views/auth/login.html',
         		controller: 'LoginController'
         	}).
-            when('/books', {
-                templateUrl: 'book/views/books.html',
-                controller: 'ListBookCtrl'
+            when('/sections', {
+                templateUrl: 'user/views/sections.html',
+                controller: 'ListGroupsOfSectionsCtrl'
             }).
-            when('/book/edit/:postId', {
-                templateUrl: 'book/views/edit.html',
-                controller: 'UpdateBookCtrl'
-            }).
-            when('/book/new', {
-                templateUrl: 'book/views/new.html',
-                controller: 'NewBookCtrl'
+//            when('/book/edit/:postId', {
+//                templateUrl: 'book/views/edit.html',
+//                controller: 'UpdateBookCtrl'
+//            }).
+            when('/sections/new', {
+                templateUrl: 'user/views/section/new.html',
+                controller: 'NewGroupSectionCtrl'
             }).
             otherwise({
-                redirectTo: '/books'
+                redirectTo: '/sections'
             });
-        $httpProvider.defaults.useXDomain = true;
-        delete $httpProvider.defaults.headers.common["X-Requested-With"];
-        console.log('@X-Requested-With@'+$httpProvider.defaults.headers.common["X-Requested-With"])
+//        $httpProvider.defaults.useXDomain = true;
+//        delete $httpProvider.defaults.headers.common["X-Requested-With"];
+//        console.log('@X-Requested-With@'+$httpProvider.defaults.headers.common["X-Requested-With"])
     }]);
 
 

@@ -1,0 +1,40 @@
+<div sha-loading-spinner="viewLoading">
+    <h1 class="page-header">Section List</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Original Title</th>
+                <th>Category</th>
+                <th>Section</th>
+                <th width="120px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="e in sections | orderBy:orderProp">
+                <td>{{e.title}}</td>
+                <td>{{e.originalTitle}}</td>
+                <td>{{e.category}}</td>
+                
+                <td>
+	                <select id="section" ng-model="pickedSection" 
+			        		ng-options="s.lang as s for s in e.sections"></select>
+                </td>
+                <!-- ng-show="user.id &&user.id==e.user_id" -->
+                <td>
+                	<a ng-click="editSection(e.id)" >
+                		<i class="glyphicon glyphicon-pencil"> </i></a>&nbsp;&nbsp;
+                    <a ng-click="delGroup(e.id)" >
+                    	<i class="glyphicon glyphicon-remove-circle"> </i></a>
+                </td>
+            </tr> 
+        </tbody>
+    </table>
+<!-- ng-show="user.username" -->
+    <p>
+        <button type="button" class="btn btn-success" ng-click="addGroup()">
+            <b class="icon-plus-sign"></b>Add Section Group
+        </button>
+    </p>
+    
+</div>

@@ -1,0 +1,35 @@
+<div>
+	<form>
+		<h1 class="page-header">New Group</h1>
+		<fieldset>
+			<div class="control-group">
+				<label class="control-label" for="title">Title</label>
+				<div class="controls">
+					<input id="title" type="text" class="input-block-level"
+						required="true" ng-model="group.title"></input>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="orgTitle">Original Title</label>
+				<div class="controls">
+					<input id="orgTitle" type="text" class="input-block-level"
+						required="true" ng-model="group.originalTitle"></input>
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<label class="control-label" for="category">Category</label>
+        		<div class="controls">
+		        	<select id="category" ng-model="group.category" 
+		        		ng-options="category as category for category in categories"></select>
+        		</div>
+    		</div>
+    					
+		</fieldset>
+		
+		<div class="form-actions">
+			<button class="btn btn-primary" ng-click="saveGroup()">Add
+				Group Section</button>
+		</div>
+	</form>
+</div>

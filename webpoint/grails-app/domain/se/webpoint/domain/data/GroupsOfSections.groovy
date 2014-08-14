@@ -5,18 +5,16 @@ import se.webpoint.type.CategoryType
 
 
 @Resource(formats=['json', 'xml'])
-class PartCollection {
+class GroupsOfSections {
 
 	static mapWith="mongo"
 	
 	String id
 	String title
 	String originalTitle
-	CategoryType category
+	String category
 	
-//	List<Part> parts
-	
-	static hasMany = [parts : Part]
+	static hasMany = [sections : Section]
 	
     static constraints = {
 		title (blank:false, index:true)  //, indexAttributes: [unique:true, dropDups:true]
