@@ -41,7 +41,7 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 		Section section = new Section()
 		section.lang = 'en'
 		section.data = ''
-//		section.sections = instance
+//		section.groupOfSection = instance
 		section.save flush:true
 		instance.sections.add(section)
 		

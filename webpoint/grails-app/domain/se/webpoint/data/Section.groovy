@@ -15,6 +15,11 @@ class Section {
 	
 //	static belongsTo = [groupOfSection: GroupOfSection ]
 	
+	
+	static mapping = {
+		cache true
+	}
+	
 	static constraints = {
 		lang(blank:false, size:2..5)
 	}
