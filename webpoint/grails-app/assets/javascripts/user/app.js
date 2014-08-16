@@ -20,15 +20,15 @@ gambApp.config(['$routeProvider', '$httpProvider',
         	}).
             when('/sections', {
                 templateUrl: 'user/views/sections.html',
-                controller: 'ListGroupsOfSectionsCtrl'
+                controller: 'ListGroupOfSectionCtrl'
             }).
-//            when('/book/edit/:postId', {
-//                templateUrl: 'book/views/edit.html',
-//                controller: 'UpdateBookCtrl'
-//            }).
+            when('/sections/edit/:groupId', {
+                templateUrl: 'user/views/section/update.html',
+                controller: 'UpdateGroupSectionCtrl'
+            }).
             when('/sections/new', {
-                templateUrl: 'user/views/section/new.html',
-                controller: 'NewGroupSectionCtrl'
+                templateUrl: 'user/views/section/update.html',
+                controller: 'UpdateGroupSectionCtrl'
             }).
             otherwise({
                 redirectTo: '/sections'

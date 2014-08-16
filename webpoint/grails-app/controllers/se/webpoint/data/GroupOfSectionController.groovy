@@ -21,12 +21,41 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 	
 	
 	
+	def index(Integer max) {
+		println "index"
+//		params.max = Math.min(max ?: 10, 100)
+//		respond listAllResources(params), model: [("${resourceName}Count".toString()): countResources()]
+		
+		
+		def groupOfSectionList = GroupOfSection.collection.find()
+		def groupOfSections = groupOfSectionList.collect{it as GroupOfSection}
+		respond groupOfSections
+		
+	}
+
+	
+	
+	def show() {
+		println "show"
+		respond queryForResource(params.id)
+	}
+	
+	
+	
+	
 	/**
 	 * Saves a resource
 	 */
 	@Transactional
-	def save(GroupOfSection instance) {
+	def save() {   // GroupOfSection instance
 		println "save"
+		
+		def instance = createResource()
+		
+		if(instance == null){
+			notFound()
+			return
+		}
 		
 		if(handleReadOnly()) {
 			return
@@ -41,45 +70,22 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 		Section section = new Section()
 		section.lang = 'en'
 		section.data = ''
-//		section.groupOfSection = instance
 		section.save flush:true
-		instance.sections.add(section)
 		
+		instance.sections.add(section)
 		instance.save flush:true
 		
 		response.addHeader(HttpHeaders.LOCATION,
 			g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))
 		respond instance, [status: CREATED]
 		
-		
-//		request.withFormat {
-//			form multipartForm {
-//				flash.message = message(code: 'default.created.message', args: [message(code: "${resourceName}.label".toString(), default: resourceClassName), instance.id])
-//				redirect instance
-//			}
-//			'*' {
-//				response.addHeader(HttpHeaders.LOCATION,
-//						g.createLink(
-//								resource: this.controllerName, action: 'show',id: instance.id, absolute: true,
-//								namespace: hasProperty('namespace') ? this.namespace : null ))
-//				respond instance, [status: CREATED]
-//			}
-//		}
 	}
+
 
 	
 	
-	@Override
-	protected GroupOfSection createResource() {
-		println "createResource"
-		GroupOfSection instance = resource.newInstance()
-		
-		bindData instance, getObjectToBind()
-	
-		instance
+	protected void notFound() {
+		render status: NOT_FOUND 
 	}
-	
-	
-	
 	
 }

@@ -14,19 +14,21 @@ class GroupOfSection {
 
 	List<Section> sections = new ArrayList()
 	
-//	static embedded = ['sections']
+	static embedded = ['sections']
 	static hasMany = [sections : Section]
 	
 	static mapping = {
-		cache true
+//		stateless true
+//		sections fetch: 'join'
+		sections lazy: false
 		title index:true  //, indexAttributes: [unique:true, dropDups:true]
 		originalTitle index:true
 	}
 	
 	
     static constraints = {
-		title (blank:false, index:true)  //, indexAttributes: [unique:true, dropDups:true]
-		originalTitle (blank:true, index:true)
+		title (blank:false)  
+		originalTitle (blank:true)
 		category (blank:false)
     }
 	

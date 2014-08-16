@@ -122,10 +122,10 @@ log4j.main = {
 		   
 }
 
-//grails.mongo.default.mapping = {
-//	version true
-//	'*'(reference:true)
-//}
+grails.mongo.default.mapping = {
+	version true
+	'*'(reference:true)
+}
 
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'se.webpoint.auth.User'

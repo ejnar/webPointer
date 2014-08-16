@@ -4,15 +4,15 @@
 
 var sectionController = angular.module('userApp');
 
-sectionController.controller('ListGroupsOfSectionsCtrl', ['$scope', '$location', '$timeout', '$q', 'GroupsOfSectionsApi',
+sectionController.controller('ListGroupOfSectionCtrl', ['$scope', '$location', '$timeout', '$q', 'GroupsOfSectionsApi', 'sharedProperties',
      
                                                
-    function list ($scope, $location, $timeout, $q, GroupsOfSectionsApi ) {
+    function list ($scope, $location, $timeout, $q, GroupsOfSectionsApi, sharedProperties) {
 	 	
 		$scope.viewLoading = true;
 		
-    	var load = function() {
-    		console.log(' --- ListGroupsOfSectionsCtrl.load');
+		$scope.loadSection = function() {
+    		console.log(' --- ListGroupOfSectionCtrl.load');
     		  
     		var promise = GroupsOfSectionsApi.list(
     				function (resp) {
@@ -23,48 +23,57 @@ sectionController.controller('ListGroupsOfSectionsCtrl', ['$scope', '$location',
                         console.log("error");
                     }).$promise;
     		
-    		
-    		
     		$q.all([promise]).then(function(data) {
     			$scope.viewLoading = false;
     			console.log($scope.sections);
     	    });
     		$scope.orderProp = 'title';
     	}
-    	load();
+		$scope.loadSection();
     	
+//		$scope.$on("loadSectionEvent", function (event, args) {
+//			console.log(' --- loadSectionEvent ' + args.eventID);
+//			$scope.loadSection();	 
+//		});
+			
     	$scope.editSection = function(id) {
     		console.log('editSection - id ' + id);
-    		$location.path('/sections/edit/' + index );
+    		sharedProperties.getProperty().doSave = false;
+    		$location.path('/sections/edit/' + id );
     	}
     	$scope.delGroup = function(id) {
     		console.log('delGroup - '+id);
-    		GroupsOfSectionsApi.remove({bookId: id});
-    		load();
+    		GroupsOfSectionsApi.remove({groupId: id});
+    		$scope.loadSection();
     	}
-    
-    	$scope.addSection = function() {
-    		console.log('addSection');
-    		$location.path("/sections/new");
-    	} 	
-    	
-    	
     	$scope.addGroup = function() {
     		console.log('addGroup');
+    		sharedProperties.getProperty().doSave = true;
     		$location.path("/sections/new");
-    	} 	
+    	} 
+    	
+    	$scope.getSection = function(id) {
+    		console.log('getSection - id ' + id);
+    		
+    		SectionsApi.get({sectionId: id}, function (post) {});
+    	}
+    	
+    	
+//    	$scope.addSection = function() {
+//    		console.log('addSection');
+//    		$location.path("/sections/new");
+//    	} 	
 
 }]);
 
 
-//sectionController.controller('UpdateBookCtrl', ['$scope', '$routeParams', '$location', '$timeout', 'GroupsOfSectionsApi',
+//sectionController.controller('UpdateGroupOfSectionCtrl', ['$scope', '$routeParams', '$location', '$timeout', 'GroupsOfSectionsApi',
 //    function ($scope, $routeParams, $location, $timeout, BookApi) {
-//		console.log("Get Book ", $routeParams.postId);
+//		console.log( " --- UpdateGroupOfSectionCtrl ", $routeParams.groupId);
 //		
-//		$scope.book = BookApi.get({bookId: $routeParams.postId}, 
+//		$scope.group = GroupsOfSectionsApi.get({groupId: $routeParams.groupId}, 
 //				function (post) {
 //		});
-//
 //	    $scope.updateBook = function () {
 //	    	console.log("Update book ", $scope.book);
 //	        var book = $scope.book;
@@ -78,7 +87,6 @@ sectionController.controller('ListGroupsOfSectionsCtrl', ['$scope', '$location',
 //	    };
 //	    
 //	    var timeout = null;
-//	    
 //	    var debounceSaveUpdates = function(newVal, oldVal) {
 //	    	console.log('debounceSaveUpdates');
 //	        if (newVal != oldVal) {
@@ -91,36 +99,57 @@ sectionController.controller('ListGroupsOfSectionsCtrl', ['$scope', '$location',
 //	    
 //	    $scope.$watch('book.title', debounceSaveUpdates);
 //	    $scope.$watch('book.author', debounceSaveUpdates);
-//	    $scope.$watch('book.price', debounceSaveUpdates);
-//	    
+//	    $scope.$watch('book.price', debounceSaveUpdates);    
 //}]);
 
 
 
 
-sectionController.controller('NewGroupSectionCtrl', ['$scope', '$rootScope', '$location', 'GroupsOfSectionsApi', 
-    function($scope, $rootScope, $location, GroupsOfSectionsApi) {
+sectionController.controller('UpdateGroupSectionCtrl', ['$scope', '$routeParams', '$location', 'GroupsOfSectionsApi', 'sharedProperties',
+    function($scope, $routeParams, $location, GroupsOfSectionsApi, sharedProperties) {
 	
 	
-	$scope.categories = [
+		$scope.categories = [
 	                 'Worship',
 	                 'Christian',
 	                 'Hymns'
 	               ];
 	
-    $scope.group = {};
+		$scope.group = {};
+		$scope.doSave = sharedProperties.getProperty().doSave;
     
-    $scope.saveGroup = function() {
-        console.log('saveGroup');
-        console.log($scope.group);
-        var res = GroupsOfSectionsApi.save($scope.group,
-                function (resp) {
-                    console.log(resp);
-                }, function (resp) {
-                    console.log(resp);
-                });
-        $location.path('/sections');    
-    }
+		if($scope.doSave){
+			$scope.group = {};
+		}else{
+			$scope.group = GroupsOfSectionsApi.get({groupId: $routeParams.groupId}, function (post) {});
+		}
+    
+    
+	    $scope.updateGroup = function () {
+	    	console.log("updateGroup ", $scope.group);
+	    	var group = $scope.group;
+	    	var res = GroupsOfSectionsApi.update({groupId: group.id}, group,
+	            function (resp) {
+	                console.log("success");
+	            }, function (resp) {
+	                console.log("error");
+	            });
+	    	$location.path('/sections');   
+	    };
+	    
+	    $scope.saveGroup = function() {
+	        console.log('saveGroup');
+	        console.log(sharedProperties.getProperty().doSave);
+	        console.log($scope.group);
+	        var res = GroupsOfSectionsApi.save($scope.group,
+	                function (resp) {
+	                    console.log(resp);
+	                }, function (resp) {
+	                    console.log(resp);
+	                });
+//	        $scope.$broadcast("loadSectionEvent", {eventID: 'new'});
+	        $location.path('/sections');    
+	    }
 }]);                                               
 
 
