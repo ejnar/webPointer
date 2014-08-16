@@ -70,10 +70,14 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 		Section section = new Section()
 		section.lang = 'en'
 		section.data = ''
+//		section.groupOfSectionID = instance
 		section.save flush:true
 		
 		instance.sections.add(section)
 		instance.save flush:true
+		
+		section.groupOfSectionID = instance.id
+		section.save flush:true
 		
 		response.addHeader(HttpHeaders.LOCATION,
 			g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))

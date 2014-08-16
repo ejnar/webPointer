@@ -14,7 +14,7 @@ class GroupOfSection {
 
 	List<Section> sections = new ArrayList()
 	
-	static embedded = ['sections']
+//	static embedded = ['sections']
 	static hasMany = [sections : Section]
 	
 	static mapping = {
@@ -25,6 +25,7 @@ class GroupOfSection {
 		originalTitle index:true
 	}
 	
+	static beforeInsert = { }
 	
     static constraints = {
 		title (blank:false)  

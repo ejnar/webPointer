@@ -124,7 +124,7 @@ log4j.main = {
 
 grails.mongo.default.mapping = {
 	version true
-	'*'(reference:true)
+	'*'(reference:false)
 }
 
 // Added by the Spring Security Core plugin:
