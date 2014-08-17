@@ -1,6 +1,6 @@
 package se.webpoint.data
 
-import grails.rest.Resource
+import se.webpoint.type.DataType
 
 //@Resource(formats=['json', 'xml'])
 class Section {
@@ -11,7 +11,7 @@ class Section {
 	String data
 	String lang
 	String groupOfSectionID
-//	DataType type = DataType.TEXT
+	DataType sectionType = DataType.TEXT
 //	GroupOfSection groupOfSection
 	
 //	static belongsTo = [groupOfSection: GroupOfSection ]
@@ -27,6 +27,7 @@ class Section {
 	
 	static constraints = {
 		lang(blank:false, size:2..5)
+		sectionType(nullable:true)
 	}
 	
 	String toString(){
