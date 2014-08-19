@@ -88,12 +88,15 @@ grails.hibernate.osiv.readonly = false
 environments {
     development {
         grails.logging.jul.usebridge = true
+		grails.config.locations = ["file:c://dev/webpoint-config.properties"]
     }
     production {
         grails.logging.jul.usebridge = false
         // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
+
+
 
 // log4j configuration
 log4j.main = {
@@ -118,6 +121,7 @@ log4j.main = {
 		   'grails.app.controllers.com.odobo',
 		   'grails.app.services.com.odobo',
 		   'org.pac4j',
+		   'org.mortbay.log'
 		   'se.webpointer'
 		   
 }
@@ -177,4 +181,13 @@ grails.plugin.springsecurity.rest.token.storage.gorm.usernamePropertyName = 'use
 grails.plugin.springsecurity.rest.token.generation.useSecureRandom = true
 grails.plugin.springsecurity.rest.token.generation.useUUID = false
 // Working
+
+
+// routing(Camel) plugin
+//grails.camel.camelContextId = 'hello'
+//grails.routing.threadPoolProfileConfig.poolSize
+//grails.routing.threadPoolProfileConfig.maxPoolSize
+//grails.routing.threadPoolProfileConfig.maxQueueSize
+//grails.routing.threadPoolProfileConfig.rejectedPolicy
+
 

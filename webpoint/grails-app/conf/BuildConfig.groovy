@@ -61,6 +61,8 @@ grails.project.dependency.resolution = {
 		}
 		
 		test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
+		runtime "org.apache.camel:camel-twitter:2.13.0"
+//		runtime "org.apache.camel:camel-ftp:2.9.4"
     }
 
     plugins {
@@ -77,11 +79,28 @@ grails.project.dependency.resolution = {
 ////			excludes: 'spring-security-core'
 //			excludes ('cors','spring-security-core')
 //		}
-		compile ":mongodb:3.0.1"
-		compile ":routing:1.3.2"
-
 		
 		compile ":spring-websocket:1.1.0"
+		
+		compile ":mongodb:3.0.1"
+		
+		compile ":routing:1.3.2"
+//		compile ":routing-jms:1.2.0"
+//		compile ":quartz:1.0.2"
+		
+		
+		
+//		compile('org.apache.activemq:activemq-core:5.3.0',
+//			'org.apache.activemq:activeio-core:3.1.2',
+//			'org.apache.xbean:xbean-spring:3.7') {
+//			 excludes 'activemq-openwire-generator'
+//			 excludes 'commons-logging'
+//			 excludes 'xalan'
+//			 excludes 'xml-apis'
+//			 exported = false
+//		 }
+		
+		
 		
         // plugins needed at runtime but not for compilation
 //        runtime ":hibernate4:4.3.5.4" // or ":hibernate:3.6.10.16"
