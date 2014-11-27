@@ -1,7 +1,6 @@
 <div sha-loading-spinner="viewLoading">
+
     <h1 class="page-header">Section List</h1>
-    
-    
     <p>
         <button type="button" class="btn btn-success" ng-click="addGroup()">
             <b class="icon-plus-sign"></b>Add Section Group
@@ -20,13 +19,13 @@
         </thead>
         <tbody>
             <tr ng-repeat="e in sections | orderBy:orderProp">
-                <td>{{e.title}}</td>
+                <!-- td>{{e.title}}</td -->
                 <td>{{e.originalTitle}}</td>
                 <td>{{e.category}}</td>
                 
-                <td>
+                <td> 
 	                <select id="section" ng-model="pickedSection" 
-			        		ng-options="s.lang for s in e.sections"></select>
+			        		ng-options="s.lang for s in e.sectionsMeta"></select>
                 </td>
                 <!-- ng-show="user.id &&user.id==e.user_id" -->
                 <td>

@@ -4,12 +4,17 @@ import se.webpoint.auth.RoleGroupRole
 import se.webpoint.auth.User
 import se.webpoint.auth.UserRole
 import se.webpoint.auth.UserRoleGroup
-import se.webpoint.data.Book
+import se.webpoint.bok.Book;
+import se.webpoint.data.Section
+import grails.converters.JSON
 
 
 class BootStrap {
 
     def init = { servletContext ->
+		
+		
+		
 		
 		new Book(title:"Java Persistence with Hibernate", author:"Gavin King", price:99.00).save()
 		new Book(title:"Spring Live", author:"Matt Raible", price:29.00).save()
@@ -46,6 +51,12 @@ class BootStrap {
 		
 		UserRoleGroup.get(user.id, groupAdmin.id) ?:
 		UserRoleGroup.create(user, groupAdmin, true)
+		
+		
+		
+		
+		
+		
 		
     }
     def destroy = {

@@ -11,33 +11,11 @@ var gambApp = angular.module('userApp', [
     'angulartics'
 ]);
 
-gambApp.config(['$routeProvider', '$httpProvider',
-    function ($routeProvider, $httpProvider) {
-        $routeProvider.
-        	when('/login', {
-        		templateUrl: 'common/views/auth/login.html',
-        		controller: 'LoginController'
-        	}).
-            when('/sections', {
-                templateUrl: 'user/views/sections.html',
-                controller: 'ListGroupOfSectionCtrl'
-            }).
-            when('/sections/edit/:groupId', {
-                templateUrl: 'user/views/section/update.html',
-                controller: 'UpdateGroupSectionCtrl'
-            }).
-            when('/sections/new', {
-                templateUrl: 'user/views/section/update.html',
-                controller: 'UpdateGroupSectionCtrl'
-            }).
-            otherwise({
-                redirectTo: '/sections'
-            });
-//        $httpProvider.defaults.useXDomain = true;
-//        delete $httpProvider.defaults.headers.common["X-Requested-With"];
-//        console.log('@X-Requested-With@'+$httpProvider.defaults.headers.common["X-Requested-With"])
-    }]);
 
+
+function getProperty() {
+    return 'test property';
+}
 
 
 function getLocalToken() {

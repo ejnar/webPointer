@@ -12,9 +12,13 @@
 //= require spin.js/spin
 
 //= require user/app
+//= require user/Routes
+//= require user/Constants
 //= require user/AppController
 //= require user/sections/SectionController
+//= require user/sections/GroupOfSectionController
 //= require user/sections/SectionService
+
 
 //= require common/auth/AuthController
 

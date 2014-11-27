@@ -1,0 +1,56 @@
+<div sha-loading-spinner="viewLoading">
+    <h1 class="page-header">Section List</h1>
+    
+    <p>
+        <button type="button" class="btn btn-success" ng-click="addGroup()">
+            <b class="glyphicon glyphicon-plus-sign"></b> Add Section Group
+        </button>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Original Title</th>
+                <th>Category</th>
+                <th>Section</th>
+                <th width="120px"></th>
+            </tr>
+        </thead>
+        <tbody ng-repeat="g in groups | orderBy:orderProp" >
+            <tr>
+                <td>
+              		<button ng-if="g.expanded" ng-click="g.expanded = false">-</button>
+              		<button ng-if="!g.expanded" ng-click="g.expanded = true">+</button>
+            	</td>
+                <td>{{g.originalTitle}}</td>
+                <td>{{g.category}}</td>
+                <td> 
+	                <select id="section" ng-model="pickedSection" 
+			        		ng-options="s.title + ':' + s.language for s in g.sectionsMeta"></select>
+                </td>
+                <!-- ng-show="user.id &&user.id==e.user_id" -->
+                <td>
+                   	<button ng-click="editGroup(g.id)">
+                    	<i class="glyphicon glyphicon-pencil"> </i>
+                    </button>	
+                    <button ng-click="delGroup(g.id)">
+                    	<i class="glyphicon glyphicon-remove-circle"> </i>
+                    </button>	
+                </td>
+            </tr>
+            <tr ng-if="g.expanded" ng-repeat-end="">
+            	<td colspan="5">
+            		<table class="table">
+            			<tr ng-repeat="s in g.sectionsMeta"> 
+            				<td>{{s.title}}</td><td>{{s.language}}</td><td>{{s.sectionType.tostring()}}</td>
+            			</tr>
+            		</table>
+            	</td>
+          	</tr> 
+        </tbody>
+    </table>
+
+<!-- ng-show="user.username" -->
+ 
+    
+</div>

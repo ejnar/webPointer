@@ -9,12 +9,16 @@ class Section {
 	
 	String id
 	String data
-	String lang
-	String groupOfSectionID
-	DataType sectionType = DataType.TEXT
-//	GroupOfSection groupOfSection
+//	String language
+//	String title
+	String groupId
+//	DataType sectionType = DataType.TEXT
 	
-//	static belongsTo = [groupOfSection: GroupOfSection ]
+//	static transients = ['language', 'title', 'sectionType']
+	
+//	GroupOfSection groupOfSection
+
+//	static belongsTo = GroupOfSection //[groupOfSection: GroupOfSection ]
 //	static hasOne = [groupOfSection : GroupOfSection]
 	
 	static mapping = {
@@ -26,12 +30,10 @@ class Section {
 //	}
 	
 	static constraints = {
-		lang(blank:false, size:2..5)
-		sectionType(nullable:true)
 	}
 	
 	String toString(){
-		"${lang}"    //+ "${type}"
+		"${groupId}"    //+ "${type}"
 	}
     
 }

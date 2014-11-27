@@ -28,7 +28,7 @@
 <div id="wrap">
 	
     <div ng-include="'user/views/includes/header.html'"></div>
-    <div class="container" id="content">   <!-- container-fluid -->
+    <div class="container" id="content"  style="width:60%" >   <!-- container-fluid -->
     	<g:layoutBody/>
     </div>
     <div ng-include="'user/views/includes/footer.html'"></div>

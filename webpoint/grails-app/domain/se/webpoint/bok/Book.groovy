@@ -1,4 +1,4 @@
-package se.webpoint.data
+package se.webpoint.bok
 
 import grails.rest.Resource
 

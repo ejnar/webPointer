@@ -2,6 +2,7 @@ package se.webpoint.data
 
 
 import static org.springframework.http.HttpStatus.*
+import grails.converters.JSON
 import grails.rest.RestfulController
 import grails.transaction.Transactional
 
@@ -47,10 +48,11 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 		
 //		sendMessage("direct:foo", "Hello, a second new message from my Grails and Camel appliction!!!")
 		
-		def groupOfSectionList = GroupOfSection.collection.find()
-		def groupOfSections = groupOfSectionList.collect{it as GroupOfSection}
-		respond groupOfSections
+//		def groupOfSectionList = GroupOfSection.collection.find()
+//		def groupOfSections = groupOfSectionList.collect{it as GroupOfSection}
 		
+		def groupOfSections = GroupOfSection.findAll()
+		respond groupOfSections
 	}
 
 	
@@ -87,17 +89,12 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 			return
 		}
 		
-		Section section = new Section()
-		section.lang = 'en'
-		section.data = ''
-//		section.groupOfSectionID = instance
-		section.save flush:true
-		
-		instance.sections.add(section)
+//		SectionMeta sectionMeta = new SectionMeta()
+//		sectionMeta.lang = 'en'
+//		sectionMeta.sectionId = section.id
+//		sectionMeta.save flush:true
+//		instance.sectionsMeta.add(sectionMeta)
 		instance.save flush:true
-		
-		section.groupOfSectionID = instance.id
-		section.save flush:true
 		
 		response.addHeader(HttpHeaders.LOCATION,
 			g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))

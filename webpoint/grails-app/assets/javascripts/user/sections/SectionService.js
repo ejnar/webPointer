@@ -9,9 +9,9 @@ sectionService.factory('GroupsOfSectionsApi', ['$resource', '$q', '$timeout',
 	
 		console.log(' --- GroupsOfSectionsApi.factory ');
 		
-		return $resource('api/groupsofsections/:groupId', null,
+		return $resource('api/groupsofsections/:Id', {Id: '@Id'},
 				{
-           			'list': { method:'GET', isArray:true },
+           			'list': { method:'GET', isArray:true, cache:false },
            			'get': { method:'GET' },
            			'save': { method:'POST'},
            			'update': { method:'PATCH'},
@@ -27,7 +27,7 @@ sectionService.factory('SectionsApi', ['$resource',
 		
 		console.log(' --- SectionsApi.factory ');
 		
-		return $resource('api/sections/:sectionId', null,
+		return $resource('api/sections/:Id', {Id: '@Id'},
 				{
 	       			'list': { method:'GET', isArray:true },
 	       			'get': { method:'GET' },
@@ -40,9 +40,26 @@ sectionService.factory('SectionsApi', ['$resource',
 ]);
 
 
+sectionService.factory('SectionsMetaApi', ['$resource',
+    function ($resource) {
+	
+		console.log(' --- SectionsMetaApi.factory ');
+		
+		return $resource('api/groupsofsections/:GroupOfSectionId/sectionsmeta/:Id', {GroupOfSectionId: '@GroupOfSectionId', Id: '@Id'},
+				{
+	       			'list': { method:'GET', isArray:true },
+	       			'get': { method:'GET' },
+	       			'save': { method:'POST'},
+	       			'update': { method:'PATCH'},
+	       			'remove': { method:'DELETE'}
+				});
+	}               
+]);
+
 sectionService.service('sharedProperties', function () {
 	 var property = {
-			 doSave: true
+			 doSave: true,
+//			 categories: {'Worship','Christian','Hymns'}
 	 };
 
     return {
