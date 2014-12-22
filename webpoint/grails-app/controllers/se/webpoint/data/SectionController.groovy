@@ -24,18 +24,14 @@ class SectionController extends RestfulController<Section>  {
 	}
 	
 	
-	
-	
-	
 	/**
 	 * Saves a resource
 	 */
 	@Transactional
 	def save() {   // GroupOfSection instance
-		println "save"
+		println "save Sections: "+ params
 		
-		def instance = createResource()
-		
+		def instance = createResource()	
 		if(instance == null){
 			notFound()
 			return
@@ -46,20 +42,10 @@ class SectionController extends RestfulController<Section>  {
 			respond instance.errors, view:'create' // STATUS CODE 422
 			return
 		}
-		
 		instance.save flush:true
 		
-//		SectionMeta sectionMeta = new SectionMeta()
-//		sectionMeta.language = instance.language;
-//		sectionMeta.sectionId = instance.id
-//		sectionMeta.title = instance.title
-//		sectionMeta.sectionType = instance.sectionType
-//		sectionMeta.save flush:true
-		
 		GroupOfSection groupOfSections = GroupOfSection.findById(instance.groupId);
-//		groupOfSections.sectionsMeta.add(sectionMeta);
 		groupOfSections.sections.add(instance);
-		
 		groupOfSections.save flush:true
 		
 		response.addHeader(HttpHeaders.LOCATION,
@@ -67,8 +53,6 @@ class SectionController extends RestfulController<Section>  {
 		respond instance, [status: CREATED]
 		
 	}
-
-
 	
 	
 	protected void notFound() {

@@ -1,7 +1,5 @@
 package se.webpoint.data
 
-import se.webpoint.type.DataType
-
 //@Resource(formats=['json', 'xml'])
 class Section {
 	
@@ -9,17 +7,9 @@ class Section {
 	
 	String id
 	String data
-//	String language
-//	String title
 	String groupId
-//	DataType sectionType = DataType.TEXT
 	
-//	static transients = ['language', 'title', 'sectionType']
-	
-//	GroupOfSection groupOfSection
-
-//	static belongsTo = GroupOfSection //[groupOfSection: GroupOfSection ]
-//	static hasOne = [groupOfSection : GroupOfSection]
+	static belongsTo = SectionMeta
 	
 	static mapping = {
 //		stateless true
@@ -30,10 +20,11 @@ class Section {
 //	}
 	
 	static constraints = {
+		data nullable: false
+		groupId nullable: false
 	}
 	
 	String toString(){
-		"${groupId}"    //+ "${type}"
-	}
-    
+		"${id}"
+	}   
 }

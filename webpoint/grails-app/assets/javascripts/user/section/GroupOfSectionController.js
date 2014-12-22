@@ -6,9 +6,9 @@ var sectionController = angular.module('userApp');
 
 sectionController.controller('GroupOfSectionCtrl', [ 
                                                     
-    '$scope', '$routeParams', '$location', '$timeout', '$q', '$log','cfgAppPath', 'GroupsOfSectionsApi', 'sharedProperties',
+    '$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log','cfgAppPath', 'GroupsOfSectionsApi', 'sharedProperties',
      
-    function list ($scope, $routeParams, $location, $timeout, $q, $log, cfgAppPath, GroupsOfSectionsApi, sharedProperties) {
+    function list ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, cfgAppPath, GroupsOfSectionsApi, sharedProperties) {
 	 	
 		$scope.viewLoading = true;
 	 	
@@ -18,29 +18,36 @@ sectionController.controller('GroupOfSectionCtrl', [
 //		});
 			
     	$scope.editGroup = function(id) {
-    		$log.debug('editSection - id ' + id);		
-    		$scope.group = GroupsOfSectionsApi.get( {groupId: id}, 
-	    		function (resp) {
-		    		$log.debug("success");
-		    	}, function (resp) {
-		    		$log.error("error");
-		    	});	
-    		$log.debug($scope.group);	
+    		$log.debug('editGroup - id:' + id);	
     		sharedProperties.getProperty().doSave = false;
     		$location.path(cfgAppPath.groupOfSectionEdit + id );
     	}
     	$scope.delGroup = function(id) {
-    		$log.debug('delGroup - '+id);
-    		GroupsOfSectionsApi.remove({groupId: id});
-    		$scope.loadGroups();
+    		$log.debug('delGroup - id:' + id);
+    		GroupsOfSectionsApi.remove({Id: id},
+    			function (resp) {
+    				$log.debug("remove success GroupsOfSection");
+    				$scope.loadGroups();
+    			});
     	}
     	$scope.addGroup = function() {
     		$log.debug('addGroup');
-    		$scope.group = {};
     		sharedProperties.getProperty().doSave = true;
     		$location.path(cfgAppPath.groupOfSectionNew);
     	} 
+    	$scope.addSection = function(id) {
+    		$log.debug('addSection groupId:' + id);
+    		$rootScope.groupId = id;
+    		sharedProperties.getProperty().doSave = true;
+            $location.path(cfgAppPath.sectionNew); 
+    	} 
     	
+    	$scope.editSection = function(groupId,metaId) {
+    		$log.debug('editSection id:'+metaId);
+    		sharedProperties.getProperty().doSave = false;
+    		$location.path(cfgAppPath.sectionEdit.replace(':groupId', groupId).replace(':id', metaId) );
+    	}
+    
     	
     	$scope.toggleDetail = function($index) {
             //$scope.isVisible = $scope.isVisible == 0 ? true : false;
@@ -49,22 +56,20 @@ sectionController.controller('GroupOfSectionCtrl', [
     	
 		$scope.loadGroups = function() {
     		$log.debug(' --- ListGroupOfSectionCtrl.load ');
-    		var promise = GroupsOfSectionsApi.list(
+    		GroupsOfSectionsApi.list(
     				function (resp) {
     					$scope.groups = resp;
-    					$log.debug("success");
-                    }, function (resp) {
-                    	$log.error("error");
-                    }).$promise;
+    					$scope.viewLoading = false;
+                    });
     		
-    		$q.all([promise]).then(function(data) {
-    			$scope.viewLoading = false;
-//    			if($scope.groups[0] != undefined)
-//    				$scope.pickedSection = $scope.groups[0].sectionsMeta[0];
-//    			$log.debug($scope.groups);
-//    			$log.debug($scope.groups[0].sectionsMeta[0].language);
-    	    });
-    		
+//    		$q.all([promise]).then(function(data) {
+//    			
+////    			if($scope.groups[0] != undefined)
+////    				$scope.pickedSection = $scope.groups[0].sectionsMeta[0];
+////    			$log.debug($scope.groups);
+////    			$log.debug($scope.groups[0].sectionsMeta[0].language);
+//    	    });
+//    		
     		$scope.orderProp = 'title';
     	}
 		$scope.loadGroups();
@@ -118,42 +123,47 @@ sectionController.controller('UpdateGroupSectionCtrl', [
     function($rootScope, $scope, $routeParams, $location, $log, cfgAppPath, properties, GroupsOfSectionsApi, sharedProperties) {
 	
 		$scope.categories = properties.categories;
-	
 		$scope.doSave = sharedProperties.getProperty().doSave;
-    
+//		$scope.$broadcast('show-errors-reset');
+		
 		if(!$scope.doSave){
-			$scope.group = GroupsOfSectionsApi.get({groupId: $routeParams.groupId}, function (post) {});
+			$scope.invalid = false
+			GroupsOfSectionsApi.get({Id: $routeParams.groupId}, 
+					function (resp) {
+	    				$scope.group = resp;
+			    	});	
 		} 
     
-	    $scope.updateGroup = function () {
+	    $scope.updateGroup = function (form) {
 	    	$log.debug("updateGroup ", $scope.group);
 	    	var group = $scope.group;
-	    	var res = GroupsOfSectionsApi.update({groupId: group.id}, group,
+	    	var res = GroupsOfSectionsApi.update({Id: group.id}, group,
 	            function (resp) {
-	                $log.debug("success");
-	            }, function (resp) {
-	                $log.debug("error");
+	                $location.path(cfgAppPath.groupOfSectionList);
 	            });
 //	    	$rootScope.$broadcast("LOAD_GROUPOFSECTION_EVENT");
-	    	$location.path(cfgAppPath.groupOfSectionList);   
 	    };
 	    
-	    $scope.saveGroup = function() {
+	    
+	    $scope.saveGroup = function(form) {
 	        $log.debug('saveGroup');
-	        $rootScope.group = $scope.group;
-	        var res = GroupsOfSectionsApi.save($scope.group,
+	        
+	        console.log(form.orgTitle.$valid);
+//	        $scope.$broadcast('show-errors-check-validity');
+	        
+//	        if (form.$valid) {
+	        	GroupsOfSectionsApi.save($scope.group,
 	                function (resp) {
 	        			$rootScope.groupId = resp.id;
-	        			 $rootScope.group.id = resp.id;
+	        			sharedProperties.getProperty().doSave = true;
 	                    $location.path(cfgAppPath.sectionNew); 
-	                }, function (resp) {
-	                    $log.debug(resp);
 	                });
+//	        }
 //	         $rootScope.$broadcast("LOAD_GROUPOFSECTION_EVENT");	           
 	    }
 	    
-	    $scope.addSection = function() {
-	        $log.debug('addSection');
-	        $location.path('/section/new');    
-	    }
+//	    $scope.reset = function() {
+//	    	  $scope.$broadcast('show-errors-reset');
+//	    }
+
 }]);                                               

@@ -1,23 +1,41 @@
+import grails.converters.JSON
 import se.webpoint.auth.Role
 import se.webpoint.auth.RoleGroup
 import se.webpoint.auth.RoleGroupRole
 import se.webpoint.auth.User
 import se.webpoint.auth.UserRole
 import se.webpoint.auth.UserRoleGroup
-import se.webpoint.bok.Book;
-import se.webpoint.data.Section
-import grails.converters.JSON
+import se.webpoint.bok.Book
+import se.webpoint.data.SectionMeta
 
 
 class BootStrap {
 
     def init = { servletContext ->
 		
+//		JSON.registerObjectMarshaller(GroupOfSection) {
+//			def output = [:]
+//			output['id'] = it.id
+//			output['originalTitle'] = it.originalTitle
+//			output['category'] = it.category
+//			output['sections'] = it.sections
+//			output['sectionMetas'] = it.sectionMetas
+//			return output
+//		}
+//		
+//		
+//		JSON.registerObjectMarshaller(SectionMeta) {
+//			def output = [:]
+//			output['sectionId'] = it.sectionId
+//			output['language'] = it.language
+//			output['title'] = it.title
+//			output['sectionType'] = it.sectionType		
+//			return output
+//		}
 		
 		
-		
-		new Book(title:"Java Persistence with Hibernate", author:"Gavin King", price:99.00).save()
-		new Book(title:"Spring Live", author:"Matt Raible", price:29.00).save()
+//		new Book(title:"Java Persistence with Hibernate", author:"Gavin King", price:99.00).save()
+//		new Book(title:"Spring Live", author:"Matt Raible", price:29.00).save()
 		
 		
 //		Role roleAdmin = Role.findByAuthority("ROLE_ADMIN") ?:

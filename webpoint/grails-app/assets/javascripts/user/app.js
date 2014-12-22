@@ -12,7 +12,6 @@ var gambApp = angular.module('userApp', [
 ]);
 
 
-
 function getProperty() {
     return 'test property';
 }
@@ -35,7 +34,7 @@ function getHttpConfig() {
 }
 
 function getAuthenticateHttpConfig() {
-	console.log('getAuthenticateHttpConfig --------');
+//	console.log('getAuthenticateHttpConfig --------');
     return {
         ignoreAuthModule: true
     };
@@ -43,9 +42,9 @@ function getAuthenticateHttpConfig() {
 
 gambApp.run(['$rootScope', '$http', '$location',
     function ($rootScope, $http, $location) {
-		console.log(' --- startup --------' + getLocalToken());
+		console.log(' --- startup -------- LocalToken: ' + getLocalToken());
         $http.defaults.headers.common['X-AUTH-TOKEN'] = getLocalToken();
-
+        
         $rootScope.$on('event:auth-loginRequired', function () {
             console.log('showing login form');
             $location.path('/login');
@@ -69,4 +68,4 @@ gambApp.run(['$rootScope', '$http', '$location',
         });
     }]);
 
-console.log('gamb app load complete');
+//console.log('gamb app load complete');

@@ -1,32 +1,57 @@
-<div>
-	<form>
-		<div ng-if="doSave" >
-			<h1 class="page-header">New Group</h1>
-		</div>
-		<div ng-if="!doSave" >
-			<h1 class="page-header">Update Group</h1>
-		</div>
-		<fieldset>
-			<div class="control-group">
-				<label class="control-label" for="orgTitle">Original Title</label>
-				<div class="controls">
-					<input id="orgTitle" type="text" class="input-block-level"
-						required="true" ng-model="group.originalTitle"></input>
+<div class="container">
+	<div ng-if="doSave" >
+		<h1 class="page-header">New Group</h1>
+	</div>
+	<div ng-if="!doSave" >
+		<h1 class="page-header">Update Group</h1>
+	</div>
+	
+	<form role="form" name="groupForm" novalidate>
+		<!-- pre>
+            Modified orgTitle invalid: {{ groupForm.orgTitle.$invalid }}
+            Modified orgTitle pristine: {{ groupForm.orgTitle.$pristine }}
+            
+            Modified category invalid: {{ groupForm.category.$invalid }}
+            Modified category pristine: {{ groupForm.category.$pristine }}
+        </pre -->   		
+			
+		<div class="row">
+			<div class="col-md-8">		
+				<div class="control-group"  
+					ng-class="{ 'has-error' : groupForm.orgTitle.$invalid && !groupForm.orgTitle.$pristine }" >
+					<label class="control-label" for="orgTitle_id">Original Title</label>
+					<span class="error" ng-show="groupForm.orgTitle.$error.required"> [Required!]</span>
+					<div class="controls">
+						<input id="orgTitle_id" name="orgTitle" type="text" 
+							class="form-control" ng-model="group.originalTitle" required/> 		
+					</div>
 				</div>
-			</div>		
-			<div class="control-group">
-				<label class="control-label" for="category">Category</label>
-        		<div class="controls">
-		        	<select id="category" ng-model="group.category" required="true"
-		        		ng-options="category as category for category in categories"></select>
-        		</div>
-    		</div>	
-		</fieldset>
-		<div ng-if="doSave"  class="form-actions" >
-			<button class="btn btn-primary" ng-click="saveGroup()">Add Group Section</button>	
+			</div>	
+		</div>
+		<div class="row">
+			<div class="col-md-8">			
+				<div class="control-group" 
+					ng-class="{ 'has-error' : groupForm.category.$invalid && !groupForm.category.$pristine }" >
+					<label class="control-label" for="category_id">Category</label>
+					<span class="error" ng-show="groupForm.category.$error.required"> [Required!]</span>
+        			<div class="controls">
+						<select id="category_id" name="category" ng-model="group.category" ng-selected="group.category"
+		        			class="form-control" ng-options="category as category for category in categories" required>
+		        			<option value="">Pick a category</option>
+		        		</select>  					        	
+		        	</div>
+    			</div>
+    		</div>
+		</div>	
+		<div ng-if="doSave"  class="form-actions" > <!-- ng-disabled="!groupForm.modified || groupForm.$invalid" -->
+			<button type="submit" class="btn btn-primary" 
+                ng-disabled="groupForm.$error.required"
+                ng-click="saveGroup(groupForm)" >Add Group Section</button>
 		</div>
 		<div ng-if="!doSave"  class="form-actions" >
-			<button class="btn btn-primary" ng-click="updateGroup()">Update Group Section</button>
+			<button class="btn btn-primary" 
+				ng-disabled="groupForm.$error.required"
+				ng-click="updateGroup(groupForm)">Update Group Section</button>
 		</div>
 	</form>
 </div>

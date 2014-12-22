@@ -1,24 +1,32 @@
 package se.webpoint.data
 
-import se.webpoint.type.DataType;
+import java.util.List;
 
-class SectionMeta {
+
+class SectionMeta {   //implements Serializable
 	
 	static mapWith="mongo"
 	
-	String sectionId
-	String language
+	String id
 	String title
-//	String mKey
-	DataType sectionType = DataType.TEXT
+	String language
+	String sectionType
 	
-//	Map meta = new HashMap()
-//	static embedded = ['meta']
+	Section section
+
+//	static mapping = {
+//	
+//	}
 	
 	static constraints = {
-//		title nullable:true, index:true
-//		language blank:false, size:2..5
-//		sectionType nullable:true 
+		title nullable:false, index:true
+		language nullable:false 
+		sectionType nullable:true 
+		section nullable:false
+	}
+	
+	public String getSectionId(){
+		return section.id;
 	}
 	
 	String toString(){

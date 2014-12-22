@@ -7,7 +7,7 @@ angular.module('userApp').constant(
 		'properties', { 
 			categories: ['Worship','Christian','Hymns', 'Gospel'],
 			language: ['swe','eng','dan'],
-			stypes: ['TEXT', 'TEXT_CHORDS'],
+			stypes: ['TEXT', 'TEXTCHORDS'],
 			test: 'value',
 		});
 

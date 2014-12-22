@@ -9,7 +9,9 @@ angular.module('userApp').constant(
 			groupOfSectionEdit:	 '/groupOfSection/edit/',
 			groupOfSectionNew:	 '/groupOfSection/new',
 			sectionNew: '/section/new',
-			sectionEdit: '/section/edit',
+			sectionEdit: '/group/:groupId/section/:id',
+			groupOfPagesList: '/groupOfPagesList',
+			groupOfPagesUpdate: '/groupOfPagesUpdate/',
 		});
 
 
@@ -41,8 +43,20 @@ angular.module('userApp').config(['$routeProvider', '$httpProvider', '$logProvid
                 templateUrl: 'user/views/section/update.html',
                 controller: 'UpdateSectionCtrl'
             }).
+            when( cfgAppPath.sectionEdit, {   //  + ':groupId'
+                templateUrl: 'user/views/section/update.html',
+                controller: 'UpdateSectionCtrl'
+            }).
+            when( cfgAppPath.groupOfPagesList, {  
+                templateUrl: 'user/views/page/list.html',
+                controller: 'PageListCtrl'
+            }).
+            when( cfgAppPath.groupOfPagesUpdate + ':pageListId', {   
+                templateUrl: 'user/views/page/update.html',
+                controller: 'UpdatePageListCtrl'
+            }).
             otherwise({
-                redirectTo: '/groupOfSection'
+                redirectTo: cfgAppPath.groupOfSectionList
             });
         
         $logProvider.debugEnabled(true);

@@ -7,21 +7,26 @@ class UrlMappings {
 			}
 		}
 		"/api/books"(resources:"book")
-		"/api/guest/books"(resources:"book")   
+		"/api/guest/books"(resources:"book")  
 		
+		
+		"/api/guest/viewer"(resources:"ViewerList")
 		"/api/guest/groupsofsections"(resources:"GroupOfSection"){
-			"/sectionsmeta"(resources:"SectionMeta")
+			"/sectionmetas"(resources:"SectionMeta")
 		}
 				
 //		"/api/groupsofsections/$action?"(controller: 'groupOfSection')
 		
 		"/api/sections"(resources:"Section")
-//		"/api/sectionsmeta"(resources:"SectionMeta")
+		"/api/sectionmetas"(resources:"SectionMeta")
 		
 		"/api/groupsofsections"(resources: "GroupOfSection"){
-			"/sectionsmeta"(resources: "SectionMeta")
+			"/sectionmetas"(resources: "SectionMeta")
 		}
-		//"/sections"(resources:"Section")
+		"/api/pagelist"(resources:"PageList"){
+			"/pagedata"(resources:"PageData")
+		}
+		"/api/pagedata"(resources:"PageData")
         
 		"/test"(view:"/book/index")
 		"/"(view:"/user/index")

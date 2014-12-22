@@ -1,67 +1,75 @@
 <div>
-	<form>
-		
-		<div ng-if="doSave" >
+	
+	<div ng-if="doSave" >
 			<h1 class="page-header">New Section</h1>
 		</div>
 		<div ng-if="!doSave" >
 			<h1 class="page-header">Update Section</h1>
-		</div>
-		
-		<fieldset>
-		
-    		<table class="table">
-
-        		<tbody>
-        			<tr>
-        				<td>
-	        				<label class="control-label" for="title">Title</label>
-							<div class="controls">
-								<input id="title" type="text" class="input-block-level"
-									required="true" ng-model="meta.title"></input>
-							</div>
-	        			</td>
-	        			<td>
-	        				<label class="control-label" for="Language">Language</label>
-	        				<div class="controls">
-			        		<select id="language" ng-model="meta.language" required="true"
-			        			ng-options="language as language for language in languages"></select>
-	        				</div>
-	        			</td>
-	        			<td>
-	        				<label class="control-label" for="type">Type</label>
-	        				<div class="controls">
-			        		<select id="type" ng-model="meta.sectionType" required="true"
-			        			ng-options="stype as stype for stype in stypes"></select>
-	        				</div>
-	        			</td>
-        		
-        			</tr>
-        		</tbody>
-			</table>
-		
-		
-			<div class="control-group">
-			
-				<label class="control-label" for="orgTitle">Data</label>
-				<div class="controls">
-					<textarea id="data" class="form-control" rows="6"
-						required="true" ng-model="section.data"></textarea>	
+	</div>
+	
+	<form role="form" name="sectionForm" novalidate >	
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10">
+				<div class="form-group" ng-class="{ 'has-error' : sectionForm.title.$invalid && !sectionForm.title.$pristine }" >  
+	        		<!-- label class="control-label" for="title_id">Title</label -->
+	        		<span class="error" ng-show="groupForm.orgTitle.$error.required"> [Required!]</span>
+					<div class="controls">     <!-- input-block-level -->
+						<input id="title_id" name="title" type="text" placeholder="Title"
+							class="form-control" ng-model="sectionMeta.title" required/>
+					</div>
 				</div>
-			
-    		</div>
-    		
-    		
-    					
-		</fieldset>
-		
-		
-		
-		<div ng-if="doSave"  class="form-actions" >
-			<button class="btn btn-primary" ng-click="saveSection()">Add Section</button>
+			</div>
+		</div>	
+		<div class="row">
+			<div class="col-md-2">
+				<div class="form-group" ng-class="{ 'has-error' : sectionForm.language.$invalid && !sectionForm.language.$pristine }" >
+	        		<!-- label class="control-label" for="language_id">Language</label -->
+	        		<div class="controls">
+			        	<select id="language_id" name="language" ng-model="sectionMeta.language" 
+			        		class="form-control" ng-options="language as language for language in languages" required>
+			        		<option value="">Pick a language</option>
+			        	</select> 
+	        		</div>
+	        	</div>	
+			</div>
+			<div class="col-md-2">
+				<div class="form-group" ng-class="{ 'has-error' : sectionForm.sectionType.$invalid && !sectionForm.sectionType.$pristine }" >
+	        		<!-- label class="control-label" for="sectionType_id">Type</label -->
+	        		<div class="controls">
+			        	<select id="sectionType_id" name="sectionType" ng-model="sectionMeta.sectionType" 
+			        		class="form-control" ng-options="stype as stype for stype in stypes" required>
+			        		<option value="">Pick a type</option>
+			        	</select>
+	        		</div>
+	        	</div>
+			</div>
+			<div class="col-md-6">
+				<div ng-if="doSave"  class="form-actions" > <!--  || sectionForm.$invalid -->
+					<button class="btn btn-primary" 
+						ng-disabled="sectionForm.$error.required"
+						ng-click="saveSection(sectionForm)">Add Section</button>
+				</div>
+				<div ng-if="!doSave"  class="form-actions" >
+					<button class="btn btn-primary" 
+						ng-disabled="sectionForm.$error.required"
+						ng-click="updateSection(sectionForm)">Update Section</button>
+				</div>
+			</div>
+		</div>	
+		<div class="row">	
+			<div class="col-md-10">
+				<div class="form-group" ng-class="{ 'has-error' : sectionForm.data.$invalid && !sectionForm.data.$pristine }" >
+					<!-- label class="control-label" for="data_id">Data</label -->
+					<div class="controls">
+						<textarea id="data_id" name="data" class="form-control" rows="6"
+							ng-model="section.data" required></textarea>
+					</div>		
+    			</div>	
+			</div>
 		</div>
-		<div ng-if="!doSave"  class="form-actions" >
-			<button class="btn btn-primary" ng-click="updateSection()">Update Section</button>
-		</div>
+	
+
 	</form>
 </div>

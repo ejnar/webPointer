@@ -1,0 +1,11 @@
+
+<select id="category_id" name="category" ng-model="group.category" 
+		        		class="form-control" 
+		        		ng-options="category as category for category in categories" required ></select>
+		        		
+		        		<select name="category" id="category_id" class="form-control" >
+<option ng-repeat="item in categories" value="item" ng-selected="group.category == item">{{item}}</option>
+</select>
+
+		        		
+		        		

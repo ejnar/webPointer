@@ -11,20 +11,19 @@ class GroupOfSection {
 	String id
 	String originalTitle
 	String category
-
-	List<Section> sections
-	List<SectionMeta> sectionsMeta
 	
-	static embedded = ['sectionsMeta']
-	static hasMany = [sections : Section]  //   sectionsMeta: SectionMeta
+//	List<Section> sections
+	List<SectionMeta> sectionMetas = new ArrayList()
 	
+//	static hasMany = [sections : Section]
+	static embedded = ['sectionMetas']
 	
 	static mapping = {
+		originalTitle nullable: false, index:true
 //		stateless true
 //		sectionsMeta fetch: 'join'
 //		sectionsMeta lazy: false
 //		title index:true  //, indexAttributes: [unique:true, dropDups:true]
-		originalTitle index:true
 //		sections nullable: true
 //		sectionsMeta nullable: true
 	}
@@ -32,12 +31,11 @@ class GroupOfSection {
 	static beforeInsert = { }
 	
     static constraints = {
-		originalTitle (blank:true)
-		category (blank:false)
+		originalTitle nullable: false, index:true
     }
 	
 	String toString(){
-		"${title}"
+		"${originalTitle}"
 	}
 	
 	

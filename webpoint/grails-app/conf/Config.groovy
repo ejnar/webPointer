@@ -102,9 +102,10 @@ environments {
 log4j.main = {
     // Example of changing the log pattern for the default console appender:
     //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+    appenders {
+        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+    }
+	info  'grails.plugins.httplogger'
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
@@ -121,7 +122,7 @@ log4j.main = {
 		   'grails.app.controllers.com.odobo',
 		   'grails.app.services.com.odobo',
 		   'org.pac4j',
-		   'org.mortbay.log'
+		   'org.mortbay.log',
 		   'se.webpointer'
 		   
 }
@@ -189,5 +190,19 @@ grails.plugin.springsecurity.rest.token.generation.useUUID = false
 //grails.routing.threadPoolProfileConfig.maxPoolSize
 //grails.routing.threadPoolProfileConfig.maxQueueSize
 //grails.routing.threadPoolProfileConfig.rejectedPolicy
+
+
+grails.plugins.httplogger.enabled = false
+//should you wish to disable it temporarily or based on environment
+
+//grails.plugins.httplogger.headers = 'Cookie, Accept-Language, X-MyHeader'
+//list of headers to log by the default HttpLogger implementation
+
+grails.plugins.httplogger.includeUrls = ['/api/**']
+grails.plugins.httplogger.excludeUrls = ['/assets/**', '/css/**', '/**/*.js']
+// - lists of Ant-style patterns to be included/excluded by the default RequestMatcher implementation
+//   (AntPatternRequestMatcher)
+// - includes take precedence over excludes
+// - if none of them are given - all requests are logged
 
 

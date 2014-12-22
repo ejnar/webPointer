@@ -11,17 +11,23 @@
 //= require bootstrap/js/collapse
 //= require spin.js/spin
 
+
 //= require user/app
 //= require user/Routes
 //= require user/Constants
-//= require user/AppController
-//= require user/sections/SectionController
-//= require user/sections/GroupOfSectionController
-//= require user/sections/SectionService
-
-
+//= require common/AppUtil
 //= require common/auth/AuthController
+
+//= require user/dao/PageService
+//= require user/dao/SectionService
+
+//= require user/section/SectionController
+//= require user/section/GroupOfSectionController
+
+//= require user/page/PageListController
+
 
 //= require_tree views
 //= require_self
 console.log("book manifest load complete.");
+
