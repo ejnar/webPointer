@@ -11,11 +11,14 @@
 //= require bootstrap/js/collapse
 //= require spin.js/spin
 
+//= require common/App
 
-//= require user/app
+//= require user/App
 //= require user/Routes
 //= require user/Constants
 //= require common/AppUtil
+//= require common/AppDirectives
+//= require common/AppController
 //= require common/auth/AuthController
 
 //= require user/dao/PageService

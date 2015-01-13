@@ -7,23 +7,17 @@
 	<form role="form" name="pageListForm" novalidate>
 		
 		<div class="row">	
-			<div class="col-md-4">
-			</div>
-			<div class="col-md-4">
-			</div>
-			<div class="col-md-4">
+			<div class="col-md-5"></div>
+			<div class="col-md-5"></div>
+			<div class="col-md-2">
 				<div class="control-group" >	
-					<button type="button" class="btn btn-success" 
-						ng-disabled="pageListForm.$error.required"
-						ng-click="savePageList()">
-            			<span class="glyphicon glyphicon-plus-sign"/> Save Page List
+					<button type="button" class="btn btn-primary" ng-click="backToList()">
+            			<span class="glyphicon glyphicon-arrow-left"/> Back to Page list
         			</button>
 	        	</div>
 			</div>
 		</div>	
 		
-		<br/>
-	
 		<div class="row">	
 			<div class="col-md-6" data-ng-init="loadPageList()" >	
 			   
@@ -35,12 +29,12 @@
 			                <th width="15%"></th>
 			            </tr>
 			        </thead>
-			        <tbody ng-repeat="s in sections | orderBy:orderProp">
+			        <tbody ng-repeat="m in sections | orderBy:orderProp">
 			            <tr>
-			                <td>{{s.title}}</td>
-		                    <td>{{s.sectionType}}</td>
+			                <td>{{m.title}}</td>
+		                    <td>{{m.sectionType}}</td>
 			                <td>
-								<button ng-click="addSectionToList(s)" tooltip="Add">
+								<button ng-click="addSectionToList(m)" tooltip="Add">
 		                    		<span class="glyphicon glyphicon-plus-sign"/> Add
 		                    	</button>
 			                </td>
@@ -50,7 +44,6 @@
 			</div>
 			
 			<div class="col-md-6">
-			    
 				<table class="table table-striped table-bordered" >
 			        <thead>
 			            <tr>
@@ -61,10 +54,10 @@
 			        </thead>
 			        <tbody ng-repeat="p in pageList.pageParts">
 			            <tr>
-			                <td>{{p.sectionMetas[0].title}}</td>
-			                <td>{{p.sectionMetas[0].sectionType}}</td>
+			                <td>{{p.sections[0].meta.title}}</td>
+			                <td>{{p.sections[0].meta.sectionType}}</td>
 			                <td>	
-		                    	<button ng-click="delPage(p)" tooltip="Remove">
+		                    	<button ng-click="delPageData(p)" tooltip="Remove">
 		                    		<i class="glyphicon glyphicon-remove-circle"> </i>
 		                    	</button>	
 			                </td>
@@ -75,7 +68,5 @@
 		</div>
 	
 	</form>
-	
-	
-	
+		
 </div>

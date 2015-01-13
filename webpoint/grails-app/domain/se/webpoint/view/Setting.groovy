@@ -7,7 +7,8 @@ class Setting {
 	String id
 	String key
 	Object value
-
+	String category
+	
     static constraints = {
     }
 }

@@ -30,6 +30,7 @@ class UrlMappings {
         
 		"/test"(view:"/book/index")
 		"/"(view:"/user/index")
+		"/vy/"(view:"/slideshow/index")
 //        "/"(view:"/index")
         "500"(view:'/error')
 	}

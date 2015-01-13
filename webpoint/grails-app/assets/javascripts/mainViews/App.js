@@ -2,20 +2,20 @@
 
 /* App Module */
 
-var gambApp = angular.module('userApp', [
+var userApp = angular.module('userApp', [
 	'http-auth-interceptor',                                    
     'ngRoute',
     'ngResource',
     'ngSanitize',
     'ui.bootstrap',
-    'angulartics'
+    'angulartics',
+    'root.webpointer'
 ]);
 
 
 function getProperty() {
     return 'test property';
 }
-
 
 function getLocalToken() {
     return sessionStorage["authToken"];
@@ -40,7 +40,7 @@ function getAuthenticateHttpConfig() {
     };
 }
 
-gambApp.run(['$rootScope', '$http', '$location',
+userApp.run(['$rootScope', '$http', '$location',
     function ($rootScope, $http, $location) {
 		console.log(' --- startup -------- LocalToken: ' + getLocalToken());
         $http.defaults.headers.common['X-AUTH-TOKEN'] = getLocalToken();

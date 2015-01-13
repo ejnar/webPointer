@@ -1,3 +1,69 @@
+<td>
+	              		<button ng-if="g.expanded" ng-click="g.expanded = false">-</button>
+	              		<button ng-if="!g.expanded" ng-click="g.expanded = true">+</button>
+	            	</td>
+
+
+<tr ng-if="g.expanded" ng-repeat-end="">
+	            	<td colspan="4">
+	            		<table class="table">
+	            			<tr ng-repeat="s in g.sectionMetas"> 
+	            				<td></td><td>{{s.title}}</td><td>{{s.language}}</td><td>{{s.sectionType}}</td>
+	            				<td>
+	            					<button ng-click="editSection(g.id,s.id)" tooltip="Edit">
+	                    				<i class="glyphicon glyphicon-pencil"> </i>
+	                    			</button>
+	                    		</td>		
+	            			</tr>
+	            		</table>
+	            	</td>
+	          	</tr> 
+
+
+
+//----------------------------
+// Brodcast from directive
+//	    $rootScope.$broadcast('keydown', e, String.fromCharCode(e.which));
+// Catch keydown in controller
+//    	$rootScope.$on('keydown', function (e, a, key) {
+//    		$log.debug(' --- keydown: ' + key + ' e:' + e + ' a: ' + a.key);
+//    		$log.debug(e);
+//    		$log.debug(a);
+//    		$log.debug(key);
+//    	    $scope.$apply(function () {
+//    	        $scope.key = key;
+//    	    });
+//    	});
+//-----------------------------
+
+
+<div sha-loading-spinner="viewLoading">    
+<div data-ng-init="loadSpotify()">  
+      <table>
+	        <thead>
+	            <tr><th>Name</th></tr>
+	        </thead>
+	        <tbody ng-repeat="t in tracks" >
+      			<tr>
+	                <td>{{t.name}}</td>
+	            </tr>
+	        </tbody>
+	  </table> 
+      <pagination total-items="totalItems" items-per-page="itemsPerPage" ng-change="pageChanged()" on-select-page="setPage(page)"
+      	boundary-links="true" max-size="maxSize" ng-model="currentPage" page="currentPage" ></pagination>
+      	
+      	
+      <p>
+         Total items: {{totalItems}}<br />
+         Items per page: {{itemsPerPage}}<br />
+         Current Page: {{currentPage}}
+      </p>
+</div>
+</div>
+
+
+
+
 
 <select id="category_id" name="category" ng-model="group.category" 
 		        		class="form-control" 
@@ -7,5 +73,38 @@
 <option ng-repeat="item in categories" value="item" ng-selected="group.category == item">{{item}}</option>
 </select>
 
+		//		  SpotifySearchApi.get({q: 'brecker', type: 'album'},
+//				  function (resp) {
+//		  			$log.debug('spotify response');
+//		  			$log.debug(resp);	
+//  				});        		
 		        		
 		        		
+		        		
+		  $http.get({
+		        method: 'GET',
+		        url: 'http://ws.spotify.com/search/1/artist',
+		        params: 'q=bah' })
+		  	.success(function(data){
+			  $log.debug(' --- 4 spotify response');
+			  $log.debug(data);
+		    }); 
+		    
+		    
+		    //		  $http.get('http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139')   // https://api.spotify.com/v1/search?q=breacker&type=album
+//	        .success(function(resp) {
+//	        	$log.debug('--- 1 spotify response');
+//	        	$log.debug(resp);	
+//	        });
+		  
+		  $http.jsonp('http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&callback=JSON_CALLBACK')
+	        .success(function(resp) {
+	        	$log.debug(' --- 2 spotify response');
+	        	$log.debug(resp);	
+	        });
+		  
+//		  $http.get('https://api.spotify.com/v1/search.json?q=breacker&type=album')
+//	        .success(function(resp) {
+//	        	$log.debug(' --- 3 spotify response');
+//	        	$log.debug(resp);	
+//	        });

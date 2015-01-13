@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.*
 import grails.rest.RestfulController
 import grails.transaction.Transactional
 
+import org.bson.types.ObjectId
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 
@@ -73,8 +74,9 @@ class SectionMetaController extends RestfulController<SectionMeta>  {
 		}
 		instance.save flush:true
 		
+		ObjectId idMeta = new ObjectId(params.id);
 		GroupOfSection groupOfSections = GroupOfSection.findById(params.GroupOfSectionId);
-		def index = groupOfSections.sectionMetas.findIndexOf { it.id == params.id }  // =~
+		def index = groupOfSections.sectionMetas.findIndexOf { it.id == idMeta } 
 		groupOfSections.sectionMetas.set(index, instance);
 		groupOfSections.save flush:true
 		

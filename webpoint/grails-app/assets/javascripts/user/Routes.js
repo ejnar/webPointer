@@ -2,8 +2,8 @@
  * 
  */
 
-
-angular.module('userApp').constant(
+var userApp = angular.module('userApp');
+userApp.constant(
 		'cfgAppPath', {
 			groupOfSectionList:  '/groupOfSection',
 			groupOfSectionEdit:	 '/groupOfSection/edit/',
@@ -17,10 +17,8 @@ angular.module('userApp').constant(
 
 
 
-angular.module('userApp').config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath',
-    
-                                  
-                                         
+userApp.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath',
+                                        
     function ($routeProvider, $httpProvider, $logProvider, cfgAppPath) {
         $routeProvider.
         	when('/login', {
@@ -55,11 +53,18 @@ angular.module('userApp').config(['$routeProvider', '$httpProvider', '$logProvid
                 templateUrl: 'user/views/page/update.html',
                 controller: 'UpdatePageListCtrl'
             }).
+            when( '/spotify', {   
+                templateUrl: 'user/views/spotify/list.html',
+                controller: 'SpotifyCtrl'
+            }).
             otherwise({
                 redirectTo: cfgAppPath.groupOfSectionList
             });
         
         $logProvider.debugEnabled(true);
+        
+//        $sceDelegateProvider.resourceUrlWhitelist(['self', 'https://api.spotify.com/v1/**', 'http://ws.spotify.com/search/1/**']);
+        
         
 //        $httpProvider.defaults.useXDomain = true;
 //        delete $httpProvider.defaults.headers.common["X-Requested-With"];

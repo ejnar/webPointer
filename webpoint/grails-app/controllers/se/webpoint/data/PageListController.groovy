@@ -2,6 +2,9 @@ package se.webpoint.data
 
 
 import static org.springframework.http.HttpStatus.*
+
+import java.util.List;
+
 import grails.converters.JSON
 import grails.rest.RestfulController
 import grails.transaction.Transactional
@@ -22,6 +25,27 @@ class PageListController extends RestfulController<PageList>  {
 	PageListController() {
 		super(PageList)
 	}
+	
+	
+	
+	/**
+	 * Shows a single resource
+	 * @param id The id of the resource
+	 * @return The rendered resource or a 404 if it doesn't exist
+	 */
+	def show() {
+		PageList pageList = queryForResource(params.id);
+	
+		for (p in pageList.pageParts) {
+			for (s in p.sections){
+				s.data = s.data.replaceAll("(\\r\\n|\\n)", "<br />");
+				println s.data;
+			}
+		}
+		respond pageList;
+	}
+	
+	
 	
 	
 	/**

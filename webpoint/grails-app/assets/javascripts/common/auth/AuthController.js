@@ -12,9 +12,9 @@ authController.controller('LoginController', ['$rootScope', '$scope', '$http', '
        
         
         $scope.logIn = function () {
-//            console.log('logIn called - ' + $scope.authData.username);
-        	
-            $http.post('auth/api/login', { username: $scope.authData.username, password: $scope.authData.password }, getAuthenticateHttpConfig).
+            console.log('logIn called - ' + $scope.authData.username);
+        																											// getAuthenticateHttpConfig()		
+            $http.post('auth/api/login', { username: $scope.authData.username, password: $scope.authData.password }, {ignoreAuthModule: true} ).
                 success(function (data) {
 //                    console.log('authentication token: ' + data.access_token);
 //                    console.log('authentication username: ' + data.username);

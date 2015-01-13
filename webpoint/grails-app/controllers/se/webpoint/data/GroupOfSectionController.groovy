@@ -29,13 +29,10 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 	
 	def index(Integer max) {
 		log.debug " Get list ----"
-//		def prop = grailsApplictaion.config['test.hello']
-		
 		println "index " + grailsApplication.metadata['app.name']
-//		params.max = Math.min(max ?: 10, 100)
-//		respond listAllResources(params), model: [("${resourceName}Count".toString()): countResources()]
 		
-		
+//		def prop = grailsApplictaion.config['test.hello']
+			
 //		if (camelContext.routes.size() == 0) {
 //			camelContext.addRoutes(new RouteBuilder() {
 //				@Override void configure() {
@@ -48,9 +45,15 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 		sendMessage("seda:input", "Hello, world! from dynamically added rotue")		
 //		sendMessage("direct:foo", "Hello, a second new message from my Grails and Camel appliction!!!")
 		
-		def groupOfSectionList = GroupOfSection.collection.find()
-		def groupOfSections = groupOfSectionList.collect{it as GroupOfSection}
-		respond groupOfSections, [status: OK]     // BAD_REQUEST
+//		def groupOfSectionList = GroupOfSection.collection.find()
+//		def groupOfSections = groupOfSectionList.collect{it as GroupOfSection}
+//		respond groupOfSections, [status: OK]     // BAD_REQUEST
+		
+		params.max = Math.min(max ?: 10, 100)
+		
+		println countResources();
+		
+		respond listAllResources(params), model: [("${resourceName}Count".toString()): countResources()]
 	}
 
 	
@@ -96,14 +99,14 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 	def update() {
 	
 		GroupOfSection instance = GroupOfSection.findById(params.id);
-		
+		println instance.getTimestamp();
 		if (instance == null) {
 			notFound()
 			return
 		}
 		
-		instance.properties = getObjectToBind()
-
+		instance.properties = getObjectToBind();
+		
 		if (instance.hasErrors()) {
 			respond instance.errors, view:'edit' // STATUS CODE 422
 			return

@@ -1,35 +1,40 @@
 import grails.converters.JSON
+
+import org.bson.types.ObjectId
+
 import se.webpoint.auth.Role
 import se.webpoint.auth.RoleGroup
 import se.webpoint.auth.RoleGroupRole
 import se.webpoint.auth.User
 import se.webpoint.auth.UserRole
 import se.webpoint.auth.UserRoleGroup
-import se.webpoint.bok.Book
-import se.webpoint.data.SectionMeta
+import se.webpoint.data.PageData
+import se.webpoint.data.Section
 
 
 class BootStrap {
 
     def init = { servletContext ->
 		
-//		JSON.registerObjectMarshaller(GroupOfSection) {
+		
+		JSON.registerObjectMarshaller(ObjectId) {
+			return it.toHexString()
+		}
+		
+//		JSON.registerObjectMarshaller(PageData) {
 //			def output = [:]
-//			output['id'] = it.id
-//			output['originalTitle'] = it.originalTitle
-//			output['category'] = it.category
+//			output['key'] = it.key
+//			output['style'] = it.style
+//			output['color'] = it.color
 //			output['sections'] = it.sections
-//			output['sectionMetas'] = it.sectionMetas
 //			return output
 //		}
-//		
-//		
-//		JSON.registerObjectMarshaller(SectionMeta) {
+//		JSON.registerObjectMarshaller(Section) {
 //			def output = [:]
-//			output['sectionId'] = it.sectionId
-//			output['language'] = it.language
-//			output['title'] = it.title
-//			output['sectionType'] = it.sectionType		
+//			output['id'] = it.id
+//			output['data'] = it.data
+//			output['groupId'] = it.groupId
+//			output['meta'] = it.meta		
 //			return output
 //		}
 		

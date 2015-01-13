@@ -2,33 +2,13 @@
 
 /* Controllers */
 
-var app = angular.module('userApp');
-
-app.controller('AppController', ['$rootScope', '$scope', '$http', //'SettingsApi', 'UserApi',
-    function ($rootScope, $scope, $http, SettingsApi, UserApi) {
-
-//    	$scope.settings = SettingsApi.Setting.setting();
-//    	$scope.currentUser = UserApi.User.profile();
-
-    	$scope.logout = function () {
-    		console.log('logOut called');
-
-    		$http.post('auth/api/logout', {}, getHttpConfig()).
-            	success(function () {
-            		console.log('logout success');
-            		$rootScope.$broadcast('event:auth-logoutRequest');
-            	}).
-            	error(function (data) {
-            		console.log('logout error: ' + data);
-            	});
-    	};
-}]);
+var app = angular.module('root.webpointer');
 
 
 app.factory('$exceptionHandler', ['$log', function ($log) {
     return function (exception, cause) {
-    	$log.debug('********** - Exception: '+ exception.statusText + ' - **********');
-        alert(exception);
+    	$log.debug('********** - Exception: ' + exception.status + ' ' + exception.statusText + ' - **********');
+        alert(exception.status + '  ' + exception.statusText);
     };
 }]);
 

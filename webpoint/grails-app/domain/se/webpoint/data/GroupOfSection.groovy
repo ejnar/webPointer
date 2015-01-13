@@ -1,6 +1,6 @@
 package se.webpoint.data
 
-
+import org.bson.types.ObjectId
 
 
 //@Resource(formats=['json', 'xml'])
@@ -8,32 +8,38 @@ class GroupOfSection {
 
 	static mapWith="mongo"
 	
-	String id
+	ObjectId id
 	String originalTitle
 	String category
+	Date modify
 	
-//	List<Section> sections
 	List<SectionMeta> sectionMetas = new ArrayList()
 	
-//	static hasMany = [sections : Section]
 	static embedded = ['sectionMetas']
 	
 	static mapping = {
-		originalTitle nullable: false, index:true
+		originalTitle index:true
 //		stateless true
-//		sectionsMeta fetch: 'join'
-//		sectionsMeta lazy: false
 //		title index:true  //, indexAttributes: [unique:true, dropDups:true]
 //		sections nullable: true
 //		sectionsMeta nullable: true
 	}
 	
-	static beforeInsert = { }
+	static constraints = {
+		originalTitle nullable: false, blank: false
+		modify nullable: true
+	}
 	
-    static constraints = {
-		originalTitle nullable: false, index:true
-    }
+    def beforeInsert () { }
+	def beforeUpdate () { modify = new Date();}
+	def afterInsert () { }
+	def afterUpdate () { }	
 	
+	
+	public Date getTimestamp(){
+		return new Date( id._time() * 1000 );
+	}
+		
 	String toString(){
 		"${originalTitle}"
 	}

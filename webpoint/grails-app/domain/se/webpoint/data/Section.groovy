@@ -1,13 +1,21 @@
 package se.webpoint.data
 
+import java.util.Date;
+
+import org.bson.types.ObjectId
+
 //@Resource(formats=['json', 'xml'])
 class Section {
 	
 	static mapWith="mongo"
 	
-	String id
+	ObjectId id
 	String data
 	String groupId
+	Date modify
+	SectionMeta meta
+
+	static transients = ['meta']
 	
 	static belongsTo = SectionMeta
 	
@@ -15,14 +23,16 @@ class Section {
 //		stateless true
 	}
 	
-//	static beforeInsert = { 
-//		data = 'test'
-//	}
-	
 	static constraints = {
 		data nullable: false
 		groupId nullable: false
+		modify nullable: true
 	}
+	
+	def beforeInsert () { }
+	def beforeUpdate () { modify = new Date();}
+	def afterInsert () { }
+	def afterUpdate () { }
 	
 	String toString(){
 		"${id}"

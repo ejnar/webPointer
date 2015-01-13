@@ -1,0 +1,29 @@
+<div sha-loading-spinner="viewLoading" data-ng-init="loadData()" >
+	
+	<h5 class="page-header">Main view</h5>
+    
+	<div class="row">
+	    <div class="col-md-2"> </div>	
+		<div class="col-md-1">
+			<button type="button" class="btn btn-small btn-primary" ng-click="left()" keyleft >
+            	<span class="glyphicon glyphicon-arrow-left"/> Prev
+        	</button>
+		</div>
+		<div class="col-md-1"> </div>
+		<div class="col-md-1">
+			<button type="button" class="btn btn-small btn-primary" ng-click="right()" keyright >
+            	Next <span class="glyphicon glyphicon-arrow-right"/> 
+        	</button>
+		</div>
+		<div class="col-md-7"> </div>
+	</div>	
+	<div class="divider"></div>
+	<div class="row">	
+		<div class="col-md-2"> </div>
+		<div class="col-md-8">	
+			<span ng-bind-html="pageList.pageParts[currentPart].sections[0].data"></span>
+		</div>  
+		<div class="col-md-2"> </div>
+	</div>
+ 
+</div>

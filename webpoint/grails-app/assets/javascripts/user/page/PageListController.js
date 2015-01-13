@@ -6,31 +6,32 @@ var sectionController = angular.module('userApp');
 
 sectionController.controller('PageListCtrl', [ 
                                                     
-    '$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', 'tmpCash', 'cfgAppPath', 'PageListApi', 'sharedProperties',
+    '$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', '$modal', 'tmpCash', 'cfgAppPath', 'PageListApi', 'sharedProperties',
      
-    function list ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, tmpCash, cfgAppPath, PageListApi, sharedProperties) {
+    function list ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $modal, tmpCash, cfgAppPath, PageListApi, sharedProperties) {
 	 	
     	$log.info(" --- PageListCtrl --- ");  
-    	$scope.viewLoading = true;
     	
-    	$scope.addPageList = function() {
-    		$log.debug('addPageLis:');
+    	$scope.openModel = function () {
+    		var modalInstance = $modal.open({
+    			templateUrl: 'user/views/page/ceatePageModal.html',
+    			controller: 'ModalInstanceCtrl',
+    			size: 'lg'
+    		});
+    	};
+    	
+    	$scope.addPageList = function(form) {
+    		$log.debug('addPageList:');
     		PageListApi.save($scope.pageList, 
 					function (resp) {
     					$log.debug(resp);
-    					tmpCash.put('PageList', resp);
+//    					tmpCash.put('PageList', resp);
     					$location.path(cfgAppPath.groupOfPagesUpdate + resp.id);
 			    	});	
-    		
     	}
     	
     	$scope.editPageList = function(id) {
     		$log.debug('editPageList - id:' + id);	
-//    		PageListApi.get({Id: id}, 
-//					function (resp) {
-//	    				$scope.item = resp;
-//    					
-//			    	});	   
     		$location.path(cfgAppPath.groupOfPagesUpdate + id );
     	}
   	
@@ -48,7 +49,7 @@ sectionController.controller('PageListCtrl', [
 	        	PageListApi.save($scope.item,
 	        			function (resp) {
 	        				$log.debug(resp);
-	        				tmpCash.put('PageList', resp);
+//	        				tmpCash.put('PageList', resp);
 	        				$scope.loadPageList();
 	                    	$location.path(cfgAppPath.groupOfPagesUpdate); 
 	        		});    
@@ -63,6 +64,7 @@ sectionController.controller('PageListCtrl', [
 	    
 		$scope.loadPageList = function() {
 			$log.debug('loadPageList');
+			$scope.viewLoading = true;
     		PageListApi.list(
     				function (resp) {
     					$scope.listOfPages = resp;
@@ -73,6 +75,30 @@ sectionController.controller('PageListCtrl', [
     	}
     	
 }]);
+
+
+
+sectionController.controller('ModalInstanceCtrl',[ '$scope', '$location', '$modalInstance', '$log', 'cfgAppPath', 'PageListApi',   
+		function ($scope, $location, $modalInstance, $log, cfgAppPath, PageListApi) {
+
+	  $scope.addPageList = function () {
+	    $modalInstance.close('close'); 
+	    
+   		$log.debug('addPageList:');
+		PageListApi.save($scope.pageList, 
+			function (resp) {
+				$log.debug(resp);
+				$location.path(cfgAppPath.groupOfPagesUpdate + resp.id);
+			});	
+	 
+	  };
+
+	  $scope.cancel = function () {
+	    $modalInstance.dismiss('cancel');
+	  };
+}]);
+
+
 
 
 sectionController.controller('UpdatePageListCtrl', [
@@ -88,20 +114,19 @@ sectionController.controller('UpdatePageListCtrl', [
 				
 				PageListApi.get({Id: $routeParams.pageListId}).$promise
 					.then( function(resp) {	
-//						$log.debug(resp);
-//						$log.debug(resp.pageParts[0].sectionMetas[0]);
 	    				$scope.pageList = resp;
 	    				$scope.pageListTmp = resp;
 	    				
 	    				SectionMetaApi.list(function (resp) {
 	    					$scope.sections = resp;
 	    					for(var i=0;i<$scope.pageListTmp.pageParts.length;i++){
-	    						var pagePart = $scope.pageListTmp.pageParts[i];
-	    						for(var j=0;j<pagePart.sectionMetas.length;j++){
-	    							var meta = pagePart.sectionMetas[j];
+	    						var pageData = $scope.pageListTmp.pageParts[i];
+	    						for(var j=0;j<pageData.sections.length;j++){
+	    							var section = pageData.sections[j];
+	    							
 	    							angular.forEach($scope.sections, function(sectionMeta) {
-	    								if(sectionMeta.id == meta.id){
-	    									$scope.pageList.pageParts[i].sectionMetas[j] = sectionMeta;
+	    								if(sectionMeta.section.id == section.id){
+	    									$scope.pageList.pageParts[i].sections[j].meta = sectionMeta;
 	    								}
 	    								
 	    							});
@@ -124,25 +149,42 @@ sectionController.controller('UpdatePageListCtrl', [
 		
 		$scope.addSectionToList = function(meta) {
 			$log.info("addSectionToList meta: "+meta.id); 
-			
-			$scope.pageList.pageParts.push(meta);
-			
+
 			var pageData = {};
+			pageData.key = '';
 			pageData.color = 'white';
 			pageData.style = 'default';
-			pageData.sectionMetas = [];
-			pageData.sectionMetas.push(meta);
-			$log.debug(pageData); 
-			$log.debug($routeParams.pageListId);
-			PageListDataApi.save({pageListId: $routeParams.pageListId}, pageData,
+			pageData.sections = [];
+			
+			SectionsApi.get({Id: meta.section.id}).$promise
+				.then( function(resp) {	
+					$log.debug(resp);
+					var section = resp;
+					section.meta = meta;
+					pageData.sections.push(section);
+					
+					$log.debug(pageData);
+					$log.debug($routeParams.pageListId);
+					PageListDataApi.save({pageListId: $routeParams.pageListId}, pageData,
+							function (resp) {
+								$log.debug(resp);  
+								$scope.loadPageList();
+							});
+				});
+		
+		}
+		$scope.delPageData = function(pageData) {
+			$log.info("delPageData: "); 
+			$log.info(pageData); 
+			PageListDataApi.remove({pageListId: $routeParams.pageListId, Id: pageData.key},
 					function (resp) {
-						$log.debug(resp);  
+						$log.debug(resp);
+						$scope.loadPageList();
 					});
 			
 		}
-		$scope.delPage = function(index) {
-			$log.info("delPage: " + index); 
-			
+		$scope.backToList = function() {
+			$location.path(cfgAppPath.groupOfPagesList);
 		}
 		
 }]);
