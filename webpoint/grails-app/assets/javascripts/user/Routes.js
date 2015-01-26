@@ -9,7 +9,7 @@ userApp.constant(
 			groupOfSectionEdit:	 '/groupOfSection/edit/',
 			groupOfSectionNew:	 '/groupOfSection/new',
 			sectionNew: '/section/new',
-			sectionEdit: '/group/:groupId/section/:id',
+			sectionEdit: '/meta/:metaId/section/:id',
 			groupOfPagesList: '/groupOfPagesList',
 			groupOfPagesUpdate: '/groupOfPagesUpdate/',
 		});

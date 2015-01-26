@@ -61,7 +61,6 @@ class PageDataController extends RestfulController<PageData>  {
 		response.addHeader(HttpHeaders.LOCATION, location)
 		respond pageList, [status: CREATED]
 	}
-
 	
 	
 	/**
@@ -69,12 +68,20 @@ class PageDataController extends RestfulController<PageData>  {
 	 * @param id The id
 	 */
 	@Transactional
-	def delete() {
+	def delete() {  
 		println " --- delete PageData: " + params
 		
 		PageList pageList = PageList.findById(params.PageListId);
-		def pageDatas = pageList.pageParts.takeWhile{ it.key == params.id };
-		pageList.pageParts = pageList.pageParts.dropWhile{ it.key == params.id };
+				
+		Iterator itr = pageList.pageParts.iterator()
+		while(itr.hasNext()){
+			def pageData = itr.next() 
+			if(pageData.key == params.id){
+				itr.remove()
+//				pageData.delete()
+			}
+		}
+		
 
 		pageList.save flush:true		
 		

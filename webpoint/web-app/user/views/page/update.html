@@ -29,12 +29,12 @@
 			                <th width="15%"></th>
 			            </tr>
 			        </thead>
-			        <tbody ng-repeat="m in sections | orderBy:orderProp">
+			        <tbody ng-repeat="s in meta | orderBy:orderProp">
 			            <tr>
-			                <td>{{m.title}}</td>
-		                    <td>{{m.sectionType}}</td>
+			                <td>{{s.title}}</td>
+		                    <td>{{s.sectionType}}</td>
 			                <td>
-								<button ng-click="addSectionToList(m)" tooltip="Add">
+								<button ng-click="addSectionToList(s)" tooltip="Add">
 		                    		<span class="glyphicon glyphicon-plus-sign"/> Add
 		                    	</button>
 			                </td>

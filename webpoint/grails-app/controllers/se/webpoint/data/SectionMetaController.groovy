@@ -39,19 +39,18 @@ class SectionMetaController extends RestfulController<SectionMeta>  {
 			respond instance.errors, view:'create' // STATUS CODE 422
 			return
 		}
-		Section section = instance.section
+//		Section section = instance.section
+//		section.save flush:true
+//		instance.section = section 
 		
-		section.save flush:true
-		
-		instance.section = section 
 		instance.save flush:true
 		
-		GroupOfSection groupOfSections = GroupOfSection.findById(params.GroupOfSectionId);
-		groupOfSections.sectionMetas.add(instance);
-		groupOfSections.save flush:true
+//		GroupOfSection groupOfSections = GroupOfSection.findById(params.GroupOfSectionId);
+//		groupOfSections.sectionMetas.add(instance);
+//		groupOfSections.save flush:true
 		
 		response.addHeader(HttpHeaders.LOCATION,
-			g.createLink( resource: 'api'  , action: this.controllerName,GroupOfSectionId: params.GroupOfSectionId,  absolute: true))
+			g.createLink( resource: 'api', action: this.controllerName, Id: instance.Id,  absolute: true))
 		respond instance, [status: CREATED]
 	}
 
@@ -74,15 +73,17 @@ class SectionMetaController extends RestfulController<SectionMeta>  {
 		}
 		instance.save flush:true
 		
-		ObjectId idMeta = new ObjectId(params.id);
-		GroupOfSection groupOfSections = GroupOfSection.findById(params.GroupOfSectionId);
-		def index = groupOfSections.sectionMetas.findIndexOf { it.id == idMeta } 
-		groupOfSections.sectionMetas.set(index, instance);
-		groupOfSections.save flush:true
+//		ObjectId idMeta = new ObjectId(params.id);
+//		GroupOfSection groupOfSections = GroupOfSection.findById(params.GroupOfSectionId);
+//		def index = groupOfSections.sectionMetas.findIndexOf { it.id == idMeta } 
+//		groupOfSections.sectionMetas.set(index, instance);
+//		groupOfSections.save flush:true
 		
 //		api/groupsofsections/:groupId/sectionmetas/:Id
+//		response.addHeader(HttpHeaders.LOCATION,
+//			g.createLink( resource: 'api/groupsofsections/'+params.Id , action: this.controllerName,id: instance.id, absolute: true))
 		response.addHeader(HttpHeaders.LOCATION,
-			g.createLink( resource: 'api/groupsofsections/'+params.GroupOfSectionId , action: this.controllerName,id: instance.id, absolute: true))
+			g.createLink( resource: 'api', action: this.controllerName, Id: instance.Id,  absolute: true))
 		respond instance, [status: OK]
 	}
 

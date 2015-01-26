@@ -44,9 +44,9 @@ class SectionController extends RestfulController<Section>  {
 		}
 		instance.save flush:true
 		
-		GroupOfSection groupOfSections = GroupOfSection.findById(instance.groupId);
-		groupOfSections.sections.add(instance);
-		groupOfSections.save flush:true
+//		GroupOfSection groupOfSections = GroupOfSection.findById(instance.groupId);
+//		groupOfSections.sections.add(instance);
+//		groupOfSections.save flush:true
 		
 		response.addHeader(HttpHeaders.LOCATION,
 			g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))

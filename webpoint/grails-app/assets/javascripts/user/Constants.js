@@ -8,6 +8,7 @@ angular.module('userApp').constant(
 			categories: ['Worship','Christian','Hymns', 'Gospel', 'Christmas carols', 'Traditional'],
 			language: ['swe','eng','dan'],
 			stypes: ['TEXT', 'TEXTCHORDS'],
+			keys: ['C','C#','D'],
 			test: 'value',
 		});
 

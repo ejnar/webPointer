@@ -6,48 +6,45 @@ var sectionController = angular.module('userApp');
 
 sectionController.controller('GroupOfSectionCtrl', [ 
                                                     
-    '$scope', '$rootScope', '$routeParams', '$location', '$filter', '$log', 'cfgAppPath', 'GroupsOfSectionsApi', 'sharedProperties',
+    '$scope', '$rootScope', '$routeParams', '$location', '$filter', '$log', 'cfgAppPath', 'SectionMetaApi', 'SectionsApi', 'sharedProperties',
      
-    function list ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath, GroupsOfSectionsApi, sharedProperties) {
+    function list ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath, SectionMetaApi, SectionsApi, sharedProperties) {
 	 	
 //		$scope.$on("LOAD_GROUPOFSECTION_EVENT", function () {   // event, args
 //			$log.debug(' --- LOAD_GROUPOFSECTION_EVENT');     // + args.eventID
 //			$scope.loadSection();	 
 //		});
 			
-    	$scope.editGroup = function(id) {
-    		$log.debug('editGroup - id:' + id);	
+    	$scope.editMeta = function(id) {
+    		$log.debug('editMeta - id:' + id);	
     		$log.debug(id);	
-    		sharedProperties.getProperty().doSave = false;
     		$location.path(cfgAppPath.groupOfSectionEdit + id );
     	}
-    	$scope.delGroup = function(id) {
-    		$log.debug('delGroup - id:' + id);
-    		GroupsOfSectionsApi.remove({Id: id},
-    			function (resp) {
-    				$log.debug("remove success GroupsOfSection");
-    				$scope.loadGroups();
-    			});
+    	$scope.delMeta = function(meta) {
+    		$log.debug('SectionMetaApi.remove ');
+    		$log.debug(meta);
+    		if(meta.sectionFK == ''){
+    			$log.debug('SectionMetaApi.remove ');
+    			SectionMetaApi.remove({Id: meta.id}, function (resp) { $scope.loadGroups(); });
+    		}else{
+    			$log.debug('SectionApi.remove ');
+    			SectionsApi.remove({Id: meta.sectionFK},
+    				function (resp) { $scope.loadGroups(); });
+    		}
     	}
-    	$scope.addGroup = function() {
+    	$scope.addMeta = function() {
     		$log.debug('addGroup');
-    		sharedProperties.getProperty().doSave = true;
     		$location.path(cfgAppPath.groupOfSectionNew);
     	} 
-    	$scope.addSection = function(id) {
-    		$log.debug('addSection groupId:' + id);
-    		$rootScope.groupId = id;
-    		sharedProperties.getProperty().doSave = true;
-            $location.path(cfgAppPath.sectionNew); 
+    	$scope.editSection = function(meta) {
+    		$log.debug('editSection :');
+    		$log.debug(meta);
+    		var id = 'null';
+    		if(meta.sectionFK != '')
+    			id = meta.sectionFK;
+    		$location.path(cfgAppPath.sectionEdit.replace(':metaId', meta.id).replace(':id',id) );
     	} 
-    	
-    	$scope.editSection = function(groupId,metaId) {
-    		$log.debug('editSection id:'+metaId);
-    		sharedProperties.getProperty().doSave = false;
-    		$location.path(cfgAppPath.sectionEdit.replace(':groupId', groupId).replace(':id', metaId) );
-    	}
-    
-    	
+        	
     	$scope.toggleDetail = function($index) {
             $scope.activePosition = $scope.activePosition == $index ? -1 : $index;
         };
@@ -71,7 +68,7 @@ sectionController.controller('GroupOfSectionCtrl', [
 		$scope.loadGroups = function() {
     		$log.debug(' --- ListGroupOfSectionCtrl.load ');
     		$scope.viewLoading = true;
-    		GroupsOfSectionsApi.list(
+    		SectionMetaApi.list(
     				function (resp) {
     					$scope.items = resp;
     					$scope.viewLoading = false;
@@ -128,42 +125,6 @@ sectionController.controller('GroupOfSectionCtrl', [
 }]);
 
 
-
-sectionController.controller('SpotifyCtrl', function ($scope, $log, SpotifySearchApi) {
-	
-	$scope.currentPage = 1;
-	$scope.maxSize = 100;
-	$scope.itemsPerPage = 2;
-	$scope.totalItems = 100;
-	$scope.offset = 0;
-	$scope.count = 0;
-		  
-	$scope.pageChanged = function(page) {
-		$scope.count = page * $scope.itemsPerPage; 
-		var limit = $scope.itemsPerPage;
-		if($scope.count < $scope.totalItems){
-			$scope.offset = (page-1) * $scope.itemsPerPage;
-		}
-		$log.debug('count: ' + $scope.count);
-		var promise = SpotifySearchApi.list('jesus', limit, $scope.offset);
-		promise.then(function(resp) { 
-			$scope.tracks = resp.tracks.items;
-			$scope.totalItems = resp.tracks.total;
-		}, 
-		function() { console.log(' --- error'); });
-	};
-	
-	$scope.$watch('currentPage', function(newPage){
-		$scope.watchPage = newPage;
-	    //or any other code here
-		$scope.pageChanged(newPage);
-		$log.debug('$watch ' + newPage);
-	});
-	
-
-});
-
-
 //sectionController.controller('UpdateGroupOfSectionCtrl', ['$scope', '$routeParams', '$location', '$timeout', 'GroupsOfSectionsApi',
 //    function ($scope, $routeParams, $location, $timeout, BookApi) {
 //		$log.debug( " --- UpdateGroupOfSectionCtrl ", $routeParams.groupId);
@@ -204,40 +165,39 @@ sectionController.controller('SpotifyCtrl', function ($scope, $log, SpotifySearc
 
 sectionController.controller('UpdateGroupSectionCtrl', [
                                                         
-    '$rootScope', '$scope', '$routeParams', '$location', '$log', 'cfgAppPath', 'properties', 'GroupsOfSectionsApi', 'sharedProperties',
+    '$rootScope', '$scope', '$routeParams', '$location', '$log', 'cfgAppPath', 'properties', 'SectionMetaApi', 'sharedProperties',
     
-    function($rootScope, $scope, $routeParams, $location, $log, cfgAppPath, properties, GroupsOfSectionsApi, sharedProperties) {
+    function($rootScope, $scope, $routeParams, $location, $log, cfgAppPath, properties, SectionMetaApi, sharedProperties) {
 	
 		$scope.categories = properties.categories;
-		$scope.doSave = sharedProperties.getProperty().doSave;
+		$scope.languages = properties.language;
+		$scope.stypes = properties.stypes;
+		$scope.doSave = true;
 //		$scope.$broadcast('show-errors-reset');
 		
-		if(!$scope.doSave){
-			$scope.invalid = false
-			GroupsOfSectionsApi.get({Id: $routeParams.groupId}, function (resp) {
-				$scope.group = resp;
+		if($routeParams.groupId != null){
+			$scope.doSave = false;
+			SectionMetaApi.get({Id: $routeParams.groupId}, function (resp) {
+				$log.debug("SectionMetaApi.get: " + resp);
+				$scope.sectionMeta = resp;
 			});	
-		} 
+		}
     
-	    $scope.updateGroup = function (form) {
-	    	$log.debug("updateGroup ", $scope.group);
-	    	var group = $scope.group;
-	    	GroupsOfSectionsApi.update({Id: group.id}, group, function (resp) {
+	    $scope.updateMeta = function (form) {
+	    	$log.debug("updateGroup ", $scope.sectionMeta);
+	    	var sectionMeta = $scope.sectionMeta;
+	    	SectionMetaApi.update({Id: sectionMeta.id}, sectionMeta, function (resp) {
 	    		$location.path(cfgAppPath.groupOfSectionList);
 	        });
 //	    	$rootScope.$broadcast("LOAD_GROUPOFSECTION_EVENT");
 	    };
 	    
-	    $scope.saveGroup = function(form) {
-	        $log.debug('saveGroup');
+	    $scope.saveMeta = function(form) {
+	        $log.debug('saveMeta');
 //	        $scope.$broadcast('show-errors-check-validity');
-	        GroupsOfSectionsApi.save($scope.group, function (resp) {
-	        	$rootScope.groupId = resp.id;
-	        	sharedProperties.getProperty().doSave = true;
-	            $location.path(cfgAppPath.sectionNew); 
+	        SectionMetaApi.save($scope.sectionMeta, function (resp) {
+	        	$location.path(cfgAppPath.sectionEdit.replace(':metaId', resp.id).replace(':id', 'null') );
 	        });
 //	         $rootScope.$broadcast("LOAD_GROUPOFSECTION_EVENT");	           
 	    }
-	    
-
 }]);                                               

@@ -27,7 +27,7 @@
 <!-- Add your site or application content here -->
 <div id="wrap">
 	
-    <div class="container-fluid" id="content">   <!-- container-fluid  style="width:60%" -->
+    <div id="content">   <!-- container-fluid  style="width:60%" -->
     	<g:layoutBody/>
     </div>
   

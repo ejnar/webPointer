@@ -11,13 +11,13 @@ class Section {
 	
 	ObjectId id
 	String data
-	String groupId
+	String type
+	String key
 	Date modify
-	SectionMeta meta
+	SectionMeta sectionMeta
 
-	static transients = ['meta']
-	
-	static belongsTo = SectionMeta
+//	static transients = ['meta']
+//	static belongsTo = SectionMeta
 	
 	static mapping = {
 //		stateless true
@@ -25,7 +25,8 @@ class Section {
 	
 	static constraints = {
 		data nullable: false
-		groupId nullable: false
+		type nullable: false
+		key nullable: true
 		modify nullable: true
 	}
 	

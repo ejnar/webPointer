@@ -57,28 +57,20 @@ class BootStrap {
 //				
 //		UserRole.get(user.id, roleAdmin.id) ?: UserRole.create(user,roleAdmin, true)
 		
-		Role roleAdmin = Role.findByAuthority("ROLE_ADMIN") ?:
-		new Role(authority: "ROLE_ADMIN").save(failOnError: true)
+		Role roleAdmin = Role.findByAuthority("ROLE_ADMIN") ?: new Role(authority: "ROLE_ADMIN").save(failOnError: true)
 		
-		RoleGroup groupAdmin = RoleGroup.findByName("GROUP_ADMIN") ?:
-		new RoleGroup(name: "GROUP_ADMIN").save(failOnError: true)
+		RoleGroup groupAdmin = RoleGroup.findByName("GROUP_ADMIN") ?: new RoleGroup(name: "GROUP_ADMIN").save(failOnError: true)
+		RoleGroup groupPT = RoleGroup.findByName("GROUP_P_TRELLEBORG") ?: new RoleGroup(name: "GROUP_P_TRELLEBORG").save(failOnError: true)
 		
-		RoleGroupRole.get(groupAdmin.id, roleAdmin.id) ?: 
-		RoleGroupRole.create(groupAdmin, roleAdmin, true)
+		RoleGroupRole.get(groupAdmin.id, roleAdmin.id) ?: RoleGroupRole.create(groupAdmin, roleAdmin, true)
+		RoleGroupRole.get(groupPT.id, roleAdmin.id) ?: RoleGroupRole.create(groupPT, roleAdmin, true)
 		
-		User user = User.findByUsername("admin") ?:
-		new User(username: 'admin', password: '123').save(failOnError: true)
+		User user = User.findByUsername("admin") ?: new User(username: 'admin', password: '123').save(failOnError: true)
 				
-		UserRole.get(user.id, roleAdmin.id) ?:
-		UserRole.create(user, roleAdmin, true)
+		UserRole.get(user.id, roleAdmin.id) ?: UserRole.create(user, roleAdmin, true)
 		
-		UserRoleGroup.get(user.id, groupAdmin.id) ?:
-		UserRoleGroup.create(user, groupAdmin, true)
-		
-		
-		
-		
-		
+		UserRoleGroup.get(user.id, groupAdmin.id) ?: UserRoleGroup.create(user, groupAdmin, true)
+		UserRoleGroup.get(user.id, groupPT.id) ?: UserRoleGroup.create(user, groupPT, true)
 		
 		
     }

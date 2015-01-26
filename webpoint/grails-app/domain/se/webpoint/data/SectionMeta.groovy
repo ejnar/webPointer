@@ -15,9 +15,11 @@ class SectionMeta {   //implements Serializable
 	String category
 	String language
 	String sectionType
+	String sectionFK
 	Date modify
-	Section section
 
+	static belongsTo = Section
+	
 	static mapping = {
 //		originalTitle index:true
 		title index:true
@@ -25,15 +27,18 @@ class SectionMeta {   //implements Serializable
 	
 	static constraints = {
 		originalTitle nullable: true
-		title nullable:false, index:true
+		title nullable:false
 		category nullable: true
 		language nullable:false 
 		sectionType nullable:true 
-		section nullable:false
+		sectionFK nullable:true
 		modify nullable: true
 	}
 	
-	def beforeInsert () { if(originalTitle == null) originalTitle = title;}
+	def beforeInsert () { 
+		if(originalTitle == null) originalTitle = title;
+		if(sectionFK == null) sectionFK = '';
+	}
 	def beforeUpdate () { modify = new Date();}
 	def afterInsert () { }
 	def afterUpdate () { }
