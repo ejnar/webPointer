@@ -12,6 +12,9 @@ userApp.constant(
 			sectionEdit: '/meta/:metaId/section/:id',
 			groupOfPagesList: '/groupOfPagesList',
 			groupOfPagesUpdate: '/groupOfPagesUpdate/',
+			user: '/user',
+			editEmail: '/editemail',
+			addUser: '/adduser'	
 		});
 
 
@@ -52,6 +55,18 @@ userApp.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath',
             when( cfgAppPath.groupOfPagesUpdate + ':pageListId', {   
                 templateUrl: 'user/views/page/update.html',
                 controller: 'UpdatePageListCtrl'
+            }).
+            when( cfgAppPath.addUser , {   
+                templateUrl: 'user/views/user/addUser.html',
+                controller: 'AddUserCtrl'
+            }).
+            when( cfgAppPath.editEmail , {   
+                templateUrl: 'user/views/user/editEmail.html',
+                controller: 'EditEmailCtrl'
+            }).
+            when( cfgAppPath.user , {   
+                templateUrl: 'user/views/user/editUser.html',
+                controller: 'UserCtrl'
             }).
             when( '/spotify', {   
                 templateUrl: 'user/views/spotify/list.html',

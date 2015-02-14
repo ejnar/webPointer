@@ -8,7 +8,10 @@ var app = angular.module('root.webpointer');
 app.factory('$exceptionHandler', ['$log', function ($log) {
     return function (exception, cause) {
     	$log.debug('********** - Exception: ' + exception.status + ' ' + exception.statusText + ' - **********');
-        alert(exception.status + '  ' + exception.statusText);
+    	$log.debug(exception);
+    	$log.debug('**********');
+    	$log.debug(cause);
+    	alert(exception.status + '  ' + exception.statusText);
     };
 }]);
 

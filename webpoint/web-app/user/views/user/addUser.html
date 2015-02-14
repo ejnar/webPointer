@@ -1,0 +1,80 @@
+<div>	
+	<div>
+		<h3 class="page-header">Add User</h3>
+	</div>
+	<form role="form" name="addUserForm" novalidate >	
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="control-group" 
+					ng-class="{ 'has-error' : addUserForm.username.$invalid && !addUserForm.username.$pristine }" >  
+	        		<label class="control-label" for="username">Username:
+	        		 	<span ng-messages="addUserForm.username.$error" 
+	        		 		ng-messages-include="common/views/messages/error.html" ></span> 
+	        		 </label>
+					<div class="controls">  
+						<input name="username" type="text" placeholder="Add user name"
+							class="form-control" ng-model="user.username" required/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="control-group" 
+					ng-class="{ 'has-error' : addUserForm.email.$invalid && !addUserForm.email.$pristine }" >  
+	        		<label class="control-label" for="email">Email:
+	        			<span ng-messages="addUserForm.email.$error"
+	        		 		ng-messages-include="common/views/messages/error.html" ></span> 	
+	        		</label>
+					<div class="controls">  
+						<input name="email" type="email" placeholder="Add email"
+							class="form-control" ng-model="user.email" required/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">			
+				<div class="control-group" 
+					ng-class="{ 'has-error' : addUserForm.role.$invalid && !addUserForm.role.$pristine }" >
+					<label class="control-label" for="role">Authority:
+						<span ng-messages="addUserForm.role.$error" 
+							ng-messages-include="common/views/messages/error.html" ></span>
+					</label>
+        			<div class="controls">
+						<select name="role" ng-model="user.authority" ng-selected="user.authority"
+		        			class="form-control" ng-options="authority for authority in roles" required>
+		        			<option value="">Pick a role</option>
+		        		</select>  					        	
+		        	</div>
+    			</div>
+    		</div>	
+    	</div>
+    	<div class="row">	
+    		<div class="col-md-3">			
+				<div class="control-group" 
+					ng-class="{ 'has-error' : addUserForm.rolegroup.$invalid && !addUserForm.rolegroup.$pristine }" >
+					<label class="control-label" for="rolegroup">Group:
+						<span ng-messages="addUserForm.rolegroup.$error" 
+							ng-messages-include="common/views/messages/error.html" ></span>
+					</label>
+        			<div class="controls">
+						<select name="rolegroup" ng-model="user.rolegroup" ng-selected="user.rolegroup"
+		        			class="form-control" ng-options="name for name in rolegroups" required>
+		        			<option value="">Pick a Group</option>
+		        		</select>  					        	
+		        	</div>
+    			</div>
+    		</div>
+		</div>
+		
+		
+		<br/>
+		<div class="form-actions" >
+			<button type="submit" class="btn btn-primary" 
+                ng-disabled="addUserForm.$error.required"
+                ng-click="addUser(addUserForm)" >Add User</button>
+		</div>
+	</form>
+</div>

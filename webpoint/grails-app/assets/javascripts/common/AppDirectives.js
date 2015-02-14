@@ -39,3 +39,24 @@ appDirectives.directive('shaLoadingSpinner', [ '$log', function($log) {
 	    }
 	  };
 }]);
+
+
+//appDirectives.directive('compareTo', [ '$log', function($log) {
+//    return {
+//    	require: "ngModel",
+//        scope: {
+//            otherModelValue: "=compareTo"
+//        },
+//        link: function(scope, element, attributes, ngModel) {
+////        	$log.debug(' --- compareTo --- ');   
+//            ngModel.$validators.compareTo = function(modelValue) {
+//                return modelValue == scope.otherModelValue;
+//            };
+// 
+//            scope.$watch("otherModelValue", function() {
+//                ngModel.$validate();
+//            });
+//        }
+//    };
+//}]);
+

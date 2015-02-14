@@ -12,6 +12,8 @@ import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 
+	def springSecurityService;
+	
     static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]   // patch: "PATCH",
 	
@@ -29,6 +31,7 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 	
 	def index(Integer max) {
 		log.debug " Get list ----"
+		
 		println "index " + grailsApplication.metadata['app.name']
 		
 //		def prop = grailsApplictaion.config['test.hello']

@@ -1,0 +1,41 @@
+<div>
+	
+	<div ng-if="doSave" >
+			<h3 class="page-header">New User</h3>
+		</div>
+		<div ng-if="!doSave" >
+			<h3 class="page-header">Update User</h3>
+	</div>
+	
+	<form role="form" name="userForm" novalidate >	
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="control-group" 
+					ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }" >  
+	        		<label class="control-label" for="email">Email:
+	        			<span ng-messages="userForm.email.$error" 
+	        		 		ng-messages-include="common/views/messages/error.html" ></span> 
+	        		</label>
+					<div class="controls">  
+						<input name="email" type="email"
+							class="form-control" ng-model="user.email" required/>
+					</div>
+					<div class="controls">  
+						<input name="confirm_email" type="email"
+							class="form-control" ng-model="user.confirm_email" required/>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<br/>
+		<div class="form-actions" >
+			<button type="submit" class="btn btn-primary" 
+                ng-disabled="userForm.$error.required"
+                ng-click="updatEmail(userForm)" >Add User</button>
+		</div>
+		
+
+	</form>
+</div>

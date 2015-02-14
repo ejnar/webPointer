@@ -1,11 +1,12 @@
 package se.webpoint.auth
 
 import org.apache.commons.lang.builder.HashCodeBuilder
+import org.bson.types.ObjectId;
 
 class RoleGroupRole implements Serializable {
 
 	private static final long serialVersionUID = 1
-
+	
 	RoleGroup roleGroup
 	Role role
 

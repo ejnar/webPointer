@@ -132,6 +132,23 @@ Then just add the alignments Css.
     opacity : 1;
 }
 
+.ng-invalid {
+    border-color: #b94a48;
+    outline-color: #b94a48;
+}
+
+.ng-valid {
+    border-color: green;
+    outline-color: green;
+}
+
+.messages {
+  font-size: smaller;
+  padding-left: 8px;
+  padding-bottom: 2px;
+  color: #b94a48;
+  display:inline-block;
+}
 
 
 

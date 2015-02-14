@@ -7,6 +7,7 @@ var userApp = angular.module('root.webpointer', [
     'ngRoute',
     'ngResource',
     'ngSanitize',
+    'ngMessages',
     'ui.bootstrap',
     'angulartics'
 ]);

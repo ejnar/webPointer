@@ -16,7 +16,7 @@ class SectionMeta {   //implements Serializable
 	String language
 	String sectionType
 	String sectionFK
-	Date modify
+	Date updated
 
 	static belongsTo = Section
 	
@@ -32,14 +32,14 @@ class SectionMeta {   //implements Serializable
 		language nullable:false 
 		sectionType nullable:true 
 		sectionFK nullable:true
-		modify nullable: true
+		updated nullable: true
 	}
 	
 	def beforeInsert () { 
 		if(originalTitle == null) originalTitle = title;
 		if(sectionFK == null) sectionFK = '';
 	}
-	def beforeUpdate () { modify = new Date();}
+	def beforeUpdate () { updated = new Date();}
 	def afterInsert () { }
 	def afterUpdate () { }
 	

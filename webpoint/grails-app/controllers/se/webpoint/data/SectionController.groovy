@@ -11,7 +11,8 @@ import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 
 class SectionController extends RestfulController<Section>  {
-
+	
+	
     static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST", update: "PUT", patch: "PATCH", delete: "DELETE"]
 	

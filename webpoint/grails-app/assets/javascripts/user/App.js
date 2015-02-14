@@ -3,13 +3,14 @@
 /* App Module */
 
 var userApp = angular.module('userApp', [
+	'root.webpointer',
 	'http-auth-interceptor',                                    
     'ngRoute',
     'ngResource',
     'ngSanitize',
+    'ngMessages',
     'ui.bootstrap',
-    'angulartics',
-    'root.webpointer'
+    'angulartics'
 ]);
 
 

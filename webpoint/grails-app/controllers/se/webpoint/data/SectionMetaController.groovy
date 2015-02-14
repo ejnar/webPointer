@@ -2,16 +2,18 @@ package se.webpoint.data
 
 
 import static org.springframework.http.HttpStatus.*
+import grails.plugin.springsecurity.SpringSecurityService
 import grails.rest.RestfulController
 import grails.transaction.Transactional
 
-import org.bson.types.ObjectId
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 
 
 class SectionMetaController extends RestfulController<SectionMeta>  {
-
+	
+	SpringSecurityService springSecurityService
+	
     static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 	
@@ -60,7 +62,23 @@ class SectionMetaController extends RestfulController<SectionMeta>  {
 	 */
 	@Transactional
 	def update() {
-	
+		
+		
+		def principal = springSecurityService.getPrincipal();
+		println principal
+		
+		def user = springSecurityService.loadCurrentUser()
+		println user.getAuthorities()
+		for (a in user.getAuthorities()) {
+			println a.name
+			for (b in a.getAuthorities()) {
+				println b.authority
+			}
+		}
+		
+		user.getAuthorities().each { println it.getAuthorities() }
+		
+		
 		def instance = queryForResource(params.id)
 		if (instance == null) {
 			notFound()

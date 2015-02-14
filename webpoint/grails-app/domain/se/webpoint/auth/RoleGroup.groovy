@@ -1,11 +1,14 @@
 package se.webpoint.auth
 
-class RoleGroup {
 
+class RoleGroup {
+	
 	String name
+	boolean system;
 
 	static mapping = {
 		cache true
+		system defaultValue: true
 	}
 
 	Set<Role> getAuthorities() {
@@ -15,4 +18,9 @@ class RoleGroup {
 	static constraints = {
 		name blank: false, unique: true
 	}
+	
+	String toString(){
+		name
+	}
+	
 }

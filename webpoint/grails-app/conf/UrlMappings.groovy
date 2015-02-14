@@ -9,13 +9,20 @@ class UrlMappings {
 		"/api/books"(resources:"book")
 		"/api/guest/books"(resources:"book")  
 		
+		"/api/guest/rolegroups"(resources:"RoleGroup")
+		"/api/guest/roles"(resources:"Role")
+		"/api/guest/user"(resources:"UserDetail")
 		
 		"/api/guest/viewer"(resources:"ViewerList")
-		"/api/guest/groupsofsections"(resources:"GroupOfSection"){
+		"/api/guest/sections"(resources:"Section"){
 			"/sectionmetas"(resources:"SectionMeta")
 		}
 				
 //		"/api/groupsofsections/$action?"(controller: 'groupOfSection')
+		
+		"/api/rolegroups"(resources:"RoleGroup")
+		"/api/roles"(resources:"Role")
+		"/api/user"(resources:"UserDetail")
 		
 		"/api/sections"(resources:"Section")
 		"/api/sectionmetas"(resources:"SectionMeta")

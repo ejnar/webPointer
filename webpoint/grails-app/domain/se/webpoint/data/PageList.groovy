@@ -10,7 +10,7 @@ class PageList {
 	ObjectId id
 	String name
 	String category
-	Date modify
+	Date updated
 //	String style
 	
 	List<PageData> pageParts = new ArrayList()
@@ -18,7 +18,7 @@ class PageList {
 	static embedded = [ 'pageParts' ]
 	
     static constraints = {
-		modify nullable: true
+		updated nullable: true
 //		pageParts (blank: false)
 //		dueDate (min:new Date())
 //		style (inList: ["one", "two"])

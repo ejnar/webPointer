@@ -1,8 +1,11 @@
 package se.webpoint.data
 
 import java.util.Date;
+import java.util.Set;
 
 import org.bson.types.ObjectId
+
+import se.webpoint.auth.RoleGroup;
 
 //@Resource(formats=['json', 'xml'])
 class Section {
@@ -13,11 +16,15 @@ class Section {
 	String data
 	String type
 	String key
-	Date modify
+	Date updated
 	SectionMeta sectionMeta
+	
+	Set<RoleGroup> roleGroupSet;
 
 //	static transients = ['meta']
 //	static belongsTo = SectionMeta
+	
+	static embedded = ['roleGroupSet']
 	
 	static mapping = {
 //		stateless true
@@ -27,11 +34,11 @@ class Section {
 		data nullable: false
 		type nullable: false
 		key nullable: true
-		modify nullable: true
+		updated nullable: true
 	}
 	
 	def beforeInsert () { }
-	def beforeUpdate () { modify = new Date();}
+	def beforeUpdate () { updated = new Date();}
 	def afterInsert () { }
 	def afterUpdate () { }
 	

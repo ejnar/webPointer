@@ -1,6 +1,6 @@
 {
   "name": "angular-spotify",
-  "version": "0.9.3",
+  "version": "0.11.0",
   "authors": [
     "Ed Moore <eddie.moore@gmail.com>"
   ],
@@ -27,13 +27,14 @@
     "angular-mocks": "1.2.24",
     "angular-scenario": "1.2.24"
   },
-  "_release": "0.9.3",
+  "_release": "0.11.0",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.3",
-    "commit": "17c92fcde995d247da5ab36a745561392062e3a5"
+    "tag": "v0.11.0",
+    "commit": "9f20adc33e17706871a5d67521b502d16f69f3db"
   },
   "_source": "git://github.com/eddiemoore/angular-spotify.git",
-  "_target": "~0.9.3",
-  "_originalSource": "angular-spotify"
+  "_target": "~0.11.0",
+  "_originalSource": "angular-spotify",
+  "_direct": true
 }

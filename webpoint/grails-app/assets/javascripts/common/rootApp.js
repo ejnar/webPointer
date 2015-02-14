@@ -3,6 +3,7 @@
 //= require angular-route/angular-route
 //= require angular-sanitize/angular-sanitize
 //= require angular-resource/angular-resource
+//= require angular-messages/angular-messages
 //= require angulartics/src/angulartics
 //= require angulartics/src/angulartics-ga
 //= require angular-http-auth/src/http-auth-interceptor

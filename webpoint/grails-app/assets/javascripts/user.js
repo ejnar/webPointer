@@ -3,6 +3,7 @@
 //= require angular-route/angular-route
 //= require angular-sanitize/angular-sanitize
 //= require angular-resource/angular-resource
+//= require angular-messages/angular-messages
 //= require angulartics/src/angulartics
 //= require angulartics/src/angulartics-ga
 //= require angular-http-auth/src/http-auth-interceptor
@@ -21,9 +22,11 @@
 //= require common/AppController
 //= require common/auth/AuthController
 
+//= require user/dao/UserService
 //= require user/dao/PageService
 //= require user/dao/SectionService
 
+//= require user/user/UserCtrl
 //= require user/section/SectionController
 //= require user/section/GroupOfSectionController
 

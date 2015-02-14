@@ -6,9 +6,9 @@ var sectionController = angular.module('userApp');
 
 sectionController.controller('GroupOfSectionCtrl', [ 
                                                     
-    '$scope', '$rootScope', '$routeParams', '$location', '$filter', '$log', 'cfgAppPath', 'SectionMetaApi', 'SectionsApi', 'sharedProperties',
+    '$scope', '$rootScope', '$routeParams', '$location', '$filter', '$log', 'cfgAppPath', 'UserApi', 'SectionMetaApi', 'SectionsApi', 'sharedProperties',
      
-    function list ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath, SectionMetaApi, SectionsApi, sharedProperties) {
+    function list ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath, UserApi, SectionMetaApi, SectionsApi, sharedProperties) {
 	 	
 //		$scope.$on("LOAD_GROUPOFSECTION_EVENT", function () {   // event, args
 //			$log.debug(' --- LOAD_GROUPOFSECTION_EVENT');     // + args.eventID

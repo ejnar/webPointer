@@ -21,14 +21,24 @@ class BootStrap {
 			return it.toHexString()
 		}
 		
-//		JSON.registerObjectMarshaller(PageData) {
-//			def output = [:]
-//			output['key'] = it.key
-//			output['style'] = it.style
-//			output['color'] = it.color
-//			output['sections'] = it.sections
-//			return output
-//		}
+		JSON.registerObjectMarshaller(Role) {		
+			return it.authority
+		}
+		
+		JSON.registerObjectMarshaller(RoleGroup) {
+			return it.name
+		}
+		
+		JSON.registerObjectMarshaller(User) {
+			def output = [:]
+			output['accountExpired'] = it.accountExpired
+			output['accountLocked'] = it.accountLocked
+			output['enabled'] = it.enabled
+			output['passwordExpired'] = it.passwordExpired
+			output['username'] = it.username
+			output['email'] = it.email
+			return output
+		}
 //		JSON.registerObjectMarshaller(Section) {
 //			def output = [:]
 //			output['id'] = it.id
@@ -57,15 +67,16 @@ class BootStrap {
 //				
 //		UserRole.get(user.id, roleAdmin.id) ?: UserRole.create(user,roleAdmin, true)
 		
-		Role roleAdmin = Role.findByAuthority("ROLE_ADMIN") ?: new Role(authority: "ROLE_ADMIN").save(failOnError: true)
+		Role roleAdmin = Role.findByAuthority("SYS_ROLE_ADMIN") ?: new Role(authority: "SYS_ROLE_ADMIN", system: true).save(failOnError: true)
+		Role roleView = Role.findByAuthority("ROLE_VIEW") ?: new Role(authority: "ROLE_VIEW", system: false).save(failOnError: true)
 		
-		RoleGroup groupAdmin = RoleGroup.findByName("GROUP_ADMIN") ?: new RoleGroup(name: "GROUP_ADMIN").save(failOnError: true)
-		RoleGroup groupPT = RoleGroup.findByName("GROUP_P_TRELLEBORG") ?: new RoleGroup(name: "GROUP_P_TRELLEBORG").save(failOnError: true)
+		RoleGroup groupAdmin = RoleGroup.findByName("SYS_GROUP_ADMIN") ?: new RoleGroup(name: "SYS_GROUP_ADMIN", system: true).save(failOnError: true)
+		RoleGroup groupPT = RoleGroup.findByName("GROUP_P_TRELLEBORG") ?: new RoleGroup(name: "GROUP_P_TRELLEBORG", system: false).save(failOnError: true)
 		
 		RoleGroupRole.get(groupAdmin.id, roleAdmin.id) ?: RoleGroupRole.create(groupAdmin, roleAdmin, true)
 		RoleGroupRole.get(groupPT.id, roleAdmin.id) ?: RoleGroupRole.create(groupPT, roleAdmin, true)
 		
-		User user = User.findByUsername("admin") ?: new User(username: 'admin', password: '123').save(failOnError: true)
+		User user = User.findByUsername("admin") ?: new User(username: 'admin', password: '123', email: 'ejnar.ak@glocalnet.net').save(failOnError: true)
 				
 		UserRole.get(user.id, roleAdmin.id) ?: UserRole.create(user, roleAdmin, true)
 		
