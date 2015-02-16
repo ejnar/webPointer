@@ -13,7 +13,7 @@ userApp.constant(
 			groupOfPagesList: '/groupOfPagesList',
 			groupOfPagesUpdate: '/groupOfPagesUpdate/',
 			user: '/user',
-			editEmail: '/editemail',
+			editUser: '/edituser',
 			addUser: '/adduser'	
 		});
 
@@ -60,9 +60,9 @@ userApp.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath',
                 templateUrl: 'user/views/user/addUser.html',
                 controller: 'AddUserCtrl'
             }).
-            when( cfgAppPath.editEmail , {   
-                templateUrl: 'user/views/user/editEmail.html',
-                controller: 'EditEmailCtrl'
+            when( cfgAppPath.editUser , {   
+                templateUrl: 'user/views/user/editUser.html',
+                controller: 'EditUserCtrl'
             }).
             when( cfgAppPath.user , {   
                 templateUrl: 'user/views/user/editUser.html',

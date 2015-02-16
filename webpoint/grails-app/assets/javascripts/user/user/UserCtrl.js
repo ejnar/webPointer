@@ -19,7 +19,7 @@ detailController.controller('UserCtrl', [
 
 }]);                                               
 
-detailController.controller('EditEmailCtrl', [
+detailController.controller('EditUserCtrl', [
     '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties', 'sharedProperties',
     'UserApi', 'RoleApi', 'RoleGroupApi',
 
@@ -29,7 +29,7 @@ detailController.controller('EditEmailCtrl', [
 	   $scope.doSave = true;
 	   
 	   
-	   $scope.updatEmail = function () {
+	   $scope.updatUser = function () {
 			$log.debug('updatEmail'); 
 			
 		};

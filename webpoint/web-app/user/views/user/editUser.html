@@ -21,6 +21,7 @@
 						<input name="email" type="email"
 							class="form-control" ng-model="user.email" required/>
 					</div>
+					<br/>
 					<div class="controls">  
 						<input name="confirm_email" type="email"
 							class="form-control" ng-model="user.confirm_email" required/>
@@ -33,7 +34,7 @@
 		<div class="form-actions" >
 			<button type="submit" class="btn btn-primary" 
                 ng-disabled="userForm.$error.required"
-                ng-click="updatEmail(userForm)" >Add User</button>
+                ng-click="updatUser(userForm)" >Add User</button>
 		</div>
 		
 
