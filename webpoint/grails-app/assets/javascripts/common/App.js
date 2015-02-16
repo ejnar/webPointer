@@ -7,7 +7,8 @@ var userApp = angular.module('root.webpointer', [
     'ngRoute',
     'ngResource',
     'ngSanitize',
-    'ngMessages',
+    'angularSpinner',
+//    'ngMessages',
     'ui.bootstrap',
     'angulartics'
 ]);
@@ -68,4 +69,15 @@ userApp.run(['$rootScope', '$http', '$location',
         });
     }]);
 
-//console.log('gamb app load complete');
+function empty(e) {
+    switch(e) {
+        case "":
+        case 0:
+        case "0":
+        case null:
+        case false:
+        case typeof this == "undefined":
+            return true;
+                default : return false;
+    }
+}

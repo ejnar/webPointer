@@ -22,23 +22,25 @@ var appDirectives = angular.module('root.webpointer');
 //    }]);
 
 
-appDirectives.directive('shaLoadingSpinner', [ '$log', function($log) {
-	$log.info(' --- AppDirectives ---');
-	  return {
-	    restrict: 'A',
-	    replace: true,
-	    transclude: true,
-	    scope: {
-	      loading: '=shaLoadingSpinner'
-	    },
-	    templateUrl: 'common/views/progress/loading.html',
-	    link: function(scope, element, attrs) {
-	      var spinner = new Spinner().spin();
-	      var loadingContainer = element.find('.sha-loading-spinner-container')[0];
-	      loadingContainer.appendChild(spinner.el);
-	    }
-	  };
-}]);
+//appDirectives.directive('shaLoadingSpinner', [ '$log', function($log) {
+//	$log.info(' --- AppDirectives ---');
+//	  return {
+//	    restrict: 'A',
+//	    replace: true,
+//	    transclude: true,
+//	    scope: {
+//	      loading: '=shaLoadingSpinner'
+//	    },
+////	    templateUrl: 'common/views/progress/loading.html',
+//	    template: {'<div class="sha-loading-spinner-container"></div>'},
+//	    link: function(scope, element, attrs) {
+//	      var spinner = new Spinner().spin();
+//	      var loadingContainer = element.find('.sha-loading-spinner-container')[0];
+//	      console.log(loadingContainer);
+//	      loadingContainer.appendChild(spinner.el);
+//	    }
+//	  };
+//}]);
 
 
 //appDirectives.directive('compareTo', [ '$log', function($log) {

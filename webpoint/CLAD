@@ -1,3 +1,8 @@
+//= require jquery/dist/jquery
+//= require angular-messages/angular-messages
+//= require bootstrap/js/collapse
+//= require bootstrap/js/dropdown
+
 		<span ng-messages="addUserForm.userName.$error" 
 	        		 		ng-messages-include="common/views/messages/error.html" ></span> 
 		<span ng-messages="addUserForm.secret.$error" 

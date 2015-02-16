@@ -6,9 +6,11 @@ var sectionController = angular.module('userApp');
 
 sectionController.controller('GroupOfSectionCtrl', [ 
                                                     
-    '$scope', '$rootScope', '$routeParams', '$location', '$filter', '$log', 'cfgAppPath', 'UserApi', 'SectionMetaApi', 'SectionsApi', 'sharedProperties',
+    '$scope', '$rootScope', '$routeParams', '$location', '$filter', '$log', 'cfgAppPath', 
+    'UserApi', 'SectionMetaApi', 'SectionsApi', 'sharedProperties', 'usSpinnerService',
      
-    function list ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath, UserApi, SectionMetaApi, SectionsApi, sharedProperties) {
+    function list ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath, 
+    		UserApi, SectionMetaApi, SectionsApi, sharedProperties, usSpinnerService) {
 	 	
 //		$scope.$on("LOAD_GROUPOFSECTION_EVENT", function () {   // event, args
 //			$log.debug(' --- LOAD_GROUPOFSECTION_EVENT');     // + args.eventID
@@ -67,13 +69,13 @@ sectionController.controller('GroupOfSectionCtrl', [
 		var filter = $filter('filter');
 		$scope.loadGroups = function() {
     		$log.debug(' --- ListGroupOfSectionCtrl.load ');
-    		$scope.viewLoading = true;
+    		usSpinnerService.spin('spinner-1');
     		SectionMetaApi.list(
     				function (resp) {
     					$scope.items = resp;
-    					$scope.viewLoading = false;
     					$scope.totalItems = $scope.items.length;
     					$scope.createSearchList();
+    					usSpinnerService.stop('spinner-1');
                     });
 
     	};

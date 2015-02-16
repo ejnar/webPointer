@@ -3,7 +3,7 @@
 var appDirectives = angular.module('root.webpointer');
 
 appDirectives.directive('keyright', [ '$document', '$parse', '$log', function($document, $parse, $log) {
-	$log.info(' --- keyright ---');
+	$log.debug(' --- keyright ---');
 	return {
 		restrict: 'A',
 		link: function(scope, iElement, iAttrs) {
@@ -21,7 +21,7 @@ appDirectives.directive('keyright', [ '$document', '$parse', '$log', function($d
 }]);
 
 appDirectives.directive('keyleft', [ '$document', '$parse', '$log', function($document, $parse, $log) {
-	$log.info(' --- keyleft ---');
+	$log.debug(' --- keyleft ---');
 	return {
 		restrict: 'A',
 		link: function(scope, iElement, iAttrs) {
