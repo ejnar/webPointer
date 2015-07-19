@@ -20,7 +20,7 @@
 				<div class="control-group" 
 					ng-class="{ 'has-error' : metaForm.title.$invalid && !metaForm.title.$pristine }" >  
 	        		<label class="control-label" for="title_id">Title</label>
-	        		<span class="error" ng-show="metaForm.title.$error.required"> [Required!]</span>
+	        		<span class="messages" ng-show="metaForm.title.$error.required"> Required</span>
 					<div class="controls">     <!-- input-block-level -->
 						<input id="title_id" name="title" type="text" placeholder="Title"
 							class="form-control" ng-model="sectionMeta.title" required/>

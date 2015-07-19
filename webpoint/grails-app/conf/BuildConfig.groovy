@@ -22,6 +22,7 @@ grails.project.fork = [
     console: [maxMemory: 768, minMemory: 64, debug: false]  // maxPerm: 256
 ]
 
+
 grails.project.dependency.resolver = "maven" // or ivy
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -44,10 +45,15 @@ grails.project.dependency.resolution = {
 //		mavenRepo 'http://repo.spring.io/milestone'
 //		mavenRepo 'https://oss.sonatype.org/content/repositories/snapshots'
         // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
-        //mavenRepo "http://repository.codehaus.org"
-        //mavenRepo "http://download.java.net/maven/2/"
-        //mavenRepo "http://repository.jboss.com/maven2/"
+//      mavenRepo "http://repository.codehaus.org"
+//      mavenRepo "http://download.java.net/maven/2/"
+//      mavenRepo "http://repository.jboss.com/maven2/"
 //		mavenRepo "http://jcenter.bintray.com"
+//		mavenRepo "https://repo1.maven.org/maven2/"
+//		mavenRepo "https://repo.grails.org/grails/plugins"
+
+		
+		
     }
 
     dependencies {
@@ -71,26 +77,28 @@ grails.project.dependency.resolution = {
 
     plugins {
         // plugins for the build system only
-        build ":tomcat:7.0.55"
+        build ":tomcat:7.0.55.2"  //":tomcat:7.0.55.2 tomcat:8.0.22"
 		
-		runtime ":httplogger:1.1"
+		
+		//runtime ":httplogger:1.1"
 		
         // plugins for the compile step
         compile ":scaffolding:2.1.2"
         compile ':cache:1.1.8'
-		compile ":asset-pipeline:1.9.9"	
-		compile ":spring-security-core:2.0-RC4"
-		compile ":spring-security-rest:1.4.0.RC5"
+		compile ":asset-pipeline:2.1.5"	 // asset-pipeline:1.9.9
+		compile ":spring-security-core:2.0-RC4" 
+		compile ":spring-security-rest:1.5.1" // spring-security-rest:1.5.0.M2 spring-security-rest:1.4.0.RC5
 //		, {    // spring-security-rest:1.4.0.RC5  spring-security-rest:1.3.4
 ////			excludes: 'spring-security-core'
 //			excludes ('cors','spring-security-core')
 //		}
 		
-		compile ":spring-websocket:1.1.0"
+//		ycompile ":spring-websocket:1.1.0"
 		
 		compile ":mongodb:3.0.1"
+//		compile 'org.grails:grails-datastore-gorm-plugin-support:3.1.3.RELEASE'
 	
-		compile ":routing:1.3.2"
+		compile ":routing:1.3.2" // routing:1.3.2 - 1.4.0
 //		compile ":routing-jms:1.2.0"
 //		compile ":quartz:1.0.2"
 		

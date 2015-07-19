@@ -1,21 +1,45 @@
 package se.webpoint.auth
 
-import grails.artefact.Artefact;
-import grails.plugin.springsecurity.SpringSecurityService;
-import grails.rest.RestfulController;
-import grails.transaction.Transactional;
+import static org.springframework.http.HttpStatus.*
+import grails.plugin.springsecurity.SpringSecurityService
+import grails.transaction.Transactional
 
-class UserDetailController extends RestfulController<UserDetail>{
+import org.apache.commons.logging.LogFactory
+import org.codehaus.groovy.grails.web.servlet.HttpHeaders
+
+
+class UserDetailController {   // extends RestfulController<UserDetail>
 	
 	static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST", update: "PUT"]
 	
-	UserService userService
+	private static final log = LogFactory.getLog(this)
 	
+	Class<UserDetail> resource
+	
+	UserService userService
+	SpringSecurityService springSecurityService
 	
 	UserDetailController() {
-		super(UserDetail)
+		resource = UserDetail
 	}
+	
+	
+	
+	/**
+	 * Lists all resources up to the given maximum
+	 *
+	 * @param max The maximum
+	 * @return A list of resources
+	 */
+	def index() {
+		log.debug(" debug ---------------  log4j test password")
+		println 'UserDetailController.index'
+		List<UserDetail> users = new ArrayList()
+		users.add(userService.getUserDetail())
+		respond users, model: [("${UserDetail}Count".toString()): users.size()]
+	}
+
 	
 
 	/**
@@ -24,7 +48,8 @@ class UserDetailController extends RestfulController<UserDetail>{
 	 * @return The rendered resource or a 404 if it doesn't exist
 	 */
 	def show() {
-		respond userService.getCurrentUser()
+		println 'UserDetailController.show'		
+		respond userService.getUserDetail()
 	}
 	
 	/**
@@ -39,8 +64,38 @@ class UserDetailController extends RestfulController<UserDetail>{
 			notFound()
 			return
 		}
-		userService.saveUser(instance.username, instance.email, instance.authority, instance.rolegroup)
+		userService.saveNewUser(instance.username, instance.email, instance.authority, instance.rolegroup)
 		
 		respond instance
 	}
+	
+	
+	
+	/**
+	 * Updates a resource for the given id
+	 * @param id
+	 */
+	def update(UserDetail instance) {
+		println " --- update UserDetail: " + params.controller
+	
+		instance = userService.updateUser(instance.username, instance.email)
+		
+		String location = g.createLink( resource: 'api', action: 'user', Username: instance.username,  absolute: true)
+		response.addHeader(HttpHeaders.LOCATION, location)
+//		println new JsonBuilder( instance ).toPrettyString()
+//		println new JSON(instance).toString()
+		respond instance, [status: OK]
+	}
+	
+	/**
+	 * Creates a new instance of the resource for the given parameters
+	 *
+	 * @param params The parameters
+	 * @return The resource instance
+	 */
+	protected UserDetail createResource(Map params) {
+		resource.newInstance(params)
+	}
+	
+	
 }

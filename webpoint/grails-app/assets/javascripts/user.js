@@ -3,6 +3,7 @@
 //= require angular-sanitize/angular-sanitize
 //= require angular-resource/angular-resource
 //= require angular-spinner/angular-spinner
+//= require angular-input-match/dist/angular-input-match
 //= require angulartics/src/angulartics
 //= require angulartics/src/angulartics-ga
 //= require angular-http-auth/src/http-auth-interceptor
@@ -16,11 +17,12 @@
 //= require common/AppController
 //= require common/auth/AuthController
 
+//= require common/dao/UserService.js
+
 //= require user/App
 //= require user/Routes
 //= require user/Constants
 
-//= require user/dao/UserService
 //= require user/dao/PageService
 //= require user/dao/SectionService
 

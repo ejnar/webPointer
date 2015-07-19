@@ -22,6 +22,7 @@ class PageData {
 	static hasMany = [sections : Section]
 	
 	static constraints = {
+		key(blank: true)
 		style(blank: false)
 		color(blank: false)
 	}

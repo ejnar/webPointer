@@ -44,7 +44,7 @@
 					</label>
         			<div class="controls">
 						<select name="role" ng-model="user.authority" ng-selected="user.authority"
-		        			class="form-control" ng-options="authority for authority in roles" required>
+		        			class="form-control" ng-options="role.authority for role in roles" required>
 		        			<option value="">Pick a role</option>
 		        		</select>  					        	
 		        	</div>
@@ -61,7 +61,7 @@
 					</label>
         			<div class="controls">
 						<select name="rolegroup" ng-model="user.rolegroup" ng-selected="user.rolegroup"
-		        			class="form-control" ng-options="name for name in rolegroups" required>
+		        			class="form-control" ng-options="group.name for group in rolegroups" required>
 		        			<option value="">Pick a Group</option>
 		        		</select>  					        	
 		        	</div>

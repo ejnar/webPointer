@@ -23,6 +23,7 @@ class UrlMappings {
 		"/api/rolegroups"(resources:"RoleGroup")
 		"/api/roles"(resources:"Role")
 		"/api/user"(resources:"UserDetail")
+		"/api/auth/$action?"(controller: "Auth" )
 		
 		"/api/sections"(resources:"Section")
 		"/api/sectionmetas"(resources:"SectionMeta")
@@ -39,6 +40,7 @@ class UrlMappings {
 		"/"(view:"/user/index")
 		"/vy/"(view:"/slideshow/index")
 //        "/"(view:"/index")
+		"/index.gsp"(view:"/index")
         "500"(view:'/error')
 	}
 }

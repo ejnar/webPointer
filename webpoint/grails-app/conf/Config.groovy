@@ -59,6 +59,7 @@ grails {
     }
 }
 
+grails.tomcat.nio = true
 
 grails.converters.encoding = "UTF-8"
 // scaffolding templates configuration
@@ -97,7 +98,6 @@ environments {
 }
 
 
-
 // log4j configuration
 log4j.main = {
     // Example of changing the log pattern for the default console appender:
@@ -105,26 +105,33 @@ log4j.main = {
     appenders {
         console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     }
-	info  'grails.plugins.httplogger'
-    error  'org.codehaus.groovy.grails.web.servlet',        // controllers
+	root {
+		debug 'stdout'
+		additivity = true
+	}
+	// 'grails.plugins.httplogger'
+//	info   'se.webpointer'
+//	error
+    off  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
-           'org.codehaus.groovy.grails.web.sitemesh',       // layouts
+		   'org.codehaus.groovy.grails.web.sitemesh',       // layouts
            'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
            'org.codehaus.groovy.grails.web.mapping',        // URL mapping
            'org.codehaus.groovy.grails.commons',            // core / classloading
            'org.codehaus.groovy.grails.plugins',            // plugins
            'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
-           'org.springframework',
-//           'org.hibernate',
-           'net.sf.ehcache.hibernate'
-    debug  'org.springframework.security',
-		   'com.odobo',
-		   'grails.app.controllers.com.odobo',
-		   'grails.app.services.com.odobo',
-		   'org.pac4j',
-		   'org.mortbay.log',
-		   'se.webpointer'
-		   
+           'org.springframework.*',
+		   'org.springframework.security.*',
+		   'naming.SelectorContext.*',
+		   'org.apache.*'
+//          'net.sf.ehcache.hibernate'
+	warn   'org.mortbay.log'  	   
+    debug  'se.webpointer'
+//		   'com.odobo',
+//		   'grails.app.controllers.com.odobo',
+//		   'grails.app.services.com.odobo',
+//		   'org.pac4j',
+		    	   
 }
 
 grails.mongo.default.mapping = {
@@ -149,6 +156,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
 		'/api/guest/**':        	['permitAll'],
 //		'/book/views/**':			['permitAll'],
 		'/api/**':            		['isFullyAuthenticated()'],
+		'/api/auth/**':            	['isFullyAuthenticated()'],
 		'/**':                  	['permitAll']     			
 ]
 
@@ -192,14 +200,14 @@ grails.plugin.springsecurity.rest.token.generation.useUUID = false
 //grails.routing.threadPoolProfileConfig.rejectedPolicy
 
 
-grails.plugins.httplogger.enabled = false
+//grails.plugins.httplogger.enabled = false
 //should you wish to disable it temporarily or based on environment
 
 //grails.plugins.httplogger.headers = 'Cookie, Accept-Language, X-MyHeader'
 //list of headers to log by the default HttpLogger implementation
 
-grails.plugins.httplogger.includeUrls = ['/api/**']
-grails.plugins.httplogger.excludeUrls = ['/assets/**', '/css/**', '/**/*.js']
+//grails.plugins.httplogger.includeUrls = ['/api/**']
+//grails.plugins.httplogger.excludeUrls = ['/assets/**', '/css/**', '/**/*.js']
 // - lists of Ant-style patterns to be included/excluded by the default RequestMatcher implementation
 //   (AntPatternRequestMatcher)
 // - includes take precedence over excludes

@@ -12,7 +12,8 @@ class Role {
 	}
 
 	static constraints = {
-		authority blank: false, unique: true
+		authority nullable: false, blank: false, unique: true
+		system nullable: true, blank: true
 	}
 	
 	String toString(){

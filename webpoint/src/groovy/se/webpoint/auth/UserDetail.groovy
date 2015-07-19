@@ -1,24 +1,22 @@
 package se.webpoint.auth
 
+import grails.validation.Validateable;
 
+@Validateable
 class UserDetail  {
 	
-	String username
-	String email
-	String authority
-	String rolegroup
+	String username = ""
+	String email = ""
+	String authority = ""
+	String rolegroup = ""
 	
 	UserDetail(){
 	}
-	
-	UserDetail(String username, String email, String authority, String rolegroup){
-		this.username = username
-		this.email = email
-		this.authority = authority
-		this.rolegroup = rolegroup
+
+	static constraints = {
+		authority(nullable: true)
+		rolegroup(nullable: true)
 	}
-	
-	
 	
 	String toString(){
 		"${username}"

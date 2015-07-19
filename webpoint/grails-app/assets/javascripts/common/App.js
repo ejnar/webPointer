@@ -8,6 +8,7 @@ var userApp = angular.module('root.webpointer', [
     'ngResource',
     'ngSanitize',
     'angularSpinner',
+    'directives.inputMatch',
 //    'ngMessages',
     'ui.bootstrap',
     'angulartics'

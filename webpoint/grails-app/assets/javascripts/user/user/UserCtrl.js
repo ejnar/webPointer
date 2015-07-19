@@ -15,8 +15,6 @@ detailController.controller('UserCtrl', [
 		RoleGroupApi.list( function (resp) { $scope.rolegroups = resp; });
 		RoleApi.list( function (resp) { $scope.roles = resp; });
 		UserApi.list( function (resp) { $log.debug(resp); });
-    
-
 }]);                                               
 
 detailController.controller('EditUserCtrl', [
@@ -25,16 +23,26 @@ detailController.controller('EditUserCtrl', [
 
     function($scope, $routeParams, $location, $log, $q, cfgAppPath, properties, sharedProperties, 
 		    UserApi, RoleApi, RoleGroupApi) {
-	   $log.debug(' --- EditEmailCtrl --- ');  
-	   $scope.doSave = true;
-	   
+	   $log.debug(' --- EditUserCtrl --- ');  
 	   
 	   $scope.updatUser = function () {
-			$log.debug('updatEmail'); 
-			
+			$log.debug('updatUser'); 
+			$log.debug( $scope.user); 
+			UserApi.User.update({Id: $scope.user.username}, $scope.user).$promise
+				.then( function(resp) {
+					$log.debug(resp);
+				});
 		};
 	   
-	   
+		$scope.loadUser = function () {
+			$log.debug('loadUser'); 
+			UserApi.User.list().$promise       // {Id: 'dummy'}
+				.then(function(resp) {	
+					$log.debug(resp); 
+					$scope.user = resp[0]; 
+					$scope.user.confirm_email = resp[0].email;
+				});
+		};
 
 }]); 
 

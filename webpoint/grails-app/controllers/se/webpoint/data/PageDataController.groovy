@@ -30,6 +30,7 @@ class PageDataController extends RestfulController<PageData>  {
 	@Transactional
 	def save() {  
 		println " --- save PageData: " + params
+		println params.controller
 		
 		def instance = createResource()
 		if(instance == null){

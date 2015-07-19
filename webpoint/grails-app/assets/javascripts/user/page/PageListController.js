@@ -164,6 +164,7 @@ sectionController.controller('UpdatePageListCtrl', [
 				.then( function(resp) {	
 					var section = resp;
 					pageData.sections.push(section);
+					$log.debug(' pageData: ', pageData);
 					PageListDataApi.save({pageListId: $routeParams.pageListId}, pageData,
 							function (resp) {
 								$scope.loadPageList();
