@@ -4,8 +4,8 @@
 
 var app = angular.module('root.webpointer');
 
-app.controller('AppController', ['$rootScope', '$scope', '$http', '$modal', '$log', //'SettingsApi', 'UserApi',
-    function ($rootScope, $scope, $http, $modal, $log) {
+app.controller('AppController', ['$rootScope', '$scope', '$http', '$modal', '$log', 'usSpinnerService', //'UserApi',
+    function ($rootScope, $scope, $http, $modal, $log, usSpinnerService) {
 
 //    	$scope.settings = SettingsApi.Setting.setting();
 //    	$scope.currentUser = UserApi.User.profile();
@@ -20,6 +20,8 @@ app.controller('AppController', ['$rootScope', '$scope', '$http', '$modal', '$lo
             	}).
             	error(function (data) {
             		console.log('logout error: ' + data);
+            		usSpinnerService.stop('spinner-1');
+            		$rootScope.$broadcast('event:auth-loginRequired');
             	});
     	};
     	

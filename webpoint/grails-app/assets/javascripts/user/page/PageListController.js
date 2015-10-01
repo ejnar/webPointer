@@ -64,11 +64,11 @@ sectionController.controller('PageListCtrl', [
 	    
 		$scope.loadPageList = function() {
 			$log.debug('loadPageList');
-			$scope.viewLoading = true;
+//			$scope.viewLoading = true;
     		PageListApi.list(
     				function (resp) {
     					$scope.listOfPages = resp;
-    					$scope.viewLoading = false;
+//    					$scope.viewLoading = false;
                     });
     		
     		$scope.orderProp = 'name';
