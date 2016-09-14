@@ -10,9 +10,6 @@ userApp.constant(
 			
 		});
 
-
-
-
 userApp.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath',
                                         
     function ($routeProvider, $httpProvider, $logProvider, cfgAppPath) {
