@@ -1,0 +1,118 @@
+<div class="container">
+	<div ng-if="doSave" >
+		<h3 class="page-header">New Group</h3>
+	</div>
+	<div ng-if="!doSave" >
+		<h3 class="page-header">Update Group</h3>
+	</div>
+	
+	<form role="form" name="metaForm" novalidate>
+		<!-- pre>
+            Modified orgTitle invalid: {{ groupForm.orgTitle.$invalid }}
+            Modified orgTitle pristine: {{ groupForm.orgTitle.$pristine }}
+            
+            Modified category invalid: {{ groupForm.category.$invalid }}
+            Modified category pristine: {{ groupForm.category.$pristine }}
+        </pre -->
+
+		<div class="form-group row">
+			<div class="col-md-10">
+				<div class="control-group" 
+					ng-class="{ 'has-error' : metaForm.title.$invalid && !metaForm.title.$pristine }" >  
+	        		<label class="control-label" for="title_id">Title</label>
+	        		<span class="messages" ng-show="metaForm.title.$error.required">Required</span>
+					<div class="controls">     <!-- input-block-level -->
+						<input id="title_id" name="title" type="text" placeholder="Title"
+							class="form-control" ng-model="sectionMeta.title" required/>
+					</div>
+				</div>
+			</div>
+		</div>		
+		<div class="form-group row">
+			<div class="col-md-10">		
+				<div class="control-group"  
+					ng-class="{ 'has-error' : metaForm.orgTitle.$invalid && !metaForm.orgTitle.$pristine }" >
+					<label class="control-label" for="orgTitle_id">Original Title</label>
+					<span class="messages" ng-show="metaForm.orgTitle.$error.required">Required</span>
+					<div class="controls">
+						<input id="orgTitle_id" name="orgTitle" type="text" 
+							class="form-control" ng-model="sectionMeta.originalTitle" required/> 		
+					</div>
+				</div>
+			</div>	
+		</div>
+		<div class="form-group row">
+			<div class="col-md-2">
+				<div class="control-group" 
+					ng-class="{ 'has-error' : metaForm.category.$invalid && !metaForm.category.$pristine }" >
+					<label class="control-label" for="category_id">Category</label>
+					<span class="messages" ng-show="metaForm.category.$error.required">Required</span>
+        			<div class="controls">
+						<select id="category_id" name="category" ng-model="sectionMeta.category" ng-selected="sectionMeta.category"
+		        			class="form-control" ng-options="category as category for category in categories" required>
+		        			<option value="">Pick a category</option>
+		        		</select>  					        	
+		        	</div>
+    			</div>
+    		</div>
+            <div class="col-md-2">
+                <div class="control-group"
+                     ng-class="{ 'has-error' : metaForm.language.$invalid && !metaForm.language.$pristine }" >
+                    <label class="control-label" for="language_id">Language</label>
+                    <span class="messages" ng-show="metaForm.language.$error.required">Required</span>
+                    <div class="controls">
+                        <select id="language_id" name="language" ng-model="sectionMeta.language"
+                                class="form-control" ng-options="language as language for language in languages" required>
+                            <option value="">Pick a language</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+		</div>
+
+        <div class="form-group row">
+            <div class="col-md-4">
+                <div class="control-group">
+                    <label class="control-label" for="tagg_id">Add tagg</label>
+                    <div class="controls">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <input id="addTagg_id" name="addTagg" type="text" class="form-control" ng-model="newTagg"/>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-primary" ng-click="updateGroupSectionCtrl_addTagg()">Add</button>
+                            </div>
+                        </div>
+                        <select id="tagg_id" name="tagg" ng-model="tagg"
+                                ng-change="updateGroupSectionCtrl_selectTagg(tagg)"
+                                class="form-control" ng-options="tagg as tagg for tagg in taggs">
+                            <option value="">Pick a tagg</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <label class="control-label" for="tagg_id">Selected taggs</label>
+                <div role="filteritem" ng-repeat="tagg in sectionMeta.taggs">
+                    <div class="alert filterItem alert-success"  >
+                        <button type='button' class='close' ng-click="updateGroupSectionCtrl_closeFilterItem(tagg)"
+                                data-dismiss='alert'>&times;</button>
+                        <strong>{{tagg}}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+			
+		<div ng-if="doSave"  class="form-actions" > <!-- ng-disabled="!groupForm.modified || groupForm.$invalid" -->
+			<button type="submit" class="btn btn-primary" 
+                ng-disabled="metaForm.$error.required"
+                ng-click="saveMeta(metaForm)" >Add Meta Section</button>
+		</div>
+		<div ng-if="!doSave"  class="form-actions" >
+			<button class="btn btn-primary" 
+				ng-disabled="metaForm.$error.required"
+				ng-click="updateMeta(metaForm)">Update Meta Section</button>
+		</div>
+	</form>
+</div>
