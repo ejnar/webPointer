@@ -1,0 +1,50 @@
+
+
+
+
+Keys
+cmd -  Comment/uncomment with line comment
+cmd alt -
+
+Build project files for IDE
+./gradlew idea
+
+
+--------------------------
+*** Test
+Integration
+test-app -integration se.webpoint.data.UserServiceSpec
+
+
+--------------------------
+*** Bower dependencies
+
+Update angular script
+./gradlew bowerRefresh -PbowerDebug=true
+
+./gradlew bowerInstall -PbowerDebug=true
+
+Installs all the bower dependencies you have set in your build.gradle
+bowerInstall
+
+Refreshes bower dependencies (if you add or modify your bower configuration)
+bowerRefresh
+
+Removes bower dependencies and clears Bower’s cache
+bowerClean
+
+--------------------------
+*** SDK
+Update Grails
+sdk list grails
+
+
+--------------------------
+*** JBoss modifications
+
+--- build.gradle ---
+runtime 'javax.xml.bind:jaxb-api:2.2.12'
+provided "org.springframework.boot:spring-boot-starter-tomcat"
+
+Add: src/main/webapp/WEB-INF/jboss-deployment-structure.xml
+--------------------------
