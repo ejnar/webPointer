@@ -17,14 +17,22 @@ vyController.controller('MainViewListCtrl', [
   		$scope.mainViewListCtrl_loadPageList = function() {
 			$log.debug(' --- MainViewListController.mainViewListCtrl_loadPageList:');
 			$scope.viewLoading = true;
-
-    		PageListApi.list(
-    				function (resp) {
-    				    $log.debug(resp);
-    					$scope.items = resp;
-    					$scope.viewLoading = false;
-                    });
+    		PageListApi.list( function (resp) {
+    	        $log.debug(resp);
+    			$scope.items = resp;
+    			$scope.viewLoading = false;
+            });
     	}
+
+    	$scope.mainViewListCtrl_clickExpand = function(p) {
+            $log.debug(' --- MainViewController.mainViewListCtrl_clickExpand - id:', p.id );
+            if(p.expanded){
+                p.expanded = false;
+            }else{
+                p.expanded = true;
+                PageListApi.get({Id: p.id }, function(resp) { $scope.pageList = resp; });
+            }
+        }
 
 }]);
 

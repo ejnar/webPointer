@@ -3,6 +3,7 @@
 //= require_tree services
 //= require_tree controllers
 //= require_tree directives
+//= require_tree filter
 //= require_tree templates
 
 //= require /angular/angular
@@ -29,42 +30,6 @@ app.config(function (localStorageServiceProvider) {
     .setPrefix('webpoint')
     .setNotify(false, false)
 });
-
-app.constant(
-		'properties', {
-			categories: ['Worship','Christian','Hymns', 'Gospel', 'Christmas carols', 'Traditional'],
-			language: ['swe','eng','dan'],
-			stypes: ['TEXT', 'TEXTCHORDS'],
-			keys: ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B:Cb'],
-			test: 'value',
-		});
-
-app.service('sharedProperties', function () {
-	 var property = {
-			 doSave: true,
-//			 categories: {'Worship','Christian','Hymns'}
-	 };
-
-   return {
-   	getProperty: function() {
-           return property;
-       }
-   };
-});
-
-app.factory('tmpCash', ['$rootScope', function ($rootScope) {
-	var mem = {};
-    return {
-        put: function (key, value) {
-            $rootScope.$emit('scope.stored', key);
-            mem[key] = value;
-        },
-        get: function (key) {
-            return mem[key];
-        }
-    };
-}]);
-
 
 function config($httpProvider) {
 //    $httpProvider.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
@@ -112,8 +77,8 @@ app.config(['usSpinnerConfigProvider', function (usSpinnerConfigProvider) {
     usSpinnerConfigProvider.setTheme('bigBlue', {color: 'blue', radius: 20});
 }]);
 
-app.run(['$rootScope', '$http', '$location', '$log', 'usSpinnerService',
-    function ($rootScope, $http, $location, $log, usSpinnerService) {
+app.run(['$rootScope', '$http', '$location', '$log', 'usSpinnerService', 'localStorageService',
+    function ($rootScope, $http, $location, $log, usSpinnerService, localStorageService) {
 		$log.debug(' --- startup -------- LocalToken: ' + sessionStorage.authToken);
         $http.defaults.headers.common['X-Auth-Token'] = sessionStorage.authToken;
 
@@ -141,6 +106,7 @@ app.run(['$rootScope', '$http', '$location', '$log', 'usSpinnerService',
             $rootScope.isAuthenticated = false;
             $rootScope.currentUser = null;
             sessionStorage.clear();
+            localStorageService.clearAll();
             usSpinnerService.stop('spinner-1');
             $location.path("/login");
         });
@@ -158,6 +124,47 @@ function empty(e) {
                 default : return false;
     }
 }
+
+app.service('sharedProperties', function () {
+	 var property = {
+			 doSave: true,
+//			 categories: {'Worship','Christian','Hymns'}
+	 };
+
+   return {
+   	getProperty: function() {
+           return property;
+       }
+   };
+});
+
+
+app.factory('hashMap', ['$rootScope', function ($rootScope) {
+	var mem = {};
+    return {
+        put: function (key, value) {
+            $rootScope.$emit('scope.stored', key);
+            mem[key] = value;
+        },
+        get: function (key) {
+            return mem[key];
+        }
+    };
+}]);
+
+
+app.factory('tmpCash', ['$rootScope', function ($rootScope) {
+	var mem = {};
+    return {
+        put: function (key, value) {
+            $rootScope.$emit('scope.stored', key);
+            mem[key] = value;
+        },
+        get: function (key) {
+            return mem[key];
+        }
+    };
+}]);
 
 //app.factory('$exceptionHandler', function ($log) {
 //    return function (exception, cause) {
@@ -205,18 +212,24 @@ function empty(e) {
 //});
 
 
-String.prototype.replaceAt=function(index, character) {
+String.prototype.replaceAt = function(index, character) {
     return this.substr(0, index) + character + this.substr(index+character.length);
-}
-String.prototype.removeLast=function(character) {
+};
+String.prototype.replaceAll = function(target, replacement) {
+  return this.split(target).join(replacement);
+};
+String.prototype.removeLast = function(character) {
     if(this[this.length-1] == character)
         return this.substring(0, this.length-1);
     else
         return this;
-}
-String.prototype.indexLastOf=function(preIndex, character) {
+};
+String.prototype.indexLastOf = function(preIndex, character) {
     if(preIndex == 0)
         return this.indexOf(character);
     else
         return preIndex + 1 + this.substr(preIndex + 1).indexOf(character);
-}
+};
+String.prototype.stripHtml = function() {
+    return this.replace(/(<([^>]+)>)/ig,"");
+};

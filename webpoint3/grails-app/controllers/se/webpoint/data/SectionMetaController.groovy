@@ -73,6 +73,9 @@ class SectionMetaController extends BasicRestController<SectionMeta>  {
 
         access()
 
+        Section section = Section.findById(instance.sectionFK);
+
+        instance.sectionType = section.type;
 		instance.save flush:true
 		
 //		ObjectId idMeta = new ObjectId(params.id);

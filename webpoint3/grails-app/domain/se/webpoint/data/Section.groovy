@@ -20,12 +20,12 @@ class Section extends BaseDomain {
 //	static transients = ['sectionMeta']
 //	static belongsTo = SectionMeta
 //	static belongsTo = [sectionMeta: SectionMeta]
-	
+
 
 	static mapping = {
 //		stateless true
 	}
-	
+
 	static constraints = {
 		data blank:true
 		key nullable: true, blank:true
@@ -33,7 +33,7 @@ class Section extends BaseDomain {
         roleGroupSet nullable: true
         sectionMeta nullable: true
 	}
-	
+
 	def beforeInsert () { updated = new Date() }
 	def beforeUpdate () { updated = new Date() }
 	def afterInsert () { }

@@ -18,15 +18,15 @@ vyController.controller('VyCtrl', [
             if($routeParams.group){
                 VyApi.get({group: $routeParams.group, pages: $routeParams.pages}).$promise
                     .then( function(resp) {
-                        $scope.pageList = resp;
                         $log.debug(resp);
+                        $scope.pageList = resp;
                         $scope.totalPart = $scope.pageList.pageParts.length;
                     });
             }else{
                 PageListApi.get({Id: $routeParams.pageListId}).$promise
                     .then( function(resp) {
-                        $scope.pageList = resp;
                         $log.debug(resp);
+                        $scope.pageList = resp;
                         $scope.totalPart = $scope.pageList.pageParts.length;
                     });
 			}
@@ -71,7 +71,7 @@ vyController.controller('VyCtrl', [
 
         $scope.vyCtrl_changeSize = function (index) {
             $log.debug('Change css: ', index);
-            $scope.fontSize = "vyArea_s0";
+            $scope.fontSize = "vyArea_s1";
             if(index != undefined){
                 $scope.fontSize = "vyArea_s" + index;
             }

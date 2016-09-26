@@ -1,84 +1,80 @@
-<div>
-	
+<div class="container">
 	<div ng-if="doSave" >
-			<h3 class="page-header">New Section</h3>
+			<h4 class="page-header">New Section</h4>
 		</div>
 		<div ng-if="!doSave" >
-			<h3 class="page-header">Update Section</h3>
+			<h4 class="page-header">Update Section</h4>
 	</div>
-	
-	<form role="form" name="sectionForm" novalidate >	
-	
-	<div class="panel panel-default">
- 
-	  	<div class="panel-heading">
-			<div class="row">
-                <div class="col-md-2">
-                    <div ng-if="doSave"  class="form-actions" > <!--  || sectionForm.$invalid -->
-                        <button class="btn btn-primary btn-xs"
-                                ng-disabled="sectionForm.$error.required"
-                                ng-click="updateSectionCtrl_saveSection(sectionForm)"> Add Section </button>
+	<form role="form" name="sectionForm" novalidate >
+		<div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div ng-if="doSave"  class="form-actions" > <!--  || sectionForm.$invalid -->
+                            <button class="btn btn-primary btn-xs"
+                                    ng-disabled="sectionForm.$error.required"
+                                    ng-click="updateSectionCtrl_saveSection(sectionForm)"> Add Section </button>
+                        </div>
+                        <div ng-if="!doSave"  class="form-actions" >
+                            <button class="btn btn-primary btn-xs"
+                                    ng-disabled="sectionForm.$error.required"
+                                    ng-click="updateSectionCtrl_updateSection(sectionForm)"> Update Section </button>
+                        </div>
                     </div>
-                    <div ng-if="!doSave"  class="form-actions" >
-                        <button class="btn btn-primary btn-xs"
-                                ng-disabled="sectionForm.$error.required"
-                                ng-click="updateSectionCtrl_updateSection(sectionForm)"> Update Section </button>
+                    <div class="col-md-2">
+                        <div class="form-group" ng-class="{ 'has-error' : sectionForm.sectionType.$invalid
+                            && !sectionForm.sectionType.$pristine }" >
+                            <!-- label class="control-label" for="sectionType_id">Type</label -->
+                            <div class="controls">
+                                <select id="sectionType_id" name="sectionType" ng-model="section.type"
+                                    class="input-medium" ng-options="stype as stype for stype in stypes" required>
+                                    <option value=""> - Pick a type - </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group" ng-class="{ 'has-error' : sectionForm.key.$invalid && !sectionForm.key.$pristine }" >
+                            <!-- label class="control-label" for="language_id">Key</label -->
+                            <div class="controls">
+                                <select id="key_id" name="key" ng-model="section.key" ng-show="section.type=='TEXTCHORDS'"
+                                    class="input-medium" ng-options="key as key for key in keys">
+                                    <option value=""> - Pick a key - </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group" ng-class="{ 'has-error' : sectionForm.tokey.$invalid
+                            && !sectionForm.tokey.$pristine }" >
+                            <!-- label class="control-label" for="language_id">Key</label -->
+                            <div class="controls">
+                                <select id="tokey_id" name="tokey" ng-model="section.tokey" ng-show="section.type=='TEXTCHORDS'"
+                                        class="input-medium" ng-options="key as key for key in keys">
+                                    <option value=""> - Change to key - </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div ng-show="section.type=='TEXTCHORDS' && section.tokey!=null" class="form-actions" >
+                            <button class="btn btn-primary btn-xs"
+                                    ng-disabled="sectionForm.$error.required"
+                                    ng-click="updateSectionCtrl_updateToKey(sectionForm)"> Update to new key </button>
+                        </div>
                     </div>
                 </div>
-				<div class="col-md-2">
-					<div class="form-group" ng-class="{ 'has-error' : sectionForm.sectionType.$invalid && !sectionForm.sectionType.$pristine }" >
-		        		<!-- label class="control-label" for="sectionType_id">Type</label -->
-		        		<div class="controls">
-				        	<select id="sectionType_id" name="sectionType" ng-model="section.type" 
-				        		class="input-medium" ng-options="stype as stype for stype in stypes" required>
-				        		<option value=""> - Pick a type - </option>
-				        	</select>
-		        		</div>
-		        	</div>
-				</div>
-				<div class="col-md-2">
-					<div class="form-group" ng-class="{ 'has-error' : sectionForm.key.$invalid && !sectionForm.key.$pristine }" >
-		        		<!-- label class="control-label" for="language_id">Key</label -->
-		        		<div class="controls">
-				        	<select id="key_id" name="key" ng-model="section.key" ng-show="section.type=='TEXTCHORDS'"
-				        		class="input-medium" ng-options="key as key for key in keys">
-				        		<option value=""> - Pick a key - </option>
-				        	</select> 
-		        		</div>
-		        	</div>	
-				</div>
-				<div class="col-md-2">
-					<div class="form-group" ng-class="{ 'has-error' : sectionForm.tokey.$invalid && !sectionForm.tokey.$pristine }" >
-						<!-- label class="control-label" for="language_id">Key</label -->
-						<div class="controls">
-							<select id="tokey_id" name="tokey" ng-model="section.tokey" ng-show="section.type=='TEXTCHORDS'"
-									class="input-medium" ng-options="key as key for key in keys">
-								<option value=""> - Change to key - </option>
-							</select>
-						</div>
-					</div>
-				</div>
-                <div class="col-md-2">
-                    <div ng-show="section.type=='TEXTCHORDS' && section.tokey!=null" class="form-actions" >
-                        <button class="btn btn-primary btn-xs"
-                                ng-disabled="sectionForm.$error.required"
-                                ng-click="updateSectionCtrl_updateToKey(sectionForm)"> Update to new key </button>
-                    </div>
-                </div>
-			</div>			
-		</div>
-		
-		<div class="panel-body">
-			
-			<div class="form-group" ng-class="{ 'has-error' : sectionForm.data.$invalid && !sectionForm.data.$pristine }" >
-				<!-- label class="control-label" for="data_id">Data</label -->
-				<div class="controls">
-					<textarea id="data_id" name="data" class="form-control" rows="20"
-							ng-model="section.data" required></textarea>
-				</div>		
-	    	</div>
-		</div>
-	
+            </div>
 
+            <div class="panel-body">
+                <div class="form-group" ng-class="{ 'has-error' : sectionForm.data.$invalid && !sectionForm.data.$pristine }" >
+                    <!-- label class="control-label" for="data_id">Data</label -->
+                    <div class="controls" dynaheight>
+                        <textarea id="data_id" name="data" class="form-control textAreaData"
+                                ng-model="section.data" required></textarea>
+                    </div>
+                </div>
+            </div>
+		</div>
 	</form>
 </div>

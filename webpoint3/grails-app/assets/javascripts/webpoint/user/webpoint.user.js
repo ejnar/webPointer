@@ -1,8 +1,6 @@
 //= wrapped
 //= require_self
-//= require_tree services
 //= require_tree controllers
-//= require_tree directives
 //= require_tree templates
 
 //= require /angular/angular
@@ -37,6 +35,7 @@ app.constant(
 			sectionEdit: '/meta/:metaId/section/:id',
 			groupOfPagesList: '/groupOfPagesList',
 			groupOfPagesUpdate: '/groupOfPagesUpdate/',
+			viewAllSongs: '/viewAllSongs',
 			user: '/user',
 			editUser: '/edituser',
 			addUser: '/adduser',
@@ -78,6 +77,10 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath',
             when( cfgAppPath.groupOfPagesUpdate + ':pageListId', {
                 templateUrl: 'static/webpoint/user/views/page/update.html',
                 controller: 'UpdatePageListCtrl'
+            }).
+            when( cfgAppPath.viewAllSongs, {
+                templateUrl: 'static/webpoint/user/views/page/viewAll.html',
+                controller: 'ViewAllSongsCtrl'
             }).
             when( cfgAppPath.addUser , {
                 templateUrl: 'static/webpoint/user/views/user/addUser.html',

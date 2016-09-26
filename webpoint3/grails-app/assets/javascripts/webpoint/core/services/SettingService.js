@@ -4,14 +4,30 @@
 
 var settingService = angular.module('webpoint.core');
 
+settingService.constant(
+		'properties', {
+			categories: ['Worship','Christian','Hymns', 'Gospel', 'Christmas carols', 'Traditional'],
+			language: ['swe','eng','dan'],
+			stypes: ['TEXT', 'TEXTCHORDS'],
+			keys: ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B:Cb'],
+			test: 'value',
+		});
 
+settingService.service('SettingService', ['SettingApi', '$rootScope', 'localStorageService', '$log', 'hashMap',
+    function(SettingApi, $rootScope, localStorageService, $log, hashMap) {
 
-settingService.service('SettingService', ['SettingApi', '$rootScope', 'localStorageService', '$log',
-    function(SettingApi, $rootScope, localStorageService, $log) {
+    hashMap.put('TEXT','TX');
+    hashMap.put('TEXTCHORDS','TC');
+
+    this.getSectionType = function (type) {
+        $log.debug(' --- SettingService.getSectionType:');
+        return hashMap.get(type);
+    };
+
 
     this.getCategory = function (scope) {
         $log.debug(' --- SettingService.getSetting:');
-        var category = null;// = localStorageService.get('category');
+        var category = localStorageService.get('category');
         if (category === null) {
             SettingApi.get({Id: 'category'}, function (resp) {
                 $log.debug(resp);
@@ -25,7 +41,7 @@ settingService.service('SettingService', ['SettingApi', '$rootScope', 'localStor
 
     this.getTagg = function (scope) {
         $log.debug(' --- SettingService.getTagg:');
-        var list = null; //localStorageService.get('tagg');
+        var list = localStorageService.get('tagg');
         if (list === null) {
             SettingApi.get({Id: 'tagg'}, function (resp) {
                 $log.debug(resp);
@@ -34,6 +50,26 @@ settingService.service('SettingService', ['SettingApi', '$rootScope', 'localStor
             });
         }else{
             scope.taggs = list.values;
+        }
+    };
+
+    this.getFilterItems = function (scope) {
+        $log.debug(' --- SettingService.getTagg:');
+        var list = localStorageService.get('filterItems');
+        if (true) {
+            SettingApi.get({Id: 'category'}).$promise
+                .then( function(resp) {
+                    $log.debug(resp);
+                    scope.filterItems = resp.values;
+                    return SettingApi.get({Id: 'tagg'}).$promise;
+                }).then( function(resp) {
+                    $log.debug(resp);
+                    angular.forEach(resp.values, function(v) {
+                        scope.filterItems.push(v);
+                    });
+                });
+        }else{
+            scope.filterItems = list.values;
         }
     };
 

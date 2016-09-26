@@ -16,6 +16,16 @@ body
 h1, h2, h3, h4, h5, h6, h7, h8 {
     font-weight: bold;
 }
+textarea.form-control {
+    height: 100%;
+}
+
+textarea.textAreaData{
+    font-size: 1.2em;
+    max-width: 30em;
+    min-width: 20em;
+}
+
 table td{
    padding-top: 0.3em !important;
    padding-bottom: 0.1em !important;
@@ -29,12 +39,16 @@ table th{
 }
 span.glyphicon-plus-sign, span.glyphicon-pencil, span.glyphicon-remove-circle {
     font-size: 0.9em;
-
 }
 button{
     padding:0.1vh;
     margin-left:0.2em;
     margin-right:0.2em;
+}
+div.song {
+    line-height: 120%;
+    white-space: pre;
+    overflow: scroll;
 }
 
 .angular-with-newlines {
@@ -71,13 +85,16 @@ button{
   content: "";
   padding: 0;
 }
-
+.pagination-sm >* {
+    font-size: 2.2em;
+}
 
 /* columns of same height styles */
 .container-xs-height {
     display:table;
     padding-left:0px;
     padding-right:0px;
+    margin:0px;
 }
 .row-xs-height {
     display:table-row;
@@ -85,6 +102,11 @@ button{
 .col-xs-height {
     display:table-cell;
     float:none;
+}
+@media (max-width: 480px) {
+    body {
+        font-size: 1.1em
+    }
 }
 @media (min-width: 768px) {
     .container-sm-height {
@@ -165,6 +187,8 @@ Then just add the alignments Css.
     transition: opacity .15s ease-in-out;
     z-index: 1;
     opacity : 0;
+    font-size: 1.2em;
+    color: #b94a48;
 }
 [tooltip]:hover:before {        
     opacity : 1;

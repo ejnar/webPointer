@@ -7,14 +7,53 @@ var sectionController = angular.module('webpoint.user');
 sectionController.controller('GroupOfSectionCtrl', [
     '$scope', '$rootScope', '$routeParams', '$location', '$filter', '$log', 'cfgAppPath', 
     'UserApi', 'SectionMetaApi', 'SectionsApi', 'sharedProperties', 'usSpinnerService',
-    function list ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath, 
+    function list ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath,
     		UserApi, SectionMetaApi, SectionsApi, sharedProperties, usSpinnerService) {
 	 	
 //		$scope.$on("LOAD_GROUPOFSECTION_EVENT", function () {   // event, args
 //			$log.debug(' --- LOAD_GROUPOFSECTION_EVENT');     // + args.eventID
 //			$scope.loadSection();	 
 //		});
-			
+
+		// Total number of items in all pages.
+		$scope.totalItems = 0;
+		// Current page number. First page is 1
+		$scope.currentPage = 1;
+		// Limit number for pagination size.
+		$scope.maxSize = 5;
+		// Maximum number of items per page. A value less than one indicates all items on one page.
+		$scope.itemsPerPage = 2;
+		$scope.items = [];
+		$scope.groups = [];
+		$scope.search = '';
+		$scope.predicate;
+    	$scope.reverse;
+		var orderBy = $filter('orderBy');
+		var filter = $filter('filter');
+
+		$scope.groupOfSectionCtrl_loadSectionMeta = function() {
+    		$log.debug(' --- GroupOfSectionController.groupOfSectionCtrl_loadSectionMeta ');
+    		usSpinnerService.spin('spinner-1');
+    		SectionMetaApi.list(
+    				function (resp) {
+    				    $log.debug(resp);
+    					$scope.items = resp;
+    					$scope.totalItems = $scope.items.length;
+    					$scope.createSearchList();
+    					usSpinnerService.stop('spinner-1');
+                    });
+
+    	};
+    	$scope.createSearchList = function (){
+    		var filterList = filter($scope.items, $scope.search);
+    		var orderByList = orderBy(filterList, $scope.predicate, $scope.reverse);
+
+    		$scope.totalItems = orderByList.length;
+    		var begin = (($scope.currentPage - 1) * $scope.itemsPerPage), end = begin + $scope.itemsPerPage;
+    		$scope.groups = orderByList.slice(begin, end);
+    	}
+    	$scope.groupOfSectionCtrl_loadSectionMeta();
+
     	$scope.groupOfSectionCtrl_editMeta = function(id) {
     		$log.debug(' --- GroupOfSectionController.groupOfSectionCtrl_editMeta - id:', id);
     		$location.path(cfgAppPath.groupOfSectionEdit + id );
@@ -42,48 +81,30 @@ sectionController.controller('GroupOfSectionCtrl', [
     	    $log.debug(' --- GroupOfSectionController.GroupOfSectionCtrl.toggleDetail - index:', $index);
             $scope.activePosition = $scope.activePosition == $index ? -1 : $index;
         };
-      	
-    	
-		// Total number of items in all pages.
-		$scope.totalItems = 64;
-		// Current page number. First page is 1
-		$scope.currentPage = 1;
-		// Limit number for pagination size.
-		$scope.maxSize = 5;
-		// Maximum number of items per page. A value less than one indicates all items on one page.
-		$scope.itemsPerPage = 2;
-		$scope.items = []; 
-		$scope.groups = [];
-		$scope.search = '';
-		$scope.predicate;
-    	$scope.reverse;
-		var orderBy = $filter('orderBy');
-		var filter = $filter('filter');
 
-		$scope.groupOfSectionCtrl_loadSectionMeta = function() {
-    		$log.debug(' --- GroupOfSectionController.groupOfSectionCtrl_loadSectionMeta ');
-    		usSpinnerService.spin('spinner-1');
-    		SectionMetaApi.list(
-    				function (resp) {
-    				    $log.debug(resp);
-    					$scope.items = resp;
-    					$scope.totalItems = $scope.items.length;
-    					$scope.createSearchList();
-    					usSpinnerService.stop('spinner-1');
+      	$scope.groupOfSectionCtrl_clickExpand = function(p) {
+            $log.debug(' --- GroupOfSectionController.groupOfSectionCtrl_clickExpand - id:', p.id );
+            if(p.expanded){
+                p.expanded = false;
+            }else{
+                p.expanded = true;
+                $scope.indexes = [];
+                $filter('filter')($scope.groups, function(g) {
+                    if(p.sectionFK == g.sectionFK){
+                        $scope.indexes.push( $scope.groups.indexOf(g)  );
+                        return true;
+                    }
+                    return false;
+                });
+                $log.debug($scope.indexes);
+                SectionsApi.get({Id: p.sectionFK}).$promise
+                    .then(function(resp) {
+                	    $scope.groups[$scope.indexes[0]].data = resp.data;
+                	    $scope.groups[$scope.indexes[0]].data = $scope.groups[$scope.indexes[0]].data.replaceAll('\n', '<br />');
                     });
+            }
+        }
 
-    	};
-    	$scope.groupOfSectionCtrl_loadSectionMeta();
-    	
-    	$scope.createSearchList = function (){
-    		var filterList = filter($scope.items, $scope.search);
-    		var orderByList = orderBy(filterList, $scope.predicate, $scope.reverse);
-    		
-    		$scope.totalItems = orderByList.length;
-    		var begin = (($scope.currentPage - 1) * $scope.itemsPerPage), end = begin + $scope.itemsPerPage;
-    		$scope.groups = orderByList.slice(begin, end);
-    	}
-    	
     	$scope.order = function(predicate, reverse) {
     		$scope.predicate = predicate; 
     		$scope.reverse = reverse;

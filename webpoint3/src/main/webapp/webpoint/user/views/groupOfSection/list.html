@@ -1,45 +1,52 @@
-<div sha-loading-spinner="viewLoading">
-    <h3 class="page-header">Section List</h3>
-
-	<div class="row" >	
-		<div class="col-md-6"></div>
-		<div class="col-md-4 col-middle">
-			<input placeholder="Search word" type="search" value="" class="form-control" 
-				ng-model="search"  ng-change="groupOfSectionCtrl_searchTable(search)"/>
-		</div>					
-		<div class="col-md-2 col-middle">
-			<button type="button" class="btn btn-success btn-sm" ng-click="groupOfSectionCtrl_addMeta()">
-            	<span class="glyphicon glyphicon-plus-sign"></span> Add Section Group
-        	</button>
+<div class="container" sha-loading-spinner="viewLoading">
+	<div class="page-header">
+		<div class="row" >
+			<div class="col-md-10 col-xs-6">
+				<h4>Song List</h4>
+			</div>
+			<div class="col-md-2 col-xs-2 col-middle">
+                <br />
+				<button type="button" class="btn btn-success btn-sm" ng-click="groupOfSectionCtrl_addMeta()">
+					<span class="glyphicon glyphicon-plus-sign"></span> Add Section
+				</button>
+			</div>
 		</div>
-	</div>	
+	</div>
+	<div class="row" >
+        <div class="col-md-8 col-xs-10">
+            <div class="container container-xs-height col-bottom">
+                <uib-pagination ng-change="pageChanged(currentPage)" items-per-page="itemsPerPage" total-items="totalItems"
+                                ng-model="currentPage" max-size="maxSize" class="pagination pagination-sm" boundary-links="true">
+                </uib-pagination>
+            </div>
+        </div>
+		<div class="col-md-4 col-xs-6">
+			<input placeholder="Search word" type="search" value="" class="form-control"
+				   ng-model="search"  ng-change="groupOfSectionCtrl_searchTable(search)"/>
+		</div>
+	</div>
 
-    <div class="container container-xs-height col-bottom">
-    	<uib-pagination ng-change="pageChanged(currentPage)" items-per-page="itemsPerPage" total-items="totalItems"
-			ng-model="currentPage" max-size="maxSize" class="pagination pagination-sm" boundary-links="true"></uib-pagination>
-    </div>
-    
     <div class="table-responsive" > 	 
 	    <table class="table-responsive table-striped table-bordered" >
 	        <thead>
 	            <tr>
 	            	<th width="2%" ></th>
 	                <th width="*" ><a href="" ng-click="reverse=!reverse;order('title', reverse)">Title</a></th>
-	                <th width="25%" ><a href="" ng-click="reverse=!reverse;order('originalTitle', reverse)">Original Title</a></th>
-	                <th width="15%" ><a href="" ng-click="reverse=!reverse;order('category', reverse)">Category</a></th>
-	                <th width="14%">Section</th>
+	                <th width="30%" class="hidden-xs"><a href="" ng-click="reverse=!reverse;order('originalTitle', reverse)">Original Title</a></th>
+	                <th width="8%" ><a href="" ng-click="reverse=!reverse;order('category', reverse)">Category</a></th>
+	                <th width="8%" class="hidden-xs">Section</th>
 	            </tr>
 	        </thead>
 	        <tbody ng-repeat="g in groups" >   <!--  | filter: searchKeyword  -->
 	            <tr>
 	            	<td>
-	              		<button ng-if="g.expanded" ng-click="g.expanded = false">-</button>
-	              		<button ng-if="!g.expanded" ng-click="g.expanded = true">+</button>
+                        <button ng-if="g.expanded" ng-click="groupOfSectionCtrl_clickExpand(g)" tooltip="Hidd">-</button>
+	              		<button ng-if="!g.expanded" ng-click="groupOfSectionCtrl_clickExpand(g)" tooltip="Show">+</button>
 	            	</td>
-	            	<td><a href="" ng-click="groupOfSectionCtrl_editMeta(g.id)" tooltip="Edit">{{g.title}}</a></td>
-	                <td>{{g.originalTitle}}</td>
+	            	<td ng-click="groupOfSectionCtrl_editMeta(g.id)" tooltip="Edit" ><a href="">{{g.title}}</a></td>
+	                <td class="hidden-xs" >{{g.originalTitle}}</td>
 	                <td>{{g.category}}</td>
-	                <td>
+	                <td class="hidden-xs">
 	                	<button ng-click="groupOfSectionCtrl_editSection(g)" tooltip="Add">
 	                    	<span class="glyphicon glyphicon-plus-sign"/>
 	                    </button>
@@ -49,10 +56,11 @@
 	                </td>
 	            </tr>
 	            <tr ng-if="g.expanded" ng-repeat-end="">
-	            	<td colspan="4">
+	            	<td colspan="5">
 	            		<table class="table">
-	            			<tr> 
-	            				<td></td>
+	            			<tr>
+                                <td width="2%"></td>
+	            				<td width="*"><div class="song" ng-bind-html="g.data" /></td>
 	            			</tr>
 	            		</table>
 	            	</td>

@@ -5,27 +5,27 @@
                 <tbody>
                 <tr class="vyRow">
                     <td class="sideLeftBtn" ng-click="vyCtrl_left()" keyleft>
-                        <i class="material-icons md-24">chevron_left</i>
+                        <i class="material-icons md-48">chevron_left</i>
                     </td>
                     <td class="vyArea">
-                        <div ng-class="fontSize" ng-bind-html="pageList.pageParts[currentPart].section.data" />
+                        <div class="vyArea" ng-class="fontSize" ng-bind-html="pageList.pageParts[currentPart].section.data" />
                     </td>
                     <td class="icon-List">
                         <div ng-click="vyCtrl_toggleSideNavRight1()" class="toggleSideNav" aria-label="List">
-                            <i class="material-icons md-18">menu</i>
+                            <i class="material-icons md-24">menu</i>
                         </div>
                         <div ng-click="vyCtrl_toggleSideNavRight2()"  class="toggleSideNav" aria-label="List">
-                            <i class="material-icons md-18">settings</i>
+                            <i class="material-icons md-24">settings</i>
                         </div>
                     </td>
                     <td class="sideRightBtn" ng-click="vyCtrl_right()" keyright>
-                        <i class="material-icons md-24">chevron_right</i>
+                        <i class="material-icons md-48">chevron_right</i>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
-        <div >
+        <div>
             <md-sidenav class="md-sidenav-right"
                         md-component-id="sidenav-right_1"
                         md-whiteframe="20">
@@ -49,9 +49,7 @@
                         md-component-id="sidenav-right_2"
                         md-whiteframe="20">
                 <md-content>
-                    <md-button ng-click="vyCtrl_goBack()" class="md-primary">
-                        Go back to list
-                    </md-button>
+                    <md-button ng-click="vyCtrl_goBack()" class="md-primary">&lArr;&nbsp;Go back to list</md-button>
                     <md-divider ></md-divider>
                     <md-subheader class="md-primary">Pick a text size</md-subheader>
                     <md-list layout="row" >

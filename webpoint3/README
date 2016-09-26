@@ -48,3 +48,6 @@ provided "org.springframework.boot:spring-boot-starter-tomcat"
 
 Add: src/main/webapp/WEB-INF/jboss-deployment-structure.xml
 --------------------------
+*** Grails
+
+grails create-app webpoint3 --profile angular --features mongodb, asset-pipeline, json-views, security

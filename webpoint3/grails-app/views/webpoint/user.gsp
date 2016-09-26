@@ -25,11 +25,10 @@
 
 <!-- Add your site or application content here -->
 <div id="wrap">
-    <div ng-include="'static/webpoint/views/includes/header.html'"></div>
-    <div class="container" id="content">   <!-- container-fluid  style="width:60%" -->
-    	<div ng-view=""></div>
-    </div>
-    <div ng-include="'static/webpoint/views/includes/footer.html'"></div>
+    <div ng-include="'static/webpoint/user/views/includes/header.html'"></div>
+    <!-- class="container" id="content" container-fluid  style="width:60%" -->
+    <div ng-view=""></div>
+    <div ng-include="'static/webpoint/user/views/includes/footer.html'"></div>
 </div>
 <asset:javascript src="/webpoint/webpoint.js"/>
 </body>

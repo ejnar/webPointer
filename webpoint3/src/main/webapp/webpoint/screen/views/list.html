@@ -12,15 +12,12 @@
             <md-list-item class="md-2-line" ng-repeat="p in items">
                 <div class="md-list-item-text" layout="column">
                     <h3>
-                        <span ng-if="p.expanded" ng-click="p.expanded = false">- </span>
-                        <span ng-if="!p.expanded" ng-click="p.expanded = true">+ </span>
-                        <a href="" ng-click="mainViewListCtrl_gotoScreen(p.id)">{{p.name}}</a>
+                        <span class="expandSign" ng-if="p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">-</span>
+                        <span class="expandSign" ng-if="!p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">+</span>
+                        <a href="" ng-click="mainViewListCtrl_gotoScreen(p.id)">{{p.category}}&nbsp;{{p.name}}</a>
                     </h3>
                     <p ng-if="p.expanded" layout="column">
-                        Category: {{p.category}}
-                        <span ng-repeat="pp in p.pageParts">
-                                {{pp.sectionMeta.id}}
-                        </span>
+                        <span ng-repeat="part in pageList.pageParts">&nbsp;&nbsp;&bull;&nbsp;{{part.sectionMeta.title}}</span>
                     </p>
                 </div>
                 <md-divider ></md-divider>

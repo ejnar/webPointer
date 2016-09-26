@@ -8,7 +8,7 @@ sectionController.controller('UpdateSectionCtrl', [
     '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties', 'SectionsApi', 'SectionMetaApi', 'ChangeKeyService',
     function($scope, $routeParams, $location, $log, $q, cfgAppPath, properties, SectionsApi, SectionMetaApi, ChangeKeyService) {
 
-		$log.debug(' - SectionController.UpdateSectionCtrl:');
+		$log.debug(' - SectionController.UpdateSectionCtrl: ' +  $location.path());
 		$scope.languages = properties.language;
 		$scope.stypes = properties.stypes;
 		$scope.keys = properties.keys;
@@ -38,6 +38,9 @@ sectionController.controller('UpdateSectionCtrl', [
 	    	$log.debug(' --- SectionController.updateSectionCtrl_updateSection:');
 
             $log.debug(' section: ', $scope.section)
+            $log.debug(' section: ', $scope.sectionMeta)
+            $scope.section.data = $scope.section.data.stripHtml();
+
 	    	var promise1 = SectionMetaApi.update({Id: $scope.sectionMeta.id }, $scope.sectionMeta);
 	    	var promise2 = SectionsApi.update({Id: $scope.section.id}, $scope.section);    
 	    	

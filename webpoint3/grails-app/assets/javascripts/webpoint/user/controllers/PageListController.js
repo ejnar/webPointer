@@ -11,6 +11,17 @@ sectionController.controller('PageListCtrl', [
         tmpCash, cfgAppPath, PageListApi, sharedProperties) {
         $log.debug(' - PageListController.PageListCtrl:');
 
+		$scope.pageListCtrl_loadPageList = function() {
+			$log.debug(" --- PageListController.pageListCtrl_loadPageList:");
+//			$scope.viewLoading = true;
+    		PageListApi.list(
+    				function (resp) {
+    					$scope.listOfPages = resp;
+//    					$scope.viewLoading = false;
+                    });
+    		$scope.orderProp = 'name';
+    	}
+
     	$scope.pageListCtrl_openModel = function () {
     		var modalInstance = $uibModal.open({
     			templateUrl: cfgAppPath.ceatePageModal,
@@ -43,17 +54,40 @@ sectionController.controller('PageListCtrl', [
     			});
     	}
 
-		$scope.pageListCtrl_loadPageList = function() {
-			$log.debug(" --- PageListController.pageListCtrl_loadPageList:");
-//			$scope.viewLoading = true;
+    	$scope.pageListCtrl_goToViewAll = function() {
+            $log.debug(" --- PageListController.pageListCtrl_goToViewAll ");
+            $location.path(cfgAppPath.viewAllSongs);
+        }
+}]);
+
+
+sectionController.controller('ViewAllSongsCtrl', [
+    '$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', '$uibModal',
+    'tmpCash', 'cfgAppPath', 'PageListApi', 'sharedProperties',
+    function ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $uibModal,
+        tmpCash, cfgAppPath, PageListApi, sharedProperties) {
+        $log.debug(' - PageListController.ViewAllSongsCtrl:');
+
+
+		$scope.viewAllSongsCtrl_loadSongList = function() {
+			$log.debug(" --- PageListController.viewAllSongsCtrl_loadSongList:");
+
     		PageListApi.list(
     				function (resp) {
     					$scope.listOfPages = resp;
-//    					$scope.viewLoading = false;
+
                     });
     		$scope.orderProp = 'name';
     	}
+
+
+    	$scope.pageListCtrl_goToViewAll = function() {
+            $log.debug(" --- PageListController.pageListCtrl_goToViewAll ");
+            $location.path(cfgAppPath.viewAllSongs);
+        }
+
 }]);
+
 
 
 
@@ -82,23 +116,22 @@ sectionController.controller('ModalInstanceCtrl',[ '$scope', '$location', '$uibM
 
 sectionController.controller('UpdatePageListCtrl', [
 	'$rootScope', '$scope', '$routeParams', '$location', '$log',
-	'tmpCash', 'cfgAppPath', 'properties', 'SectionMetaApi', 'SectionsApi', 'PageListApi', 'PageListDataApi', '$filter',
+	'cfgAppPath', 'properties', 'SectionMetaApi', 'SectionsApi', 'PageListApi', 'PageListDataApi', '$filter', 'SettingService',
     function($rootScope, $scope, $routeParams, $location, $log,
-        tmpCash, cfgAppPath, properties, SectionMetaApi, SectionsApi, PageListApi, PageListDataApi, $filter) {
+        cfgAppPath, properties, SectionMetaApi, SectionsApi, PageListApi, PageListDataApi, $filter, SettingService) {
         $log.debug(' - PageListController.UpdatePageListCtrl:');
 
 		$scope.updatePageListCtrl_loadSectionMetaList = function() {
             $log.debug(" --- PageListController.updatePageListCtrl_loadSectionMetaList");
-
-            $scope.filterCategories = properties.categories;
-            $scope.choosenCategory = []
+            SettingService.getCategory($scope);
+            SettingService.getFilterItems($scope);
+            $scope.choosenCategory = [];
             SectionMetaApi.list(function (resp) {
                 $log.debug(resp);
                 $scope.meta = resp;
                 $scope.metaFilteredList = resp;
                 $scope.updatePageListCtrl_loadPageList();
             });
-
    		    $scope.orderProp = 'title';
 		}
 
@@ -107,9 +140,9 @@ sectionController.controller('UpdatePageListCtrl', [
             $log.debug(" --- PageListController.updatePageListCtrl_pickFilterCategory " + category);
             $scope.choosenCategory.push(category);
             $scope.metaFilteredList = $scope.meta.filter(function (meta) {
-                  return $scope.choosenCategory.indexOf(meta.category) !== -1;
+                 return filterSearch($scope.choosenCategory, meta, $scope.filterAnd);
             });
-		}
+		};
 
         $scope.updatePageListCtrl_closeFilterItem = function(category) {
             $log.debug(" --- PageListController.updatePageListCtrl_closeFilterItem " + category);
@@ -117,10 +150,24 @@ sectionController.controller('UpdatePageListCtrl', [
             if(index != -1){
                 $scope.choosenCategory.splice( index, 1 );
             }
-            $scope.metaFilteredList = $scope.meta.filter(function (meta) {
-                return $scope.choosenCategory.indexOf(meta.category) == -1;
-            });
-        }
+            if($scope.choosenCategory.length > 0){
+                $scope.metaFilteredList = $scope.meta.filter(function (meta) {
+                    return filterSearch($scope.choosenCategory, meta, $scope.filterAnd);
+                });
+            }else{
+                $scope.metaFilteredList = $scope.meta;
+            }
+        };
+        $scope.updatePageListCtrl_filterAndChange = function() {
+            $log.debug(" --- PageListController.updatePageListCtrl_filterAndChange ");
+            $scope.choosenCategory = [];
+        };
+
+        $scope.updatePageListCtrl_convertSectionType = function(type) {
+            $log.debug(" --- PageListController.updatePageListCtrl_convertSectionType type: " + type);
+
+            return SettingService.getSectionType(type);
+        };
 
 		$scope.updatePageListCtrl_loadPageList = function() {
 		    $log.debug(" --- PageListController.updatePageListCtrl_loadPageList - pageListId: ", $routeParams.pageListId);
@@ -174,5 +221,26 @@ sectionController.controller('UpdatePageListCtrl', [
 		}
 		
 }]);
+
+function filterSearch(choosenCategory, meta, filterAnd){
+    var isCategory = choosenCategory.indexOf(meta.category) !== -1;
+    var is = false;
+    angular.forEach(meta.taggs, function(tagg) {
+        var isTagg = choosenCategory.indexOf(tagg) !== -1;
+        if(filterAnd){
+            if(isCategory && isTagg){
+                is = true;
+            }
+        }else{
+            if(isCategory || isTagg){
+                is = true;
+            }
+        }
+    });
+    if(meta.taggs == null || meta.taggs.length < 1){
+        is = isCategory;
+    }
+    return is;
+}
 
 
