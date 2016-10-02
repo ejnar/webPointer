@@ -24,11 +24,8 @@ class PageList extends BaseDomain {
     }
 
     def beforeInsert() { updated = new Date(); }
-
     def beforeUpdate() { updated = new Date(); }
-
     def afterInsert() {}
-
     def afterUpdate() {}
 
 
@@ -90,16 +87,15 @@ class PageItem {
     String key
     String style
     String color
-    SectionMeta sectionMeta
 
     Section section
-    static transients = ['section']
+//    static transients = ['section']
 
     static constraints = {
         key(blank: true)
         style(blank: false)
         color(blank: false)
-        sectionMeta nullable: true
+        section nullable: true
     }
 
     String toString() {

@@ -26,7 +26,7 @@
 		</div>
 	</div>
 
-    <div class="table-responsive" > 	 
+    <div class="table-responsive" data-ng-init="groupOfSectionCtrl_loadSection()" >
 	    <table class="table-responsive table-striped table-bordered" >
 	        <thead>
 	            <tr>
@@ -50,7 +50,7 @@
 	                	<button ng-click="groupOfSectionCtrl_editSection(g)" tooltip="Add">
 	                    	<span class="glyphicon glyphicon-plus-sign"/>
 	                    </button>
-	                    <button ng-click="groupOfSectionCtrl_delMeta(g)" tooltip="Remove">
+	                    <button ng-click="groupOfSectionCtrl_delSection(g)" tooltip="Remove">
 	                    	<span class="glyphicon glyphicon-remove-circle"/>
 	                    </button>	
 	                </td>

@@ -6,17 +6,19 @@
 			</div>
 			<div class="col-md-6">
 				<br />
-
-				<button type="button" class="btn btn-primary pull-right" ng-click="">
+				<button type="button" class="btn btn-primary pull-right" back>
 					<span class="glyphicon glyphicon-plus-sign"/>&nbsp;Go back</button>
-
 			</div>
 		</div>
 	</div>
-	<div sha-loading-spinner="viewLoading">
-   		<div class="table-responsive" data-ng-init="viewAllSongsCtrl_loadSongList()" >
-
-
-		</div>   
-	</div>	
+	<div sha-loading-spinner="viewLoading" data-ng-init="viewAllSongsCtrl_loadSongList()" >
+        <div ng-repeat="s in sectionList">
+            <div class="col-md-3 col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{s.title}}</div>
+                    <div class="panel-body"><div class="mini_song" ng-bind-html="s.data" /></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

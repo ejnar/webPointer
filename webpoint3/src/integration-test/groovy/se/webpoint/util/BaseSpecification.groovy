@@ -4,7 +4,6 @@ import se.webpoint.auth.*
 import se.webpoint.data.PageItem
 import se.webpoint.data.PageList
 import se.webpoint.data.Section
-import se.webpoint.data.SectionMeta
 import spock.lang.Specification
 
 /**
@@ -19,10 +18,10 @@ class BaseSpecification extends Specification {
             'Finsh the test';
 
 
-    def setupPageList(sectionMeta) {
+    def setupPageList(section) {
         PageList pageList = new PageList(name: 'name1', category: 'category')
         PageItem part = new PageItem(style: 'default', color: 'red')
-        part.sectionMeta = sectionMeta
+        part.section = section
         pageList.pageParts.add(part)
         pageList.addGroup("testersson")
         pageList.save flush: true
@@ -30,21 +29,9 @@ class BaseSpecification extends Specification {
     }
 
 
-    def setupSectionMeta(name) {
-//        SectionMeta.where { title == name }.deleteAll()
-        SectionMeta sectionMeta = new SectionMeta(title: name, language: 'ENG')
-        sectionMeta.save flush: true
-        sectionMeta
-    }
-
-    def setupSection(sectionMeta) {
-        Section section = new Section(data: data, type: 'type', key: 'C')
-
-        section.setSectionMeta(sectionMeta)
+    def setupSection(name) {
+        Section section = new Section(title: name, category: 'category', language: 'ENG', data: data, type: 'type', key: 'C')
         section.save flush: true
-
-        sectionMeta.sectionFK = section.id.toHexString()
-        sectionMeta.save flush: true
         section
     }
 

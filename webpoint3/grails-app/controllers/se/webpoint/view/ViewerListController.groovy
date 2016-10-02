@@ -3,7 +3,7 @@ package se.webpoint.view
 import grails.rest.RestfulController
 import se.webpoint.data.PageItem
 import se.webpoint.data.PageList
-import se.webpoint.data.SectionMeta
+import se.webpoint.data.Section
 
 class ViewerListController extends RestfulController<PageList> {
 
@@ -38,7 +38,7 @@ class ViewerListController extends RestfulController<PageList> {
 		for(PageItem part in instance.pageParts){
 			println "PageItem: "
 			
-			for(SectionMeta meta in part.sectionMetas){
+			for(Section meta in part.section){
 				println "SectionMeta: "
 			}
 			

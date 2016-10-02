@@ -50,6 +50,21 @@ div.song {
     white-space: pre;
     overflow: scroll;
 }
+div.mini_song {
+    line-height: 90%;
+    height: 12vh;
+    font-size: 0.9em;
+    white-space: pre;
+    overflow: scroll;
+    text-overflow: ellipsis;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+div.panel-body{
+    margin: 0 0 0.2em 0;
+    padding: 0.8em 0.2em 0.8em 0.4em;
+}
 
 .angular-with-newlines {
   white-space: pre;

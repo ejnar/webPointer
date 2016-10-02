@@ -13,6 +13,17 @@ appDirectives.directive('dynaheight', [ '$window', '$log', function($window, $lo
 	};
 }]);
 
+appDirectives.directive('back', ['$window', function($window) {
+    return {
+        restrict: 'A',
+        link: function (scope, elem, attrs) {
+            elem.bind('click', function () {
+                $window.history.back();
+            });
+        }
+    };
+}]);
+
 appDirectives.directive('directiveSectiontype', [ '$log', 'SettingService',  function($log, SettingService){
     $log.debug(' --- directiveSectiontype ---');
     return {

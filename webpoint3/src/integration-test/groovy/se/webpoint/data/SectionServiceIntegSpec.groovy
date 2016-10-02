@@ -18,25 +18,21 @@ class SectionServiceIntegSpec extends BaseSpecification {
 
     void "test getSection"() {
         given:
-        SectionMeta sectionMeta = setupSectionMeta('SectionServiceInteg')
-        Section section = setupSection(sectionMeta)
+        Section section = setupSection('SectionServiceIntegSpec1')
 
         expect:
         service.getSection(section.id).key.equals('C')
 
         cleanup:
         section.delete flush:true
-        sectionMeta.delete flush:true
     }
 
     void "test saveSection"() {
         given:
-        User user = setupUser('SectionServiceIntegSpec1')
+        User user = setupUser('SectionServiceIntegSpec2')
         mockSecurityService.loadCurrentUser() >> user
         service.springSecurityService = mockSecurityService
-        SectionMeta sectionMeta = setupSectionMeta('SectionServiceInteg2')
-        Section instance = new Section(data: data, type: 'type', key: 'F')
-        instance.setSectionMeta(sectionMeta)
+        Section instance = new Section(title: 'SectionServiceIntegSpec2', category: 'category', language: 'ENG', data: 'data', type: 'type', key: 'F')
 
         when:
         Section savedS = service.saveSection(instance)
@@ -47,7 +43,6 @@ class SectionServiceIntegSpec extends BaseSpecification {
 
         cleanup:
         savedS.delete flush:true
-        sectionMeta.delete flush:true
         cleanUser(user)
     }
 }

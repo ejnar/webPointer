@@ -17,6 +17,7 @@ class PageService {
 
 
     def getAllPageLists() {
+        log.debug(' --- Get all PageList')
         User user = springSecurityService.loadCurrentUser()
         Set<RoleGroup> rolegroups = user.getAuthoritiesExternal()
 
@@ -44,11 +45,8 @@ class PageService {
     def PageList getPageListByList(PageList pageList) {
         PageList list = new PageList();
         for (p in pageList.pageParts) {
-            SectionMeta meta = SectionMeta.findById(p.sectionMeta);
-            log.debug(meta);
 
-            p.sectionMeta = meta;
-            Section section = Section.webConvertedSection(meta.sectionFK);
+            Section section = Section.webConvertedSection(p.section);
             log.debug(section);
 
             p.section = section;
@@ -89,19 +87,19 @@ class PageService {
      * @param sectionMetaId
      */
     @Transactional
-    def removePagePart(sectionMetaId) {
-        log.debug(' --- Remove PagePart - sectionMetaId: ' + sectionMetaId)
+    def removePagePart(sectionId) {
+        log.debug(' --- Remove PagePart - sectionId: ' + sectionId)
 
         ObjectId objectId
-        if(sectionMetaId instanceof String)
-            objectId = new ObjectId(sectionMetaId)
+        if(sectionId instanceof String)
+            objectId = new ObjectId(sectionId)
         else
-            objectId = sectionMetaId
+            objectId = sectionId
 
 
         def criteria = PageList.createCriteria();
         List<PageList> pageLists = criteria.list {
-            eq('pageParts.sectionMeta', objectId)
+            eq('pageParts.section', objectId)
         }
         try {
             PageItem pageData
@@ -113,7 +111,7 @@ class PageService {
                 Iterator pageDataI = pageList.pageParts.iterator();
                 while (pageDataI.hasNext()) {
                     pageData = pageDataI.next();
-                    if (sectionMetaId.toString().equals(pageData.sectionMeta.id.toString())) {
+                    if (sectionId.toString().equals(pageData.section.id.toString())) {
                         pageParts.add(pageData)
                     }
                 }

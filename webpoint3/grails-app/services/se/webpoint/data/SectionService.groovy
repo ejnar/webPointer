@@ -18,7 +18,7 @@ class SectionService {
 //        def user = springSecurityService.loadCurrentUser()
 
         Section section = Section.findById(id);
-        section.data = section.data.expand()
+//        section.data = section.data.expand()
         section
     }
 
@@ -30,9 +30,10 @@ class SectionService {
         if (instance.hasErrors()) {
             throw new GrailsWrappedRuntimeException()
         }
-        instance.data = instance.data.expand()
-        Set<RoleGroup> roleGroupSet = new HashSet<RoleGroup>()
+        if(instance.data != null)
+            instance.data = instance.data.expand()
 
+        Set<RoleGroup> roleGroupSet = new HashSet<RoleGroup>()
         def user = springSecurityService.loadCurrentUser()
         for (a in user.getAuthorities()) {
             if(!a.system)

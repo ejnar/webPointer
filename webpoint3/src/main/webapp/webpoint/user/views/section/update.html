@@ -1,27 +1,27 @@
 <div class="container">
 	<div ng-if="doSave" >
-			<h4 class="page-header">New Section</h4>
+			<h4 class="page-header">New Song</h4>
 		</div>
 		<div ng-if="!doSave" >
-			<h4 class="page-header">Update Section</h4>
+			<h4 class="page-header">Update Song</h4>
 	</div>
 	<form role="form" name="sectionForm" novalidate >
 		<div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-xs-4 col-sm-2 col-md-1">
                         <div ng-if="doSave"  class="form-actions" > <!--  || sectionForm.$invalid -->
                             <button class="btn btn-primary btn-xs"
                                     ng-disabled="sectionForm.$error.required"
-                                    ng-click="updateSectionCtrl_saveSection(sectionForm)"> Add Section </button>
+                                    ng-click="updateSectionCtrl_saveSection(sectionForm)"> Add Song </button>
                         </div>
                         <div ng-if="!doSave"  class="form-actions" >
                             <button class="btn btn-primary btn-xs"
                                     ng-disabled="sectionForm.$error.required"
-                                    ng-click="updateSectionCtrl_updateSection(sectionForm)"> Update Section </button>
+                                    ng-click="updateSectionCtrl_updateSection(sectionForm)"> Update Song </button>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-xs-4 col-sm-3 col-md-2">
                         <div class="form-group" ng-class="{ 'has-error' : sectionForm.sectionType.$invalid
                             && !sectionForm.sectionType.$pristine }" >
                             <!-- label class="control-label" for="sectionType_id">Type</label -->
@@ -33,7 +33,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-xs-4 col-sm-5 col-md-2">
                         <div class="form-group" ng-class="{ 'has-error' : sectionForm.key.$invalid && !sectionForm.key.$pristine }" >
                             <!-- label class="control-label" for="language_id">Key</label -->
                             <div class="controls">
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-xs-6 col-sm-3 col-md-2">
                         <div class="form-group" ng-class="{ 'has-error' : sectionForm.tokey.$invalid
                             && !sectionForm.tokey.$pristine }" >
                             <!-- label class="control-label" for="language_id">Key</label -->
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xs-6 col-sm-3 col-md-4">
                         <div ng-show="section.type=='TEXTCHORDS' && section.tokey!=null" class="form-actions" >
                             <button class="btn btn-primary btn-xs"
                                     ng-disabled="sectionForm.$error.required"

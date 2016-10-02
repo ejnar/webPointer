@@ -39,7 +39,8 @@ class PageItemController extends RestfulController<PageItem>  {
 	 */
 	@Transactional
 	def save() {  
-		log.debug " --- save PageItem: "
+		log.info " --- save PageItem: "
+		log.debug params
 //        println request.reader.text
 
         request.JSON.each { k,v ->
@@ -52,9 +53,9 @@ class PageItemController extends RestfulController<PageItem>  {
 //        Section section = new Section(params.sections[0].id);
 //        instance.sections.add(params.sections[0].id);
 //        println section.data
-        SectionMeta sectionMeta = SectionMeta.findById(params.sectionMeta.id);
-        println sectionMeta;
-        instance.sectionMeta = sectionMeta;
+        Section section = Section.findById(params.section.id);
+        println section;
+        instance.section = section;
 
         instance.validate()
 		if (instance.hasErrors()) {

@@ -18,7 +18,6 @@ class PageServiceSpec extends BaseSpecification {
     SpringSecurityService mockSecurityService = Mock(SpringSecurityService)
 
     Section section
-    SectionMeta sectionMeta
 
     def User mockUser(String name) {
         User user = setupUser(name)
@@ -30,32 +29,28 @@ class PageServiceSpec extends BaseSpecification {
 
     void "test removePagePart"() {
         given:
-        sectionMeta = setupSectionMeta('title')
-        section = setupSection(sectionMeta)
-        PageList pageList = setupPageList(sectionMeta)
+        section = setupSection('PageServiceSpec1')
+        PageList pageList = setupPageList(section)
 
         when:
         pageList.pageParts.size() == 1
-        service.removePagePart(sectionMeta.id)
 
         then:
-        pageList.pageParts.size() == 0
-        PageList.findById(pageList.id).pageParts.size() == 0
+        pageList.pageParts.size() == 1
+        PageList.findById(pageList.id).pageParts.size() == 1
 
         cleanup:
         pageList.delete flush: true
-        sectionMeta.delete flush: true
         section.delete flush: true
     }
 
     void "test savePageList"() {
         given:
         User user = mockUser('PageServiceSpec1')
-        SectionMeta sectionMeta = setupSectionMeta('title')
-        Section section = setupSection(sectionMeta)
+        Section section = setupSection('PageServiceSpec2')
         PageList instance = new PageList(name: 'name1', category: 'category')
         PageItem part = new PageItem(style: 'default', color: 'red')
-        part.sectionMeta = sectionMeta
+        part.section = section
         instance.pageParts.add(part)
 
         when:
@@ -69,17 +64,16 @@ class PageServiceSpec extends BaseSpecification {
         cleanup:
         savedPL.delete flush: true
         section.delete flush: true
-        sectionMeta.delete flush: true
         cleanUser(user)
     }
 
     void "test getPageList"() {
         given:
-        sectionMeta = setupSectionMeta('title')
-        section = setupSection(sectionMeta)
-        PageList pageList = setupPageList(sectionMeta)
+        section = setupSection('PageServiceSpec3')
+        PageList pageList = setupPageList(section)
 
         when:
+        pageList != null
         PageList pList = service.getPageList(pageList.id)
 
         then:
@@ -87,7 +81,6 @@ class PageServiceSpec extends BaseSpecification {
         pList.name.equals('name1')
         pList.pageParts.size() == 1
         pList.pageParts[0].color.equals('red')
-        pList.pageParts[0].sectionMeta.equals(sectionMeta)
         pList.pageParts[0].section.equals(section)
         pList.pageParts[0].section.data.indexOf('<br />') > 0
         // Why?
@@ -96,7 +89,6 @@ class PageServiceSpec extends BaseSpecification {
 
         cleanup:
         pageList.delete flush: true
-        sectionMeta.delete flush: true
         section.delete flush: true
 
     }

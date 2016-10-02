@@ -1,9 +1,9 @@
 <div class="container">
 	<div ng-if="doSave" >
-		<h4 class="page-header">New Group</h4>
+		<h4 class="page-header">New Song</h4>
 	</div>
 	<div ng-if="!doSave" >
-		<h4 class="page-header">Update Group</h4>
+		<h4 class="page-header">Update Song</h4>
 	</div>
 	<form role="form" name="metaForm" novalidate>
 		<!-- pre>
@@ -21,7 +21,7 @@
 	        		<span class="messages" ng-show="metaForm.title.$error.required">Required</span>
 					<div class="controls">     <!-- input-block-level -->
 						<input id="title_id" name="title" type="text" placeholder="Title"
-							class="form-control" ng-model="sectionMeta.title" required/>
+							class="form-control" ng-model="section.title" required/>
 					</div>
 				</div>
 			</div>
@@ -34,7 +34,7 @@
 					<span class="messages" ng-show="metaForm.orgTitle.$error.required">Required</span>
 					<div class="controls">
 						<input id="orgTitle_id" name="orgTitle" type="text" 
-							class="form-control" ng-model="sectionMeta.originalTitle" required/> 		
+							class="form-control" ng-model="section.originalTitle" required/>
 					</div>
 				</div>
 			</div>	
@@ -46,7 +46,7 @@
                     <label class="control-label" for="category_id">Category</label>
                     <span class="messages" ng-show="metaForm.category.$error.required">Required</span>
                     <div class="controls">
-                        <select id="category_id" name="category" ng-model="sectionMeta.category" ng-selected="sectionMeta.category"
+                        <select id="category_id" name="category" ng-model="section.category" ng-selected="section.category"
                                 class="form-control" ng-options="category as category for category in categories" required>
                             <option value="">Pick a category</option>
                         </select>
@@ -59,7 +59,7 @@
                     <label class="control-label" for="language_id">Language</label>
                     <span class="messages" ng-show="metaForm.language.$error.required">Required</span>
                     <div class="controls">
-                        <select id="language_id" name="language" ng-model="sectionMeta.language"
+                        <select id="language_id" name="language" ng-model="section.language"
                                 class="form-control" ng-options="language as language for language in languages" required>
                             <option value="">Pick a language</option>
                         </select>
@@ -101,7 +101,7 @@
 		<div class="form-group row">
 			<div class="col-md-12">
 				<label class="control-label" for="tagg_id">Selected taggs</label>
-				<div role="filteritem" ng-repeat="tagg in sectionMeta.taggs">
+				<div role="filteritem" ng-repeat="tagg in section.taggs">
 					<div class="alert filterItem alert-success"  >
 						<button type='button' class='close' ng-click="updateGroupSectionCtrl_closeFilterItem(tagg)"
 								data-dismiss='alert'>&times;</button>
@@ -115,12 +115,12 @@
 		<div ng-if="doSave"  class="form-actions" > <!-- ng-disabled="!groupForm.modified || groupForm.$invalid" -->
 			<button type="submit" class="btn btn-primary" 
                 ng-disabled="metaForm.$error.required"
-                ng-click="saveMeta(metaForm)" >Add Meta Section</button>
+                ng-click="saveMeta(metaForm)" >Add Song</button>
 		</div>
 		<div ng-if="!doSave"  class="form-actions" >
 			<button class="btn btn-primary" 
 				ng-disabled="metaForm.$error.required"
-				ng-click="updateMeta(metaForm)">Update Meta Section</button>
+				ng-click="updateMeta(metaForm)">Update Song</button>
 		</div>
 	</form>
 </div>

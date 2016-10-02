@@ -14,10 +14,10 @@
                     <h3>
                         <span class="expandSign" ng-if="p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">-</span>
                         <span class="expandSign" ng-if="!p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">+</span>
-                        <a href="" ng-click="mainViewListCtrl_gotoScreen(p.id)">{{p.category}}&nbsp;{{p.name}}</a>
+                        <a href="" ng-click="mainViewListCtrl_gotoScreen(p.id)">{{p.category}}&nbsp;&Verbar;&nbsp;{{p.name}}</a>
                     </h3>
                     <p ng-if="p.expanded" layout="column">
-                        <span ng-repeat="part in pageList.pageParts">&nbsp;&nbsp;&bull;&nbsp;{{part.sectionMeta.title}}</span>
+                        <span ng-repeat="part in pageList.pageParts">&nbsp;&nbsp;&bull;&nbsp;{{part.section.title}}</span>
                     </p>
                 </div>
                 <md-divider ></md-divider>

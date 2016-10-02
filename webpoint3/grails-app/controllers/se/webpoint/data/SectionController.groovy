@@ -3,23 +3,23 @@ package se.webpoint.data
 import grails.rest.RestfulController
 import grails.transaction.Transactional
 import grails.web.http.HttpHeaders
+import se.webpoint.rest.BasicRestController
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
+import static org.springframework.http.HttpStatus.NO_CONTENT
 
 
-class SectionController extends RestfulController<Section>  {
+class SectionController extends BasicRestController<Section> {
 	
 	
     static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST", update: "PUT", patch: "PATCH", delete: "DELETE"]
 
-    SectionMetaService sectionMetaService
-
 	def camelContext
 	def grailsApplictaion
     SectionService sectionService
-	
+    PageService pageService
 	
 	SectionController() {
 		super(Section)
@@ -44,10 +44,12 @@ class SectionController extends RestfulController<Section>  {
         log.debug params
 
         def instance = createResource()
+        println instance
 		if(instance == null){
 			notFound()
 			return
 		}
+        access()
         sectionService.saveSection(instance);
 
         response.addHeader(HttpHeaders.LOCATION,
@@ -55,9 +57,32 @@ class SectionController extends RestfulController<Section>  {
 		respond instance, [status: CREATED]
 	}
 	
-	
-	protected void notFound() {
-		render status: NOT_FOUND 
+
+
+	/**
+	 * Deletes a resource for the given id
+	 * @param id The id
+	 */
+	@Override
+	@Transactional
+	def delete() {
+		log.info " --- SectionController.delete: "
+		log.debug params
+		if(handleReadOnly()) {
+			return
+		}
+
+		def instance = queryForResource(params.id)
+		if (instance == null) {
+			transactionStatus.setRollbackOnly()
+			render status: NOT_FOUND
+			return
+		}
+		pageService.removePagePart(params.id)
+
+        instance.delete flush:true
+
+        render status: NO_CONTENT
 	}
 	
 }

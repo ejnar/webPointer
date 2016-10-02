@@ -2,11 +2,11 @@
     <div class="page-header">
         <div class="row">
             <div class="col-md-6">
-                <h4>Create Page List</h4>
+                <h4>Create Song List</h4>
             </div>
             <div class="col-md-6">
                 <br />
-                <button type="button" class="btn btn-primary pull-right" ng-click="updatePageListCtrl_backToList()">
+                <button type="button" class="btn btn-primary pull-right" back>
                         <span class="glyphicon glyphicon-arrow-left"/> Back</button>
             </div>
         </div>
@@ -42,7 +42,7 @@
     </div>
     <form role="form" name="pageListForm" novalidate>
 		<div class="row">	
-			<div class="col-md-7" data-ng-init="updatePageListCtrl_loadSectionMetaList()" >
+			<div class="col-md-7" data-ng-init="updatePageListCtrl_loadSectionList()" >
 			   
 			    <table class="table table-bordered table-hover" >
 			        <thead>
@@ -55,7 +55,7 @@
 			            <tr ng-click="updatePageListCtrl_addSectionToList(s)" title="Click to add">
 			                <td>{{s.title}}</td>
 		                    <td>
-                                <directive-sectiontype sectiontype="{{s.sectionType}}"></directive-sectiontype>
+                                <directive-sectiontype sectiontype="{{s.type}}"></directive-sectiontype>
                             </td>
 			            </tr>
 			        </tbody>
@@ -72,9 +72,9 @@
 			        </thead>
 			        <tbody ng-repeat="p in pageDataList.pageParts">
 			            <tr>
-			                <td>{{p.sectionMeta.title}}</td>
+			                <td>{{p.section.title}}</td>
 			                <td>
-                                <directive-sectiontype sectiontype="{{p.sectionMeta.sectionType}}"></directive-sectiontype>
+                                <directive-sectiontype sectiontype="{{p.section.type}}"></directive-sectiontype>
                             </td>
 			                <td>
                                 <button ng-click="updatePageListCtrl_delPageData(p)" tooltip="Remove">

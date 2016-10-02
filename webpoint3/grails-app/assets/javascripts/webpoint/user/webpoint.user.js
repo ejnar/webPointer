@@ -32,7 +32,7 @@ app.constant(
 			groupOfSectionEdit:	 '/groupOfSection/edit/',
 			groupOfSectionNew:	 '/groupOfSection/new',
 			sectionNew: '/section/new',
-			sectionEdit: '/meta/:metaId/section/:id',
+			sectionEdit: '/section/:id',
 			groupOfPagesList: '/groupOfPagesList',
 			groupOfPagesUpdate: '/groupOfPagesUpdate/',
 			viewAllSongs: '/viewAllSongs',

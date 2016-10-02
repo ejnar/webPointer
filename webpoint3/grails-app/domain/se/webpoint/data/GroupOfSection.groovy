@@ -5,8 +5,7 @@ class GroupOfSection extends BaseDomain {
 	String originalTitle
 	String category
 	Date modify
-	
-	List<SectionMeta> sectionMetas = new ArrayList()
+
 	
 	static embedded = ['sectionMetas']
 	

@@ -21,7 +21,6 @@ class BootStrap {
             output['key'] = it.key
             output['style'] = it.style
             output['color'] = it.color
-            output['sectionMeta'] = it.sectionMeta
             output['section'] = it.section
             return output
         }

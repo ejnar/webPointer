@@ -60,6 +60,9 @@ app.factory('$resourceInterceptor', function ($q, $log, $location, usSpinnerServ
                 usSpinnerService.stop('spinner-1');
                 $location.url('/login');
             }
+            if (responseError.status === 500) { // authentication issue
+                usSpinnerService.stop('spinner-1');
+            }
 //            $log.debug(responseError);
             if (responseError.status < 0) {
                 $log.debug(' Server down:');
@@ -225,7 +228,7 @@ String.prototype.removeLast = function(character) {
         return this;
 };
 String.prototype.indexLastOf = function(preIndex, character) {
-    if(preIndex == 0)
+    if(preIndex < 0)
         return this.indexOf(character);
     else
         return preIndex + 1 + this.substr(preIndex + 1).indexOf(character);

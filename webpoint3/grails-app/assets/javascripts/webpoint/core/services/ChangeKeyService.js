@@ -7,6 +7,23 @@ var app = angular.module('webpoint.core');
 
 app.service('ChangeKeyService', ['properties', '$log', function(properties, $log) {
 
+    this.isKeyRow = function (containWord) {
+        var isKeyRow = false;
+        if(containWord != null){
+            var keyPrefix = ['sus', 'maj'];
+            for(var i=0; i < containWord.length; i++){
+                $log.debug(' --- containWord[i]: ', containWord[i]);
+                var word = containWord[i].match(new RegExp("\\w{3}["+ keyPrefix + "]\\w", "gi"));
+                $log.debug(' ----- word: ', word);
+                if(word != null){
+                    isKeyRow = true;
+                    break;
+                }
+            }
+        }
+        return isKeyRow;
+    };
+
     this.changeKey = function (section, doHtml) {
         $log.debug(' --- ChangeKeyService.ChangeKeyService:');
 //        $log.debug(' section: ', section);
@@ -38,34 +55,25 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         $log.debug(' - keyIndex diff: ', keyIndex);
 
         var result = '';
+//        var keysModify = keys;
+//        keysModify.push('/');
         for(var l=0; l < lines.length; l++){
             var line = lines[l];
+
             $log.debug(' --- line: ', line);
-            var keyRow = line.match(new RegExp("\\b["+ keys + "]{1,2}", "gi"));
-            var containWord = line.match(new RegExp("\\w{2,}[^"+ keys + ",' ']\\w", "gi"));
+            var keyRow = line.matchKeyRow(keys);
+            var containWord = line.matchContainWord(keys);
             $log.debug(' --- keyRow: ', keyRow);
-            $log.debug(' --- wordRow: ', containWord);
+            $log.debug(' --- containWord: ', containWord);
 
-            if(keyRow != null && keyRow.length > 0){
-                var isKeyRow = false;
-                if(containWord != null){
-                    var keyPrefix = ['sus', 'maj'];
-                    for(var i=0; i < containWord.length; i++){
-                        $log.debug(' --- containWord[i]: ', containWord[i]);
-                        var word = containWord[i].match(new RegExp("\\w{3}["+ keyPrefix + "]\\w", "gi"));
-                        $log.debug(' ----- word: ', word);
-                        if(word != null){
-                            isKeyRow = true;
-                            break;
-                        }
-                    }
-                }
+            var matrix = [];
 
-                var matrix = [];
-                if((containWord == null) || (containWord != null && isKeyRow) ){
+            var isKeyRow = this.isKeyRow(containWord);
+            if((keyRow != null && keyRow.length > 0) && ( (containWord == null) || (containWord != null && isKeyRow) )){
+
+//                if( ){
                     $log.debug(' - match keyRow and wordRow' );
-                    var last = 0;
-//                    angular.forEach(keyRow, function(key) {
+                    var last = -1;
                     for(var k=0; k < keyRow.length; k++){
                         var key = keyRow[k];
                         $log.debug(' - key: ', key);
@@ -89,7 +97,7 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
 
                                     var a = [];
                                     a[0] = keyArr[j];
-                                    a[1] = keys[newKeyindex].split(':')[j];
+                                    a[1] = getIndexValue(keys[newKeyindex], j);    //keys[newKeyindex].split(':')[j];
                                     a[2] = last = line.indexLastOf(last, keyArr[j]);
                                     a[3] = i;
                                     a[4] = newKeyindex;
@@ -107,31 +115,60 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
                     for(var i=0; i < matrix.length; i++){
                         var keeys = matrix[i];
                         $log.debug(' - keeys: ', keeys);
+                        try{
+                            var slash = '';
+                            if(line.charAt(keeys[2]-1) == '/' && keeys[1].length > 1) slash = '/';
+                            $log.debug(' - slash: ', line.charAt(keeys[2]-1));
 
-                        var slash = '';
-                        if(line.charAt(keeys[2]-1) == '/' && keeys[1].length > 1) slash = '/';
-                        $log.debug(' - slash: ', line.charAt(keeys[2]-1));
+                            if(keeys[0].length > 1 && keeys[1].length < 2){
+                                line = replaceAt(line, keeys[2], keeys[1]);    //line.replaceAt(keeys[2], keeys[1] + ' ');
+                                $log.debug(' --- first 0 : ', keeys[0]);
+                                $log.debug(' --- first 1  : ', keeys[1]);
+                            }else if(keeys[0].length < 2 && keeys[1].length > 1){
+                                line = line.replaceAt(keeys[2]-1, slash + keeys[1]);
+                                $log.debug(' --- second 0 : ', keeys[0]);
+                                $log.debug(' --- second 1  : ', keeys[1]);
+                            }else{
+                                line = line.replaceAt(keeys[2], slash + keeys[1]);
+                                $log.debug(' --- thired 0 : ', keeys[0]);
+                                $log.debug(' --- thired 1  : ', keeys[1]);
+                            }
+                        }catch(err){ $log.debug(' ----- ERROR '); }
 
-                        if(keeys[0].length > 1 && keeys[1].length < 2){
-                            line = line.replaceAt(keeys[2], keeys[1] + ' ');  //' ' +
-                            $log.debug(' --- first 0 : ', keeys[0].length);
-                            $log.debug(' --- first 1  : ', keeys[1].length);
-                        }else if(keeys[0].length < 2 && keeys[1].length > 1){
-                            line = line.replaceAt(keeys[2]-1, slash + keeys[1]);
-                            $log.debug(' --- second 0 : ', keeys[0].length);
-                            $log.debug(' --- second 1  : ', keeys[1].length);
-                        }else{
-                            line = line.replaceAt(keeys[2], slash + keeys[1]);
-                            $log.debug(' --- thired 0 : ', keeys[0].length);
-                            $log.debug(' --- thired 1  : ', keeys[1].length);
-                        }
                         $log.debug(' ----- line: ', line);
                     }
                     $log.debug(' ---------- found key row: ', line);
-                }
+//                }
             }
             result += line + linebreak;
         }
         return result;
-    }
+    };
 }]);
+
+String.prototype.matchKeyRow = function(keys) {
+    return this.match(new RegExp("\\b["+ keys + "]{1,2}", "gi"));
+};
+String.prototype.matchContainWord = function(keys) {
+    return this.match(new RegExp("\\w{2,}[^"+ keys + ",'/',' ']\\w", "gi"));
+};
+
+
+function replaceAt(str, index, character){
+    var str1 = str.substr(0, index);
+    var str2 = str.substr(index+character.length);
+
+    console.log(str2.indexOf('b'));
+    if(str2.indexOf('b') == 0 || str2.indexOf('#') == 0) str2 = str2.replaceAt(0, ' ');
+
+
+
+    console.log(str1);
+    console.log(str2);
+    return str1 + character + str2;
+}
+function getIndexValue(arr, i){
+    var sA = arr.split(':');
+    if(sA.length > 1){ return sA[i]; }
+    else { return sA[0];}
+}

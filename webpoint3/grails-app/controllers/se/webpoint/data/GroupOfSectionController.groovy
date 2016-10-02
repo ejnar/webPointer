@@ -139,9 +139,6 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 		for(section in instance.sections){
 			section.delete flush:true
 		}
-		for(meta in instance.sectionMetas){
-			meta.delete flush:true
-		}
 		instance.delete flush:true
 		response.addHeader(HttpHeaders.LOCATION,
 			g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))

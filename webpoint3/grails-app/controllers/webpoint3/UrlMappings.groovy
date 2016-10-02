@@ -14,9 +14,7 @@ class UrlMappings {
         "/api/guest/user"(resources:"UserDetail")
 
         "/api/guest/viewer"(resources:"ViewerList")
-        "/api/guest/sections"(resources:"Section"){
-            "/sectionmetas"(resources:"SectionMeta")
-        }
+        "/api/guest/sections"(resources:"Section")
 
         "/api/guest/pagelist"(resources:"PageList"){
             "/pageItem"(resources:"PageItem")
@@ -42,11 +40,12 @@ class UrlMappings {
         "/api/auth/$action?"(controller: "Auth" )
 
         "/api/sections"(resources:"Section")
-        "/api/sectionmetas"(resources:"SectionMeta")
 
-        "/api/groupsofsections"(resources: "GroupOfSection"){
-            "/sectionmetas"(resources: "SectionMeta")
-        }
+//        "/api/sectionmetas"(resources:"SectionMeta")
+
+//        "/api/groupsofsections"(resources: "GroupOfSection"){
+//            "/sectionmetas"(resources: "SectionMeta")
+//        }
         "/api/pagelist"(resources:"PageList"){
             "/pageItem"(resources:"PageItem")
         }

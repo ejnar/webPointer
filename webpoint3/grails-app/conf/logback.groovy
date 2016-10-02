@@ -26,15 +26,15 @@ if (Environment.isDevelopmentMode() ) {  // && targetDir
     }
     logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
 
-    logger("org.apache", OFF, ['STDOUT'], false)
+    logger("org.apache", INFO, ['STDOUT'], false)
 //    logger("grails", OFF, ['STDOUT'], false)
-    logger("org.grails", OFF, ['STDOUT'], false)
+    logger("org.grails", INFO, ['STDOUT'], false)
     logger("org.mongodb", INFO, ['STDOUT'], false)
     logger("org.springframework", ERROR, ['STDOUT'], false)
     logger("grails.plugin.springsecurity.web.filter.DebugFilter", INFO, ['STDOUT'], false)
 //    logger("org.springframework.security", ERROR, ['STDOUT'], false)
 //
-    logger("angularapp", ALL, ["STDOUT"], false)
+    logger("webpoint3", ALL, ["STDOUT"], false)
 //    logger("web.filter", DEBUG, ["STDOUT"], false)
 //    logger("org.apache.catalina.filters.RequestDumperFilter", DEBUG, ["STDOUT"], false)
     logger("se.webpoint", ALL, ["STDOUT"], false)
