@@ -214,7 +214,12 @@ app.factory('tmpCash', ['$rootScope', function ($rootScope) {
 //    };
 //});
 
-
+String.prototype.insertAt = function(index, string) {
+  if((this.length-1) <= index || index < 0)
+    return this + string;
+  else
+    return this.substr(0, index) + string + this.substr(index);
+}
 String.prototype.replaceAt = function(index, character) {
     return this.substr(0, index) + character + this.substr(index+character.length);
 };

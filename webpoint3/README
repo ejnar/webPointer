@@ -6,9 +6,16 @@ Keys
 cmd -  Comment/uncomment with line comment
 cmd alt -
 
+--------------------------
+*** Grails
+
 Build project files for IDE
 ./gradlew idea
 
+./gradlew assemble --refresh-dependencies
+
+
+./gradlew karmaRun -PkarmaDebug=true
 
 --------------------------
 *** Test

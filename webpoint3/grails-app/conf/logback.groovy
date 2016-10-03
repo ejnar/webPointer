@@ -31,7 +31,7 @@ if (Environment.isDevelopmentMode() ) {  // && targetDir
     logger("org.grails", INFO, ['STDOUT'], false)
     logger("org.mongodb", INFO, ['STDOUT'], false)
     logger("org.springframework", ERROR, ['STDOUT'], false)
-    logger("grails.plugin.springsecurity.web.filter.DebugFilter", INFO, ['STDOUT'], false)
+    logger("grails.plugin.springsecurity.web.filter.DebugFilter", OFF, ['STDOUT'], false)
 //    logger("org.springframework.security", ERROR, ['STDOUT'], false)
 //
     logger("webpoint3", ALL, ["STDOUT"], false)
@@ -40,5 +40,5 @@ if (Environment.isDevelopmentMode() ) {  // && targetDir
     logger("se.webpoint", ALL, ["STDOUT"], false)
     logger("grails.app.controllers.se.webpoint", ALL, ["STDOUT"], false)
     logger("grails.app.services.se.webpoint", ALL, ["STDOUT"], false)
-    logger("grails.app", ALL, ["STDOUT"], false)
+    logger("grails.app", INFO, ["STDOUT"], false)
 }

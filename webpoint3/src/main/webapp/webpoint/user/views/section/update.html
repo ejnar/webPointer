@@ -38,6 +38,7 @@
                             <!-- label class="control-label" for="language_id">Key</label -->
                             <div class="controls">
                                 <select id="key_id" name="key" ng-model="section.key" ng-show="section.type=='TEXTCHORDS'"
+                                        ng-disabled="section.key != undefined && section.key != null"
                                     class="input-medium" ng-options="key as key for key in keys">
                                     <option value=""> - Pick a key - </option>
                                 </select>
