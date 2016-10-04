@@ -4,10 +4,10 @@
 //= require /webpoint/screen/webpoint.screen
 
 
-var app = angular.module("webpointApp", [
+var app = angular.module("webpoint.main", [
 	"webpoint.core",
 	"webpoint.screen"
 ]);
 
 
-console.log("webpointMain manifest load complete.");
+console.log("webpoint.main manifest load complete.");

@@ -23,7 +23,7 @@
 
 </head>
 
-<body ng-app="webpointApp" >
+<body ng-app="webpoint.main" >
 
 <!-- Add your site or application content here -->
 <div id="wrap">

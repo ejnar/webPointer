@@ -57,7 +57,6 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         var result = '';
         for(var l=0; l < lines.length; l++){
             var line = lines[l];
-
             $log.debug(' --- line: ', line);
             var keyRow = line.matchKeyRow(keys);
             var containWord = line.matchContainWord(keys);
@@ -68,9 +67,6 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
 
             var isKeyRow = this.isKeyRow(containWord);
             if((keyRow != null && keyRow.length > 0) && ( (containWord == null) || (containWord != null && isKeyRow) )){
-
-
-                $log.debug(' - match keyRow and wordRow' );
                 var last = -1;
                 for(var k=0; k < keyRow.length; k++){
                     var key = keyRow[k];
@@ -137,28 +133,22 @@ function replaceAt(str, index, newChar, oldChar){
     }else if(newChar.length > 1 && oldChar.length == 1){
         offset = 1;
     }
-
-    var slash = 0;
-    if(str.indexOf('/', index-1) == index) slash = 1;
+    var slash = (str.indexOf('/', index-1) == index) ? 1 : 0;
     var str1 = str.substr(0, index + slash);
     var str2 = str.substr((index + offset) + slash);
 //    console.log(str1);
 //    console.log(str2);
-
-
     if(newChar.length > 1 && oldChar.length == 1){
         var firstSpace = str2.indexOf(' ');
         var s1 = str2.substr(0, firstSpace);
         var s2 = str2.substr(firstSpace+1);
         str2 = s1 + s2;
     }else if(newChar.length == 1 && oldChar.length > 1){
-        var slace = str2.indexOf('/');
-        if(slace == 0){
+        if(str2.indexOf('/') == 0){
             nChar = ' ' + newChar;
         }
         else{
             var firstSpace = str2.indexOf(' ');
-            console.log('--------add space------------' + firstSpace);
             str2 = str2.insertAt(firstSpace, ' ');
         }
         console.log(str2);
