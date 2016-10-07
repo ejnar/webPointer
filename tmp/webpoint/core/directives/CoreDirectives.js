@@ -2,6 +2,7 @@
 
 var appDirectives = angular.module('webpoint.core');
 
+
 appDirectives.directive('dynaheight', [ '$window', '$log', function($window, $log) {
 	$log.debug(' --- dynaheight ---');
 	return {

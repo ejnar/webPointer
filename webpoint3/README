@@ -19,6 +19,9 @@ Build project files for IDE
 
 --------------------------
 *** Test
+Unit
+test-app -unit se.webpoint.data.UserServiceSpec
+test-app -unit:javascript ChangeKeyServiceSpec
 Integration
 test-app -integration se.webpoint.data.UserServiceSpec
 

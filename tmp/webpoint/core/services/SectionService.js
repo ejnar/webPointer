@@ -7,6 +7,7 @@ var sectionService = angular.module('webpoint.core');
 
 sectionService.factory('SectionsApi', ['$resource', '$resourceInterceptor', '$log',
 	function ($resource, $resourceInterceptor, $log) {
+		
 		$log.info(' --- SectionService.SectionsApi.factory --- ');
 		return $resource('api/sections/:Id', {Id: '@Id'},
 				{
@@ -17,6 +18,7 @@ sectionService.factory('SectionsApi', ['$resource', '$resourceInterceptor', '$lo
 //	       			'remove': { method:'DELETE'}
 				});
 	}
+
 ]);
 
 

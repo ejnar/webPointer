@@ -4,16 +4,14 @@
 
 var settingService = angular.module('webpoint.core');
 
-
-// https://www.w3.org/WAI/ER/IG/ert/iso639.htm
 settingService.constant(
 		'properties', {
 			categories: ['Worship','Christian','Hymns', 'Gospel', 'Christmas carols', 'Traditional'],
-			language: ['swe','eng','dan','nor'],
+			language: ['swe','eng','dan'],
 			stypes: ['TEXT', 'TEXTCHORDS'],
 			keys: ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B:Cb'],
 			test: 'value',
-});
+		});
 
 settingService.service('SettingService', ['SettingApi', '$rootScope', 'localStorageService', '$log', 'hashMap',
     function(SettingApi, $rootScope, localStorageService, $log, hashMap) {
@@ -75,8 +73,10 @@ settingService.service('SettingService', ['SettingApi', '$rootScope', 'localStor
         }
     };
 
+
     this.updateTaggs = function (tagg) {
         $log.debug(' --- SettingService.updateTaggs:' + tagg);
+
         var taggs = localStorageService.get('tagg');
         $log.debug(taggs);
         taggs.values.push(tagg);
@@ -85,10 +85,14 @@ settingService.service('SettingService', ['SettingApi', '$rootScope', 'localStor
             $log.debug(resp);
         });
     };
+
 }]);
+
+
 
 settingService.factory('SettingApi', ['$resource', '$resourceInterceptor', '$log',
     function ($resource, $resourceInterceptor, $log) {
+	
 		$log.info(' --- SettingService.SettingApi.factory --- ');
 		return $resource('api/setting/:Id', {Id: '@Id'},
 		    {
@@ -97,4 +101,7 @@ settingService.factory('SettingApi', ['$resource', '$resourceInterceptor', '$log
            		'update': { method:'PUT', interceptor : $resourceInterceptor }
 			});
 	}
+
 ]);
+
+

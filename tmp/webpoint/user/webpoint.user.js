@@ -1,8 +1,6 @@
 //= wrapped
 //= require_self
-//= require_tree services
 //= require_tree controllers
-//= require_tree directives
 //= require_tree templates
 
 //= require /angular/angular
@@ -23,6 +21,8 @@ var app = angular.module("webpoint.user", [
 
 
 console.log("webpoint.user manifest load complete.");
+
+
 
 app.value( 'testkey', 'testValue');
 

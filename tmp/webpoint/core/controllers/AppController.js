@@ -7,6 +7,8 @@ var app = angular.module('webpoint.core');
 app.controller('AppController', [ '$rootScope', '$scope', '$http', '$uibModal', '$log', 'usSpinnerService',
     function ($rootScope, $scope, $http, $uibModal, $log, usSpinnerService) {
         $log.info('AppController');
+//    	$scope.settings = SettingsApi.Setting.setting();
+//    	$scope.currentUser = UserApi.User.profile();
 
     	$scope.logout = function () {
     		$log.debug('logOut called');

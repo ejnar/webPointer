@@ -3,6 +3,7 @@
 //= require_tree services
 //= require_tree controllers
 //= require_tree directives
+//= require_tree filter
 //= require_tree templates
 
 //= require /angular/angular
@@ -23,6 +24,7 @@ var app = angular.module("webpoint.core", [
 
 console.log("webpoint.core manifest load complete.");
 
+
 app.config(function (localStorageServiceProvider) {
   localStorageServiceProvider
     .setPrefix('webpoint')
@@ -33,7 +35,7 @@ function config($httpProvider) {
 //    $httpProvider.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 //    $httpProvider.interceptors.push(httpRequestInterceptor);
     $httpProvider.interceptors.push('authInterceptor');
-};
+}
 
 
 app.factory('authInterceptor', function ($rootScope, $window, $log) {
@@ -49,6 +51,7 @@ app.factory('authInterceptor', function ($rootScope, $window, $log) {
         }
     };
 });
+
 
 app.factory('$resourceInterceptor', function ($q, $log, $location, usSpinnerService) {
     return {
@@ -110,7 +113,7 @@ app.run(['$rootScope', '$http', '$location', '$log', 'usSpinnerService', 'localS
             usSpinnerService.stop('spinner-1');
             $location.path("/login");
         });
-}]);
+    }]);
 
 function empty(e) {
     switch(e) {
@@ -123,7 +126,7 @@ function empty(e) {
             return true;
                 default : return false;
     }
-};
+}
 
 app.service('sharedProperties', function () {
 	 var property = {
@@ -211,8 +214,6 @@ app.factory('tmpCash', ['$rootScope', function ($rootScope) {
 //    };
 //});
 
-console.log("webpoint.core load new String function.");
-
 String.prototype.insertAt = function(index, string) {
   if((this.length-1) <= index || index < 0)
     return this + string;
@@ -221,22 +222,22 @@ String.prototype.insertAt = function(index, string) {
 }
 String.prototype.replaceAt = function(index, character) {
     return this.substr(0, index) + character + this.substr(index+character.length);
-}
+};
 String.prototype.replaceAll = function(target, replacement) {
   return this.split(target).join(replacement);
-}
+};
 String.prototype.removeLast = function(character) {
     if(this[this.length-1] == character)
         return this.substring(0, this.length-1);
     else
         return this;
-}
+};
 String.prototype.indexLastOf = function(preIndex, character) {
     if(preIndex < 0)
         return this.indexOf(character);
     else
         return preIndex + 1 + this.substr(preIndex + 1).indexOf(character);
-}
+};
 String.prototype.stripHtml = function() {
     return this.replace(/(<([^>]+)>)/ig,"");
-}
+};

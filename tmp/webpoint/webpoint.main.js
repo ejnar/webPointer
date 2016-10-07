@@ -9,4 +9,5 @@ var app = angular.module("webpoint.main", [
 	"webpoint.screen"
 ]);
 
+
 console.log("webpoint.main manifest load complete.");
