@@ -11,13 +11,12 @@ describe("webpoint.core module", function() {
             ChangeKeyService = _ChangeKeyService_;
         }));
 
-
         it("should contain word", function() {
             var containWord = ['Dette', 'lengsel', 'deg'];
 
             var isKeyRow = ChangeKeyService.foundKeyRow(containWord);
 
-            expect(isKeyRow).toBe(false);
+            expect(false).toBe(isKeyRow);
         });
 
         it("should contain keys", function() {
@@ -25,7 +24,7 @@ describe("webpoint.core module", function() {
 
             var isKeyRow = ChangeKeyService.foundKeyRow(containWord);
 
-            expect(isKeyRow).toBe(true);
+            expect(true).toBe(isKeyRow);
         });
 
         it("should change row1", function() {
@@ -34,7 +33,7 @@ describe("webpoint.core module", function() {
             var lResult = ChangeKeyService.replaceAt(line, 30, 'A', 'G');
 
             var test = 'D              Hm       G D/F#A';
-            expect(lResult).toEqual(test);
+            expect(test).toEqual(lResult);
         });
         it("should change row2", function() {
             var line = 'D              Hm       G D/E G';
@@ -42,15 +41,15 @@ describe("webpoint.core module", function() {
             var lResult = ChangeKeyService.replaceAt(line, 28, 'F#', 'E');
 
             var test = 'D              Hm       G D/F#G';
-            expect(lResult).toEqual(test);
+            expect(test).toEqual(lResult);
         });
         it("should change row3", function() {
-            var line = 'C              Am       F C/F#A';
+            var line = 'C              Am       F C/F#mA';
 
             var lResult = ChangeKeyService.replaceAt(line, 28, 'E', 'F#');
 
-            var test = 'C              Am       F C/E A';
-            expect(lResult).toEqual(test);
+            var test = 'C              Am       F C/Em A';
+            expect(test).toEqual(lResult);
         });
 
 
@@ -71,11 +70,11 @@ describe("webpoint.core module", function() {
                        '    D        Hm           Asus4 A\n' +
                        'Av hele mitt hjerte tilbe deg';
 
-            expect(result).toEqual(test);
+            expect(test).toEqual(result);
         });
 
         it("should change key from C to D", function() {
-            var data = 'D              Hm       G D/F#A\n' +
+            var data = '\nD              Hm       G D/F#A\n' +
                        'Dette er min lengsel å ære deg\n' +
                        '    D        Hm           Asus4 A\n' +
                        'Av hele mitt hjerte tilbe deg';
@@ -86,16 +85,16 @@ describe("webpoint.core module", function() {
             section.data = data;
             var result = ChangeKeyService.changeKey(section, false);
 
-            var test = 'C              Am       F C/E G\n' +
+            var test = '\nC              Am       F C/E G\n' +
                        'Dette er min lengsel å ære deg\n' +
                        '    C        Am           Gsus4 G\n' +
                        'Av hele mitt hjerte tilbe deg';
 
-            expect(result).toEqual(test);
+            expect(test).toEqual(result);
         });
 
         it("should change key from C to D and back", function() {
-            var data = 'C              Am       F C/E G\n' +
+            var data = '\nC              Am       F C/E G\n' +
                        'Dette er min lengsel å ære deg\n' +
                        '    C        Am           Gsus4 G\n' +
                        'Av hele mitt hjerte tilbe deg';
@@ -111,56 +110,73 @@ describe("webpoint.core module", function() {
             section.data = result1;
             var result2 = ChangeKeyService.changeKey(section, false);
 
-            expect(result2).toEqual(data);
+            expect(data).toEqual(result2);
         });
-
 
         it("should change key from Bb to A", function() {
 
-            var data = '\nBb               Eb/Bb  Bb   Cm7 Eb/F   Bb\n' +
+            var data = '\n' +
+                        'Bb    Bb/E     Eb/Bb  Bb   Cm7 Eb/F   Bb\n' +
                         'Helig, helig, he   -    lig är Herren Sebaot\n' +
                         'Bb              Cm7 F7 Bb   Eb     C7     F\n' +
                         'Helig, helig, he   -   lig    är Herren Sebaot\n' +
-                        '        Bb                           Eb\n' +
+                        '        Bb                          Eb\n' +
                         'Hela jorden är full av din härlighet\n' +
                         '        C                  Ab/Bb    F\n' +
                         'Hela jorden är full av din härlighet\n' +
-                        'F/Eb D                           Gm    G/F\n' +
+                        'F/Eb D         Cm   Bbsus4 Gm    G/F\n' +
                         'Hela jorden är full av din härlighet\n' +
                         'Eb    F7  Bb\n' +
                         'Ära vare Gud';
 
             var section = {};
-            section.key = 'A#:Bb';
+            section.key = 'Bb';
             section.tokey = 'A';
             section.data = data;
             var result = ChangeKeyService.changeKey(section, false);
 
-            var test = '\nA                D/A    A    Hm7 D/E    A\n' +
+            var test = '\n' +
+                        'A     A/D#     D/A    A    Hm7 D/E    A\n' +
                         'Helig, helig, he   -    lig är Herren Sebaot\n' +
                         'A               Hm7 E7 A    D      H7     E\n' +
                         'Helig, helig, he   -   lig    är Herren Sebaot\n' +
-                        '        A                            D\n' +
+                        '        A                           D\n' +
                         'Hela jorden är full av din härlighet\n' +
                         '        H                  G/A      E\n' +
                         'Hela jorden är full av din härlighet\n' +
-                        'E/D  C#                          F#m   F#/E\n' +
+                        'E/D  C#        Hm   Asus4  F#m   F#/E\n' +
                         'Hela jorden är full av din härlighet\n' +
                         'D     E7  A\n' +
                         'Ära vare Gud';
-            expect(result).toEqual(test);
+            expect(test).toEqual(result);
 
             section.key = 'A';
-            section.tokey = 'A#:Bb';
+            section.tokey = 'Bb';
             section.data = result;
-            var result2 = ChangeKeyService.changeKeyConfig(section, false, 2);
-//            expect(result2).toEqual(data);
+            var result2 = ChangeKeyService.changeKey(section, false);
+            expect(data).toEqual(result2);
 
         });
 
+        it("should change key on I saw Mommy kissing Santa Claus", function() {
+            var data = '\nBb         Ebmaj7              A7       Bb             G\n' +
+                       'Oh, what a laugh it would have been, if Daddy had only seen\n' +
+                       '  Cm7          F                Bb  F\n' +
+                       'Mommy kissing Santa Claus last night';
 
+            var section = {};
+            section.key = 'Bb';
+            section.tokey = 'Eb';
+            section.data = data;
+            var result = ChangeKeyService.changeKey(section, false);
 
+            var test = '\nEb         Abmaj7              D7       Eb             C\n' +
+                       'Oh, what a laugh it would have been, if Daddy had only seen\n' +
+                       '  Fm7          Bb               Eb  Bb\n' +
+                       'Mommy kissing Santa Claus last night';
 
+            expect(test).toEqual(result);
+        });
 
 
     });

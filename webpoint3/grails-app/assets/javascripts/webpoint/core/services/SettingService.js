@@ -10,8 +10,9 @@ settingService.constant(
 		'properties', {
 			categories: ['Worship','Christian','Hymns', 'Gospel', 'Christmas carols', 'Traditional'],
 			language: ['swe','eng','dan','nor'],
-			stypes: ['TEXT', 'TEXTCHORDS'],
+			stypes: ['TEXT', 'TEXTCHORDS'],  // , 'IMAGE', 'PDF'
 			keys: ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B:Cb'],
+			keyList: ['C','C#','Db','D','D#','Eb','E','F','F#','Gb','G','G#','Ab','A','A#','Bb','H','B','Cb'],
 			test: 'value',
 });
 

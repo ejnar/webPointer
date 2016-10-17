@@ -2,6 +2,26 @@
 
 var appDirectives = angular.module('webpoint.core');
 
+
+
+appDirectives.directive('ngFileModel', ['$parse', '$log', function ($parse, $log) {
+    $log.debug(' --- ngFileModel ---');
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.ngFileModel);
+            var modelSetter = model.assign;
+
+            element.bind('change', function(){
+                $log.debug(' --- change ---');
+                scope.$apply(function(){
+                    $log.debug(element);
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+};}])
+
 appDirectives.directive('dynaheight', [ '$window', '$log', function($window, $log) {
 	$log.debug(' --- dynaheight ---');
 	return {

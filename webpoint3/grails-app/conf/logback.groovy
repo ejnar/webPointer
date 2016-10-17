@@ -40,5 +40,6 @@ if (Environment.isDevelopmentMode() ) {  // && targetDir
     logger("se.webpoint", ALL, ["STDOUT"], false)
     logger("grails.app.controllers.se.webpoint", ALL, ["STDOUT"], false)
     logger("grails.app.services.se.webpoint", ALL, ["STDOUT"], false)
-    logger("grails.app", INFO, ["STDOUT"], false)
+    logger("grails.app", DEBUG, ["STDOUT"], false)
+
 }

@@ -214,7 +214,7 @@ app.factory('tmpCash', ['$rootScope', function ($rootScope) {
 console.log("webpoint.core load new String function.");
 
 String.prototype.insertAt = function(index, string) {
-  if((this.length-1) <= index || index < 0)
+  if((this.length) <= index || index < 0)
     return this + string;
   else
     return this.substr(0, index) + string + this.substr(index);

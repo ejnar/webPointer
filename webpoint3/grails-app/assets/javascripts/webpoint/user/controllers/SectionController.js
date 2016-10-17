@@ -12,6 +12,8 @@ sectionController.controller('UpdateSectionCtrl', [
 		$scope.languages = properties.language;
 		$scope.stypes = properties.stypes;
 		$scope.keys = properties.keys;
+		$scope.keyList = properties.keyList;
+
 		$scope.doSave = true;
 
 		
@@ -54,7 +56,17 @@ sectionController.controller('UpdateSectionCtrl', [
         		    $log.debug(resp);
         			$location.path(cfgAppPath.groupOfSectionList);
         		});
-	     }
+	    }
+
+	    $scope.updateSectionCtrl_onFileSelect = function(form) {
+            $log.debug(' --- SectionController.updateSectionCtrl_onFileSelect:');
+
+
+        }
+
+
+
+
 }]);
 
 

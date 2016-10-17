@@ -44,7 +44,7 @@ class SectionSpec extends BaseSpecification {
 
         expect:
         section != null
-        Section s = Section.webConvertedSection(section.id.toHexString())
+        Section s = Section.webConvertedSection(section.id)
         s.data.contains('<br />')
 
         cleanup:

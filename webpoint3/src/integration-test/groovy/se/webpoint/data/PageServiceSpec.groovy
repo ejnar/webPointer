@@ -69,7 +69,7 @@ class PageServiceSpec extends BaseSpecification {
 
     void "test getPageList"() {
         given:
-        section = setupSection('PageServiceSpec3')
+        Section section = setupSection('PageServiceSpec3')
         PageList pageList = setupPageList(section)
 
         when:

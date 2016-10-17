@@ -4,7 +4,17 @@
 
 var app = angular.module('webpoint.core');
 
-var keySufix = ['sus','maj','m'];
+var KEY_SUFIX = ['sus','maj','m'];
+var KEYS = ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B:Cb'];
+var KEYS = ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B:Cb'];
+var KEYLIST = ['C','C#','Db','D','D#','Eb','E','F','F#','Gb','G','G#','Ab','A','A#','Bb','H','B','Cb'];
+
+var MATCH_KEY_SUFIX = new RegExp("\\w{1}['sus','maj','m']{2}\\w", "gi");
+//var MATCH_KEY_SUFIX = new RegExp("["+KEYLIST+"]+["+KEY_SUFIX+"]", "gi");
+var MATCH_KEYS_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "gi");
+var MATCH_FIRST_KEYS_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "gi");
+var MATCH_KEYROW_REG = new RegExp("\\b[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]{1,2}", "gi");
+var MATCH_CONTAINWORD_REG = new RegExp("\\w{2,}[^C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb,/,' ']\\w", "gi")
 
 app.service('ChangeKeyService', ['properties', '$log', function(properties, $log) {
 
@@ -13,10 +23,15 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         if(containWord != null){
             for(var i=0; i < containWord.length; i++){
                 $log.debug(' --- containWord[i]: ', containWord[i]);
-                var word = containWord[i].match(new RegExp("\\w{1}["+ keySufix + "]{2}\\w", "gi"));
-                $log.debug(' ----- word: ', word);
-                if(word != null){
-                    isKeyRow = true;
+                var word = containWord[i].match(MATCH_KEY_SUFIX);
+                if(word != null ){
+                    $log.debug(word[0].match(MATCH_KEYS_REG) + ' ------------------- word: ', word);
+                    for(var j=0; j < word.length; j++){
+                        isKeyRow = false;
+                        if(word[j].match(MATCH_FIRST_KEYS_REG)){
+                           isKeyRow = true;
+                        }
+                    }
                     break;
                 }
             }
@@ -25,11 +40,11 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
     };
 
 
-    this.validKeyRow = function (line, keys) {
+    this.validKeyRow = function (line) {
         var row = null;
         $log.debug(' --- line: ', line);
-        var keyRow = line.matchKeyRow(keys);
-        var containWord = line.matchContainWord(keys);
+        var keyRow = line.match(MATCH_KEYROW_REG);
+        var containWord = line.match(MATCH_CONTAINWORD_REG);
         $log.debug(' --- keyRow: ', keyRow);
         $log.debug(' --- containWord: ', containWord);
         var isKeyRow = this.foundKeyRow(containWord);
@@ -42,11 +57,6 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
     };
 
     this.changeKey = function (section, doHtml) {
-        $log.debug(' --- ChangeKeyService.changeKey:');
-        return this.changeKeyConfig(section, doHtml, 0);
-    };
-
-    this.changeKeyConfig = function (section, doHtml, major) {
         $log.debug(' --- ChangeKeyService.changeKeyConfig:');
 
         var result = '';
@@ -59,59 +69,54 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         }else{
             lines = data.split('\n');
         }
-        var keys = properties.keys;
-        $log.debug('keys: ', keys);
+//        var keys = ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B:Cb'];
+        $log.debug('keys: ', KEYS);
 
         var changeToKeyIndex = 0;
         var keyIndex = 0;
-        for(var i=0; i < keys.length; i++){
-            if(keys[i] == section.key){
+        for(var i=0; i < KEYS.length; i++){
+            if(isKeyFound(section.key, KEYS[i])){
                 keyIndex = i;
             }
-            if(keys[i] == section.tokey){
+            if(isKeyFound(section.tokey, KEYS[i])){
                 changeToKeyIndex = i;
             }
         }
         $log.debug('keyIndex: ', keyIndex);
         $log.debug('changeToKeyIndex: ', changeToKeyIndex);
-        keyIndex = changeToKeyIndex - keyIndex;
-        $log.debug(' - keyIndex diff: ', keyIndex);
+        var keyDiff = changeToKeyIndex - keyIndex;
+        $log.debug(' - keyDiff: ', keyDiff);
 
         for(var l=0; l < lines.length; l++){
             result += l != 0 ? linebreak : '';
             var line = lines[l];
-            var keyRow = this.validKeyRow(line, keys);
+            var keyRow = this.validKeyRow(line);
             if(keyRow != null){
                 var matrix = [];
                 var last = -1;
                 for(var k=0; k < keyRow.length; k++){
                     var key = keyRow[k];
                     key = key.removeLast('/');
-
-                    for(var i=0; i < keys.length; i++){
-                        var keyArr = keys[i].split(':');
-                        for(var j=0; j < keyArr.length; j++){
-                            if(keyArr[j] == key){
-                                var newKeyindex = 0;
-                                if(i+keyIndex < 0){
-                                    newKeyindex = keys.length + (i+keyIndex);
-                                }else if(i+keyIndex > (keys.length -1)){
-                                    newKeyindex = (i+keyIndex) - (keys.length);
-                                }else{
-                                    newKeyindex = i+keyIndex;
-                                }
-                                var a = [];
-                                a[0] = keyArr[j];
-                                a[1] = getIndexValue(keys[newKeyindex], j, getKeyType(section.tokey, major));
-                                a[2] = last = line.indexLastOf(last, keyArr[j]);
-                                a[3] = i;
-                                a[4] = newKeyindex;
-                                a[5] = j;
-                                matrix.push(a);
-                                $log.debug(' -----  found key: ', keys[i] + ':' + i);
-                                $log.debug(' -----  new key: ', keys[newKeyindex] + ':' + newKeyindex);
-                                break;
+                    for(var i=0; i < KEYS.length; i++){
+                        if(isKeyFound(key, KEYS[i])){
+                            var newKeyindex = 0;
+                            if(i+keyDiff < 0){
+                                newKeyindex = KEYS.length + (i+keyDiff);
+                            }else if(i+keyDiff > (KEYS.length -1)){
+                                newKeyindex = (i+keyDiff) - (KEYS.length);
+                            }else{
+                                newKeyindex = i+keyDiff;
                             }
+                            var a = [];
+                            a[0] = key;
+                            a[1] = getIndexValue(KEYS[newKeyindex], getKeyType(section.tokey));
+                            a[2] = last = line.indexLastOf(last, key);
+                            a[3] = i;
+                            a[4] = newKeyindex;
+                            matrix.push(a);
+                            $log.debug(' -----  found key: ', KEYS[i] + ':' + i);
+                            $log.debug(' -----  new key: ', KEYS[newKeyindex] + ':' + newKeyindex);
+                            break;
                         }
                     }
                 }
@@ -138,112 +143,123 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         }else if(newChar.length > 1 && oldChar.length == 1){
             offset = 1;
         }
-
         var slash = (line.indexOf('/', index-1) == index) ? 1 : 0;
         var str1 = line.substr(0, index + slash);
         var str2 = line.substr((index + offset) + slash);
-    //    console.log(str1);
-    //    console.log(str2);
+//        console.log(' if old: '+ oldChar +' - new: '+ newChar + '|' + str1 + nChar + str2);
+//        console.log(' -- |' + str1);
+//        console.log(' -- |' + str2);
         // ex newChar = C#  oldChar = D
         if(newChar.length > 1 && oldChar.length == 1){
             // Check last char in string, if not spaces
-            if(startSufix(str2) || str2.indexOf('/') == 0 || str2.indexOf(' ') == 0 || str1.slice(-1) != ' '){
-                var firstSpace = str2.indexOf(' ');
-                var s1 = str2.substr(0, firstSpace);
-                var s2 = str2.substr(firstSpace+1);
-                str2 = s1 + s2;
+            if(str1.substr(-2) == '/'+oldChar){
+//                str2 = addSpace(str2, ' ')
+                str1 = str1.substr(0,str1.length-1);
             }
-            else{
-                str1 = str1.substr(0, str1.length-1);
+            else if(startSufix(str2) || str2.indexOf('/') == 0 || str2.indexOf(' ') == 0){
+                str2 = delSpace(str2, 1);
             }
+
         } // ex newChar = A  oldChar = Bb
         else if(newChar.length == 1 && oldChar.length > 1){
-//            console.log(' if old: '+ oldChar +' - new: '+ newChar +' -|'+ nChar +'|' + str1 + nChar + str2);
-//            console.log(' -- |' + str1);
-//            console.log(' -- |' + str2);
-//            console.log('----|' + line.substr(0, index));
-//            console.log('----|' + line.substr(index+offset));
-//            console.log('----|' + '/'+oldChar[0]);
-            if(str2.indexOf('/') == 0){  //
-                str2 = addSpace(str2, ' ')
+            if(str2.indexOf('/') == 0){
+                str2 = addSpace(str2, ' ');
             }
-            else if(str1.slice(-2) == '/'+oldChar[0]){
-                str2 = addSpace(str2, '  ')
+            else if(str1.substr(-2) == '/'+oldChar[0]){
+                str2 = addSpace(str2, '  ');
                 str1 = str1.substr(0,str1.length-1);
             }
             else if((line.length-2) > index){
-                nChar = newChar + ' ';
+                str2 = addSpace(str2, ' ');
             }
-            else{
-                nChar = newChar;
-            }
-//            console.log(' -- |' + str1 + nChar + str2);
-//            console.log(' -- |' + str1);
-//            console.log(' -- |' + str2);
-//            console.log(' else old: '+ oldChar +' - new: '+ newChar +' -|'+ nChar +'|' + str1 + nChar + str2);
         } // ex newChar = F  oldChar = E
-        else if(newChar.length == 1 && oldChar.length == 1){
-//            if(str2.indexOf('/') == 0){
-//                str2 = addSpace(str2, ' ')
-//            }
-            if(str1.slice(-2) == '/'+oldChar[0]){
-                str2 = addSpace(str2, ' ')
+        else if((newChar.length == 1 && oldChar.length == 1) || (newChar.length == 2 && oldChar.length == 2)){
+            if(str1.substr(-2) == '/'+oldChar[0]){
+                str2 = addSpace(str2, ' ');
                 str1 = str1.substr(0,str1.length-1);
             }
         }
+//        console.log(' -- |' + str1 + nChar + str2);
+//        console.log(' -- |' + str1);
+//        console.log(' -- |' + str2);
+//        console.log(' --------   else old: '+ oldChar +' - new: '+ newChar + ' -----------------');
         return str1 + nChar + str2;
     };
 
 }]);
 
 function addSpace(str, space){
+    var st0 = str;
+    var firstSpace = str.indexOf(' ');
+    if(firstSpace >= 0){
+        var s1 = str.substr(0, firstSpace);
+        var s2 = str.substr(firstSpace);
+        st0 = s1 + space + s2;
+    }
+    else{
+        var keys = str.match(MATCH_KEYS_REG);
+//        console.log(str + '|----------keys----------------|' + keys);
+        if(keys != null){
+            var index = str.indexOf(keys[0]);
+            if(!(str[0] == '/' && index < 2)){
+                st0 = str.insertAt(index, ' ');
+            }
+        }
+//        console.log(st0 + '|----------keys----------------|' + index);
+    }
+    return st0;
+}
+function delSpace(str, count){
     var firstSpace = str.indexOf(' ');
     var s1 = str.substr(0, firstSpace);
-    var s2 = str.substr(firstSpace);
-    return s1 + space + s2;
+    var s2 = str.substr(firstSpace+count);
+    return s1 + s2;
 }
 
-function getIndexValue(arr, i, cross){
+function getIndexValue(arr, cross){
     var sA = arr.split(':');
     if(sA.length > 1){
-        if(cross)
+        if(cross){
             return sA[0];
-        else
+        }else{
             return sA[1];
+        }
     }
     else { return sA[0];}
 }
 
-function getKeyType(toKey, major){
+function getKeyType(toKey){
     var type = ['D,true', 'A,true', 'A#:Bb,false'];
     var typ = false;
-    if(major == 0){
-        for(var j=0; j < type.length; j++){
-            var t = type[j].split(',');
-            if(t[0] == toKey){
-                typ = t[1];
-                break;
-            }
+    for(var j=0; j < type.length; j++){
+        var t = type[j].split(',');
+        if(t[0] == toKey){
+            typ = t[1];
+            break;
         }
-    }else if(major == 1){
-        typ = true;
     }
     return typ;
 }
 
 function startSufix(str){
-    for(var i=0; i < keySufix.length; i++){
-        var sufix = keySufix[i];
+    for(var i=0; i < KEY_SUFIX.length; i++){
+        var sufix = KEY_SUFIX[i];
         if(str.indexOf(sufix) == 0){
             return true;
         }
     }
 }
 
-
-String.prototype.matchKeyRow = function(keys) {
-    return this.match(new RegExp("\\b["+ keys + "]{1,2}", "gi"));
-}
-String.prototype.matchContainWord = function(keys) {
-    return this.match(new RegExp("\\w{2,}[^"+ keys + ",'/',' ']\\w", "gi"));
+function isKeyFound(key, keyArray){
+    var keyArr = keyArray.split(':');
+    if(keyArr[0] == key){
+        return true;
+    }
+    if(keyArr.length == 2 && keyArr[1] == key){
+        return true;
+    }
+    if(keyArr.length == 3 && keyArr[2] == key){
+            return true;
+        }
+    return false;
 }

@@ -15,6 +15,7 @@ class Section extends BaseDomain {
     String[] taggs
 
     String data
+    byte[] doc
 	String type
 	String key
 	Date updated
@@ -33,6 +34,7 @@ class Section extends BaseDomain {
         taggs nullable: true
 
 		data nullable: true, blank:true
+        doc nullable: true
         type nullable: true, blank:true
 		key nullable: true, blank:true
 		updated nullable: true
