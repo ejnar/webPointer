@@ -19,6 +19,7 @@ class SectionService {
 
         Section section = Section.findById(id);
 //        section.data = section.data.expand()
+        section.convertToBase64()
         section
     }
 

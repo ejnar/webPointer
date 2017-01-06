@@ -2,13 +2,14 @@ package se.webpoint.data
 
 import grails.transaction.Transactional
 import grails.web.http.HttpHeaders
+import org.imgscalr.Scalr
 import se.webpoint.rest.BasicRestController
+import sun.misc.BASE64Encoder;
 
-import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NO_CONTENT
-import static org.springframework.http.HttpStatus.OK
+import javax.imageio.ImageIO
+import java.awt.image.BufferedImage
 
+import static org.springframework.http.HttpStatus.*
 
 class SectionController extends BasicRestController<Section> {
 	
@@ -24,6 +25,27 @@ class SectionController extends BasicRestController<Section> {
 	SectionController() {
 		super(Section)
 	}
+
+    /**
+     * Lists all resources up to the given maximum
+     *
+     * @param max The maximum
+     * @return A list of resources
+     */
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+
+        List<Section> list = listAllResources(params)
+
+        for (a in list) {
+            a.convertToBase64()
+        }
+
+
+        respond list, model: [("${resourceName}Count".toString()): countResources()]
+    }
+
+
 
 	/**
 	 * Shows a single resource
@@ -121,6 +143,47 @@ class SectionController extends BasicRestController<Section> {
         instance.delete flush:true
 
         render status: NO_CONTENT
+	}
+
+
+	def upload() {
+		log.info " --- UploadController.upload:"
+		log.debug params
+
+        Section instance = Section.findById(params.id)
+        List files = new ArrayList()
+        params.each { k,v ->
+            if(k.startsWith("files"))
+                files.add(v)
+        }
+
+        instance.objects.clear()
+        files.each {
+            InputStream fileStream = it.inputStream;
+            def imageIn = ImageIO.read(fileStream);
+            BufferedImage scaledImage = Scalr.resize(imageIn, 1600);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write( scaledImage, "png", baos );
+            baos.flush();
+            byte[] bytes = baos.toByteArray();
+            baos.close();
+
+            SectionDoc object = new SectionDoc()
+            object.name = it.getOriginalFilename()
+            object.contentType = it.getContentType()
+            object.size = bytes.length
+            object.doc = bytes
+            instance.objects.add(object)
+        }
+        if(instance.objects.get(0).contentType.startsWith('image/')) {
+            instance.type = 'IMAGE'
+        }
+        instance.save flush:true
+
+//		file.transferTo(new File('/Users/ejnarakerman/dev/project/grails/tmp/' + f.getOriginalFilename()))
+        instance.convertToBase64()
+        respond instance, status: OK
+//		response.setStatus(200, OK)  //sendError(200, 'Done')
 	}
 	
 }

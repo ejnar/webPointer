@@ -1,8 +1,6 @@
 import grails.converters.JSON
 import org.bson.types.ObjectId
 import se.webpoint.auth.*
-import se.webpoint.auth.UserDetail
-import se.webpoint.auth.UserPassword
 import se.webpoint.data.PageItem
 import se.webpoint.view.Setting
 

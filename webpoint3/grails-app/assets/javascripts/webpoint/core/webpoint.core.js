@@ -10,6 +10,7 @@
 //= require /angular/angular-route
 //= require /angular/angular-sanitize
 //= require /angular/angular-local-storage
+//= require /ng-modules/ng-file-upload
 //= require spin.js/spin
 //= require /angular/angular-spinner
 //= require /angular-http-auth/http-auth-interceptor
@@ -17,7 +18,8 @@
 
 
 var app = angular.module("webpoint.core", [
-    'http-auth-interceptor', 'ngRoute', 'ngResource', 'ngSanitize', 'angularSpinner', 'ui.bootstrap', 'LocalStorageModule'])
+    'http-auth-interceptor', 'ngRoute', 'ngResource', 'ngFileUpload',
+    'ngSanitize', 'angularSpinner', 'ui.bootstrap', 'LocalStorageModule'])
     .constant("contextPath", window.contextPath)
     .config(config);
 

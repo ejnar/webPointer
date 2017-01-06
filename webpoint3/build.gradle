@@ -4,7 +4,7 @@ buildscript {
     }
     repositories {
         mavenLocal()
-//        mavenCentral()
+        mavenCentral()
         maven { url "https://repo.grails.org/grails/core" }
     }
     dependencies {
@@ -23,12 +23,12 @@ group "webpoint3"
 apply plugin:"eclipse"
 apply plugin:"idea"
 apply plugin:"war"
+apply plugin:"asset-pipeline"
 //apply plugin:"maven"
 apply plugin:"org.grails.grails-web"
 apply plugin:"org.grails.grails-gsp"
 apply plugin:"com.craigburke.karma"
 apply plugin:"com.craigburke.bower-installer"
-apply plugin:"asset-pipeline"
 apply plugin:"org.grails.plugins.views-json"
 
 ext {
@@ -38,7 +38,7 @@ ext {
 
 repositories {
     mavenLocal()
-//    mavenCentral()
+    mavenCentral()
     maven { url "https://repo.grails.org/grails/core" }
 }
 
@@ -53,11 +53,23 @@ dependencies {
     assets "com.craigburke.angular:angular-template-asset-pipeline:2.2.6"
     assets "com.craigburke.angular:angular-annotate-asset-pipeline:2.4.0"
     assets "com.craigburke:js-closure-wrap-asset-pipeline:1.2.0"
+
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"
-    compile "org.grails:grails-core"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-tomcat"
+
+    compile "org.grails.plugins:spring-security-core:$springSecurityCoreVersion"
+    compile "org.grails.plugins:spring-security-rest:$springSecurityRestVersion"
+    compile "org.grails.plugins:spring-security-rest-gorm:$springSecurityRestVersion"
+
+//    compile 'javax.websocket:javax.websocket-api:1.0'
+//    compile "org.springframework:spring-websocket"
+    compile "org.grails.plugins:grails-spring-websocket:2.3.0"
+
+    compile "org.imgscalr:imgscalr-lib:4.2"
+
+    compile "org.grails:grails-core"
     compile "org.grails:grails-plugin-url-mappings"
     compile "org.grails:grails-plugin-rest"
     compile "org.grails:grails-plugin-codecs"
@@ -74,12 +86,9 @@ dependencies {
     compile "org.grails.plugins:views-json"
     console "org.grails:grails-console"
 
-    compile "org.grails.plugins:spring-security-core:$springSecurityCoreVersion"
-    compile "org.grails.plugins:spring-security-rest:$springSecurityRestVersion"
-    compile "org.grails.plugins:spring-security-rest-gorm:$springSecurityRestVersion"
-
     profile "org.grails.profiles:angular"
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.8.2"
+
     testCompile "org.grails:grails-plugin-testing"
     testCompile "org.grails.plugins:geb"
     testCompile "org.grails:grails-datastore-rest-client"
@@ -104,6 +113,9 @@ bower {
     }
     'angular-aria'('1.4.x') {
         source 'angular-aria.js' >> '/angular/'
+    }
+    'ng-file-upload'('12.2.x') {
+        source 'ng-file-upload.js' >> '/ng-modules/'
     }
 //    'angular-cookies'('1.4.x') {
 //        source 'angular-cookies.js' >> '/angular/'

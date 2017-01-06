@@ -1,5 +1,8 @@
 package webpoint3
 
+
+
+
 class UrlMappings {
 
     static mappings = {
@@ -25,14 +28,7 @@ class UrlMappings {
                 // apply constraints here
             }
         }
-
         "/api/guest/setting"(resources:"Setting")
-
-//        "/api/guest/setting/$action/$key"(controller: "Setting") {
-//            constraints {
-//                // apply constraints here
-//            }
-//        }
 
         "/api/rolegroups"(resources:"RoleGroup")
         "/api/roles"(resources:"Role")
@@ -40,8 +36,7 @@ class UrlMappings {
         "/api/auth/$action?"(controller: "Auth" )
 
         "/api/sections"(resources:"Section")
-
-//        "/api/sectionmetas"(resources:"SectionMeta")
+        "/api/sections/upload/$id"(controller: "Section", action: "upload")
 
 //        "/api/groupsofsections"(resources: "GroupOfSection"){
 //            "/sectionmetas"(resources: "SectionMeta")

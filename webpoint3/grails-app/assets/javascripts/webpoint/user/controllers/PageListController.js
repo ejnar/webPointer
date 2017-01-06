@@ -30,16 +30,6 @@ sectionController.controller('PageListCtrl', [
     		});
     	};
     	
-//    	$scope.addPageList = function(form) {
-//    		$log.debug(" --- PageListController.PageListCtrl.addPageList");
-//    		PageListApi.save($scope.pageList,
-//					function (resp) {
-//    					$log.debug(resp);
-////    					tmpCash.put('PageList', resp);
-//    					$location.path(cfgAppPath.groupOfPagesUpdate + resp.id);
-//			    	});
-//    	}
-    	
     	$scope.pageListCtrl_editPageList = function(id) {
     		$log.debug(" --- PageListController.pageListCtrl_editPageList - id:", id);
     		$location.path(cfgAppPath.groupOfPagesUpdate + id );
@@ -49,7 +39,6 @@ sectionController.controller('PageListCtrl', [
     	    $log.debug(" --- PageListController.pageListCtrl_delPageList - id:", id);
     		PageListApi.remove({Id: id},
     			function (resp) {
-    				$log.debug("remove success PageList");
     				$scope.pageListCtrl_loadPageList();
     			});
     	}

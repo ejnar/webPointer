@@ -6,14 +6,16 @@ var vyController = angular.module('webpoint.screen');
 
 vyController.controller('VyCtrl', [
     '$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath',
-    'PageListApi', '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi',
+    'PageListApi', '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService', 'CashService',
     function list ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath,
-                    PageListApi, $mdDialog, properties, ChangeKeyService, VyApi) {
+                    PageListApi, $mdDialog, properties, ChangeKeyService, VyApi, localStorageService, CashService) {
 
     	$scope.currentPart = 0;
+    	$scope.currentPage = 0;
     	$scope.totalPart = 1;
     	$scope.vyCtrl_loadData = function() {
-            $log.debug(' --- MainViewListController.mainViewListCtrl_loadData:');
+            $log.debug(' --- VyController.vyCtrl_loadData:');
+//            localStorageService.clearAll();
             $log.debug($routeParams);
             if($routeParams.group){
                 VyApi.get({group: $routeParams.group, pages: $routeParams.pages}).$promise
@@ -23,12 +25,20 @@ vyController.controller('VyCtrl', [
                         $scope.totalPart = $scope.pageList.pageParts.length;
                     });
             }else{
-                PageListApi.get({Id: $routeParams.pageListId}).$promise
-                    .then( function(resp) {
-                        $log.debug(resp);
-                        $scope.pageList = resp;
-                        $scope.totalPart = $scope.pageList.pageParts.length;
-                    });
+                var pageList = CashService.pop('PageList', $routeParams.pageListId);
+                $log.debug(' ----------------- pageList: ', pageList);
+                if(pageList == null){
+                    PageListApi.get({Id: $routeParams.pageListId}).$promise
+                        .then( function(resp) {
+                            $log.debug(resp);
+                            $scope.pageList = resp;
+                            $scope.totalPart = $scope.pageList.pageParts.length;
+                            CashService.stash('PageList',resp);
+                        });
+                }else{
+                    $scope.pageList = pageList;
+                    $scope.totalPart = $scope.pageList.pageParts.length;
+                }
 			}
 
     	};
@@ -50,6 +60,24 @@ vyController.controller('VyCtrl', [
     		}	
       	};
 
+
+    	$scope.vyCtrl_rightPage = function() {
+    		$scope.nextPage(1);
+    	};
+
+    	$scope.vyCtrl_leftPage = function() {
+    		$scope.nextPage(-1);
+    	};
+
+    	$scope.nextPage = function(index) {
+    	    console.log($scope.pageList.pageParts[$scope.currentPart].section.objects.length)
+    		$scope.currentPage = $scope.currentPage + index;
+    		if($scope.currentPage >= $scope.pageList.pageParts[$scope.currentPart].section.objects.length){
+    			$scope.currentPage = 0;
+    		}else if($scope.currentPage < 0){
+    			$scope.currentPage = $scope.pageList.pageParts[$scope.currentPart].section.objects.length-1;
+    		}
+      	};
 
         $scope.vyCtrl_goBack = function(){
             $location.path(cfgScreenPath.pagelist);
@@ -79,8 +107,20 @@ vyController.controller('VyCtrl', [
         };
         $scope.vyCtrl_changeSize();
 
-        $scope.vyCtrl_toggleSideNavRight1 = buildToggler('sidenav-right_1');
-        $scope.vyCtrl_toggleSideNavRight2 = buildToggler('sidenav-right_2');
+        $scope.vyCtrl_toggleSideNavRight1 = buildToggler('sidenav-right_1', 'sidenav-right_2');
+        $scope.vyCtrl_toggleSideNavRight2 = buildToggler('sidenav-right_2', 'sidenav-right_1');
+
+        $scope.vyCtrl_moveUpward = function (index) {
+            $log.debug('Sort move up: ', index);
+
+            var updateItem = $scope.pageList.pageParts[index];
+            var previosItem = $scope.pageList.pageParts[index-1];
+
+            $scope.pageList.pageParts[index-1] = updateItem;
+            $scope.pageList.pageParts[index] = previosItem;
+
+        };
+
 
         /**
          * Supplies a function that will continue to operate until the
@@ -112,10 +152,12 @@ vyController.controller('VyCtrl', [
               });
           }, 400);
         }
-        function buildToggler(navID) {
+        function buildToggler(navID, closeID) {
           return function() {
             // Component lookup should always be available since we are not using `ng-if`
             setKEy();
+            if(closeID)
+                $scope.vyCtrl_closeSidenav(closeID);
             $mdSidenav(navID)
               .toggle()
               .then(function () {
@@ -132,7 +174,7 @@ vyController.controller('VyCtrl', [
         $scope.selectedKey;
         $scope.vyCtrl_getSelectedKey = function() {
             $log.debug("Selected key: " + $scope.selectedKey );
-            if ($scope.selectedKey !== undefined) {
+            if ($scope.selectedKey) {
                 return $scope.selectedKey;
             } else {
                 return "Select key";
@@ -142,12 +184,21 @@ vyController.controller('VyCtrl', [
         $scope.vyCtrl_changeKey = function() {
             $log.debug("Change key: " + $scope.selectedKey );
             var section = $scope.pageList.pageParts[$scope.currentPart].section;
+            if(!section.data) return;
             section.tokey = $scope.selectedKey;
             $log.debug(" Section: ", section);
             $scope.pageList.pageParts[$scope.currentPart].section.data = ChangeKeyService.changeKey(section, true);
             section.key = $scope.selectedKey;
             $log.debug(" Data: ", $scope.pageList.pageParts[$scope.currentPart].section.data);
         };
+
+        $scope.vyCtrl_print = function() {
+            $log.debug("Go to print page: " + $scope.currentPart );
+            var section = $scope.pageList.pageParts[$scope.currentPart].section;
+            localStorageService.set('printout', section);
+            $location.path(cfgScreenPath.print);
+        };
+
 
 
         $scope.showAlert = function(ev) {
@@ -169,4 +220,13 @@ vyController.controller('VyCtrl', [
 
 }]);
 
+vyController.controller('PrintCtrl', [
+    '$scope', '$location', '$log', 'cfgScreenPath', 'localStorageService',
+    function list ($scope, $location, $log, cfgScreenPath, localStorageService) {
 
+    $scope.vyCtrl_loadItem = function() {
+        $log.debug("Print current: " );
+        $scope.section = localStorageService.get('printout');
+    };
+
+}]);

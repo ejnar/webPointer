@@ -28,12 +28,11 @@ var app = angular.module("webpoint.screen", [
 
 console.log("webpoint.screen manifest load complete.");
 
-
-
 app.constant(
 		'cfgScreenPath', {
 			main:  '/screen/',
 			pagelist:  '/pagelist',
+			print:  '/print',
             vy:  '/vy/',
 		});
 
@@ -56,6 +55,10 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath',
             when( cfgScreenPath.pagelist, {
                 templateUrl: 'static/webpoint/screen/views/list.html',
                 controller: 'MainViewListCtrl'
+            }).
+            when( cfgScreenPath.print, {
+                templateUrl: 'static/webpoint/screen/views/print.html',
+                controller: 'PrintCtrl'
             }).
             otherwise({
                 redirectTo: cfgScreenPath.pagelist

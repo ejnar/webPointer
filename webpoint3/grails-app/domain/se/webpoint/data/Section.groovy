@@ -1,9 +1,8 @@
 package se.webpoint.data
 
-import grails.gorm.DetachedCriteria
 import groovy.transform.EqualsAndHashCode
-import org.bson.types.ObjectId
-import se.webpoint.auth.RoleGroup;
+import se.webpoint.auth.RoleGroup
+import sun.misc.BASE64Encoder
 
 @EqualsAndHashCode(includes='id')
 class Section extends BaseDomain {
@@ -15,13 +14,15 @@ class Section extends BaseDomain {
     String[] taggs
 
     String data
-    byte[] doc
 	String type
 	String key
 	Date updated
 
+//    SectionDoc[] objects
+    List<SectionDoc> objects = new ArrayList()
+
 	Set<RoleGroup> roleGroupSet;
-    static embedded = ['roleGroupSet']
+    static embedded = ['roleGroupSet', 'objects']
 
 //	static transients = ['sectionMeta']
 //	static belongsTo = [sectionMeta: SectionMeta]
@@ -34,7 +35,7 @@ class Section extends BaseDomain {
         taggs nullable: true
 
 		data nullable: true, blank:true
-        doc nullable: true
+        objects nullable: true
         type nullable: true, blank:true
 		key nullable: true, blank:true
 		updated nullable: true
@@ -62,6 +63,11 @@ class Section extends BaseDomain {
         }
     }
 
+    def void addSectionDoc(){
+        objects.add(new SectionDoc());
+    }
+
+
     static Section webConvertedSection(id){
         Section webSection = Section.findById(id);
         webConverter(webSection)
@@ -69,12 +75,50 @@ class Section extends BaseDomain {
 
 
     static Section webConverter(Section section){
-        section.data = section.data.replaceAll("(\\t)", "    ");
-        section.data = section.data.replaceAll("(\\r\\n|\\n)", "<br />");
+        if(section.data != null && section.data.length() > 0) {
+            section.data = section.data.replaceAll("(\\t)", "    ");
+            section.data = section.data.replaceAll("(\\r\\n|\\n)", "<br />");
+        }
         section
     }
+
+
+    def void convertToBase64(){
+        if(objects != null && type == 'IMAGE' ){
+            objects.each {
+                it.base64 = new BASE64Encoder().encode(it.doc);
+                it.doc = null
+            }
+        }
+
+    }
+
 
 	String toString(){
 		"id: ${id} type: ${type} key: ${key} updated: ${updated}"
 	}   
+}
+
+class SectionDoc{
+
+    String name
+    String contentType
+    int size
+    byte[] doc
+    String base64
+
+    static constraints = {
+        contentType nullable: true
+        doc nullable: true
+        base64 nullable: true
+    }
+
+    @Override
+    public String toString() {
+        return "SectionDoc{" +
+                "name='" + name + '\'' +
+                ", contentType='" + contentType + '\'' +
+                ", size=" + size +
+                '}';
+    }
 }

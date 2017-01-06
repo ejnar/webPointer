@@ -2,13 +2,16 @@ package se.webpoint.data
 
 import groovy.transform.EqualsAndHashCode
 
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
 @EqualsAndHashCode(includes = 'name')
 class PageList extends BaseDomain {
 
     String name
     String category
-    Date updated
     String[] groups
+    Date updated
 
     List<PageItem> pageParts = new ArrayList()
     static embedded = ['pageParts']
@@ -17,14 +20,14 @@ class PageList extends BaseDomain {
     static constraints = {
         name index: true, indexAttributes: [unique: true, dropDups: true]
         category blank: false
-        updated nullable: true
         groups nullable: true
+        updated nullable: true
 //		dueDate (min:new Date())
 //		style (inList: ["one", "two"])
     }
 
-    def beforeInsert() { updated = new Date(); }
-    def beforeUpdate() { updated = new Date(); }
+    def beforeInsert() { updated = new Date();}
+    def beforeUpdate() {}
     def afterInsert() {}
     def afterUpdate() {}
 
@@ -74,7 +77,6 @@ class PageList extends BaseDomain {
             groups = groups.plus(tmp)
         }
     }
-
 
     String toString() {
         "${name} : ${category}"

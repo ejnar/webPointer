@@ -7,6 +7,7 @@ import org.bson.types.ObjectId
 import org.grails.web.errors.GrailsWrappedRuntimeException
 import se.webpoint.auth.RoleGroup
 import se.webpoint.auth.User
+import sun.misc.BASE64Encoder
 
 @Transactional
 class PageService {
@@ -25,7 +26,7 @@ class PageService {
         for (rg in rolegroups) {
             pageLists.addAll(PageList.getPageListsByGroup(rg.name))
         }
-        log.debug(pageLists);
+
         pageLists
     }
 
@@ -44,16 +45,21 @@ class PageService {
 
     def PageList getPageListByList(PageList pageList) {
         PageList list = new PageList();
-        for (p in pageList.pageParts) {
 
+        if(pageList == null || pageList.pageParts == null)
+            return list;
+
+        for (p in pageList.pageParts) {
             Section section = Section.webConvertedSection(p.section);
-            log.debug(section);
+            section.convertToBase64()
 
             p.section = section;
+//            log.debug(section);
             list.pageParts.add(p);
         }
         pageList.pageParts.clear()
         pageList.pageParts.addAll(list.pageParts)
+        pageList.test = true
         return pageList;
     }
 
@@ -123,5 +129,42 @@ class PageService {
         }
     }
 
+
+    @Transactional
+    def addPageItem(style, color, sectionId, pageListId) {
+        log.debug('-- Add PageItem - PageList: ' + pageListId)
+        PageItem instance = new PageItem(key: ObjectId.get().toHexString(), style: style, color: color);
+        Section section = Section.findById(sectionId);
+        instance.section = section;
+
+        instance.validate()
+        if (instance.hasErrors()) {
+            throw new GrailsWrappedRuntimeException()
+        }
+        PageList pageList = PageList.findById(pageListId);
+        pageList.pageParts.add(instance);
+        pageList.updated = new Date()
+        pageList.save flush:true
+        instance
+    }
+
+
+    @Transactional
+    def removePageItem(id, pageListId) {
+        log.debug(' --- Remove PageItem - id: ' + id)
+        PageList pageList = PageList.findById(pageListId);
+
+        List<PageItem> pageParts = new ArrayList()
+        Iterator itr = pageList.pageParts.iterator()
+        while(itr.hasNext()){
+            def pageData = itr.next()
+            if(pageData.key != id){
+                pageParts.add(pageData)
+            }
+        }
+        pageList.pageParts = pageParts
+        pageList.updated = new Date()
+        pageList.save flush:true
+    }
 
 }

@@ -33,7 +33,7 @@
 		            	</td -->
 		                <td>{{g.name}}</td>
 		                <td>{{g.category}}</td>
-		                <td>
+		                <td class="not-clickable-cell" ng-click="$event.stopPropagation()" >
 	                    	<button ng-click="pageListCtrl_delPageList(g.id)" tooltip="Remove">
 	                    		<i class="glyphicon glyphicon-remove-circle"> </i>
 	                    	</button>	

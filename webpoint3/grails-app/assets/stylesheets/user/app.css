@@ -35,15 +35,14 @@ table th{
    padding-top: 0.35em !important;
    padding-bottom: 0.2em !important;
    padding-left: 0.2em !important;
-   font-size: 2.0vh !important;
+   font-size: 1.6vh !important;
 }
 span.glyphicon-plus-sign, span.glyphicon-pencil, span.glyphicon-remove-circle {
     font-size: 0.9em;
 }
 button{
-    padding:0.1vh;
-    margin-left:0.2em;
-    margin-right:0.2em;
+    padding:0 0.6vh;
+    margin: 0 0.2em;
 }
 div.song {
     line-height: 120%;
@@ -236,6 +235,20 @@ Then just add the alignments Css.
   display: inline-block;
 
 }
-
-
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    width: 400px;
+    height: 80px;
+    text-align: center;
+    padding-top: 25px;
+    margin: 5px;
+}
+.dragover {
+    border: 5px dashed blue;
+}
+.drop-box-info {
+    margin: 8px;
+    font:smaller;
+}
 

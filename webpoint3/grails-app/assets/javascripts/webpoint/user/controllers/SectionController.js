@@ -5,8 +5,10 @@
 var sectionController = angular.module('webpoint.user');
 
 sectionController.controller('UpdateSectionCtrl', [
-    '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties', 'SectionsApi', 'ChangeKeyService',
-    function($scope, $routeParams, $location, $log, $q, cfgAppPath, properties, SectionsApi, ChangeKeyService) {
+    '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties',
+    'SectionsApi', 'ChangeKeyService', 'FileUploadService', 'Upload', '$timeout',
+    function($scope, $routeParams, $location, $log, $q, cfgAppPath, properties,
+        SectionsApi, ChangeKeyService, FileUploadService, Upload, $timeout) {
 
 		$log.debug(' - SectionController.UpdateSectionCtrl: ' +  $location.path());
 		$scope.languages = properties.language;
@@ -34,10 +36,9 @@ sectionController.controller('UpdateSectionCtrl', [
 
 	    $scope.updateSectionCtrl_updateSection = function () {
 	    	$log.debug(' --- SectionController.updateSectionCtrl_updateSection:');
+            $log.debug(' section: ', $scope.section);
 
-            $log.debug(' section: ', $scope.section)
             $scope.section.data = $scope.section.data.stripHtml();
-
 	    	var promise = SectionsApi.update({Id: $scope.section.id}, $scope.section);
 	    	
 	    	$q.all([promise]).then(function(data) {
@@ -58,13 +59,71 @@ sectionController.controller('UpdateSectionCtrl', [
         		});
 	    }
 
-	    $scope.updateSectionCtrl_onFileSelect = function(form) {
-            $log.debug(' --- SectionController.updateSectionCtrl_onFileSelect:');
+//	    $scope.updateSectionCtrl_onFileSelect = function() {
+//            $log.debug(' --- SectionController.updateSectionCtrl_onFileSelect:');
+//            $log.debug($scope.section);
+//
+//            var file = $scope.myFile;
+//            $log.debug(file);
+////            var uploadUrl = '/UploadLogo/upload'  // don't forget to include the leading /
+//            FileUploadService.uploadSectionObjectFile($scope.section.id, file);
+//        }
 
+        $scope.$watch('files', function () {
+//            $scope.upload($scope.files);
+        });
+        $scope.updateSectionCtrl_updateFile = function () {
+            $log.debug(' --- SectionController.updateSectionCtrl_updateFile:');
+            $log.debug($scope.files);
+            $scope.upload($scope.files);
+            $scope.files = {};
 
         }
+//        $scope.$watch('file', function () {
+//            if ($scope.file != null) {
+//                $scope.files = [$scope.file];
+//            }
+//        });
+        Upload.setDefaults({ngfMinSize: 10, ngfMaxSize:2000000000000});
 
+        $scope.upload = function (files) {
+            if (files && files.length) {
+                var approved_size = files[0].size < 1000000000000 ? true: false
+                $scope.file_size_warning = !approved_size;
+                if(approved_size){
+//                    for (var i = 0; i < files.length; i++) {
+//                      var file = files[i];
+//                      if (!file.$error) {
+                        $log.debug('upload');
+                        Upload.upload({
+                            url: 'api/sections/upload/' + $scope.section.id,
+                            headers : {
+                                'enctype': 'multipart/form-data',
+                                'Content-Type': undefined
+                            },
+                            data: {
+                              files: files
+                            }
+                        }).then(function (resp) {
+                            $log.debug('  ---- resp:', resp);
+                            $scope.section = resp.data;
 
+                        }, null, function (evt) {
+                            $log.debug('  --- evt: ', evt);
+                            var progressPercentage = parseInt(100.0 *
+                                    evt.loaded / evt.total);
+                            $log.debug('  --- progressPercentage: ', progressPercentage);
+                        });
+//                      }
+//                    }
+
+                }
+                else{
+                    $scope.files = {};
+                }
+
+            }
+        };
 
 
 }]);

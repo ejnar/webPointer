@@ -10,7 +10,7 @@ cmd alt -
 *** Grails
 
 Build project files for IDE
-./gradlew idea
+./gradlew idea --refresh-dependencies
 
 ./gradlew assemble --refresh-dependencies
 
