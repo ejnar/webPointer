@@ -1,6 +1,0 @@
-#Mon, 09 Jan 2017 22:17:00 +0100
-
-info.app.version=0.1
-info.app.name=server
-grails.env=production
-info.app.grailsVersion=3.2.4
