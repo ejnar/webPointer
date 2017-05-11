@@ -39,10 +39,11 @@ sectionController.controller('UpdateSectionCtrl', [
             $log.debug(' section: ', $scope.section);
 
             $scope.section.data = $scope.section.data.stripHtml();
+            $log.debug(' section: ', $scope.section);
 	    	var promise = SectionsApi.update({Id: $scope.section.id}, $scope.section);
 	    	
 	    	$q.all([promise]).then(function(data) {
-    			$location.path(cfgAppPath.groupOfSectionList);
+    			$location.path(cfgAppPath.SONGDATA_LIST);
     	    });
 	    };
 	    
@@ -55,7 +56,7 @@ sectionController.controller('UpdateSectionCtrl', [
 			SectionsApi.save(section).$promise
         		.then( function(resp) {
         		    $log.debug(resp);
-        			$location.path(cfgAppPath.groupOfSectionList);
+        			$location.path(cfgAppPath.SONGDATA_LIST);
         		});
 	    }
 
@@ -181,7 +182,7 @@ sectionController.controller('GroupOfSectionCtrl', [
 
     	$scope.groupOfSectionCtrl_editMeta = function(id) {
     		$log.debug(' --- SectionController.groupOfSectionCtrl_editMeta - id:', id);
-    		$location.path(cfgAppPath.groupOfSectionEdit + id );
+    		$location.path(cfgAppPath.SONGDATA_EDIT + id );
     	}
     	$scope.groupOfSectionCtrl_delSection = function(section) {
     	    $log.debug(' --- SectionController.groupOfSectionCtrl_delSection - section:', section);
@@ -192,11 +193,11 @@ sectionController.controller('GroupOfSectionCtrl', [
     	}
     	$scope.groupOfSectionCtrl_addMeta = function() {
     		$log.debug(' --- SectionController.groupOfSectionCtrl_addMeta ');
-    		$location.path(cfgAppPath.groupOfSectionNew);
+    		$location.path(cfgAppPath.SONGDATA_NEW);
     	}
     	$scope.groupOfSectionCtrl_editSection = function(section) {
     		$log.debug(' --- SectionController.groupOfSectionCtrl_editSection - section:', section);
-    		$location.path(cfgAppPath.sectionEdit.replace(':id', section.id));
+    		$location.path(cfgAppPath.SONG_EDIT.replace(':id', section.id));
     	}
 
     	$scope.toggleDetail = function($index) {
@@ -273,15 +274,39 @@ sectionController.controller('UpdateGroupSectionCtrl', [
 		$scope.doSave = true;
 //		$scope.$broadcast('show-errors-reset');
 
-		if($routeParams.groupId != null){
-			$scope.doSave = false;
-			SectionsApi.get({Id: $routeParams.groupId}, function (resp) {
-				$scope.section = resp;
-				$log.debug(resp);
-			});
-		}else{
-		    $scope.section = {};
-		}
+        init();
+        function init(){
+            if($routeParams.groupId != null){
+                $scope.doSave = false;
+                SectionsApi.get({Id: $routeParams.groupId}, function (resp) {
+                    $scope.section = resp;
+                });
+            }else{
+                $scope.section = {};
+//                $scope.section.links = [];
+            }
+        }
+
+		$scope.updateGroupSectionCtrl_addLink = function () {
+            $log.debug(' --- SectionController.UpdateGroupSectionCtrl.addLink - link:', $scope.newLink);
+            $scope.updateGroupSectionCtrl_selectLink($scope.newLink);
+            $scope.newLink = '';
+        }
+        $scope.updateGroupSectionCtrl_selectLink = function (link) {
+            $log.debug(' --- SectionController.UpdateGroupSectionCtrl.selectLink - link:', link);
+
+            if(link != null){
+                if(!Array.isArray($scope.section.links)){
+                    $scope.section.links = []
+                }
+                $scope.section.links.push(link);
+            }
+        }
+        $scope.updateGroupSectionCtrl_closeLinkItem = function (link) {
+            $log.debug(' --- SectionController.updateGroupSectionCtrl_closeLinkItem - link:', link);
+            removeItem(link,$scope.section.links);
+        };
+
 
         $scope.updateGroupSectionCtrl_addTagg = function () {
     	    $log.debug(' --- SectionController.UpdateGroupSectionCtrl.addTagg - tagg:', $scope.newTagg);
@@ -290,10 +315,8 @@ sectionController.controller('UpdateGroupSectionCtrl', [
             $scope.updateGroupSectionCtrl_selectTagg($scope.newTagg);
             SettingService.updateTaggs($scope.newTagg);
         }
-
         $scope.updateGroupSectionCtrl_selectTagg = function (tagg) {
             $log.debug(' --- SectionController.UpdateGroupSectionCtrl.selectTagg - tagg:', tagg);
-
             if(tagg != null){
                 if(!Array.isArray($scope.section.taggs)){
                     $scope.section.taggs = []
@@ -303,25 +326,19 @@ sectionController.controller('UpdateGroupSectionCtrl', [
             tagg = '';
 //            SettingService.updateTaggs(tagg);
         }
+	    $scope.updateGroupSectionCtrl_closeFilterItem = function (tagg) {
+            $log.debug(' --- SectionController.updateGroupSectionCtrl_closeFilterItem - tagg:', tagg);
+            removeItem(tagg,$scope.section.taggs);
+        };
 
 	    $scope.updateMeta = function (form) {
 	    	$log.debug(' --- SectionController.UpdateGroupSectionCtrl.updateMeta - meta:', $scope.section);
 	    	var section = $scope.section;
 	    	SectionsApi.update({Id: section.id}, section, function (resp) {
-	    		$location.path(cfgAppPath.groupOfSectionList);
+	    		$location.path(cfgAppPath.SONGDATA_LIST);
 	        });
 //	    	$rootScope.$broadcast("LOAD_GROUPOFSECTION_EVENT");
 	    };
-
-	    $scope.updateGroupSectionCtrl_closeFilterItem = function (tagg) {
-            $log.debug(' --- SectionController.updateGroupSectionCtrl_closeFilterItem - tagg:', tagg);
-            var index = $scope.section.taggs.indexOf(tagg);
-            if(index != -1){
-                $scope.section.taggs.splice( index, 1 );
-            }
-
-        };
-
 
 	    $scope.saveMeta = function(form) {
 	        $log.debug(' --- SectionController.UpdateGroupSectionCtrl.saveMeta - section:', $scope.section);
@@ -329,7 +346,7 @@ sectionController.controller('UpdateGroupSectionCtrl', [
 
 	        SectionsApi.save($scope.section, function (resp) {
 	            $log.debug(resp);
-	        	$location.path(cfgAppPath.sectionEdit.replace(':id', resp.id) );
+	        	$location.path(cfgAppPath.SONG_EDIT.replace(':id', resp.id) );
 	        });
 //	         $rootScope.$broadcast("LOAD_GROUPOFSECTION_EVENT");
 	    }
@@ -337,4 +354,10 @@ sectionController.controller('UpdateGroupSectionCtrl', [
 
 
 
+function removeItem(item,list){
+    var index = list.indexOf(item);
+    if(index != -1){
+        list.splice( index, 1 );
+    }
+}
 

@@ -41,7 +41,7 @@
         <div>
             <md-sidenav class="md-sidenav-right"
                         md-component-id="sidenav-right_1"
-                        md-whiteframe="40">
+                        md-whiteframe="24">
                 <md-content>
                     <md-subheader class="md-primary">Song list</md-subheader>
                     <md-list layout="column">
@@ -71,7 +71,7 @@
             </md-sidenav>
             <md-sidenav class="md-sidenav-right"
                         md-component-id="sidenav-right_2"
-                        md-whiteframe="40">
+                        md-whiteframe="24">
                 <md-content>
                     <md-button ng-click="vyCtrl_goBack()">
                         <div class="icon-wrapper">
@@ -104,6 +104,12 @@
                     <md-button ng-click="vyCtrl_print()">
                         <div class="icon-wrapper">
                             <i class="material-icons md-18">local_printshop</i><p class="icon-text">Print current</p>
+                        </div>
+                    </md-button>
+                    <md-divider ></md-divider>
+                    <md-button ng-click="vyCtrl_cleanCash()">
+                        <div class="icon-wrapper">
+                            <i class="material-icons md-18">cached</i><p class="icon-text">Clean cash</p>
                         </div>
                     </md-button>
 

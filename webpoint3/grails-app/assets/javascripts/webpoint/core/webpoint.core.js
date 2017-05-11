@@ -81,7 +81,7 @@ app.config(['usSpinnerConfigProvider', function (usSpinnerConfigProvider) {
 
 app.run(['$rootScope', '$http', '$location', '$log', 'usSpinnerService', 'localStorageService',
     function ($rootScope, $http, $location, $log, usSpinnerService, localStorageService) {
-		$log.debug(' --- startup -------- LocalToken: ' + sessionStorage.authToken);
+//		$log.debug(' --- startup -------- LocalToken: ' + sessionStorage.authToken);
         $http.defaults.headers.common['X-Auth-Token'] = sessionStorage.authToken;
 
         $rootScope.$on('event:auth-loginRequired', function () {
@@ -103,7 +103,6 @@ app.run(['$rootScope', '$http', '$location', '$log', 'usSpinnerService', 'localS
         });
         $rootScope.$on('event:auth-logoutRequest', function () {
             $log.debug('Logging out user');
-            $log.debug($http.defaults.headers.common["X-Auth-Token"]);
             delete $http.defaults.headers.common["X-Auth-Token"]
             $rootScope.isAuthenticated = false;
             $rootScope.currentUser = null;

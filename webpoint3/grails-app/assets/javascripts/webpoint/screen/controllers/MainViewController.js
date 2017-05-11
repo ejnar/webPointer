@@ -5,12 +5,17 @@
 var vyController = angular.module('webpoint.screen');
 
 vyController.controller('MainViewListCtrl', [
-    '$scope', '$location', '$log', 'cfgScreenPath', 'PageListApi', 'properties',
-    function list ($scope, $location, $log, cfgScreenPath, PageListApi, properties) {
+    '$scope', '$location', '$log', 'cfgScreenPath', 'PageListApi', 'properties', '$filter',
+    function list ($scope, $location, $log, cfgScreenPath, PageListApi, properties, $filter) {
 
     	$scope.mainViewListCtrl_gotoScreen = function(id) {
             $log.debug(' --- MainViewController.mainViewListCtrl_gotoScreen - id:', id);
-            $location.path(cfgScreenPath.main + id );
+
+            var item = $filter("filter")($scope.items, {id: id});
+            $log.debug(item);
+            var withoutkeys = item.length > 0 && item[0].special ? '/withoutkeys' : '';
+
+            $location.path(cfgScreenPath.SCREEN + id + withoutkeys);
         }
 
 		$scope.items = []; 
@@ -18,7 +23,7 @@ vyController.controller('MainViewListCtrl', [
 			$log.debug(' --- MainViewListController.mainViewListCtrl_loadPageList:');
 			$scope.viewLoading = true;
     		PageListApi.list( function (resp) {
-    	        $log.debug(resp);
+//    	        $log.debug(resp);
     			$scope.items = resp;
     			$scope.viewLoading = false;
             });

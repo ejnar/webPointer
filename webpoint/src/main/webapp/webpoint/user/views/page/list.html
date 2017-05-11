@@ -1,0 +1,47 @@
+<div class="container">
+	<div class="page-header">
+		<div class="row">
+			<div class="col-md-6">
+				<h4>Group of songs</h4>
+			</div>
+			<div class="col-md-6">
+				<br />
+
+				<button type="button" class="btn btn-success pull-right" ng-click="pageListCtrl_openModel()">
+					<span class="glyphicon glyphicon-plus-sign"/>&nbsp;Create</button>
+                <button type="button" class="btn .btn-info pull-right" ng-click="pageListCtrl_goToViewAll()">
+                    <span class="glyphicon glyphicon-plus-sign"/>&nbsp;View</button>
+			</div>
+		</div>
+	</div>
+	<div sha-loading-spinner="viewLoading">
+   		<div class="table-responsive" data-ng-init="pageListCtrl_loadPageList()" >
+		    <table class="table table-bordered table-hover" >
+		        <thead>
+		            <tr>
+		                <!-- th></th -->
+		                <th>Name</th>
+		                <th>Category</th>
+		                <th width="8%"></th>
+		            </tr>
+		        </thead>
+		        <tbody ng-repeat="g in listOfPages | orderBy:orderProp">
+		            <tr ng-click="pageListCtrl_editPageList(g.id)" title="Click to edit" >
+		                <!-- td>
+		              		<button ng-if="g.expanded" ng-click="g.expanded = false">-</button>
+		              		<button ng-if="!g.expanded" ng-click="g.expanded = true">+</button>
+		            	</td -->
+		                <td>{{g.name}}</td>
+		                <td>{{g.category}}</td>
+		                <td class="not-clickable-cell" ng-click="$event.stopPropagation()" >
+	                    	<button ng-click="pageListCtrl_delPageList(g.id)" tooltip="Remove">
+	                    		<i class="glyphicon glyphicon-remove-circle"> </i>
+	                    	</button>	
+		                </td>
+		            </tr>
+		        </tbody>
+		    </table>
+
+		</div>   
+	</div>	
+</div>

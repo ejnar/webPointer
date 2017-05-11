@@ -17,6 +17,8 @@ class VyController {
         log.debug params
 
         PageList pageList = pageService.getPageListByGroupAndName(params.group, params.pages)
+        println pageList.pageParts[0].section.data
+        println pageList.pageParts[1].section.data
 
         String location = g.createLink( resource: 'api', absolute: true) + '/vy/' //+ params.PageListId + '/pagedata/' + params.id
         println location

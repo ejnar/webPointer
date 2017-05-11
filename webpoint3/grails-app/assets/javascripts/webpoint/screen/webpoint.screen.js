@@ -30,10 +30,10 @@ console.log("webpoint.screen manifest load complete.");
 
 app.constant(
 		'cfgScreenPath', {
-			main:  '/screen/',
+			SCREEN:  '/screen/',
 			pagelist:  '/pagelist',
 			print:  '/print',
-            vy:  '/vy/',
+            VY:  '/vy/',
 		});
 
 app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath',
@@ -42,13 +42,17 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath',
         $routeProvider.
         	when('/login', {
         		templateUrl: 'static/common/views/auth/login.html',
-        		controller: 'LoginController'
+        		controller: 'LoginController as vm'
         	}).
-            when( cfgScreenPath.main  + ':pageListId', {
+            when( cfgScreenPath.SCREEN  + ':pageListId', {
                 templateUrl: 'static/webpoint/screen/views/vy.html',
                 controller: 'VyCtrl'
             }).
-            when( cfgScreenPath.vy  + ':group/:pages', {
+            when( cfgScreenPath.SCREEN  + ':pageListId/:withoutkeys', {
+                templateUrl: 'static/webpoint/screen/views/vy.html',
+                controller: 'VyCtrl'
+            }).
+            when( cfgScreenPath.VY  + ':group/:pages', {
                 templateUrl: 'static/webpoint/screen/views/vy.html',
                 controller: 'VyCtrl'
             }).
@@ -64,5 +68,5 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath',
                 redirectTo: cfgScreenPath.pagelist
             });
 
-        $logProvider.debugEnabled(true);
+        $logProvider.debugEnabled(false);
 }]);

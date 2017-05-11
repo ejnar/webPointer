@@ -30,6 +30,44 @@ var appDirectives = angular.module('webpoint.core');
 //        }
 //};}])
 
+appDirectives.directive('ngConfirmClick', [
+  function() {
+    return {
+      priority: 1,
+      link: function(scope, element, attr) {
+        var msg = attr.ngConfirmClick || "Are you sure?";
+        var clickAction = attr.ngClick;
+        attr.ngClick = "";
+        element.bind('click', function(event) {
+          if (window.confirm(msg)) {
+            scope.$eval(clickAction)
+          }
+        });
+      }
+    };
+  }
+])
+
+appDirectives.directive('mwConfirmClick',[confirmDialog]);
+function confirmDialog() {
+    return {
+        priority: -1,
+        restrict: 'A',
+        scope: { confirmFunction: "&mwConfirmClick" },
+        link: function( scope, element, attrs ){
+            element.bind( 'click', function( e ){
+                // message defaults to "Are you sure?"
+                var message = attrs.mwConfirmClickMessage ? attrs.mwConfirmClickMessage : "Are you sure?";
+                // confirm() requires jQuery
+                if( confirm( message ) ) {
+                    scope.confirmFunction();
+                }
+            });
+        }
+    }
+}
+
+
 appDirectives.directive('dynaheight', [ '$window', '$log', function($window, $log) {
 	$log.debug(' --- dynaheight ---');
 	return {

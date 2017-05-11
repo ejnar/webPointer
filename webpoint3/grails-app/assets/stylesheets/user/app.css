@@ -10,9 +10,12 @@ html, body {
 }
 body
 {
+   padding: 0;
    color: #000 !important;
    font: Verdana, Arial, 'sans-serif' !important;
 }
+.page-header{margin-top:0;}
+.pagination{margin-top:0;}
 h1, h2, h3, h4, h5, h6, h7, h8 {
     font-weight: bold;
 }
@@ -24,18 +27,20 @@ textarea.textAreaData{
     font-size: 1.2em;
     max-width: 30em;
     min-width: 20em;
+    /*white-space: pre;*/
 }
-
+.nowrap { white-space:nowrap;}
+.bold{ font-weight: bold;}
 table td{
    padding-top: 0.3em !important;
    padding-bottom: 0.1em !important;
    padding-left: 0.1em !important;
 }
 table th{
-   padding-top: 0.35em !important;
-   padding-bottom: 0.2em !important;
+   padding-top: 0.20em !important;
+   padding-bottom: 0.1em !important;
    padding-left: 0.2em !important;
-   font-size: 1.6vh !important;
+   font-size: 0.9em !important;
 }
 span.glyphicon-plus-sign, span.glyphicon-pencil, span.glyphicon-remove-circle {
     font-size: 0.9em;
@@ -43,6 +48,10 @@ span.glyphicon-plus-sign, span.glyphicon-pencil, span.glyphicon-remove-circle {
 button{
     padding:0 0.6vh;
     margin: 0 0.2em;
+}
+button span{
+    margin: 0 0.2em;
+    font-size: 1.1em
 }
 div.song {
     line-height: 120%;
@@ -52,7 +61,7 @@ div.song {
 div.mini_song {
     line-height: 90%;
     height: 12vh;
-    font-size: 0.9em;
+    font-size: 0.8em;
     white-space: pre;
     overflow: scroll;
     text-overflow: ellipsis;

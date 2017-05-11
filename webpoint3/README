@@ -17,6 +17,8 @@ Build project files for IDE
 
 ./gradlew karmaRun -PkarmaDebug=true
 
+grails dependency-report
+
 --------------------------
 *** Test
 Unit
@@ -66,3 +68,18 @@ grails create-app webpoint3 --profile angular --features mongodb, asset-pipeline
 * Db dump
  - mongodump
  - mongorestore
+
+
+----------------------------
+ Update Node
+
+ sudo npm cache clean -f
+ sudo npm install -g n
+ sudo n stable
+
+
+ ---------------------------
+ Util
+
+ ps -aux
+ kill -9 <PID<

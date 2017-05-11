@@ -28,17 +28,17 @@ app.value( 'testkey', 'testValue');
 
 app.constant(
 		'cfgAppPath', {
-			groupOfSectionList:  '/groupOfSection',
-			groupOfSectionEdit:	 '/groupOfSection/edit/',
-			groupOfSectionNew:	 '/groupOfSection/new',
-			sectionNew: '/section/new',
-			sectionEdit: '/section/:id',
-			groupOfPagesList: '/groupOfPagesList',
-			groupOfPagesUpdate: '/groupOfPagesUpdate/',
-			viewAllSongs: '/viewAllSongs',
-			user: '/user',
-			editUser: '/edituser',
-			addUser: '/adduser',
+			SONGDATA_LIST:  '/songdata',
+			SONGDATA_EDIT:	 '/songdata/edit/',
+			SONGDATA_NEW:	 '/songdata/new',
+			SONG_NEW: '/song/new',
+			SONG_EDIT: '/song/:id',
+			PAGE_LIST: '/page',
+			PAGE_UPDATE: '/page/update/',
+			SONGS_VIEW: '/songs/view',
+			USER: '/user',
+			USER_EDIT: '/user/edit/',
+			USER_ADD: '/user/add',
 			ceatePageModal: 'static/webpoint/user/views/page/ceatePageModal.html'
 		});
 
@@ -48,49 +48,49 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath',
         $routeProvider.
         	when('/login', {
         		templateUrl: 'static/common/views/auth/login.html',
-        		controller: 'LoginController'
+        		controller: 'LoginController as vm'
         	}).
-            when( cfgAppPath.groupOfSectionList, {
-                templateUrl: 'static/webpoint/user/views/groupOfSection/list.html',
+            when( cfgAppPath.SONGDATA_LIST, {
+                templateUrl: 'static/webpoint/user/views/songdata/list.html',
                 controller: 'GroupOfSectionCtrl'
             }).
-            when( cfgAppPath.groupOfSectionEdit + ':groupId', {
-                templateUrl: 'static/webpoint/user/views/groupOfSection/update.html',
+            when( cfgAppPath.SONGDATA_EDIT + ':groupId', {
+                templateUrl: 'static/webpoint/user/views/songdata/update.html',
                 controller: 'UpdateGroupSectionCtrl'
             }).
-            when( cfgAppPath.groupOfSectionNew, {
-                templateUrl: 'static/webpoint/user/views/groupOfSection/update.html',
+            when( cfgAppPath.SONGDATA_NEW, {
+                templateUrl: 'static/webpoint/user/views/songdata/update.html',
                 controller: 'UpdateGroupSectionCtrl'
             }).
-            when( cfgAppPath.sectionNew, {   //  + ':groupId'
-                templateUrl: 'static/webpoint/user/views/section/update.html',
+            when( cfgAppPath.SONG_NEW, {   //  + ':groupId'
+                templateUrl: 'static/webpoint/user/views/song/update.html',
                 controller: 'UpdateSectionCtrl'
             }).
-            when( cfgAppPath.sectionEdit, {   //  + ':groupId'
-                templateUrl: 'static/webpoint/user/views/section/update.html',
+            when( cfgAppPath.SONG_EDIT, {   //  + ':groupId'
+                templateUrl: 'static/webpoint/user/views/song/update.html',
                 controller: 'UpdateSectionCtrl'
             }).
-            when( cfgAppPath.groupOfPagesList, {
+            when( cfgAppPath.PAGE_LIST, {
                 templateUrl: 'static/webpoint/user/views/page/list.html',
                 controller: 'PageListCtrl'
             }).
-            when( cfgAppPath.groupOfPagesUpdate + ':pageListId', {
+            when( cfgAppPath.PAGE_UPDATE + ':pageListId', {
                 templateUrl: 'static/webpoint/user/views/page/update.html',
                 controller: 'UpdatePageListCtrl'
             }).
-            when( cfgAppPath.viewAllSongs, {
+            when( cfgAppPath.SONGS_VIEW, {
                 templateUrl: 'static/webpoint/user/views/page/viewAll.html',
                 controller: 'ViewAllSongsCtrl'
             }).
-            when( cfgAppPath.addUser , {
+            when( cfgAppPath.USER_ADD , {
                 templateUrl: 'static/webpoint/user/views/user/addUser.html',
                 controller: 'AddUserCtrl'
             }).
-            when( cfgAppPath.editUser , {
+            when( cfgAppPath.USER_EDIT , {
                 templateUrl: 'static/webpoint/user/views/user/editUser.html',
                 controller: 'EditUserCtrl'
             }).
-            when( cfgAppPath.user , {
+            when( cfgAppPath.USER, {
                 templateUrl: 'static/webpoint/user/views/user/editUser.html',
                 controller: 'UserCtrl'
             }).
@@ -99,7 +99,7 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath',
                 controller: 'SpotifyCtrl'
             }).
             otherwise({
-                redirectTo: cfgAppPath.groupOfSectionList
+                redirectTo: cfgAppPath.SONGDATA_LIST
             });
 
         $logProvider.debugEnabled(true);

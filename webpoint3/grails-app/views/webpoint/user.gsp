@@ -18,15 +18,12 @@
     <script type="text/javascript">
         window.contextPath = "${request.contextPath}";
     </script>
-
 </head>
 
 <body ng-app="webpoint" >
-
 <!-- Add your site or application content here -->
-<div id="wrap">
+<div id="wrap" data-ng-controller="AppController">
     <div ng-include="'static/webpoint/user/views/includes/header.html'"></div>
-    <!-- class="container" id="content" container-fluid  style="width:60%" -->
     <div ng-view=""></div>
     <div ng-include="'static/webpoint/user/views/includes/footer.html'"></div>
 </div>

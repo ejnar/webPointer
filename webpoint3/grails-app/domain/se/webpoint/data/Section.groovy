@@ -12,6 +12,7 @@ class Section extends BaseDomain {
     String originalTitle
     String category
     String[] taggs
+    String[] links
 
     String data
 	String type
@@ -33,6 +34,7 @@ class Section extends BaseDomain {
         originalTitle nullable: true, blank:true
         category nullable: false
         taggs nullable: true
+        links nullable: true
 
 		data nullable: true, blank:true
         objects nullable: true
@@ -63,16 +65,23 @@ class Section extends BaseDomain {
         }
     }
 
+    def void addLink(String link) {
+        if (links == null) {
+            links = [link]
+        } else {
+            String[] tmp = [link]
+            links = links.plus(tmp)
+        }
+    }
+
     def void addSectionDoc(){
         objects.add(new SectionDoc());
     }
-
 
     static Section webConvertedSection(id){
         Section webSection = Section.findById(id);
         webConverter(webSection)
     }
-
 
     static Section webConverter(Section section){
         if(section.data != null && section.data.length() > 0) {
@@ -81,7 +90,6 @@ class Section extends BaseDomain {
         }
         section
     }
-
 
     def void convertToBase64(){
         if(objects != null && type == 'IMAGE' ){
@@ -92,7 +100,6 @@ class Section extends BaseDomain {
         }
 
     }
-
 
 	String toString(){
 		"id: ${id} type: ${type} key: ${key} updated: ${updated}"

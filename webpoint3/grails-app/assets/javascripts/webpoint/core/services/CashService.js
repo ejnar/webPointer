@@ -17,7 +17,7 @@ app.service('CashService', ['localStorageService', 'properties', '$log',
         var cashObj = {name: value.name, obj: value, time: new Date()};
         arr.push(cashObj);
         localStorageService.set(key, arr);
-        $log.debug(arr);
+//        $log.debug(arr);
     };
 
     this.pop = function (key,id) {
@@ -26,7 +26,6 @@ app.service('CashService', ['localStorageService', 'properties', '$log',
         var arr = localStorageService.get(key);
         if(arr){
             arr.forEach(function(entry) {
-                console.log(entry);
                 if(id == entry.obj.id) {
                     var timeStamp_cash = new Date(entry.time).getTime();
                     var timeStamp_obj = new Date(entry.obj.updated ).getTime();
@@ -37,6 +36,10 @@ app.service('CashService', ['localStorageService', 'properties', '$log',
             });
             return obj.obj;
         }
+    }
+
+    this.clean = function () {
+        localStorageService.clearAll();
     }
 
 }]);

@@ -5,9 +5,9 @@
 				<h4>View songs</h4>
 			</div>
 			<div class="col-md-6">
-				<br />
-				<button type="button" class="btn btn-primary pull-right" back>
-					<span class="glyphicon glyphicon-plus-sign"/>&nbsp;Go back</button>
+				<button type="button" class="btn btn-primary btn-sm pull-right" back>
+					<span class="glyphicon glyphicon-arrow-left"></span><span>Go back</span>
+				</button>
 			</div>
 		</div>
 	</div>
@@ -15,7 +15,7 @@
         <div ng-repeat="s in sectionList">
             <div class="col-md-3 col-sm-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">{{s.title}}</div>
+                    <div class="panel-heading" style="font-size:0.8em">{{s.title}}</div>
                     <div class="panel-body">
                         <div ng-if="s.type == 'IMAGE'">
                             <img width="220" src="data:image/JPG;base64,{{s.objects[0].base64}}">

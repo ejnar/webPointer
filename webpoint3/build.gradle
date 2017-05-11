@@ -17,7 +17,7 @@ buildscript {
     }
 }
 
-version "0.1"
+version "0.9"
 group "webpoint3"
 
 apply plugin:"eclipse"
@@ -96,22 +96,22 @@ dependencies {
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
 }
 bower {
-    'angular'('1.4.x') {
+    'angular'('1.5.x') {
         source 'angular.js'
     }
-    'angular-resource'('1.4.x') {
+    'angular-resource'('1.5.x') {
         source 'angular-resource.js' >> '/angular/'
     }
-    'angular-route'('1.4.x') {
+    'angular-route'('1.5.x') {
         source 'angular-route.js' >> '/angular/'
     }
-    'angular-sanitize'('1.4.x') {
+    'angular-sanitize'('1.5.x') {
         source 'angular-sanitize.js' >> '/angular/'
     }
-    'angular-animate'('1.4.x') {
+    'angular-animate'('1.5.x') {
         source 'angular-animate.js' >> '/angular/'
     }
-    'angular-aria'('1.4.x') {
+    'angular-aria'('1.5.x') {
         source 'angular-aria.js' >> '/angular/'
     }
     'ng-file-upload'('12.2.x') {
@@ -126,10 +126,10 @@ bower {
 //    'ngStorage'('0.3.x') {
 //        source 'ngStorage.js' >> '/angular/'
 //    }
-    'angular-mocks'('1.4.x') {
+    'angular-mocks'('1.5.x') {
         source 'angular-mocks.js' >> '/angular/'
     }
-    'angular-messages'('1.4.x') {
+    'angular-messages'('1.5.x') {
         source 'angular-messages.js' >> '/angular/'
     }
     'angular-spinner'('0.8.x') {
@@ -145,7 +145,7 @@ bower {
     'spin.js'('2.x.x') {
         source 'spin.js' >> '/spin.js/'
     }
-    'angular-http-auth'('1.3.x') {
+    'angular-http-auth'('1.5.x') {
         source 'src/http-auth-interceptor.js' >> '/angular-http-auth/'
     }
     'angular-bootstrap'('1.3.x') {
@@ -153,6 +153,7 @@ bower {
     }
     'bootstrap'('3.x.x') {
         source 'dist/css/bootstrap.css' >> '/bootstrap/css/'
+        source 'dist/css/bootstrap.css.map' >> '/bootstrap/css/'
         source 'dist/fonts/**' >> '/bootstrap/fonts/'
     }
 }
@@ -174,6 +175,22 @@ karma {
 assets {
     minifyJs = false
     minifyCss = false
+}
+
+bootRun {
+    jvmArgs('-Dspring.output.ansi.enabled=always')
+    systemProperties = System.properties
+}
+
+processResources {
+    filesMatching("**/*.yml") {
+        expand(MONGO_WEBPOINT_HOST: MONGO_WEBPOINT_HOST, MONGO_WEBPOINT_USER: MONGO_WEBPOINT_USER, MONGO_WEBPOINT_PASS: MONGO_WEBPOINT_PASS)
+    }
+}
+
+grails {
+    println 'webpoint3'
+
 }
 
 //springBoot{

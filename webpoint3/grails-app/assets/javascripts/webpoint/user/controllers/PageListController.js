@@ -32,7 +32,7 @@ sectionController.controller('PageListCtrl', [
     	
     	$scope.pageListCtrl_editPageList = function(id) {
     		$log.debug(" --- PageListController.pageListCtrl_editPageList - id:", id);
-    		$location.path(cfgAppPath.groupOfPagesUpdate + id );
+    		$location.path(cfgAppPath.PAGE_UPDATE + id );
     	}
   	
     	$scope.pageListCtrl_delPageList = function(id) {
@@ -45,7 +45,7 @@ sectionController.controller('PageListCtrl', [
 
     	$scope.pageListCtrl_goToViewAll = function() {
             $log.debug(" --- PageListController.pageListCtrl_goToViewAll ");
-            $location.path(cfgAppPath.viewAllSongs);
+            $location.path(cfgAppPath.SONGS_VIEW);
         }
 }]);
 
@@ -71,12 +71,12 @@ sectionController.controller('ViewAllSongsCtrl', [
 
     	$scope.pageListCtrl_goToViewAll = function() {
             $log.debug(" --- PageListController.pageListCtrl_goToViewAll ");
-            $location.path(cfgAppPath.viewAllSongs);
+            $location.path(cfgAppPath.SONGS_VIEW);
         }
 
         $scope.pageListCtrl_backPageList = function(id) {
             $log.debug(" --- PageListController.pageListCtrl_editPageList - id:", id);
-            $location.path(cfgAppPath.groupOfPagesUpdate + id );
+            $location.path(cfgAppPath.PAGE_UPDATE + id );
         }
 
 }]);
@@ -94,7 +94,7 @@ sectionController.controller('ModalInstanceCtrl',[ '$scope', '$location', '$uibM
 			    function (resp) {
 				    $log.debug(resp);
 				    $uibModalInstance.close('close');
-				    $location.path(cfgAppPath.groupOfPagesUpdate + resp.id);
+				    $location.path(cfgAppPath.PAGE_UPDATE + resp.id);
 			    });
 
 	    };

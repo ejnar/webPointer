@@ -6,11 +6,11 @@ package webpoint3
 class UrlMappings {
 
     static mappings = {
-        "/$controller/$action?/$id?(.$format)?"{
-            constraints {
-                // apply constraints here
-            }
-        }
+//        "/$controller/$action?/$id?(.$format)?"{
+//            constraints {
+//                // apply constraints here
+//            }
+//        }
 
         "/api/guest/rolegroups"(resources:"RoleGroup")
         "/api/guest/roles"(resources:"Role")

@@ -1,0 +1,4 @@
+<div class="printOut" data-ng-init="vyCtrl_loadItem()">
+    <h2>{{section.title}}</h2>
+    <div class="body" ng-if="section.type == 'TEXT' || section.type == 'TEXTCHORDS'" ng-bind-html="section.data" />
+</div>

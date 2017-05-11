@@ -16,14 +16,14 @@ environments:
    production:
       grails:
          mongodb:
-            host: "localhost"
+            host: "${MONGO_WEBPOINT_HOST}"
             port: 27017
+            username: "${MONGO_WEBPOINT_USER}"
+            password: "${MONGO_WEBPOINT_PASS}"
             databaseName: "webpoint-prod"
+
 ---
 
-grails:
-    gorm:
-        failOnError: true
 ---
 grails:
     profile: angular
@@ -32,6 +32,8 @@ grails:
     spring:
         transactionManagement:
             proxies: false
+    gorm:
+        failOnError: true
 info:
     app:
         name: '@info.app.name@'
@@ -85,11 +87,17 @@ grails:
             maxsize: 1000
     controllers:
         defaultScope: singleton
-    converters:
-        encoding: UTF-8
----
-grails:
-    controllers:
         upload:
             maxFileSize: 10000000
             maxRequestSize: 10000000
+    converters:
+        encoding: UTF-8
+---
+#server:
+#    port: 8443                                             # The port to listen on
+#    ssl:
+#        enabled: true                                      # Activate HTTPS mode on the server port
+#        key-store: <the-location-of-your-keystore>         # e.g. /etc/tomcat7/keystore/tomcat.keystore
+#        key-store-password: <your-key-store-password>      # e.g. changeit
+#        key-alias: <your-key-alias>                        # e.g. tomcat
+#        key-password: <usually-the-same-as-your-key-store-password>

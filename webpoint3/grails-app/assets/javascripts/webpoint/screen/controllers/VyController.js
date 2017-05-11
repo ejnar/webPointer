@@ -6,9 +6,9 @@ var vyController = angular.module('webpoint.screen');
 
 vyController.controller('VyCtrl', [
     '$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath',
-    'PageListApi', '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService', 'CashService',
+    'PageListApi', '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService', 'CashService', 'RemoveKeyService',
     function list ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath,
-                    PageListApi, $mdDialog, properties, ChangeKeyService, VyApi, localStorageService, CashService) {
+                    PageListApi, $mdDialog, properties, ChangeKeyService, VyApi, localStorageService, CashService, RemoveKeyService) {
 
     	$scope.currentPart = 0;
     	$scope.currentPage = 0;
@@ -20,9 +20,10 @@ vyController.controller('VyCtrl', [
             if($routeParams.group){
                 VyApi.get({group: $routeParams.group, pages: $routeParams.pages}).$promise
                     .then( function(resp) {
-                        $log.debug(resp);
+//                        $log.debug(resp);
                         $scope.pageList = resp;
                         $scope.totalPart = $scope.pageList.pageParts.length;
+                        removeKeys($scope.pageList);
                     });
             }else{
                 var pageList = CashService.pop('PageList', $routeParams.pageListId);
@@ -30,18 +31,30 @@ vyController.controller('VyCtrl', [
                 if(pageList == null){
                     PageListApi.get({Id: $routeParams.pageListId}).$promise
                         .then( function(resp) {
-                            $log.debug(resp);
+//                            $log.debug(resp);
                             $scope.pageList = resp;
                             $scope.totalPart = $scope.pageList.pageParts.length;
                             CashService.stash('PageList',resp);
+                            removeKeys($scope.pageList);
                         });
                 }else{
                     $scope.pageList = pageList;
                     $scope.totalPart = $scope.pageList.pageParts.length;
+                    removeKeys($scope.pageList);
                 }
 			}
-
     	};
+
+        function removeKeys(pageList) {
+            $log.debug($routeParams.withoutkeys);
+            if($routeParams.withoutkeys){
+                for(var i=0; i < pageList.pageParts.length; i++){
+                    var part = pageList.pageParts[i];
+                    pageList.pageParts[i].section.data = RemoveKeyService.removeKeys(true,pageList.pageParts[i].section.data);
+                }
+
+            }
+        }
 
     	$scope.vyCtrl_right = function() {
     		$scope.nextData(1);
@@ -92,13 +105,13 @@ vyController.controller('VyCtrl', [
         };
 
         $scope.vyCtrl_clickLNavList = function (index) {
-            $log.debug('Click in list: ', index);
+//            $log.debug('Click in list: ', index);
             $scope.currentPart = index;
             $scope.vyCtrl_closeSidenav('sidenav-right_1');
         };
 
         $scope.vyCtrl_changeSize = function (index) {
-            $log.debug('Change css: ', index);
+//            $log.debug('Change css: ', index);
             $scope.fontSize = "vyArea_s1";
             if(index != undefined){
                 $scope.fontSize = "vyArea_s" + index;
@@ -173,7 +186,7 @@ vyController.controller('VyCtrl', [
         $scope.keys = properties.keys;
         $scope.selectedKey;
         $scope.vyCtrl_getSelectedKey = function() {
-            $log.debug("Selected key: " + $scope.selectedKey );
+//            $log.debug("Selected key: " + $scope.selectedKey );
             if ($scope.selectedKey) {
                 return $scope.selectedKey;
             } else {
@@ -199,7 +212,10 @@ vyController.controller('VyCtrl', [
             $location.path(cfgScreenPath.print);
         };
 
-
+        $scope.vyCtrl_cleanCash = function() {
+            $log.debug("Clean cash ");
+            CashService.clean();
+        };
 
         $scope.showAlert = function(ev) {
             // Appending dialog to document.body to cover sidenav in docs app
