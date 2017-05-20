@@ -100,6 +100,9 @@ class BootStrap {
         }
         if (Environment.current == Environment.PRODUCTION) {
             // insert Production environment specific code here
+            User user = User.findByUsername("admin") ?: new User(username: 'admin', password: '123', email: 'ejnar.ak@glocalnet.net').save(flush: true, failOnError: true)
+//            user.password = ""
+//            user.encodePassword
         }
 
     }

@@ -17,7 +17,7 @@ buildscript {
     }
 }
 
-version "0.9"
+version "0.9.4"
 group "webpoint3"
 
 apply plugin:"eclipse"
@@ -173,8 +173,8 @@ karma {
 }
 
 assets {
-    minifyJs = false
-    minifyCss = false
+    minifyJs = true
+    minifyCss = true
 }
 
 bootRun {

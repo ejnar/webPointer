@@ -34,6 +34,8 @@ app.constant(
 			pagelist:  '/pagelist',
 			print:  '/print',
             VY:  '/vy/',
+            SONGLIST:  '/songList/',
+            SONGITEM: '/song/'
 		});
 
 app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath',
@@ -64,9 +66,17 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath',
                 templateUrl: 'static/webpoint/screen/views/print.html',
                 controller: 'PrintCtrl'
             }).
+            when( cfgScreenPath.SONGLIST, {
+                templateUrl: 'static/webpoint/screen/views/songList.html',
+                controller: 'SongListCtrl'
+            }).
+            when( cfgScreenPath.SONGITEM + ':id', {
+                templateUrl: 'static/webpoint/screen/views/song.html',
+                controller: 'SongItemtCtrl'
+            }).
             otherwise({
                 redirectTo: cfgScreenPath.pagelist
             });
 
-        $logProvider.debugEnabled(false);
+        $logProvider.debugEnabled(true);
 }]);

@@ -1,10 +1,32 @@
-<div id="content" sha-loading-spinner="viewLoading" data-ng-init="mainViewListCtrl_loadPageList()"  ng-cloak layout-gt-sm="row" layout="column">
+<div id="content" sha-loading-spinner="viewLoading" data-ng-init="mainViewListCtrl_loadPageList()"
+     ng-cloak layout-gt-sm="row" layout="column">
 
-    <div flex-gt-sm="150" flex>
+    <md-content  flex>
         <md-toolbar layout="row" class="md-hue-2">
             <div class="md-toolbar-tools">
-                <span>Webpoints</span>
+                <h1><a href="/"> Songpoint </a></h1>
             </div>
+            <md-menu md-position-mode="target-right target" >
+                <md-button aria-label="Open menu" ng-click="$mdMenu.open($event)">
+                    <md-icon md-menu-align-target class="material-icons">menu</md-icon>
+                </md-button>
+                <md-menu-content width="4" >
+                    <md-menu-item>
+                        <md-button ng-click="mainViewListCtrl_goToSongList()">
+                            <div layout="row" flex>
+                                <p flex> List songs </p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.announceClick($index)">
+                            <div layout="row" flex>
+                                <p flex> About </p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
         </md-toolbar>
 
         <md-list flex>
@@ -25,6 +47,6 @@
                 <md-divider ></md-divider>
             </md-list-item>
         </md-list>
-    </div>
+    </md-content>
 
 </div>

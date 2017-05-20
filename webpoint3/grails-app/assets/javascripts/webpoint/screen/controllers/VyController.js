@@ -16,7 +16,7 @@ vyController.controller('VyCtrl', [
     	$scope.vyCtrl_loadData = function() {
             $log.debug(' --- VyController.vyCtrl_loadData:');
 //            localStorageService.clearAll();
-            $log.debug($routeParams);
+//            $log.debug($routeParams);
             if($routeParams.group){
                 VyApi.get({group: $routeParams.group, pages: $routeParams.pages}).$promise
                     .then( function(resp) {
@@ -27,7 +27,7 @@ vyController.controller('VyCtrl', [
                     });
             }else{
                 var pageList = CashService.pop('PageList', $routeParams.pageListId);
-                $log.debug(' ----------------- pageList: ', pageList);
+//                $log.debug(' ----------------- pageList: ', pageList);
                 if(pageList == null){
                     PageListApi.get({Id: $routeParams.pageListId}).$promise
                         .then( function(resp) {

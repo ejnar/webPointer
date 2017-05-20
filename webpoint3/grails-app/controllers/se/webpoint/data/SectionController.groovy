@@ -33,15 +33,14 @@ class SectionController extends BasicRestController<Section> {
      * @return A list of resources
      */
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        params.max = Math.min(max ?: 10, 100000)
+        params.offset = 0
+        println params
 
         List<Section> list = listAllResources(params)
-
         for (a in list) {
             a.convertToBase64()
         }
-
-
         respond list, model: [("${resourceName}Count".toString()): countResources()]
     }
 

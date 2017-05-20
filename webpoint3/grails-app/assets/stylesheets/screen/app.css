@@ -33,6 +33,7 @@ h1, h2, h3, h4, h5, h6, h7, h8 {
 .padding-bottom-3 {padding-bottom: 3px;}
 .icon-wrapper {margin: 0 0.1em; display: inline-flex; vertical-align: middle; align-items: center;}
 p.icon-text{ margin: 0.1em 0.2em; }
+.bold{ font-weight: bold;}
 
 /* Rules for using icons as black on a light background. */
 .material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
@@ -42,27 +43,34 @@ p.icon-text{ margin: 0.1em 0.2em; }
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
 
-
-.virtualRepeatdemoVerticalUsage #vertical-container {
+md-virtual-repeat-container {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  border: solid 1px #ccc;
+  padding: 10px;
+}
+.virtualRepeatdemoDeferredLoading #vertical-container {
   height: 292px;
   width: 100%;
-  max-width: 400px;
-}
-.virtualRepeatdemoVerticalUsage .repeated-item {
+  max-width: 400px; }
+
+.virtualRepeatdemoDeferredLoading .repeated-item {
   border-bottom: 1px solid #ddd;
   box-sizing: border-box;
   height: 40px;
-  padding-top: 10px;
-}
-.virtualRepeatdemoVerticalUsage md-content {
-  margin: 16px;
-}
-.virtualRepeatdemoVerticalUsage md-virtual-repeat-container {
-  border: solid 1px grey;
-}
-.virtualRepeatdemoVerticalUsage .md-virtual-repeat-container .md-virtual-repeat-offsetter div {
-  padding-left: 16px;
-}
+  padding-top: 10px; }
+
+.virtualRepeatdemoDeferredLoading md-content {
+  margin: 16px; }
+
+.virtualRepeatdemoDeferredLoading md-virtual-repeat-container {
+  border: solid 1px grey; }
+
+.virtualRepeatdemoDeferredLoading .md-virtual-repeat-container .md-virtual-repeat-offsetter div {
+  padding-left: 16px; }
+
 
 md-sidenav,
 md-sidenav.md-locked-open-add-active,
@@ -153,6 +161,27 @@ div.vyImgArea {
     left: 0px;
     top: 0px;
 }
+.songContent{
+    width: 100%;
+}
+p.songtext {
+    font-size: 2.4vh;
+    padding: 1.0em 1.0em 0 0;
+    white-space: pre;
+    line-height: 96%;
+}
+a.small {
+    font-size: 2.8vh;
+    margin: 0.1em 1.2em;
+}
+.dialogInfo span{
+    font-size: 0.9em;
+    font-weight:normal;
+    padding:0;
+    margin:0;
+    line-height: 90%;
+}
+
 @media (max-width: 380px) {
     .stretch {
         height: 76%;

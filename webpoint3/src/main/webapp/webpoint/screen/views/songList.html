@@ -1,0 +1,34 @@
+<div id="content" sha-loading-spinner="viewLoading" ng-cloak layout-gt-sm="row" layout="column">
+
+    <md-content  flex>
+        <md-toolbar layout="row" class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h1><a href="/"> Songpoint </a></h1>
+            </div>
+            <md-button aria-label="Open menu" ng-click="$mdMenu.open($event)">
+                <md-icon md-menu-align-target class="material-icons">menu</md-icon>
+            </md-button>
+
+        </md-toolbar>
+        <md-subheader >Song list</md-subheader>
+        <div ng-repeat="p in songs" flex>
+            <h4>
+                <a class="small" href="" ng-click="showAdvanced($event,p)">{{p.title}}</a>
+            </h4>
+
+        </div>
+
+
+        <!-- md-virtual-repeat-container id="vertical-container">
+            <div md-virtual-repeat="p in items"
+                 class="repeated-item" flex>
+                <h5>
+                    <a href="" ng-click="songListCtrl_clickExpand(p)">{{p.title}}</a>
+                </h5>
+                <md-divider ></md-divider>
+            </div>
+        </md-virtual-repeat-container -->
+
+    </md-content>
+
+</div>

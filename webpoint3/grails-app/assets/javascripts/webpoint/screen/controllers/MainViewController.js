@@ -2,11 +2,12 @@
 
 /* Controllers */
 
-var vyController = angular.module('webpoint.screen');
+var module = angular.module('webpoint.screen');
 
-vyController.controller('MainViewListCtrl', [
-    '$scope', '$location', '$log', 'cfgScreenPath', 'PageListApi', 'properties', '$filter',
-    function list ($scope, $location, $log, cfgScreenPath, PageListApi, properties, $filter) {
+    module.controller('MainViewListCtrl', MainViewListCtrl);
+    MainViewListCtrl.$inject = ['$scope', '$location', '$log', 'cfgScreenPath', 'PageListApi', 'properties', '$filter', 'CashService'];
+
+    function MainViewListCtrl ($scope, $location, $log, cfgScreenPath, PageListApi, properties, $filter, CashService) {
 
     	$scope.mainViewListCtrl_gotoScreen = function(id) {
             $log.debug(' --- MainViewController.mainViewListCtrl_gotoScreen - id:', id);
@@ -21,9 +22,14 @@ vyController.controller('MainViewListCtrl', [
 		$scope.items = []; 
   		$scope.mainViewListCtrl_loadPageList = function() {
 			$log.debug(' --- MainViewListController.mainViewListCtrl_loadPageList:');
+
+            if($location.search().cleancash){
+                $log.debug(' --- clean cash: ');
+                CashService.clean();
+            }
 			$scope.viewLoading = true;
     		PageListApi.list( function (resp) {
-//    	        $log.debug(resp);
+    	        $log.debug(resp);
     			$scope.items = resp;
     			$scope.viewLoading = false;
             });
@@ -39,6 +45,12 @@ vyController.controller('MainViewListCtrl', [
             }
         }
 
-}]);
+        $scope.mainViewListCtrl_goToSongList = function() {
+            $log.debug(' --- mainViewListCtrl_goToSongList ');
+            $location.path(cfgScreenPath.SONGLIST);
+
+        }
+
+    }
 
 

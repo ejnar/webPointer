@@ -68,6 +68,9 @@ function confirmDialog() {
 }
 
 
+
+
+
 appDirectives.directive('dynaheight', [ '$window', '$log', function($window, $log) {
 	$log.debug(' --- dynaheight ---');
 	return {

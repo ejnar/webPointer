@@ -146,9 +146,9 @@ sectionController.controller('GroupOfSectionCtrl', [
 		// Current page number. First page is 1
 		$scope.currentPage = 1;
 		// Limit number for pagination size.
-		$scope.maxSize = 5;
+		$scope.maxSize = 100;
 		// Maximum number of items per page. A value less than one indicates all items on one page.
-		$scope.itemsPerPage = 2;
+		$scope.itemsPerPage = 10;
 		$scope.items = [];
 		$scope.groups = [];
 		$scope.search = '';
@@ -161,7 +161,7 @@ sectionController.controller('GroupOfSectionCtrl', [
     		$log.debug(' --- SectionController.groupOfSectionCtrl_loadSection ');
     		usSpinnerService.spin('spinner-1');
 
-    		SectionsApi.list().$promise
+    		SectionsApi.list({max:1000}).$promise
                 .then(function(resp) {
                     $log.debug(resp);
                     $scope.items = resp;

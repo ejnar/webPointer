@@ -102,7 +102,7 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath',
                 redirectTo: cfgAppPath.SONGDATA_LIST
             });
 
-        $logProvider.debugEnabled(true);
+        $logProvider.debugEnabled(false);
 //        $sceDelegateProvider.resourceUrlWhitelist(['self', 'https://api.spotify.com/v1/**', 'http://ws.spotify.com/search/1/**']);
 
 //        $httpProvider.defaults.useXDomain = true;
