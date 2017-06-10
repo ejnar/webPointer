@@ -25,7 +25,7 @@ textarea.form-control {
 
 textarea.textAreaData{
     font-size: 1.18em;
-    max-width: 35em;
+    max-width: 30em;
     min-width: 20em;
     /*white-space: pre;*/
 }

@@ -6,11 +6,11 @@ var sectionController = angular.module('webpoint.user');
 
 sectionController.controller('UpdateSectionCtrl', [
     '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties',
-    'SectionsApi', 'ChangeKeyService', 'FileUploadService', 'Upload', '$timeout',
+    'SectionsApi', 'ChangeKeyService', 'FileUploadService', 'Upload', '$timeout', '$filter',
     function($scope, $routeParams, $location, $log, $q, cfgAppPath, properties,
-        SectionsApi, ChangeKeyService, FileUploadService, Upload, $timeout) {
+        SectionsApi, ChangeKeyService, FileUploadService, Upload, $timeout, $filter) {
 
-		$log.debug(' - SectionController.UpdateSectionCtrl: ' +  $location.path());
+
 		$scope.languages = properties.language;
 		$scope.stypes = properties.stypes;
 		$scope.keys = properties.keys;
@@ -18,15 +18,19 @@ sectionController.controller('UpdateSectionCtrl', [
 
 		$scope.doSave = true;
 
-		
-		if($routeParams.id != 'null' && $routeParams.id != ''){	
-			$log.debug("SectionApi.get " + $routeParams.id);
-			SectionsApi.get({Id: $routeParams.id}).$promise
-				.then(function(resp) {	
-					$scope.section = resp;
-					$scope.doSave = false;
-				});
-		}
+		init();
+        function init(){
+            $log.debug(' - SectionController.UpdateSectionCtrl.init: ' +  $location.path());
+            if($routeParams.id != 'null' && $routeParams.id != ''){
+                $log.debug("SectionApi.get " + $routeParams.id);
+                SectionsApi.get({Id: $routeParams.id}).$promise
+                    .then(function(resp) {
+                        $scope.section = resp;
+                        $scope.doSave = false;
+                    });
+            }
+        }
+
 
         $scope.updateSectionCtrl_updateToKey = function () {
             $log.debug(' --- SectionController.updateSectionCtrl_updateToKey:');
@@ -34,14 +38,22 @@ sectionController.controller('UpdateSectionCtrl', [
             $scope.section.key = $scope.section.tokey;
         };
 
+        $scope.updateSectionCtrl_evaluateChange = function() {
+
+            $log.debug(' section 1 : ', $scope.section.data);
+            $scope.section.data = $scope.section.data.stripHtml();
+            $log.debug(' section 2 : ', $scope.section.data);
+            $scope.textdata = angular.copy($scope.section.data);
+        };
+
 	    $scope.updateSectionCtrl_updateSection = function () {
 	    	$log.debug(' --- SectionController.updateSectionCtrl_updateSection:');
-            $log.debug(' section: ', $scope.section);
 
+            $log.debug(' section.data1: ', $scope.section.data);
             $scope.section.data = $scope.section.data.stripHtml();
-            $log.debug(' section: ', $scope.section);
+            $log.debug(' section.data2: ', $scope.section.data);
+
 	    	var promise = SectionsApi.update({Id: $scope.section.id}, $scope.section);
-	    	
 	    	$q.all([promise]).then(function(data) {
     			$location.path(cfgAppPath.SONGDATA_LIST);
     	    });
@@ -53,11 +65,15 @@ sectionController.controller('UpdateSectionCtrl', [
 
 			var section = $scope.section;
 
-			SectionsApi.save(section).$promise
-        		.then( function(resp) {
-        		    $log.debug(resp);
-        			$location.path(cfgAppPath.SONGDATA_LIST);
-        		});
+            var promise = SectionsApi.save(section);
+            $q.all([promise]).then(function(data) {
+                $location.path(cfgAppPath.SONGDATA_LIST);
+            });
+//			SectionsApi.save(section).$promise
+//        		.then( function(resp) {
+//        		    $log.debug(resp);
+//        			$location.path(cfgAppPath.SONGDATA_LIST);
+//        		});
 	    }
 
 //	    $scope.updateSectionCtrl_onFileSelect = function() {
@@ -132,9 +148,9 @@ sectionController.controller('UpdateSectionCtrl', [
 
 sectionController.controller('GroupOfSectionCtrl', [
     '$scope', '$rootScope', '$routeParams', '$location', '$filter', '$log', 'cfgAppPath',
-    'UserApi', 'SectionsApi', 'sharedProperties', 'usSpinnerService',
+    'UserApi', 'SectionsApi',
     function list ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath,
-    		UserApi, SectionsApi, sharedProperties, usSpinnerService) {
+    		UserApi, SectionsApi) {
 
 //		$scope.$on("LOAD_GROUPOFSECTION_EVENT", function () {   // event, args
 //			$log.debug(' --- LOAD_GROUPOFSECTION_EVENT');     // + args.eventID
@@ -146,34 +162,30 @@ sectionController.controller('GroupOfSectionCtrl', [
 		// Current page number. First page is 1
 		$scope.currentPage = 1;
 		// Limit number for pagination size.
-		$scope.maxSize = 100;
+		$scope.maxSize = 1000;
 		// Maximum number of items per page. A value less than one indicates all items on one page.
-		$scope.itemsPerPage = 10;
+		$scope.itemsPerPage = 20;
 		$scope.items = [];
 		$scope.groups = [];
 		$scope.search = '';
-		$scope.predicate;
-    	$scope.reverse;
-		var orderBy = $filter('orderBy');
-		var filter = $filter('filter');
+		$scope.predicate = 'title';
+    	$scope.reverse = false;
+
 
 		$scope.groupOfSectionCtrl_loadSection = function() {
-    		$log.debug(' --- SectionController.groupOfSectionCtrl_loadSection ');
-    		usSpinnerService.spin('spinner-1');
-
-    		SectionsApi.list({max:1000}).$promise
+    		$log.debug(' --- GroupOfSectionCtrl.groupOfSectionCtrl_loadSection ');
+    		SectionsApi.list({max:$scope.maxSize}).$promise
                 .then(function(resp) {
-                    $log.debug(resp);
+//                    $log.debug(resp);
                     $scope.items = resp;
                     $scope.totalItems = $scope.items.length;
                     $scope.createSearchList();
-                    usSpinnerService.stop('spinner-1');
                 });
 
     	};
     	$scope.createSearchList = function (){
-    		var filterList = filter($scope.items, $scope.search);
-    		var orderByList = orderBy(filterList, $scope.predicate, $scope.reverse);
+    		var filterList = $filter('filter')($scope.items, $scope.search);
+    		var orderByList = $filter('orderBy')(filterList, $scope.predicate, $scope.reverse);
 
     		$scope.totalItems = orderByList.length;
     		var begin = (($scope.currentPage - 1) * $scope.itemsPerPage), end = begin + $scope.itemsPerPage;
@@ -196,7 +208,7 @@ sectionController.controller('GroupOfSectionCtrl', [
     		$location.path(cfgAppPath.SONGDATA_NEW);
     	}
     	$scope.groupOfSectionCtrl_editSection = function(section) {
-    		$log.debug(' --- SectionController.groupOfSectionCtrl_editSection - section:', section);
+//    		$log.debug(' --- SectionController.groupOfSectionCtrl_editSection - section:', section);
     		$location.path(cfgAppPath.SONG_EDIT.replace(':id', section.id));
     	}
 
@@ -230,7 +242,7 @@ sectionController.controller('GroupOfSectionCtrl', [
     		$scope.reverse = reverse;
     		$scope.createSearchList();
     	};
-    	$scope.order('originalTitle',true);
+    	$scope.order('title',false);
 
     	$scope.pageChanged = function(page) {
     		$log.debug('Page changed to: ' + page);
@@ -276,6 +288,7 @@ sectionController.controller('UpdateGroupSectionCtrl', [
 
         init();
         function init(){
+            $log.debug(' - SectionController.UpdateGroupSectionCtrl.init: ');
             if($routeParams.groupId != null){
                 $scope.doSave = false;
                 SectionsApi.get({Id: $routeParams.groupId}, function (resp) {
@@ -288,23 +301,24 @@ sectionController.controller('UpdateGroupSectionCtrl', [
         }
 
 		$scope.updateGroupSectionCtrl_addLink = function () {
-            $log.debug(' --- SectionController.UpdateGroupSectionCtrl.addLink - link:', $scope.newLink);
-            $scope.updateGroupSectionCtrl_selectLink($scope.newLink);
-            $scope.newLink = '';
+            $log.debug(' --- SectionController.UpdateGroupSectionCtrl.addLink - link:', $scope.link);
+            $scope.updateGroupSectionCtrl_selectLink($scope.link);
+            $scope.link = {};
         }
+
         $scope.updateGroupSectionCtrl_selectLink = function (link) {
             $log.debug(' --- SectionController.UpdateGroupSectionCtrl.selectLink - link:', link);
 
             if(link != null){
-                if(!Array.isArray($scope.section.links)){
-                    $scope.section.links = []
+                if(!Array.isArray($scope.section.oLinks)){
+                    $scope.section.oLinks = []
                 }
-                $scope.section.links.push(link);
+                $scope.section.oLinks.push(link);
             }
         }
         $scope.updateGroupSectionCtrl_closeLinkItem = function (link) {
             $log.debug(' --- SectionController.updateGroupSectionCtrl_closeLinkItem - link:', link);
-            removeItem(link,$scope.section.links);
+            removeItem(link,$scope.section.oLinks);
         };
 
 

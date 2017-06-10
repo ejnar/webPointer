@@ -63,6 +63,9 @@ class BootStrap {
             return output
         }
 
+        Setting cashUpdate = Setting.findByKey("cashUpdate") ?: new Setting(key: "cashUpdate", values: [true, new Date()]).save(flush: true, failOnError: true)
+        cashUpdate.values = [true, new Date()];
+        cashUpdate.save(flush: true, failOnError: true);
 
         if (Environment.current == Environment.DEVELOPMENT || Environment.current == Environment.TEST) {
 
@@ -71,38 +74,49 @@ class BootStrap {
             Role roleView = Role.findByAuthority("ROLE_VIEW") ?: new Role(authority: "ROLE_VIEW", system: false, order: 5).save(flush: true, failOnError: true)
 
             RoleGroup groupSysAdmin = RoleGroup.findByName("SYS_GROUP_ADMIN") ?: new RoleGroup(name: "SYS_GROUP_ADMIN", system: true).save(flush: true, failOnError: true)
-            RoleGroup groupExt = RoleGroup.findByName("GROUP_ADMIN") ?: new RoleGroup(name: "GROUP_ADMIN", system: false).save(flush: true, failOnError: true)
-            RoleGroup groupPT = RoleGroup.findByName("GROUP_P_TRELLEBORG") ?: new RoleGroup(name: "GROUP_P_TRELLEBORG", system: false).save(flush: true, failOnError: true)
+            RoleGroup groupAdmin = RoleGroup.findByName("GROUP_ADMIN") ?: new RoleGroup(name: "GROUP_ADMIN", system: false).save(flush: true, failOnError: true)
+            RoleGroup groupPingst = RoleGroup.findByName("GROUP_PINGST_TRELLEBORG") ?: new RoleGroup(name: "GROUP_PINGST_TRELLEBORG", system: false).save(flush: true, failOnError: true)
 
             RoleGroupRole.get(groupSysAdmin.id, roleSysAdmin.id) ?: RoleGroupRole.create(groupSysAdmin, roleSysAdmin, true)
 
-            RoleGroupRole.get(groupExt.id, roleAdmin.id) ?: RoleGroupRole.create(groupExt, roleAdmin, true)
-            RoleGroupRole.get(groupExt.id, roleView.id) ?: RoleGroupRole.create(groupExt, roleView, true)
+            RoleGroupRole.get(groupAdmin.id, roleAdmin.id) ?: RoleGroupRole.create(groupAdmin, roleAdmin, true)
+            RoleGroupRole.get(groupAdmin.id, roleView.id) ?: RoleGroupRole.create(groupAdmin, roleView, true)
 
-            RoleGroupRole.get(groupPT.id, roleAdmin.id) ?: RoleGroupRole.create(groupPT, roleAdmin, true)
-            RoleGroupRole.get(groupPT.id, roleView.id) ?: RoleGroupRole.create(groupPT, roleView, true)
+//            RoleGroupRole.get(groupPT.id, roleAdmin.id) ?: RoleGroupRole.create(groupPT, roleAdmin, true)
+            RoleGroupRole.get(groupPingst.id, roleView.id) ?: RoleGroupRole.create(groupPingst, roleView, true)
 
-            User user = User.findByUsername("admin") ?: new User(username: 'admin', password: '123', email: 'ejnar.ak@glocalnet.net').save(flush: true, failOnError: true)
-//            user.password = ""
+            User admin = User.findByUsername("admin") ?: new User(username: 'admin', password: '123', email: 'eaakerman@gmail.com').save(flush: true, failOnError: true)
+//            admin.password = ""
+//            admin.encodePassword
+//            admin.save(flush: true, failOnError: true)
+            UserRoleGroup.get(admin.id, groupSysAdmin.id) ?: UserRoleGroup.create(admin, groupSysAdmin, true)
+            UserRoleGroup.get(admin.id, groupAdmin.id) ?: UserRoleGroup.create(admin, groupAdmin, true)
+            UserRoleGroup.get(admin.id, groupPingst.id) ?: UserRoleGroup.create(admin, groupPingst, true)
+
+            User user = User.findByUsername("user") ?: new User(username: 'user', password: '123', email: 'eaakerman@gmail.com').save(flush: true, failOnError: true)
+//            user.password = "123"
 //            user.encodePassword
 //            user.save(flush: true, failOnError: true)
-
+            UserRoleGroup.get(user.id, groupPingst.id) ?: UserRoleGroup.create(user, groupPingst, true)
 
     //        UserRole.get(user.id, roleSysAdmin.id) ?: UserRole.create(user, roleSysAdmin, true)
     //        UserRole.get(user.id, roleAdmin.id) ?: UserRole.create(user, roleAdmin, true)
 
-            UserRoleGroup.get(user.id, groupSysAdmin.id) ?: UserRoleGroup.create(user, groupSysAdmin, true)
-            UserRoleGroup.get(user.id, groupExt.id) ?: UserRoleGroup.create(user, groupExt, true)
-            UserRoleGroup.get(user.id, groupPT.id) ?: UserRoleGroup.create(user, groupPT, true)
-
             Setting.findByKey("category") ?: new Setting(key: "category", groups: ['SYS_GROUP_ADMIN'], values: ['Worship', 'Christian', 'Hymns', 'Gospel', 'Christmas carols', 'Traditional']).save(flush: true, failOnError: true)
-            Setting.findByKey("tagg") ?: new Setting(key: "tagg", groups: ['GROUP_P_TRELLEBORG'], values: ['Praise', 'Speedy', 'Trashy']).save(flush: true, failOnError: true)
+            Setting.findByKey("tagg") ?: new Setting(key: "tagg", groups: ['GROUP_PINGST_TRELLEBORG'], values: ['Praise', 'Speedy', 'Trashy', 'Ballad']).save(flush: true, failOnError: true)
         }
         if (Environment.current == Environment.PRODUCTION) {
             // insert Production environment specific code here
-            User user = User.findByUsername("admin") ?: new User(username: 'admin', password: '123', email: 'ejnar.ak@glocalnet.net').save(flush: true, failOnError: true)
-//            user.password = ""
-//            user.encodePassword
+//            User admin = User.findByUsername("admin") ?: new User(username: 'admin', password: '123', email: 'ejnar.ak@glocalnet.net').save(flush: true, failOnError: true)
+//            admin.password = ""
+//            admin.encodePassword
+//            admin.save(flush: true, failOnError: true)
+//
+//            User user = User.findByUsername("user") ?: new User(username: 'user', password: 'jesus', email: 'eaakerman@gmail.com').save(flush: true, failOnError: true)
+////            user.password = "123"
+////            user.encodePassword
+////            user.save(flush: true, failOnError: true)
+//            UserRoleGroup.get(user.id, groupPingst.id) ?: UserRoleGroup.create(user, groupPingst, true)
         }
 
     }

@@ -14,7 +14,6 @@
 //= require spin.js/spin
 //= require /angular/angular-spinner
 //= require /angular-http-auth/http-auth-interceptor
-//= require /angular-bootstrap/ui-bootstrap-tpls
 //= require /angular-material/angular-material
 
 //= require jquery/jquery
@@ -38,12 +37,12 @@ app.constant(
             SONGITEM: '/song/'
 		});
 
-app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath',
+app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 'CONFIG',
 
-    function ($routeProvider, $httpProvider, $logProvider, cfgScreenPath) {
+    function ($routeProvider, $httpProvider, $logProvider, cfgScreenPath, CONFIG) {
         $routeProvider.
         	when('/login', {
-        		templateUrl: 'static/common/views/auth/login.html',
+        		templateUrl: 'static/webpoint/screen/views/auth/login.html',
         		controller: 'LoginController as vm'
         	}).
             when( cfgScreenPath.SCREEN  + ':pageListId', {
@@ -60,7 +59,9 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath',
             }).
             when( cfgScreenPath.pagelist, {
                 templateUrl: 'static/webpoint/screen/views/list.html',
-                controller: 'MainViewListCtrl'
+                controller: 'MainViewListCtrl',
+                requireAuth: true,
+                requireRoles: ['ROLE_ADMIN','ROLE_VIEW']
             }).
             when( cfgScreenPath.print, {
                 templateUrl: 'static/webpoint/screen/views/print.html',
@@ -78,5 +79,5 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath',
                 redirectTo: cfgScreenPath.pagelist
             });
 
-        $logProvider.debugEnabled(true);
+        $logProvider.debugEnabled(CONFIG.DEBUG_LOG);
 }]);

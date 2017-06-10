@@ -100,7 +100,7 @@ vyController.controller('VyCtrl', [
             // Component lookup should always be available since we are not using `ng-if`
             $mdSidenav(navID).close()
                 .then(function () {
-                $log.debug("close RIGHT is done");
+//                $log.debug("close RIGHT is done");
             });
         };
 
@@ -110,11 +110,12 @@ vyController.controller('VyCtrl', [
             $scope.vyCtrl_closeSidenav('sidenav-right_1');
         };
 
-        $scope.vyCtrl_changeSize = function (index) {
-//            $log.debug('Change css: ', index);
+        $scope.vyCtrl_changeSize = function () {
             $scope.fontSize = "vyArea_s1";
-            if(index != undefined){
-                $scope.fontSize = "vyArea_s" + index;
+            if($scope.selectedSize != undefined){
+                $scope.fontSize = "vyArea_s" + $scope.selectedSize;
+            }else{
+                $scope.selectedSize = 1;
             }
 
         };
@@ -161,7 +162,7 @@ vyController.controller('VyCtrl', [
             $mdSidenav(navID)
               .toggle()
               .then(function () {
-                $log.debug("toggle " + navID + " is done");
+//                $log.debug("toggle " + navID + " is done");
               });
           }, 400);
         }
@@ -174,7 +175,7 @@ vyController.controller('VyCtrl', [
             $mdSidenav(navID)
               .toggle()
               .then(function () {
-                $log.debug("toggle " + navID + " is done");
+//                $log.debug("toggle " + navID + " is done");
               });
           }
         }

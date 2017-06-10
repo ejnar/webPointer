@@ -1,4 +1,4 @@
-<div class="container" sha-loading-spinner="viewLoading">
+<div class="container">
 	<div class="page-header">
 		<div class="row" >
 			<div class="col-md-10 col-xs-6">
@@ -38,14 +38,14 @@
 	        <tbody ng-repeat="g in groups" >   <!--  | filter: searchKeyword  -->
 	            <tr>
 	            	<td>
-                        <button ng-if="g.expanded" ng-click="groupOfSectionCtrl_clickExpand(g)" tooltip="Hidd">
+                        <button ng-if="g.expanded" ng-click="groupOfSectionCtrl_clickExpand(g)">
                             <i class="glyphicon glyphicon-minus"></i>
                         </button>
-	              		<button ng-if="!g.expanded" ng-click="groupOfSectionCtrl_clickExpand(g)" tooltip="Show">
+	              		<button ng-if="!g.expanded" ng-click="groupOfSectionCtrl_clickExpand(g)">
                             <i class="glyphicon glyphicon-plus"></i>
                         </button>
 	            	</td>
-	            	<td ng-click="groupOfSectionCtrl_editMeta(g.id)" tooltip="Edit" ><a href="">{{g.title}}</a></td>
+	            	<td ng-click="groupOfSectionCtrl_editMeta(g.id)"><a href="">{{g.title}}</a></td>
 	                <td class="hidden-xs" >{{g.originalTitle}}</td>
 	                <td>{{g.category}}</td>
 	                <td class="hidden-xs nowrap">

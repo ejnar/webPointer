@@ -82,21 +82,8 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         var data = section.data;
         var linebreak = '\n';
         var lines = this.getLines(doHtml,data,linebreak);
-//        $log.debug('keys: ', KEYS);
-        var changeToKeyIndex = 0;
-        var keyIndex = 0;
-        for(var i=0; i < KEYS.length; i++){
-            if(isKeyFound(section.key, KEYS[i])){
-                keyIndex = i;
-            }
-            if(isKeyFound(section.tokey, KEYS[i])){
-                changeToKeyIndex = i;
-            }
-        }
-        $log.debug('keyIndex: ', keyIndex);
-        $log.debug('changeToKeyIndex: ', changeToKeyIndex);
-        var keyDiff = changeToKeyIndex - keyIndex;
-        $log.debug(' - keyDiff: ', keyDiff);
+        var keydiff = keyDiff(section);
+        $log.debug(' - keydiff: ', keydiff);
 
         for(var l=0; l < lines.length; l++){
             result += l != 0 ? linebreak : '';
@@ -111,12 +98,12 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
                     for(var i=0; i < KEYS.length; i++){
                         if(isKeyFound(key, KEYS[i])){
                             var newKeyindex = 0;
-                            if(i+keyDiff < 0){
-                                newKeyindex = KEYS.length + (i+keyDiff);
-                            }else if(i+keyDiff > (KEYS.length -1)){
-                                newKeyindex = (i+keyDiff) - (KEYS.length);
+                            if(i+keydiff < 0){
+                                newKeyindex = KEYS.length + (i+keydiff);
+                            }else if(i+keydiff > (KEYS.length -1)){
+                                newKeyindex = (i+keydiff) - (KEYS.length);
                             }else{
-                                newKeyindex = i+keyDiff;
+                                newKeyindex = i+keydiff;
                             }
                             var a = [];
                             a[0] = key;
@@ -157,9 +144,6 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         var slash = (line.indexOf('/', index-1) == index) ? 1 : 0;
         var str1 = line.substr(0, index + slash);
         var str2 = line.substr((index + offset) + slash);
-//        console.log(' if old: '+ oldChar +' - new: '+ newChar + '|' + str1 + nChar + str2);
-//        console.log(' -- |' + str1);
-//        console.log(' -- |' + str2);
         // ex newChar = C#  oldChar = D
         if(newChar.length > 1 && oldChar.length == 1){
             // Check last char in string, if not spaces
@@ -190,87 +174,96 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
                 str1 = str1.substr(0,str1.length-1);
             }
         }
-//        console.log(' -- |' + str1 + nChar + str2);
-//        console.log(' -- |' + str1);
-//        console.log(' -- |' + str2);
-//        console.log(' --------   else old: '+ oldChar +' - new: '+ newChar + ' -----------------');
         return str1 + nChar + str2;
     };
 
-}]);
 
-function addSpace(str, space){
-    var st0 = str;
-    var firstSpace = str.indexOf(' ');
-    if(firstSpace >= 0){
-        var s1 = str.substr(0, firstSpace);
-        var s2 = str.substr(firstSpace);
-        st0 = s1 + space + s2;
-    }
-    else{
-        var keys = str.match(MATCH_KEYS_REG);
-//        console.log(str + '|----------keys----------------|' + keys);
-        if(keys != null){
-            var index = str.indexOf(keys[0]);
-            if(!(str[0] == '/' && index < 2)){
-                st0 = str.insertAt(index, ' ');
+
+    function keyDiff(section){
+        var changeToKeyIndex = 0;
+        var keyIndex = 0;
+        for(var i=0; i < KEYS.length; i++){
+            if(isKeyFound(section.key, KEYS[i])){
+                keyIndex = i;
+            }
+            if(isKeyFound(section.tokey, KEYS[i])){
+                changeToKeyIndex = i;
             }
         }
-//        console.log(st0 + '|----------keys----------------|' + index);
+        $log.debug('keyIndex: ', keyIndex);
+        $log.debug('changeToKeyIndex: ', changeToKeyIndex);
+        return changeToKeyIndex - keyIndex;
     }
-    return st0;
-}
-function delSpace(str, count){
-    var firstSpace = str.indexOf(' ');
-    var s1 = str.substr(0, firstSpace);
-    var s2 = str.substr(firstSpace+count);
-    return s1 + s2;
-}
 
-function getIndexValue(arr, cross){
-    var sA = arr.split(':');
-    if(sA.length > 1){
-        if(cross){
-            return sA[0];
-        }else{
-            return sA[1];
+    function delSpace(str, count){
+        var firstSpace = str.indexOf(' ');
+        var s1 = str.substr(0, firstSpace);
+        var s2 = str.substr(firstSpace+count);
+        return s1 + s2;
+    }
+
+    function getIndexValue(arr, cross){
+        var sA = arr.split(':');
+        if(sA.length > 1){
+            return cross ? sA[0] : sA[1];
+        }
+        else { return sA[0];}
+    }
+
+    function getKeyType(toKey){
+        var type = ['D,true', 'A,true', 'A#:Bb,false'];
+        var typ = false;
+        for(var j=0; j < type.length; j++){
+            var t = type[j].split(',');
+            if(t[0] == toKey){
+                typ = t[1];
+                break;
+            }
+        }
+        return typ;
+    }
+
+    function startSufix(str){
+        for(var i=0; i < KEY_SUFIX.length; i++){
+            var sufix = KEY_SUFIX[i];
+            if(str.indexOf(sufix) == 0){
+                return true;
+            }
         }
     }
-    else { return sA[0];}
-}
-
-function getKeyType(toKey){
-    var type = ['D,true', 'A,true', 'A#:Bb,false'];
-    var typ = false;
-    for(var j=0; j < type.length; j++){
-        var t = type[j].split(',');
-        if(t[0] == toKey){
-            typ = t[1];
-            break;
+    function isKeyFound(key, keyArray){
+        var keyArr = keyArray.split(':');
+        for(var i=0; i < keyArr.length; i++){
+            if(keyArr[i] == key){
+                return true;
+            }
         }
+        return false;
     }
-    return typ;
-}
 
-function startSufix(str){
-    for(var i=0; i < KEY_SUFIX.length; i++){
-        var sufix = KEY_SUFIX[i];
-        if(str.indexOf(sufix) == 0){
-            return true;
+    function addSpace(str, space){
+        var st0 = str;
+        var firstSpace = str.indexOf(' ');
+        if(firstSpace >= 0){
+            var s1 = str.substr(0, firstSpace);
+            var s2 = str.substr(firstSpace);
+            st0 = s1 + space + s2;
         }
+        else{
+            var keys = str.match(MATCH_KEYS_REG);
+            if(keys != null){
+                var index = str.indexOf(keys[0]);
+                if(!(str[0] == '/' && index < 2)){
+                    st0 = str.insertAt(index, ' ');
+                }
+            }
+        }
+        return st0;
     }
-}
 
-function isKeyFound(key, keyArray){
-    var keyArr = keyArray.split(':');
-    if(keyArr[0] == key){
-        return true;
-    }
-    if(keyArr.length == 2 && keyArr[1] == key){
-        return true;
-    }
-    if(keyArr.length == 3 && keyArr[2] == key){
-            return true;
-        }
-    return false;
-}
+
+
+}]);
+
+
+

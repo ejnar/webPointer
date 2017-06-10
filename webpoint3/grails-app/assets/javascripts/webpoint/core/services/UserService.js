@@ -4,30 +4,30 @@
 
 var userService = angular.module('webpoint.core');
 
-userService.factory('UserApi', ['$resource', '$log', '$resourceInterceptor',
-  function ($resource, $log, $resourceInterceptor) {
-	$log.debug(' --- UserApi.factory --- ');
+userService.factory('UserApi', ['$resource', '$log',
+  function ($resource, $log) {
+	$log.debug(' --- UserApi.factory --- '); // interceptor :$resourceInterceptor
 	
 	return	{ 
 			User: $resource('api/user/:Id', {Id: '@Id'},
 					{
-           				'list': { method:'GET', isArray:true, cache:false, interceptor :$resourceInterceptor},
-           				'get': { method:'GET', interceptor : $resourceInterceptor },
-           				'save': { method:'POST', interceptor : $resourceInterceptor},
-           				'update': { method:'PUT', interceptor : $resourceInterceptor}
+           				'list': { method:'GET', isArray:true, cache:false},
+           				'get': { method:'GET'},
+           				'save': { method:'POST'},
+           				'update': { method:'PUT'}
 					})
 			};
 	}
 ]);
 
-userService.factory('AuthorityApi', ['$resource', '$log', '$resourceInterceptor',
-	function ($resource, $log, $resourceInterceptor) {
+userService.factory('AuthorityApi', ['$resource', '$log',
+	function ($resource, $log) {
 		$log.debug(' --- AuthorityApi.factory --- ');
 		
 		return	{ 
 				Auth: $resource('api/auth/:Id', {Id: '@Id'},
 						{
-	           				'password': { method: 'PUT', url: 'api/auth/password', interceptor : $resourceInterceptor}
+	           				'password': { method: 'PUT', url: 'api/auth/password'}
 						})
 				};
 		}
@@ -35,12 +35,12 @@ userService.factory('AuthorityApi', ['$resource', '$log', '$resourceInterceptor'
 
 
 
-userService.factory('RoleApi', ['$resource', '$resourceInterceptor',
-  function ($resource, $resourceInterceptor) {
+userService.factory('RoleApi', ['$resource',
+  function ($resource) {
 	return $resource('api/roles/:Id', {Id: '@Id'},
 			{
-       			'list': { method:'GET', isArray:true, cache:false, interceptor : $resourceInterceptor},
-       			'get': { method:'GET', interceptor : $resourceInterceptor }
+       			'list': { method:'GET', isArray:true, cache:false},
+       			'get': { method:'GET'}
 			});
   }
 ]);
@@ -49,10 +49,10 @@ userService.factory('RoleGroupApi', ['$resource', '$resourceInterceptor',
   function ($resource, $resourceInterceptor) {
 	return $resource('api/rolegroups/:Id', {Id: '@Id'},
 			{
-       			'list': { method:'GET', isArray:true, cache:false, interceptor : $resourceInterceptor},
-       			'get': { method:'GET', interceptor : $resourceInterceptor },
-       			'save': { method:'POST', interceptor : $resourceInterceptor },
-       			'update': { method:'PUT', interceptor : $resourceInterceptor }
+       			'list': { method:'GET', isArray:true, cache:false},
+       			'get': { method:'GET'},
+       			'save': { method:'POST'},
+       			'update': { method:'PUT'}
 			});
   }
 ]);

@@ -42,12 +42,12 @@ app.constant(
 			ceatePageModal: 'static/webpoint/user/views/page/ceatePageModal.html'
 		});
 
-app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath',
+app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath', 'CONFIG',
 
-    function ($routeProvider, $httpProvider, $logProvider, cfgAppPath) {
+    function ($routeProvider, $httpProvider, $logProvider, cfgAppPath, CONFIG) {
         $routeProvider.
         	when('/login', {
-        		templateUrl: 'static/common/views/auth/login.html',
+        		templateUrl: 'static/webpoint/user/views/auth/login.html',
         		controller: 'LoginController as vm'
         	}).
             when( cfgAppPath.SONGDATA_LIST, {
@@ -102,7 +102,7 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath',
                 redirectTo: cfgAppPath.SONGDATA_LIST
             });
 
-        $logProvider.debugEnabled(false);
+        $logProvider.debugEnabled(CONFIG.DEBUG_LOG);
 //        $sceDelegateProvider.resourceUrlWhitelist(['self', 'https://api.spotify.com/v1/**', 'http://ws.spotify.com/search/1/**']);
 
 //        $httpProvider.defaults.useXDomain = true;

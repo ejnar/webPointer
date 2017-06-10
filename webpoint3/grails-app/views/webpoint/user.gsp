@@ -23,6 +23,7 @@
 <body ng-app="webpoint" >
 <!-- Add your site or application content here -->
 <div id="wrap" data-ng-controller="AppController">
+    <span us-spinner="{radius:20, width:8, length: 10}" spinner-key="spinner-1"></span>
     <div ng-include="'static/webpoint/user/views/includes/header.html'"></div>
     <div ng-view=""></div>
     <div ng-include="'static/webpoint/user/views/includes/footer.html'"></div>

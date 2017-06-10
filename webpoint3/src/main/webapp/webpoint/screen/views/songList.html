@@ -1,20 +1,19 @@
-<div id="content" sha-loading-spinner="viewLoading" ng-cloak layout-gt-sm="row" layout="column">
+<div id="content" ng-cloak layout-gt-sm="row" layout="column">
 
     <md-content  flex>
-        <md-toolbar layout="row" class="md-hue-2">
+        <md-toolbar layout="row" layout-xs="row" layout-sm="row" class="md-hue-2">
             <div class="md-toolbar-tools">
                 <h1><a href="/"> Songpoint </a></h1>
             </div>
             <md-button aria-label="Open menu" ng-click="$mdMenu.open($event)">
                 <md-icon md-menu-align-target class="material-icons">menu</md-icon>
             </md-button>
-
         </md-toolbar>
         <md-subheader >Song list</md-subheader>
-        <div ng-repeat="p in songs" flex>
-            <h4>
+        <div ng-repeat="p in songs | orderBy:'title'" flex>
+            <p>
                 <a class="small" href="" ng-click="showAdvanced($event,p)">{{p.title}}</a>
-            </h4>
+            </p>
 
         </div>
 

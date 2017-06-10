@@ -83,3 +83,8 @@ grails create-app webpoint3 --profile angular --features mongodb, asset-pipeline
 
  ps -aux
  kill -9 <PID<
+
+
+ ------- Backlogg ---------
+
+ * progress bar in vy page

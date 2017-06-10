@@ -1,8 +1,8 @@
-<md-dialog aria-label="Song">
+<md-dialog flex-xs="95" layout-fill aria-label="Song">
     <form ng-cloak>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h3>{{song.title}}</h3>
+                <h5>{{song.title}}</h5>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <md-icon md-menu-align-target class="material-icons ">close</md-icon>
@@ -10,32 +10,27 @@
             </div>
         </md-toolbar>
 
-        <md-dialog-content  class="songContent">
+        <md-dialog-content layout-fill flex="100" class="songContent">
             <div class="md-dialog-content">
-                <div layout="row">
-                    <div flex="60">
-                        <h4>Links:</h4>
-                        <div ng-repeat="l in song.links" flex>
-                            <h5>
-                                <a href="{{l}}" target="blank">{{l | gethost}}</a>
-                            </h5>
+                <div layout="row" layout-xs="column">
+                    <div flex="50" >
+                        <h5>Links:</h5>
+                        <div ng-repeat="l in song.oLinks" flex>
+                            <a href="{{l.url}}" target="blank">{{l.name}}</a>
                         </div>
                     </div>
-                    <div flex="40" class="dialogInfo">
-                        <h4>Category:</h4>
-                        <h5><span>{{song.category}}</span></h5>
+                    <div flex="50" class="dialogInfo">
+                        <h5>Category:</h5><span>{{song.category}}</span>
                         <div ng-repeat="t in song.taggs" flex>
-                            <h5><span>{{t}}</span></h5>
+                            <span>{{t}}</span>
                         </div>
                     </div>
                 </div>
-                <div layout="column" flex="100">
-                    <p class="songtext">{{song.data}}</p>
 
-                </div>
+                <md-content flex>
+                    <p class="songtext">{{song.data}}</p>
+                </md-content>
             </div>
         </md-dialog-content>
-
-
     </form>
 </md-dialog>

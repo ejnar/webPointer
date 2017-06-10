@@ -5,15 +5,15 @@
 var module = angular.module('webpoint.screen');
 
     module.controller('SongItemtCtrl', SongItemtCtrl);
-    SongItemtCtrl.$inject = ['$scope', '$location', '$log', '$mdDialog', 'song', 'PageListApi', 'usSpinnerService', 'SectionsApi'];
+    SongItemtCtrl.$inject = ['$scope', '$location', '$log', '$mdDialog', 'song', 'PageListApi', 'SectionsApi'];
 
-    function SongItemtCtrl($scope, $location, $log, $mdDialog, song, PageListApi, usSpinnerService, SectionsApi) {
+    function SongItemtCtrl($scope, $location, $log, $mdDialog, song, PageListApi, SectionsApi) {
 
 
     	init();
     	function init () {
             $log.debug(' --- SongItemtCtrl.init ' + song.id);
-            $log.debug(song);
+//            $log.debug(song);
             $scope.song = song;
 
         }

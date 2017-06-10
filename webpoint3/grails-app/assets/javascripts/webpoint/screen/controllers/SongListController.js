@@ -5,22 +5,21 @@
 var module = angular.module('webpoint.screen');
 
     module.controller('SongListCtrl', SongListCtrl);
-    SongListCtrl.$inject = ['$scope', '$location', '$log', '$mdDialog', 'cfgScreenPath', 'PageListApi', 'usSpinnerService', 'SectionsApi'];
+    SongListCtrl.$inject = ['$scope', '$location', '$log', '$mdDialog', 'cfgScreenPath', 'PageListApi', 'SectionsApi'];
 
-    function SongListCtrl ($scope, $location, $log, $mdDialog, cfgScreenPath, PageListApi, usSpinnerService, SectionsApi) {
+    function SongListCtrl ($scope, $location, $log, $mdDialog, cfgScreenPath, PageListApi, SectionsApi) {
+
+        $scope.alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
 
     	init();
     	function init () {
-            $log.debug(' --- songListCtrl.init ');
+            $log.debug(' --- SongListCtrl.init ');
 
-            SectionsApi.list().$promise
+            SectionsApi.list({max:1000}).$promise
                 .then(function(resp) {
-                    $log.debug(resp);
-                    usSpinnerService.spin('spinner-1');
+//                    $log.debug(resp);
                     $scope.songs = resp;
-
-                    usSpinnerService.stop('spinner-1');
                 });
         }
 

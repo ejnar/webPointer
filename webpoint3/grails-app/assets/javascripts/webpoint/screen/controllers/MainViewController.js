@@ -13,7 +13,6 @@ var module = angular.module('webpoint.screen');
             $log.debug(' --- MainViewController.mainViewListCtrl_gotoScreen - id:', id);
 
             var item = $filter("filter")($scope.items, {id: id});
-            $log.debug(item);
             var withoutkeys = item.length > 0 && item[0].special ? '/withoutkeys' : '';
 
             $location.path(cfgScreenPath.SCREEN + id + withoutkeys);
@@ -27,11 +26,9 @@ var module = angular.module('webpoint.screen');
                 $log.debug(' --- clean cash: ');
                 CashService.clean();
             }
-			$scope.viewLoading = true;
     		PageListApi.list( function (resp) {
-    	        $log.debug(resp);
+//    	        $log.debug(resp);
     			$scope.items = resp;
-    			$scope.viewLoading = false;
             });
     	}
 

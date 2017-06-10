@@ -10,25 +10,28 @@ html, body {
 }
 body
 {
-   font-size: 2.2em;
+   font-size: 0.85em;
    color: #000;
    font: Verdana, Arial, 'sans-serif';
+   margin: 0;
+   padding: 0;
 }
 h1, h2, h3, h4, h5, h6, h7, h8 {
     font-weight: bold;
     padding: 0;
     margin: 0;
+    margin-top: 0.4em;
 }
 
 /* angular-material begian */
 /* Rules for sizing the icon. */
 .material-icons.md-16 { font-size: 1.8vh; }
 .material-icons.md-18 { font-size: 2.6vh; }
-.material-icons.md-20 { font-size: 1.8vw; }
-.material-icons.md-22 { font-size: 2.8vw; }
-.material-icons.md-24 { font-size: 4.2vw; }
-.material-icons.md-36 { font-size: 5.4vw; }
-.material-icons.md-48 { font-size: 6.8vw; }
+.material-icons.md-20 { font-size: 1.8em; }
+.material-icons.md-22 { font-size: 3.0vw; }
+.material-icons.md-24 { font-size: 4.8vw; }
+.material-icons.md-36 { font-size: 6.2vw; }
+.material-icons.md-48 { font-size: 8.8vw; }
 .padding-left-3 {margin-left: 5px;}
 .padding-bottom-3 {padding-bottom: 3px;}
 .icon-wrapper {margin: 0 0.1em; display: inline-flex; vertical-align: middle; align-items: center;}
@@ -80,27 +83,26 @@ md-sidenav.md-locked-open {
   min-width: 300px;
   max-width: 340px;
 }
-
-
 .md-subheader{
     font-size: 0.9em;
 }
-
+.title-sm{
+    font-size: 1.0em;
+    font-weight: bold;
+    color:gray;
+}
 .size-text{
-    font-size: 0.8em;
-
+    font-size: 1.2em;
 }
 
 md-list-item.sidenav-list-item  {
-    font-size: 0.6em;
-    padding:0;
-    margin:0;
+    font-size: 1.0em;
 }
 md-list-item.sidenav-list-item span.mdl-list_item-primary-content  {
     margin:0 0.2em;
 }
 md-list-item.sidenav-list-item span.mdl-list_item-secondary-action{
-    margin-right:2.0em;
+    margin-right:0.4em;
 }
 md-backdrop.md-sidenav-backdrop{
     display:none;
@@ -137,14 +139,14 @@ table tr.vyRow{
 	margin:0px;
     padding:0px;
 }
-div.vyArea_s0{ font-size: 3.2vw;}
-div.vyArea_s1{ font-size: 3.2vh;}
-div.vyArea_s2{ font-size: 2.8vh;}
-div.vyArea_s3{ font-size: 2.2vh;}
+div.vyArea_s0{ font-size: 3.0vw;}
+div.vyArea_s1{ font-size: 2.6vw;}
+div.vyArea_s2{ font-size: 2.2vh;}
+div.vyArea_s3{ font-size: 2.8vh;}
 table td.vyArea {
 	width:94%;
 	height:100%;
-	padding: 0.2em 0.05em 0.05em 0.2em;
+	padding: 0.4em 0.05em 0.05em 0.2em;
 	margin: 0;
 }
 div.vyArea {
@@ -154,6 +156,7 @@ div.vyArea {
     overflow: scroll;
     left: 0px;
     top: 0px;
+
 }
 div.vyImgArea {
     height:100%;
@@ -162,17 +165,20 @@ div.vyImgArea {
     top: 0px;
 }
 .songContent{
-    width: 100%;
+    width: 480px;
 }
 p.songtext {
-    font-size: 2.4vh;
-    padding: 1.0em 1.0em 0 0;
+    font-size: 2.0vh;
+    padding: 0.4em 4.0em 0 0;
     white-space: pre;
     line-height: 96%;
+    width: 100%
 }
 a.small {
-    font-size: 2.8vh;
-    margin: 0.1em 1.2em;
+    font-size: 1.1em;
+    margin: 0 1.4em;
+    padding:0;
+
 }
 .dialogInfo span{
     font-size: 0.9em;
@@ -182,32 +188,6 @@ a.small {
     line-height: 90%;
 }
 
-@media (max-width: 380px) {
-    .stretch {
-        height: 76%;
-        padding: 0.2em 0.1em;
-        position: absolute;
-        top: 0px;
-    }
-}
-@media (min-width: 768px) {
-    .stretch {
-        height: 94%;
-        padding: 0.2em 0.1em;
-        position: absolute;
-        top: 0px;
-    }
-}
-@media (min-width: 1200px) {
-    .stretch {
-        height: 98%;
-        padding: 0.4em 0.1em;
-        /*width: 60%;
-        max-height: 1200px;*/
-        position: absolute;
-        top: 0px;
-    }
-}
 div.printOut {
     padding: 1.2em 0 1.4em 0;
     font-size: 1.3em;
@@ -224,11 +204,8 @@ table td.sideLeftBtn{
 	color: #404040;
 	vertical-align: top;
 	padding: 0;
+	margin:0;
 	outline:none
-    /*background: -webkit-linear-gradient(left, rgba(100,100,200,0), rgba(100,100,200,4)); /* For Safari 5.1 to 6.0 */
-    /*background: -o-linear-gradient(right, rgba(100,100,200,0), rgba(100,100,200,4)); /* For Opera 11.1 to 12.0 */
-    /*background: -moz-linear-gradient(left, rgba(100,100,200,0), rgba(100,100,200,4)); /* For Firefox 3.6 to 15 */
-    /*background: linear-gradient(to left, rgba(200,200,200,0), rgba(200,200,200,4)); /* Standard syntax (must be last) */
 }
 table td.sideRightBtn{
     width:1%;
@@ -237,11 +214,8 @@ table td.sideRightBtn{
 	color: #404040;
 	vertical-align: top;
 	padding: 0;
+	margin:0;
 	outline:none
-    /*background: -webkit-linear-gradient(left, rgba(100,100,200,0), rgba(100,100,200,2)); /* For Safari 5.1 to 6.0 */
-    /*background: -o-linear-gradient(right, rgba(100,100,200,0), rgba(100,100,200,2)); /* For Opera 11.1 to 12.0 */
-    /*background: -moz-linear-gradient(right, rgba(100,100,200,0), rgba(100,100,200,2)); /* For Firefox 3.6 to 15 */
-    /*background: linear-gradient(to right, rgba(100,100,200,0), rgba(100,100,200,2)); /* Standard syntax (must be last) */
 }
 table td.sideLeftPageBtn{
     width:1%;
@@ -249,6 +223,7 @@ table td.sideLeftPageBtn{
 	color: #404040;
 	vertical-align: top;
 	padding-top: 5em;
+	margin:0;
 	outline:none
 }
 table td.sideRightPageBtn{
@@ -257,13 +232,14 @@ table td.sideRightPageBtn{
 	color: #404040;
 	vertical-align: top;
 	padding-top: 5em;
+	margin:0;
 	outline:none
 }
 table td.icon-List {
     width: 1%;
     vertical-align: top;
     color: #888;
-    padding: 0;
+    padding: 0.2em 0.4em 0 0;
     margin: 0;
 }
 
@@ -287,36 +263,6 @@ button{
   white-space: pre;
   /* white-space: pre-line; */
 }
-
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
-}
-
-.menu:before {
-  content: "[";
-}
-
-.menu:after {
-  content: "]";
-}
-
-.menu > li {
-  display: inline;
-}
-
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
-}
-
 
 /* columns of same height styles */
 .container-xs-height {

@@ -11,8 +11,9 @@ class Section extends BaseDomain {
     String language
     String originalTitle
     String category
+    String author
     String[] taggs
-    String[] links
+//    String[] links
 
     String data
 	String type
@@ -21,20 +22,21 @@ class Section extends BaseDomain {
 
 //    SectionDoc[] objects
     List<SectionDoc> objects = new ArrayList()
+    List<Link> oLinks = new ArrayList()
 
 	Set<RoleGroup> roleGroupSet;
-    static embedded = ['roleGroupSet', 'objects']
+    static embedded = ['roleGroupSet', 'objects', 'oLinks']
 
 //	static transients = ['sectionMeta']
 //	static belongsTo = [sectionMeta: SectionMeta]
 
 	static constraints = {
-        title index: true, indexAttributes: [unique: true, dropDups: true]
+        title index: true, indexAttributes: [unique: false]
         language nullable: false
         originalTitle nullable: true, blank:true
         category nullable: false
+        author nullable: true, blank:true
         taggs nullable: true
-        links nullable: true
 
 		data nullable: true, blank:true
         objects nullable: true
@@ -42,6 +44,7 @@ class Section extends BaseDomain {
 		key nullable: true, blank:true
 		updated nullable: true
         roleGroupSet nullable: true
+        oLinks nullable: true
 	}
 
     static mapping = {
@@ -65,14 +68,14 @@ class Section extends BaseDomain {
         }
     }
 
-    def void addLink(String link) {
-        if (links == null) {
-            links = [link]
-        } else {
-            String[] tmp = [link]
-            links = links.plus(tmp)
-        }
-    }
+//    def void addLink(String link) {
+//        if (links == null) {
+//            links = [link]
+//        } else {
+//            String[] tmp = [link]
+//            links = links.plus(tmp)
+//        }
+//    }
 
     def void addSectionDoc(){
         objects.add(new SectionDoc());
@@ -126,6 +129,23 @@ class SectionDoc{
                 "name='" + name + '\'' +
                 ", contentType='" + contentType + '\'' +
                 ", size=" + size +
+                '}';
+    }
+}
+
+class Link {
+    String name
+    String url
+
+    static constraints = {
+        name nullable: true, blank:true
+        url nullable: true, blank:true
+    }
+
+    @Override
+    public String toString() {
+        return "Link{" +
+                "name='" + name + '\'' +
                 '}';
     }
 }

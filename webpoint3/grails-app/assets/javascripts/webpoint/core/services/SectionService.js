@@ -5,15 +5,15 @@
 var sectionService = angular.module('webpoint.core');
 
 
-sectionService.factory('SectionsApi', ['$resource', '$resourceInterceptor', '$log',
-	function ($resource, $resourceInterceptor, $log) {
-		$log.info(' --- SectionService.SectionsApi.factory --- ');
+sectionService.factory('SectionsApi', ['$resource', '$log',
+	function ($resource, $log) {
+		$log.info(' --- SectionService.SectionsApi.factory --- '); //, interceptor : $resourceInterceptor
 		return $resource('api/sections/:Id', {Id: '@Id'},
 				{
-	       			'list': { method:'GET', isArray:true, interceptor : $resourceInterceptor},
-	       			'get': { method:'GET', interceptor : $resourceInterceptor},
-	       			'save': { method:'POST', interceptor : $resourceInterceptor},
-	       			'update': { method:'PUT', interceptor : $resourceInterceptor}
+	       			'list': { method:'GET', isArray:true},
+	       			'get': { method:'GET'},
+	       			'save': { method:'POST'},
+	       			'update': { method:'PUT'}
 //	       			'remove': { method:'DELETE'}
 				});
 	}

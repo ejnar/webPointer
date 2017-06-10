@@ -1,17 +1,17 @@
-<div sha-loading-spinner="viewLoading" data-ng-init="vyCtrl_loadData()" layout="column" ng-cloak>
-    <section layout="row" flex>
-        <div id="wrap">
+<div layout="column" data-ng-init="vyCtrl_loadData()" ng-cloak>
+    <section>
+        <div id="wrap" flex-offset="5" flex-offset-gt-sm="0">
             <table>
                 <tbody>
                 <tr class="vyRow">
-                    <td class="sideLeftBtn" ng-click="vyCtrl_left()" keyleft>
+                    <td hide-xs hide-sm class="sideLeftBtn" ng-click="vyCtrl_left()" keyleft>
                         <i class="material-icons md-48">chevron_left</i>
                     </td>
                     <td class="sideLeftPageBtn" ng-click="vyCtrl_leftPage()"
                         ng-if="pageList.pageParts[currentPart].section.objects.length > 1">
                         <i class="material-icons md-22">chevron_left</i>
                     </td>
-                    <td class="vyArea">
+                    <td class="vyArea" md-swipe-left="vyCtrl_left()" md-swipe-right="vyCtrl_right()" >
                         <div class="vyImgArea" ng-if="pageList.pageParts[currentPart].section.type == 'IMAGE'" >
                             <img class="stretch" alt=""
                                      src="data:image/JPG;base64,{{pageList.pageParts[currentPart].section.objects[currentPage].base64}}">
@@ -31,7 +31,7 @@
                         </div>
 
                     </td>
-                    <td class="sideRightBtn" ng-click="vyCtrl_right()" keyright>
+                    <td hide-xs hide-sm class="sideRightBtn" ng-click="vyCtrl_right()" keyright>
                         <i class="material-icons md-48">chevron_right</i>
                     </td>
                 </tr>
@@ -41,7 +41,7 @@
         <div>
             <md-sidenav class="md-sidenav-right"
                         md-component-id="sidenav-right_1"
-                        md-whiteframe="24">
+                        md-whiteframe="10">
                 <md-content>
                     <md-subheader class="md-primary">Song list</md-subheader>
                     <md-list layout="column">
@@ -52,26 +52,26 @@
                             </span>
                             <span ng-click="vyCtrl_moveUpward($index)" flex="10"
                                   class="mdl-list_item-secondary-action" >
-                                <i ng-if="$index > 0" class="material-icons md-18">arrow_upward</i>
+                                <i ng-if="$index > 0" class="material-icons md-20">arrow_upward</i>
                                 <md-divider></md-divider>
                             </span>
                         </md-list-item>
                     </md-list>
                     <md-button ng-click="vyCtrl_toggleSideNavRight2()"  class="toggleSideNav" aria-label="List">
                         <div class="icon-wrapper">
-                            <i class="material-icons md-18">settings</i><p class="icon-text">Settings</p>
+                            <i class="material-icons md-20">settings</i><p class="icon-text">Settings</p>
                         </div>
                     </md-button>
                     <md-button ng-click="vyCtrl_closeSidenav('sidenav-right_1')" >
                         <div class="icon-wrapper">
-                            <i class="material-icons md-18">close</i><p class="icon-text">Close</p>
+                            <i class="material-icons md-20">close</i><p class="icon-text">Close</p>
                         </div>
                     </md-button>
                 </md-content>
             </md-sidenav>
             <md-sidenav class="md-sidenav-right"
                         md-component-id="sidenav-right_2"
-                        md-whiteframe="24">
+                        md-whiteframe="10">
                 <md-content>
                     <md-button ng-click="vyCtrl_goBack()">
                         <div class="icon-wrapper">
@@ -79,13 +79,14 @@
                         </div>
                     </md-button>
                     <md-divider ></md-divider>
-                    <md-subheader class="md-primary">Text size</md-subheader>
-                    <md-list layout="row">
-                        <md-list-item ng-repeat="n in [0,1,2,3]" class="sidenav-list-item"
-                                      ng-click="vyCtrl_changeSize($index)">
-                            <p class="size-text">Size {{$index}}</p>
-                        </md-list-item>
-                    </md-list>
+
+                    <label class="title-sm">Text size</label>
+                    <md-radio-group ng-model="selectedSize" ng-change="vyCtrl_changeSize()" layout="row" >
+                        <md-radio-button ng-repeat="size in [0,1,2,3]" ng-value="size" aria-label="{{size}}">
+                            {{ size }}
+                        </md-radio-button>
+                    </md-radio-group>
+
                     <md-divider></md-divider>
                     <md-input-container class="md-title">
                         <label>Key</label>
@@ -97,31 +98,31 @@
                     </md-input-container>
                     <md-button ng-click="vyCtrl_changeKey()">
                         <div class="icon-wrapper">
-                            <i class="material-icons md-18">straighten</i><p class="icon-text">Change key</p>
+                            <i class="material-icons md-20">straighten</i><p class="icon-text">Change key</p>
                         </div>
                     </md-button>
                     <md-divider ></md-divider>
                     <md-button ng-click="vyCtrl_print()">
                         <div class="icon-wrapper">
-                            <i class="material-icons md-18">local_printshop</i><p class="icon-text">Print current</p>
+                            <i class="material-icons md-20">local_printshop</i><p class="icon-text">Print current</p>
                         </div>
                     </md-button>
                     <md-divider ></md-divider>
                     <md-button ng-click="vyCtrl_cleanCash()">
                         <div class="icon-wrapper">
-                            <i class="material-icons md-18">cached</i><p class="icon-text">Clean cash</p>
+                            <i class="material-icons md-20">cached</i><p class="icon-text">Clean cash</p>
                         </div>
                     </md-button>
 
                     <md-divider ></md-divider>
                     <md-button ng-click="vyCtrl_toggleSideNavRight1()" class="toggleSideNav" aria-label="List">
                         <div class="icon-wrapper">
-                            <i class="material-icons md-18">menu</i><p class="icon-text">Menu</p>
+                            <i class="material-icons md-20">menu</i><p class="icon-text">Menu</p>
                         </div>
                     </md-button>
                     <md-button ng-click="vyCtrl_closeSidenav('sidenav-right_2')">
                         <div class="icon-wrapper">
-                            <i class="material-icons md-18">close</i><p class="icon-text">Close</p>
+                            <i class="material-icons md-20">close</i><p class="icon-text">Close</p>
                         </div>
                     </md-button>
                 </md-content>

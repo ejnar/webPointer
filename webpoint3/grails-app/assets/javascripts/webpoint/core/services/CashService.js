@@ -5,14 +5,21 @@
 var app = angular.module('webpoint.core');
 
 
-app.service('CashService', ['localStorageService', 'properties', '$log',
-    function(localStorageService, properties, $log) {
+app.service('CashService', ['localStorageService', 'properties', '$log', '$filter',
+    function(localStorageService, properties, $log, $filter) {
 
     this.stash = function (key, value) {
+        this.stash(key, value, 3);
+    }
+
+
+    this.stash = function (key, value, storageSize) {
         $log.debug(' --- CashService.stash: ', key);
 
         var arr = localStorageService.get(key);
-        arr = removeOldItem(arr);
+        arr = $filter('orderBy')(arr, 'time');
+        var arr = removeOldItem(arr, value, storageSize);
+        $log.debug(arr);
 
         var cashObj = {name: value.name, obj: value, time: new Date()};
         arr.push(cashObj);
@@ -26,45 +33,55 @@ app.service('CashService', ['localStorageService', 'properties', '$log',
         var arr = localStorageService.get(key);
         if(arr){
             arr.forEach(function(entry) {
-                if(id == entry.obj.id) {
-                    var timeStamp_cash = new Date(entry.time).getTime();
-                    var timeStamp_obj = new Date(entry.obj.updated ).getTime();
-                    if(timeStamp_cash > timeStamp_obj){
-                        obj = entry;
-                    }
+                if(entry.obj.id == id) {
+                    obj = entry;
                 }
             });
-            return obj.obj;
         }
+        return obj != null ? obj.obj : null;
     }
 
     this.clean = function () {
+        $log.debug('Clean all');
         localStorageService.clearAll();
     }
 
+    this.setStorage = function (key, val){
+        localStorageService.set(key, val);
+    };
+
+    this.getStorage = function (key){
+        if(!key) return;
+        return localStorageService.get(key);
+    };
+
+
+    this.setSessionStorage = function (key, val){
+        localStorageService.set(key, val, 'sessionStorage');
+    };
+
+    this.getSessionStorage = function (key){
+        return localStorageService.get(key, 'sessionStorage');
+    };
+
+
+
+
 }]);
 
-function removeOldItem(localStorageArr){
+function removeOldItem(localStorageArr,value,storageSize){
     var timeStamp_cash = 0, timeStamp_entry;
     if(!localStorageArr){
         return [];
     }
-    if(localStorageArr.length > 1){
-        localStorageArr.forEach(function(entry) {
-            console.log(entry);
-            timeStamp_entry = new Date(entry.time).getTime();
-            if(timeStamp_cash == 0) {
-                timeStamp_cash = timeStamp_entry;
-            }else if(timeStamp_cash > timeStamp_entry){
-                timeStamp_cash = timeStamp_entry;
-            }
-        });
-    }
     var i = localStorageArr.length;
     while (i--){
-        if (localStorageArr[i].time == timeStamp_cash){
+        if (localStorageArr[i].obj.id == value.id){
             localStorageArr.splice(i, 1);
         }
     }
+    var count = localStorageArr.length - storageSize;
+    localStorageArr.splice(0, count);
+
     return localStorageArr;
 }

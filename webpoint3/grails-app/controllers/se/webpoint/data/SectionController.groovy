@@ -34,9 +34,8 @@ class SectionController extends BasicRestController<Section> {
      */
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100000)
-        params.offset = 0
-        println params
-
+//        params.offset = 0
+//        println params
         List<Section> list = listAllResources(params)
         for (a in list) {
             a.convertToBase64()
@@ -63,7 +62,7 @@ class SectionController extends BasicRestController<Section> {
 	@Transactional
 	def save() {
         log.info " --- SectionController.save:"
-        log.debug params
+//        log.debug params
 
         def instance = createResource()
         println instance
@@ -88,6 +87,7 @@ class SectionController extends BasicRestController<Section> {
     @Transactional
     def update() {
         log.info " --- SectionController.update: "
+
         if(handleReadOnly()) {
             return
         }
@@ -98,9 +98,7 @@ class SectionController extends BasicRestController<Section> {
             notFound()
             return
         }
-
         instance.properties = getObjectToBind()
-
         if (instance.hasErrors()) {
             transactionStatus.setRollbackOnly()
             respond instance.errors, view:'edit' // STATUS CODE 422
@@ -110,7 +108,7 @@ class SectionController extends BasicRestController<Section> {
         if(instance.data != null)
             instance.data = instance.data.expand()
 
-        updateResource instance
+        updateResource(instance)
 
         response.addHeader(HttpHeaders.LOCATION,
                 g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))

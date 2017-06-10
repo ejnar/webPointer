@@ -6,9 +6,9 @@ var sectionController = angular.module('webpoint.user');
 
 sectionController.controller('PageListCtrl', [
     '$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', '$uibModal',
-    'tmpCash', 'cfgAppPath', 'PageListApi', 'sharedProperties',
+    'cfgAppPath', 'PageListApi',
     function ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $uibModal,
-        tmpCash, cfgAppPath, PageListApi, sharedProperties) {
+        cfgAppPath, PageListApi) {
         $log.debug(' - PageListController.PageListCtrl:');
 
 		$scope.pageListCtrl_loadPageList = function() {
@@ -19,7 +19,7 @@ sectionController.controller('PageListCtrl', [
     					$scope.listOfPages = resp;
 //    					$scope.viewLoading = false;
                     });
-    		$scope.orderProp = 'name';
+
     	}
 
     	$scope.pageListCtrl_openModel = function () {
@@ -51,21 +51,20 @@ sectionController.controller('PageListCtrl', [
 
 sectionController.controller('ViewAllSongsCtrl', [
     '$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', '$uibModal',
-    'tmpCash', 'cfgAppPath', 'SectionsApi', 'sharedProperties',
+    'cfgAppPath', 'SectionsApi',
     function ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $uibModal,
-        tmpCash, cfgAppPath, SectionsApi, sharedProperties) {
+        cfgAppPath, SectionsApi) {
         $log.debug(' - PageListController.ViewAllSongsCtrl:');
 
 
 		$scope.viewAllSongsCtrl_loadSongList = function() {
 			$log.debug(" --- PageListController.viewAllSongsCtrl_loadSongList:");
 
-    		SectionsApi.list(
-    		    function (resp) {
-    		        $log.debug(resp);
-    				$scope.sectionList = resp;
-                });
-    		$scope.orderProp = 'name';
+            SectionsApi.list({max: 1000}).$promise
+                .then( function(resp) {
+//                      $log.debug(resp);
+                    $scope.sectionList = resp;
+            });
     	}
 
 
@@ -114,20 +113,33 @@ sectionController.controller('UpdatePageListCtrl', [
         cfgAppPath, properties, SectionsApi, PageListApi, PageListDataApi, $filter, SettingService) {
         $log.debug(' - PageListController.UpdatePageListCtrl:');
 
+        $scope.alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+
+
 		$scope.updatePageListCtrl_loadSectionList = function() {
             $log.debug(" --- PageListController.updatePageListCtrl_loadSectionList");
             SettingService.getCategory($scope);
             SettingService.getFilterItems($scope);
             $scope.choosenCategory = [];
-            SectionsApi.list(function (resp) {
-                $log.debug(resp);
-                $scope.meta = resp;
-                $scope.metaFilteredList = resp;
-                $scope.updatePageListCtrl_loadPageList();
+            SectionsApi.list({max: 1000}).$promise
+                .then( function(resp) {
+//                    $log.debug(resp);
+                    $scope.meta = resp;
+                    $scope.metaFilteredList = resp;
+                    $scope.updatePageListCtrl_loadPageList();
             });
-   		    $scope.orderProp = 'title';
 		}
 
+        $scope.updatePageListCtrl_alphabetFilter = function(char) {
+            $log.debug(" --- PageListController.updatePageListCtrl_alphabetFilter " + char);
+            if(char){
+                $scope.metaFilteredList = $filter('filter')($scope.meta, function (o) {
+                    return o.title.search(new RegExp('^' + char , "i")) == 0;
+                });
+            }else{
+                $scope.metaFilteredList = $scope.meta;
+            }
+        };
 
 		$scope.updatePageListCtrl_pickFilterCategory = function(category) {
             $log.debug(" --- PageListController.updatePageListCtrl_pickFilterCategory " + category);
@@ -167,7 +179,7 @@ sectionController.controller('UpdatePageListCtrl', [
 
 	        PageListApi.get({Id: $routeParams.pageListId}).$promise
 			    .then( function(resp) {
-                    $log.debug(resp);
+//                    $log.debug(resp);
 	    		    $scope.pageDataList = resp;
 //	    		    angular.forEach($scope.pageDataList.pageParts, function(d) {
 //                        $log.debug(d);

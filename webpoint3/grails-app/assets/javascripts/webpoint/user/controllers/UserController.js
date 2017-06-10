@@ -5,10 +5,10 @@
 var detailController = angular.module('webpoint.user');
 
 detailController.controller('UserCtrl', [
-    '$rootScope', '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties', 'sharedProperties',
+    '$rootScope', '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties',
     'UserApi', 'RoleApi', 'RoleGroupApi',
     
-    function($rootScope, $scope, $routeParams, $location, $log, $q, cfgAppPath, properties, sharedProperties, 
+    function($rootScope, $scope, $routeParams, $location, $log, $q, cfgAppPath, properties,
     		UserApi, RoleApi, RoleGroupApi) {
     	$log.debug(' --- UserController.userCtrl:');
     	$scope.doSave = true;
@@ -18,10 +18,10 @@ detailController.controller('UserCtrl', [
 }]);                                               
 
 detailController.controller('EditUserCtrl', [
-    '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties', 'sharedProperties',
+    '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties',
     'UserApi', 'RoleApi', 'RoleGroupApi',
 
-    function($scope, $routeParams, $location, $log, $q, cfgAppPath, properties, sharedProperties, 
+    function($scope, $routeParams, $location, $log, $q, cfgAppPath, properties,
 		    UserApi, RoleApi, RoleGroupApi) {
 
 	   $scope.updatUser = function () {

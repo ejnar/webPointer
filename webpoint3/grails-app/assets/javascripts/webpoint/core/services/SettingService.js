@@ -16,8 +16,8 @@ settingService.constant(
 			test: 'value',
 });
 
-settingService.service('SettingService', ['SettingApi', '$rootScope', 'localStorageService', '$log', 'hashMap',
-    function(SettingApi, $rootScope, localStorageService, $log, hashMap) {
+settingService.service('SettingService', ['SettingApi', '$rootScope', 'CashService', '$log', 'hashMap',
+    function(SettingApi, $rootScope, CashService, $log, hashMap) {
 
     hashMap.put('TEXT','TX');
     hashMap.put('TEXTCHORDS','TC');
@@ -31,43 +31,31 @@ settingService.service('SettingService', ['SettingApi', '$rootScope', 'localStor
 
     this.getCategory = function (scope) {
         $log.debug(' --- SettingService.getSetting:');
-        var category = localStorageService.get('category');
+        var category = CashService.getStorage('category');
         if (category === null) {
             SettingApi.get({Id: 'category'}, function (resp) {
-                $log.debug(resp);
+//                $log.debug(resp);
                 scope.categories = resp.values;
-                localStorageService.set('category', resp);
+                CashService.setStorage('category', resp);
             });
         }else{
             scope.categories = category.values;
         }
     };
 
-    this.getTagg = function (scope) {
-        $log.debug(' --- SettingService.getTagg:');
-        var list = localStorageService.get('tagg');
-        if (list === null) {
-            SettingApi.get({Id: 'tagg'}, function (resp) {
-                $log.debug(resp);
-                scope.taggs = resp.values;
-                localStorageService.set('tagg', resp);
-            });
-        }else{
-            scope.taggs = list.values;
-        }
-    };
+
 
     this.getFilterItems = function (scope) {
         $log.debug(' --- SettingService.getTagg:');
-        var list = localStorageService.get('filterItems');
+        var list = CashService.getStorage('filterItems');
         if (true) {
             SettingApi.get({Id: 'category'}).$promise
                 .then( function(resp) {
-                    $log.debug(resp);
+//                    $log.debug(resp);
                     scope.filterItems = resp.values;
                     return SettingApi.get({Id: 'tagg'}).$promise;
                 }).then( function(resp) {
-                    $log.debug(resp);
+//                    $log.debug(resp);
                     angular.forEach(resp.values, function(v) {
                         scope.filterItems.push(v);
                     });
@@ -77,9 +65,19 @@ settingService.service('SettingService', ['SettingApi', '$rootScope', 'localStor
         }
     };
 
+   this.getTagg = function (scope) {
+        $log.debug(' --- SettingService.getTagg:');
+
+        SettingApi.get({Id: 'tagg'}, function (resp) {
+//                $log.debug(resp);
+            scope.taggs = resp.values;
+            CashService.setStorage('tagg', resp);
+        });
+    };
+
     this.updateTaggs = function (tagg) {
         $log.debug(' --- SettingService.updateTaggs:' + tagg);
-        var taggs = localStorageService.get('tagg');
+        var taggs = CashService.getStorage('tagg');
         $log.debug(taggs);
         taggs.values.push(tagg);
 
@@ -87,16 +85,30 @@ settingService.service('SettingService', ['SettingApi', '$rootScope', 'localStor
             $log.debug(resp);
         });
     };
+
+
+    this.forceCashUpdate = function (){
+        SettingApi.get({Id: 'cashUpdate'}, function (resp) {
+            $log.debug(resp.values[0]);
+            if(resp.values[0] == 'true') {
+                CashService.clean();
+            }
+            CashService.setStorage('cashUpdate', resp);
+        });
+    };
+
+
+
 }]);
 
-settingService.factory('SettingApi', ['$resource', '$resourceInterceptor', '$log',
-    function ($resource, $resourceInterceptor, $log) {
+settingService.factory('SettingApi', ['$resource', '$log',
+    function ($resource, $log) {
 		$log.info(' --- SettingService.SettingApi.factory --- ');
 		return $resource('api/setting/:Id', {Id: '@Id'},
 		    {
-           	    'list': { method:'GET', isArray:true, cache:false, interceptor : $resourceInterceptor },
-           		'get': { method:'GET', interceptor : $resourceInterceptor },
-           		'update': { method:'PUT', interceptor : $resourceInterceptor }
+           	    'list': { method:'GET', isArray:true, cache:false},
+           		'get': { method:'GET'},
+           		'update': { method:'PUT'}
 			});
 	}
 ]);

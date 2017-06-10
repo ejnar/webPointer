@@ -27,7 +27,7 @@ class PageList extends BaseDomain {
     }
 
     def beforeInsert() { updated = new Date();}
-    def beforeUpdate() {}
+    def beforeUpdate() { updated = new Date();}
     def afterInsert() {}
     def afterUpdate() {}
 
@@ -91,7 +91,6 @@ class PageItem {
     String color
 
     Section section
-//    static transients = ['section']
 
     static constraints = {
         key(blank: true)

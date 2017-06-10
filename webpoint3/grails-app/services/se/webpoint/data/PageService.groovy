@@ -143,9 +143,9 @@ class PageService {
         }
         PageList pageList = PageList.findById(pageListId);
         pageList.pageParts.add(instance);
-        pageList.updated = new Date()
-        pageList.save flush:true
-        instance
+        pageList.updated = new Date();
+        pageList.save flush:true;
+        instance;
     }
 
 

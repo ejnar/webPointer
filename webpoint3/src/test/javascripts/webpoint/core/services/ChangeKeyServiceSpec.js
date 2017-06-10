@@ -178,6 +178,25 @@ describe("webpoint.core module", function() {
             expect(test).toEqual(result);
         });
 
+        it("should change key on You Dance over me", function() {
+            var data = '\n-  G/B   C   Dsus         G/B  C       Dsus\n' +
+                       'You Dance over me,  While I am    unaware,\n' +
+                       '    G/B   C   Dsus           G/B    C          Dsus\n' +
+                       'You sing  all around, but I never hear the sound';
+
+            var section = {};
+            section.key = 'G';
+            section.tokey = 'A';
+            section.data = data;
+            var result = ChangeKeyService.changeKey(section, false);
+
+            var test = '\n-  A/C#  D   Esus         A/C# D       Esus\n' +
+                       'You Dance over me,  While I am    unaware,\n' +
+                       '    A/C#  D   Esus           A/C#   D          Esus\n' +
+                       'You sing  all around, but I never hear the sound';
+
+            expect(test).toEqual(result);
+        });
 
     });
 });

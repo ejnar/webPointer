@@ -34,6 +34,9 @@ grails:
             proxies: false
     gorm:
         failOnError: true
+    databinding:
+        trimStrings: false                  # the default value is true
+        convertEmptyStringsToNull: true     # the default value is true
 info:
     app:
         name: '@info.app.name@'

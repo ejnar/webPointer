@@ -5,15 +5,19 @@
 var app = angular.module('webpoint.core');
 
     app.controller('AppController', AppController);
-    AppController.$inject = ['$rootScope', '$scope', '$http', '$uibModal', '$log', 'usSpinnerService', 'AppService'];
+    AppController.$inject = ['$rootScope', '$scope', '$http', '$uibModal', '$log', 'AuthService', 'AppStatusService'];
 
-    function AppController ($rootScope, $scope, $http, $uibModal, $log, usSpinnerService, AppService) {
-        $log.info('AppController');
-        $log.info(AppService.isAuthenticated());
-//        $scope.isAuthenticated = $rootScope.isAuthenticated != '';
+    function AppController ($rootScope, $scope, $http, $uibModal, $log, AuthService, AppStatusService) {
+
+        init();
+        function init() {
+            $log.info('AppController.init');
+            $scope.loadingTracker = AppStatusService.getLoadingTracker();
+            $scope.errorContainer = AppStatusService.getErrorContainer();
+        };
 
     	$scope.logout = function () {
-    		AppService.logout();
+    		AuthService.logout();
     	};
 
 		$scope.openPasswordModel = function () {
