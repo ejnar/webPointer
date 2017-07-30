@@ -51,7 +51,6 @@ class Section extends BaseDomain {
 //		stateless true
     }
     def beforeInsert () {
-        if(originalTitle == null) originalTitle = title;
         updated = new Date();
     }
     def beforeUpdate () { updated = new Date();}

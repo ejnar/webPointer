@@ -13,7 +13,7 @@ var module = angular.module('webpoint.screen');
             $log.debug(' --- MainViewController.mainViewListCtrl_gotoScreen - id:', id);
 
             var item = $filter("filter")($scope.items, {id: id});
-            var withoutkeys = item.length > 0 && item[0].special ? '/withoutkeys' : '';
+            var withoutkeys = item.length > 0 && $scope.withoutkeys ? '/withoutkeys' : '';
 
             $location.path(cfgScreenPath.SCREEN + id + withoutkeys);
         }
@@ -26,10 +26,7 @@ var module = angular.module('webpoint.screen');
                 $log.debug(' --- clean cash: ');
                 CashService.clean();
             }
-    		PageListApi.list( function (resp) {
-//    	        $log.debug(resp);
-    			$scope.items = resp;
-            });
+    		$scope.items = PageListApi.list();
     	}
 
     	$scope.mainViewListCtrl_clickExpand = function(p) {
@@ -40,12 +37,6 @@ var module = angular.module('webpoint.screen');
                 p.expanded = true;
                 PageListApi.get({Id: p.id }, function(resp) { $scope.pageList = resp; });
             }
-        }
-
-        $scope.mainViewListCtrl_goToSongList = function() {
-            $log.debug(' --- mainViewListCtrl_goToSongList ');
-            $location.path(cfgScreenPath.SONGLIST);
-
         }
 
     }

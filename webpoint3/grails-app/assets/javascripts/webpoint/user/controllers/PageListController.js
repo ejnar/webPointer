@@ -108,9 +108,9 @@ sectionController.controller('ModalInstanceCtrl',[ '$scope', '$location', '$uibM
 
 sectionController.controller('UpdatePageListCtrl', [
 	'$rootScope', '$scope', '$routeParams', '$location', '$log',
-	'cfgAppPath', 'properties', 'SectionsApi', 'PageListApi', 'PageListDataApi', '$filter', 'SettingService',
+	'cfgAppPath', 'properties', 'SectionsApi', 'PageListApi', 'PageListDataApi', '$filter', 'SettingService', 'PageService',
     function($rootScope, $scope, $routeParams, $location, $log,
-        cfgAppPath, properties, SectionsApi, PageListApi, PageListDataApi, $filter, SettingService) {
+        cfgAppPath, properties, SectionsApi, PageListApi, PageListDataApi, $filter, SettingService, PageService) {
         $log.debug(' - PageListController.UpdatePageListCtrl:');
 
         $scope.alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
@@ -197,19 +197,10 @@ sectionController.controller('UpdatePageListCtrl', [
 		$scope.updatePageListCtrl_addSectionToList = function(section) {
 			$log.debug(" --- PageListController.updatePageListCtrl_addSectionToList - section:", section);
 
-			var pageItem = {};
-			pageItem.key = '';
-			pageItem.color = 'white';
-			pageItem.style = 'default';
-//			pageData.sections = [];
-			pageItem.section = section;
-//			pageData.sectionMetas.push(meta);
-
-            PageListDataApi.save({pageListId: $routeParams.pageListId}, pageItem,    //
-                function (resp) {
-            	    $log.debug(resp);
-            		$scope.updatePageListCtrl_loadPageList();
-            	});
+            PageService.addSectionToList($routeParams.pageListId, section).$promise
+                .then( function(resp) {
+                    $scope.updatePageListCtrl_loadPageList();
+                });
 		}
 
 		$scope.updatePageListCtrl_delPageData = function(pageData) {

@@ -1,33 +1,50 @@
-<div id="content" ng-cloak layout-gt-sm="row" layout="column">
+<div ng-cloak  layout="column">
 
     <md-content  flex>
-        <md-toolbar layout="row" layout-xs="row" layout-sm="row" class="md-hue-2">
-            <div class="md-toolbar-tools">
-                <h1><a href="/"> Songpoint </a></h1>
-            </div>
-            <md-button aria-label="Open menu" ng-click="$mdMenu.open($event)">
-                <md-icon md-menu-align-target class="material-icons">menu</md-icon>
-            </md-button>
-        </md-toolbar>
+        <div ng-init="hideSongList = true" ng-include="'static/webpoint/screen/views/menu.html'"></div>
         <md-subheader >Song list</md-subheader>
-        <div ng-repeat="p in songs | orderBy:'title'" flex>
-            <p>
-                <a class="small" href="" ng-click="showAdvanced($event,p)">{{p.title}}</a>
-            </p>
 
+        <!-- div class="md-virtual">
+            <md-virtual-repeat-container id="vertical-container" >
+                <div md-virtual-repeat="s in infiniteItems" md-on-demand
+                     class="repeated-item" flex>
+                    <h5>
+                        {{s}}
+                    </h5>
+                    <md-divider ></md-divider>
+                </div>
+            </md-virtual-repeat-container>
+
+
+            <md-virtual-repeat-container id="vertical-container" md-top-index="topIndex">
+                <div md-virtual-repeat="o in alphabeticalList" md-item-size="10"
+                     class="repeated-item" flex>
+                    <h4>{{o.letter}}</h4>
+                    <div ng-repeat="s in o.list | orderBy:'title'">
+                        <div class="songItem">
+                            <a href="" ng-click="showAdvanced($event,s)">{{s.title}}</a>
+                        </div>
+                    </div>
+                </div>
+            </md-virtual-repeat-container>
+
+        </div -->
+        <md-divider ></md-divider>
+
+        <div class="songList" ng-repeat="o in alphabeticalList" flex>
+            <h4>{{o.letter}}</h4>
+            <div ng-repeat="s in o.list | orderBy:'title'">
+                <div class="songItem">
+                    <a href="" ng-click="showAdvanced($event,s)">{{s.title}}</a>
+                </div>
+            </div>
         </div>
 
-
-        <!-- md-virtual-repeat-container id="vertical-container">
-            <div md-virtual-repeat="p in items"
-                 class="repeated-item" flex>
-                <h5>
-                    <a href="" ng-click="songListCtrl_clickExpand(p)">{{p.title}}</a>
-                </h5>
-                <md-divider ></md-divider>
-            </div>
-        </md-virtual-repeat-container -->
-
     </md-content>
-
+    <!-- div>
+        <div infinite-scroll='loadMore()' infinite-scroll-distance='20'>
+            <img ng-repeat='image in images' ng-src='http://placehold.it/225x250&text={{image}}'>
+        </div>
+    </div -->
+    <div ng-include="'static/webpoint/screen/views/include/footer.html'"></div>
 </div>

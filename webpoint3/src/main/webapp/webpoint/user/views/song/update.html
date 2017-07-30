@@ -9,7 +9,7 @@
 		<div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-xs-4 col-sm-3 col-md-2">
+                    <div class="col-xs-3 col-sm-2 col-md-1 margin_width">
                         <div ng-if="doSave" ng-show="section.type!='IMAGE'" class="form-actions" > <!--  || sectionForm.$invalid -->
                             <button class="btn btn-primary btn-xs"
                                     ng-disabled="sectionForm.$error.required"
@@ -25,19 +25,19 @@
                                     ng-click="updateSectionCtrl_updateFile(sectionForm)"> Update file </button>
                         </div>
                     </div>
-                    <div class="col-xs-4 col-sm-3 col-md-2">
+                    <div class="col-xs-3 col-sm-2 col-md-1 margin_width">
                         <div class="form-group" ng-class="{ 'has-error' : sectionForm.sectionType.$invalid
                             && !sectionForm.sectionType.$pristine }" >
                             <!-- label class="control-label" for="sectionType_id">Type</label -->
                             <div class="controls">
                                 <select id="sectionType_id" name="sectionType" ng-model="section.type"
                                         ng-options="stype as stype for stype in stypes" required>
-                                    <option value=""> - Pick a type - </option>
+                                    <option value="">- Pick a type -</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-4 col-sm-3 col-md-2">
+                    <div class="col-xs-3 col-sm-2 col-md-2">
                         <div class="form-group" ng-class="{ 'has-error' : sectionForm.key.$invalid && !sectionForm.key.$pristine }" >
                             <!-- label class="control-label" for="language_id">Key</label
                                  ng-disabled="section.key != undefined && section.key != null" -->
@@ -49,7 +49,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-4 col-sm-3 col-md-2">
+                    <div class="col-xs-3 col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label><input type="checkbox" ng-click="updateSectionCtrl_addColumn2()" ng-model="column2">Column 2</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3 col-sm-2 col-md-2">
                         <div class="form-group" ng-class="{ 'has-error' : sectionForm.tokey.$invalid
                             && !sectionForm.tokey.$pristine }" >
                             <!-- label class="control-label" for="language_id">Key</label -->
@@ -61,27 +68,32 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-2 col-sm-3 col-md-2">
+                    <div class="col-xs-2 col-sm-2 col-md-1">
                         <div ng-show="section.type=='TEXTCHORDS' && section.tokey!=null" class="form-actions" >
                             <button class="btn btn-primary btn-xs"
                                     ng-disabled="sectionForm.$error.required"
-                                    ng-click="updateSectionCtrl_updateToKey(sectionForm)">Update to new key</button>
+                                    ng-click="updateSectionCtrl_updateToKey(sectionForm)">Update new key</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="panel-body">
-                <div class="form-group" ng-show="section.type!='IMAGE'"
+                <div class="form-group row" ng-show="section.type!='IMAGE'"
                      ng-class="{ 'has-error' : sectionForm.data.$invalid && !sectionForm.data.$pristine }" >
                     <!-- label class="control-label" for="data_id">Data</label -->
-                    <div class="controls" dynaheight>
-                        <textarea id="data_id" name="data" class="form-control textAreaData" rows="*"
-                                  ng-trim="false" ng-model="section.data"
-                                  ng-change="updateSectionCtrl_evaluateChange()" required></textarea>
+                    <div class="controls col-sm-6 col-md-5" dynaheight>
+                        <textarea id="data" name="data" class="form-control textAreaData" rows="*"
+                                  ng-trim="false" ng-model="section.data" ng-class="max_width_textarea"
+                                  required></textarea>
                     </div>
-                </div>
+                    <div class="controls col-sm-6 col-md-4" dynaheight ng-show="column2">
+                        <textarea id="data2" name="data2" class="form-control textAreaData max_with_col2" rows="*"
+                                  ng-trim="false" ng-model="data2"
+                                  ></textarea>
+                    </div>
 
+                </div>
                 <div class="form-group" ng-show="section.type=='IMAGE'">
                     <!-- label class="control-label" for="data_id">Data</label -->
                     <div class="controls row">

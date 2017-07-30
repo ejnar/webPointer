@@ -1,6 +1,6 @@
 <div layout="column" data-ng-init="vyCtrl_loadData()" ng-cloak>
     <section>
-        <div id="wrap">
+        <!-- div id="wrap" class="vySongArea">
             <table>
                 <tbody>
                 <tr class="vyRow">
@@ -13,8 +13,9 @@
                         <div class="vyImgArea"
                              ng-if="pageList.pageParts[currentPart].section.type == 'IMAGE'" >
                             <img class="stretch" alt=""
-                                 src="data:image/JPG;base64,{{pageList.pageParts[currentPart].section.objects[currentPage].base64}}">
+                                     src="data:image/JPG;base64,{{pageList.pageParts[currentPart].section.objects[currentPage].base64}}">
                         </div>
+
                     </td>
                     <td class="sideRightPageBtn" ng-click="vyCtrl_rightPage()"
                         ng-if="pageList.pageParts[currentPart].section.objects.length > 1">
@@ -23,13 +24,15 @@
                 </tr>
                 </tbody>
             </table>
-            <div ng-if="pageList.pageParts[currentPart].section.type == 'TEXT'
-                                || pageList.pageParts[currentPart].section.type == 'TEXTCHORDS'"
-                 class="vyMainArea"  ng-class="fontSize" layout="row"
-                 ng-bind-html="pageList.pageParts[currentPart].section.fdata" />
-        </div>
+        </div -->
         <div hide-xs class="sideLeftBtn sideBtn" ng-click="vyCtrl_left()" keyleft>
             <i class="material-icons md-48">chevron_left</i>
+        </div>
+        <div ng-if="pageList.pageParts[currentPart].section.type == 'TEXT'
+              || pageList.pageParts[currentPart].section.type == 'TEXTCHORDS'">
+
+            <div class="vyMainArea"  ng-class="fontSize" layout="row"
+                 ng-bind-html="pageList.pageParts[currentPart].section.data" />
         </div>
         <div class="menuToggleSideNav" ng-click="vyCtrl_toggleSideNavRight1()" aria-label="List">
             <i class="material-icons md-28">menu</i>
@@ -37,6 +40,8 @@
         <div hide-xs class="sideRightBtn sideBtn" ng-click="vyCtrl_right()" keyright>
             <i class="material-icons md-48">chevron_right</i>
         </div>
+
+
         <div>
             <md-sidenav class="md-sidenav-right"
                         md-component-id="sidenav-right_1"
@@ -82,7 +87,9 @@
                         <label>Text size:</label>
                         <md-select md-selected-text="vyCtrl_changeSize()" ng-model="selectedSize"
                                    class="md-no-underline md-select">
-                            <md-option ng-repeat="size in [0,1,2,3]" ng-value="size">Size {{size}}</md-option>
+                            <md-optgroup label="sizes">
+                                <md-option ng-repeat="size in [0,1,2,3]" ng-value="size" >Size {{size}}</md-option>
+                            </md-optgroup>
                         </md-select>
                     </md-input-container>
                     <md-divider></md-divider>
@@ -126,6 +133,12 @@
                     </md-button>
                 </md-content>
             </md-sidenav>
+
         </div>
+
     </section>
 </div>
+
+
+
+

@@ -16,6 +16,7 @@
 //= require /angular-http-auth/http-auth-interceptor
 //= require /angular-bootstrap/ui-bootstrap-tpls
 
+//= require jquery/jquery
 
 var app = angular.module("webpoint.core", [
     'http-auth-interceptor', 'ngRoute', 'ngResource', 'ngFileUpload',
@@ -28,10 +29,8 @@ console.log("webpoint.core manifest load complete.");
 
 app.constant(
 		'CONFIG', {
-			DEBUG_LOG: true
+			DEBUG_LOG: false
 		});
-
-
 
 
 app.config(function (localStorageServiceProvider) {

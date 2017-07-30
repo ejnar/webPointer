@@ -16,8 +16,6 @@
 //= require /angular-http-auth/http-auth-interceptor
 //= require /angular-material/angular-material
 
-//= require jquery/jquery
-
 
 var app = angular.module("webpoint.screen", [
     'webpoint.core',
@@ -33,8 +31,9 @@ app.constant(
 			pagelist:  '/pagelist',
 			print:  '/print',
             VY:  '/vy/',
-            SONGLIST:  '/songList/',
-            SONGITEM: '/song/'
+            SONGLIST:  '/songList',
+            SONGITEM: '/song/',
+            ABOUT: '/about'
 		});
 
 app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 'CONFIG',
@@ -74,6 +73,10 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
             when( cfgScreenPath.SONGITEM + ':id', {
                 templateUrl: 'static/webpoint/screen/views/song.html',
                 controller: 'SongItemtCtrl'
+            }).
+            when( cfgScreenPath.ABOUT, {
+                templateUrl: 'static/webpoint/screen/views/about.html',
+                controller: 'MenuCtrl'
             }).
             otherwise({
                 redirectTo: cfgScreenPath.pagelist

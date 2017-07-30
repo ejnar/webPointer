@@ -10,9 +10,10 @@ html, body {
 }
 body
 {
-   padding: 0;
-   color: #000 !important;
-   font: Verdana, Arial, 'sans-serif' !important;
+    font-size: 1.2em;
+    padding: 0;
+    color: #000 !important;
+    font: Verdana, Arial, 'sans-serif' !important;
 }
 .page-header{margin-top:0;}
 .pagination{margin-top:0;}
@@ -25,15 +26,19 @@ textarea.form-control {
 
 textarea.textAreaData{
     font-size: 1.18em;
-    max-width: 30em;
-    min-width: 20em;
+    /* max-width: 455px; */
+    min-width: 200px;
     /*white-space: pre;*/
 }
+.max_with_col1{max-width: 455px;}
+.max_with_col2{max-width: 340px;}
+
 .nowrap { white-space:nowrap;}
 .bold{ font-weight: bold;}
+.margin_width{ margin: 0 2.8em 0 0;}
 table td{
-   padding-top: 0.3em !important;
-   padding-bottom: 0.1em !important;
+   padding-top: 0.4em !important;
+   padding-bottom: 0.2em !important;
    padding-left: 0.1em !important;
 }
 table th{

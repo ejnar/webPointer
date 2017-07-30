@@ -37,7 +37,7 @@ app.constant(
 			PAGE_UPDATE: '/page/update/',
 			SONGS_VIEW: '/songs/view',
 			USER: '/user',
-			USER_EDIT: '/user/edit/',
+			USER_EDIT: '/user/:id',
 			USER_ADD: '/user/add',
 			ceatePageModal: 'static/webpoint/user/views/page/ceatePageModal.html'
 		});

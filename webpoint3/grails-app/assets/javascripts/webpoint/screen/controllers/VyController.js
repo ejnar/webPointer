@@ -2,13 +2,16 @@
 
 /* Controllers */
 
-var vyController = angular.module('webpoint.screen');
+var module = angular.module('webpoint.screen');
 
-vyController.controller('VyCtrl', [
-    '$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath',
-    'PageListApi', '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService', 'CashService', 'RemoveKeyService',
-    function list ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath,
-                    PageListApi, $mdDialog, properties, ChangeKeyService, VyApi, localStorageService, CashService, RemoveKeyService) {
+    module.controller('VyCtrl', VyCtrl);
+    VyCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath',
+                      'PageListApi', '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService',
+                      'CashService', 'RemoveKeyService'];
+
+    function VyCtrl ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath,
+                    PageListApi, $mdDialog, properties, ChangeKeyService, VyApi, localStorageService,
+                    CashService, RemoveKeyService) {
 
     	$scope.currentPart = 0;
     	$scope.currentPage = 0;
@@ -23,11 +26,11 @@ vyController.controller('VyCtrl', [
 //                        $log.debug(resp);
                         $scope.pageList = resp;
                         $scope.totalPart = $scope.pageList.pageParts.length;
-                        removeKeys($scope.pageList);
+                        formatText();
                     });
             }else{
                 var pageList = CashService.pop('PageList', $routeParams.pageListId);
-//                $log.debug(' ----------------- pageList: ', pageList);
+                $log.debug(' ----------------- pageList: ', pageList);
                 if(pageList == null){
                     PageListApi.get({Id: $routeParams.pageListId}).$promise
                         .then( function(resp) {
@@ -35,24 +38,46 @@ vyController.controller('VyCtrl', [
                             $scope.pageList = resp;
                             $scope.totalPart = $scope.pageList.pageParts.length;
                             CashService.stash('PageList',resp);
-                            removeKeys($scope.pageList);
+                            formatText();
                         });
                 }else{
                     $scope.pageList = pageList;
                     $scope.totalPart = $scope.pageList.pageParts.length;
-                    removeKeys($scope.pageList);
+                    formatText();
                 }
 			}
     	};
 
+    	function formatText(){
+    	    removeKeys($scope.pageList);
+            spliteColumns($scope.pageList);
+    	}
+
+
         function removeKeys(pageList) {
-            $log.debug($routeParams.withoutkeys);
             if($routeParams.withoutkeys){
                 for(var i=0; i < pageList.pageParts.length; i++){
                     var part = pageList.pageParts[i];
                     pageList.pageParts[i].section.data = RemoveKeyService.removeKeys(true,pageList.pageParts[i].section.data);
                 }
+            }
+        }
 
+        function spliteColumns(pageList) {
+            for(var i=0; i < pageList.pageParts.length; i++){
+                var part = pageList.pageParts[i];
+                var columns = pageList.pageParts[i].section.data.split('-column2-');
+                if(columns.length > 1){
+                    pageList.pageParts[i].section.fdata = '<div class="vyColumn">';
+                    pageList.pageParts[i].section.fdata += columns[0];
+                    pageList.pageParts[i].section.fdata += '</div>';
+
+                    pageList.pageParts[i].section.fdata += '<div class="vyColumn">';
+                    pageList.pageParts[i].section.fdata += columns[1];
+                    pageList.pageParts[i].section.fdata += '</div>';
+                }else{
+                    pageList.pageParts[i].section.fdata = pageList.pageParts[i].section.data;
+                }
             }
         }
 
@@ -117,9 +142,9 @@ vyController.controller('VyCtrl', [
             }else{
                 $scope.selectedSize = 1;
             }
-
+            return ' Size ' + $scope.selectedSize;
         };
-        $scope.vyCtrl_changeSize();
+        $scope.vyCtrl_changeSize(1);
 
         $scope.vyCtrl_toggleSideNavRight1 = buildToggler('sidenav-right_1', 'sidenav-right_2');
         $scope.vyCtrl_toggleSideNavRight2 = buildToggler('sidenav-right_2', 'sidenav-right_1');
@@ -204,6 +229,7 @@ vyController.controller('VyCtrl', [
             $scope.pageList.pageParts[$scope.currentPart].section.data = ChangeKeyService.changeKey(section, true);
             section.key = $scope.selectedKey;
             $log.debug(" Data: ", $scope.pageList.pageParts[$scope.currentPart].section.data);
+            formatText();
         };
 
         $scope.vyCtrl_print = function() {
@@ -233,17 +259,16 @@ vyController.controller('VyCtrl', [
                 .targetEvent(ev)
             );
         };
+    }
 
+    module.controller('PrintCtrl', PrintCtrl);
+    PrintCtrl.$inject = ['$scope', '$log', 'localStorageService'];
 
-}]);
+    function PrintCtrl ($scope, $log, localStorageService) {
 
-vyController.controller('PrintCtrl', [
-    '$scope', '$location', '$log', 'cfgScreenPath', 'localStorageService',
-    function list ($scope, $location, $log, cfgScreenPath, localStorageService) {
+        $scope.vyCtrl_loadItem = function() {
+            $log.debug("Print current: " );
+            $scope.section = localStorageService.get('printout');
+        };
 
-    $scope.vyCtrl_loadItem = function() {
-        $log.debug("Print current: " );
-        $scope.section = localStorageService.get('printout');
-    };
-
-}]);
+    }

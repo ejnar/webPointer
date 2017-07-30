@@ -9,21 +9,35 @@ var KEYS = ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B
 var KEYS = ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B:Cb'];
 var KEYLIST = ['C','C#','Db','D','D#','Eb','E','F','F#','Gb','G','G#','Ab','A','A#','Bb','H','B','Cb'];
 
-var MATCH_KEY_SUFIX = new RegExp("\\w{1}['sus','maj','m']{2}\\w", "gi");
+var MATCH_KEY_SUFIX = new RegExp("\\w{1,2}['sus','sus4','maj','m','m7','m6']{2}\\w", "gi");
+var MATCH_KEY_WORD_SUFIX = new RegExp("\\b(sus|sus4|maj|m|m7|m6)\\b", "gi");
 //var MATCH_KEY_SUFIX = new RegExp("["+KEYLIST+"]+["+KEY_SUFIX+"]", "gi");
 var MATCH_KEYS_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "gi");
 var MATCH_FIRST_KEYS_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "g");
 var MATCH_KEYROW_REG = new RegExp("\\b[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]{1,2}", "gi");
-var MATCH_CONTAINWORD_REG = new RegExp("\\w{2,}[^C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb,/,' ']\\w", "g")
+var MATCH_CONTAINWORD_REG = new RegExp("\\w{1,}[^C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb,/,' ']\\w", "g")
 
 app.service('ChangeKeyService', ['properties', '$log', function(properties, $log) {
 
-    this.foundKeyRow = function (containWord) {
+    this.foundKeyRow = function (containWord,keyRow) {
         var isKeyRow = false;
         if(containWord != null){
             for(var i=0; i < containWord.length; i++){
                 $log.debug(' --- containWord[i]: ', containWord[i]);
-                var word = containWord[i].match(MATCH_KEY_SUFIX);
+                var word;
+                if(keyRow){
+                    var w1 = containWord[i];
+                    for(var j=0; j < keyRow.length; j++){
+                        w1 = w1.replaceAll(keyRow[j], '');
+                    }
+                    var word = w1.match(MATCH_KEY_WORD_SUFIX);
+                    $log.debug(' word: ', word);
+                    if(word != null ){
+                        isKeyRow = true;
+                        break;
+                    }
+                }
+                word = containWord[i].match(MATCH_KEY_SUFIX);
                 $log.debug(' word: ', word);
                 if(word != null ){
                     $log.debug(word[0].match(MATCH_KEYS_REG) + ' ------------------- word: ', word);
@@ -47,12 +61,13 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
 
     this.validKeyRow = function (line) {
         var row = null;
-        $log.debug(' --- line: ', line);
+        $log.debug(' - validKeyRow: ', line);
         var keyRow = line.match(MATCH_KEYROW_REG);
         var containWord = line.match(MATCH_CONTAINWORD_REG);
+        var isKeyRow = this.foundKeyRow(containWord,keyRow);
         $log.debug(' --- keyRow: ', keyRow);
         $log.debug(' --- containWord: ', containWord);
-        var isKeyRow = this.foundKeyRow(containWord);
+        $log.debug(' --- isKeyRow: ', isKeyRow);
 
         if((keyRow != null && keyRow.length > 0) &&
             (containWord == null || (containWord != null && isKeyRow) ))

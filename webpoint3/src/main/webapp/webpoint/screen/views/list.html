@@ -1,55 +1,30 @@
 <div layout="column" data-ng-init="mainViewListCtrl_loadPageList()" ng-cloak>
 
     <md-content>
-        <md-toolbar class="md-hue-2">
-            <div class="md-toolbar-tools">
-                <h1 flex md-truncate><a href="/"> Songpoint </a></h1>
-                <md-menu md-position-mode="target-right target" >
-                    <md-button aria-label="Open menu" ng-click="$mdMenu.open($event)">
-                        <md-icon md-menu-align-target class="material-icons">menu</md-icon>
-                    </md-button>
-                    <md-menu-content width="4" >
-                        <md-menu-item>
-                            <md-button ng-click="mainViewListCtrl_goToSongList()">
-                                <div layout="row"> List song </div>
-                            </md-button>
-                        </md-menu-item>
-                        <md-menu-item>
-                            <md-button ng-click="ctrl.announceClick($index)">
-                                <div layout="row"> About </div>
-                            </md-button>
-                        </md-menu-item>
-                        <md-menu-item>
-                            <md-button ng-click="logout()">
-                                <div layout="row"> Logout </div>
-                            </md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-            </div>
-        </md-toolbar>
-
+        <div ng-include="'static/webpoint/screen/views/menu.html'"></div>
         <md-list>
-            <md-subheader class="md-no-sticky">List of songs collections</md-subheader>
-            <md-list-item ng-repeat="p in items">
-                <div flex="100" layout="column">
+            <md-subheader class="md-no-sticky">List of songs collections
+                <span flex-offset="0" flex-offset-gt-xs="5">
+                    <md-checkbox aria-label="Checkbox Remove key" ng-model="withoutkeys">Remove key</md-checkbox>
+                </span>
+            </md-subheader>
+            <div ng-repeat="p in items">
+                <div flex layout="column">
                     <div layout="row" >
-                        <p layout="row" flex="55" flex-sm="25" flex-gt-sm="15">
-                            <span class="expandSign" ng-if="p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">-</span>
-                            <span class="expandSign" ng-if="!p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">+</span>
+                        <p class="listItem">
+                            <a href class="expandSign" ng-if="p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">-</a>
+                            <a href class="expandSign" ng-if="!p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">+</a>
                             <a href ng-click="mainViewListCtrl_gotoScreen(p.id)">{{p.name}}</a>
                         </p>
-                        <p>
-                            <md-checkbox aria-label="Checkbox Remove key" class="md-primary" ng-model="p.special">Remove key</md-checkbox>
-                        </p>
                     </div>
-                    <div ng-if="p.expanded" layout="column">
-                        <span ng-repeat="part in pageList.pageParts">&nbsp;&nbsp;&bull;&nbsp;{{part.section.title}}</span>
+                    <div flex-offset="5" ng-if="p.expanded" >
+                        <div ng-repeat="part in pageList.pageParts">&nbsp;&nbsp;&bull;&nbsp;{{part.section.title}}</div>
                     </div>
                 </div>
                 <md-divider ></md-divider>
-            </md-list-item>
+            </div>
         </md-list>
 
     </md-content>
+    <div ng-include="'static/webpoint/screen/views/include/footer.html'"></div>
 </div>

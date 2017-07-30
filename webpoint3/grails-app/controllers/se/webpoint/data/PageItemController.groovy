@@ -42,7 +42,6 @@ class PageItemController extends RestfulController<PageItem>  {
 		log.info " --- save PageItem: "
 		log.debug params
 //        println request.reader.text
-
         request.JSON.each { k,v ->
             params[k] = v
 //            println k +':'+ v
@@ -53,6 +52,7 @@ class PageItemController extends RestfulController<PageItem>  {
 //		println location
 
 		response.addHeader(HttpHeaders.LOCATION, location)
+
 		respond instance, [status: CREATED]
 	}
 	

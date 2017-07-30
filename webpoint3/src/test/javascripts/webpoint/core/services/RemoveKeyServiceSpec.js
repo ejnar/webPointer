@@ -42,6 +42,31 @@ describe("webpoint.core module", function() {
 
         });
 
+        it("should remove keys", function() {
+
+            var data = '\n' +
+                        'Am         Dm\n' +
+                        'Du är en god Gud,\n' +
+                        'G7        Cmaj7      E/H\n' +
+                        'du är en god Gud,\n' +
+                        'Am        Dm7\n' +
+                        'du är en god Gud,\n' +
+                        'E7                      Am\n' +
+                        'full av barmhärtighet.';
+
+            var result = RemoveKeyService.removeKeys(false,data);
+
+            var test = '\n' +
+                        'Du är en god Gud,\n' +
+                        'du är en god Gud,\n' +
+                        'du är en god Gud,\n' +
+                        'full av barmhärtighet.\n' +
+                        '';
+
+            expect(test).toEqual(result);
+
+        });
+
 
 //        - Bb Gm Fsus F
 //        Din nåd är allt jag be - hö - ver //2 ~

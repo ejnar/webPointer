@@ -10,7 +10,7 @@ var app = angular.module('webpoint.core');
 
 
     function Access($rootScope, $log, CashService){
-        $log.info('AppService');
+        $log.info('Access');
 
         var access = {
             OK: 200,

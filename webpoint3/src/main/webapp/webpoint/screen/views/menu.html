@@ -1,0 +1,34 @@
+    <div>
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h1 flex md-truncate><a href="/"> Songpoint </a></h1>
+                <md-menu md-position-mode="target-right target" >
+                    <md-button aria-label="Open menu" ng-click="$mdMenu.open($event)">
+                        <md-icon md-menu-align-target class="material-icons">menu</md-icon>
+                    </md-button>
+                    <md-menu-content width="4" >
+                        <md-menu-item>
+                            <md-button href="#pagelist">
+                                <div layout="row"> Home </div>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item ng-hide="hideSongList">
+                            <md-button href="#songList">
+                                <div layout="row"> List song {{show}}</div>
+                            </md-button>
+                        </md-menu-item>
+                        <!-- md-menu-item>
+                            <md-button href="#about">
+                                <div layout="row"> About </div>
+                            </md-button>
+                        </md-menu-item -->
+                        <md-menu-item>
+                            <md-button ng-click="logout()">
+                                <div layout="row"> Logout </div>
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+        </md-toolbar>
+    </div>

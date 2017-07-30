@@ -2,14 +2,13 @@
 
 /* Controllers */
 
-var sectionController = angular.module('webpoint.user');
+var module = angular.module('webpoint.user');
 
-sectionController.controller('UpdateSectionCtrl', [
-    '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties',
-    'SectionsApi', 'ChangeKeyService', 'FileUploadService', 'Upload', '$timeout', '$filter',
-    function($scope, $routeParams, $location, $log, $q, cfgAppPath, properties,
-        SectionsApi, ChangeKeyService, FileUploadService, Upload, $timeout, $filter) {
-
+    module.controller('UpdateSectionCtrl', UpdateSectionCtrl);
+    UpdateSectionCtrl.$inject =  ['$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties',
+                                    'SectionsApi', 'ChangeKeyService', 'FileUploadService', 'Upload', '$timeout', '$filter'];
+    function UpdateSectionCtrl ($scope, $routeParams, $location, $log, $q, cfgAppPath, properties,
+            SectionsApi, ChangeKeyService, FileUploadService, Upload, $timeout, $filter) {
 
 		$scope.languages = properties.language;
 		$scope.stypes = properties.stypes;
@@ -27,6 +26,7 @@ sectionController.controller('UpdateSectionCtrl', [
                     .then(function(resp) {
                         $scope.section = resp;
                         $scope.doSave = false;
+                        initColumn();
                     });
             }
         }
@@ -38,21 +38,21 @@ sectionController.controller('UpdateSectionCtrl', [
             $scope.section.key = $scope.section.tokey;
         };
 
-        $scope.updateSectionCtrl_evaluateChange = function() {
-
-            $log.debug(' section 1 : ', $scope.section.data);
+        function evaluate() {
             $scope.section.data = $scope.section.data.stripHtml();
-            $log.debug(' section 2 : ', $scope.section.data);
-            $scope.textdata = angular.copy($scope.section.data);
+            var lines = $scope.section.data.split('\n');
+            var data = '';
+            angular.forEach(lines, function(line) {
+                line = line.rtrim();
+                data = data + line + '\n';
+            });
+            $scope.section.data = data;
         };
 
 	    $scope.updateSectionCtrl_updateSection = function () {
 	    	$log.debug(' --- SectionController.updateSectionCtrl_updateSection:');
-
-            $log.debug(' section.data1: ', $scope.section.data);
-            $scope.section.data = $scope.section.data.stripHtml();
-            $log.debug(' section.data2: ', $scope.section.data);
-
+            copyColumn2();
+            evaluate();
 	    	var promise = SectionsApi.update({Id: $scope.section.id}, $scope.section);
 	    	$q.all([promise]).then(function(data) {
     			$location.path(cfgAppPath.SONGDATA_LIST);
@@ -61,20 +61,17 @@ sectionController.controller('UpdateSectionCtrl', [
 	    
 		$scope.updateSectionCtrl_saveSection = function(form) {
 			$log.debug(' --- SectionController.updateSectionCtrl_saveSection:');
-			$log.debug($scope.section); 
+			$log.debug($scope.section);
 
-			var section = $scope.section;
-
-            var promise = SectionsApi.save(section);
+            copyColumn2();
+            evaluate();
+            var promise = SectionsApi.save($scope.section);
             $q.all([promise]).then(function(data) {
                 $location.path(cfgAppPath.SONGDATA_LIST);
             });
-//			SectionsApi.save(section).$promise
-//        		.then( function(resp) {
-//        		    $log.debug(resp);
-//        			$location.path(cfgAppPath.SONGDATA_LIST);
-//        		});
 	    }
+
+
 
 //	    $scope.updateSectionCtrl_onFileSelect = function() {
 //            $log.debug(' --- SectionController.updateSectionCtrl_onFileSelect:');
@@ -141,15 +138,49 @@ sectionController.controller('UpdateSectionCtrl', [
 
             }
         };
+        $scope.max_width_textarea = "max_with_col1";
+        $scope.updateSectionCtrl_addColumn2 = function() {
+            $log.debug('updateSectionCtrl_addColumn2 ' + $scope.column2);
+            splitColumn();
+        }
 
+        function initColumn(){
+            if($scope.section.data.indexOf('-column2-') > 0){
+                $scope.column2 = true;
+                splitColumn();
+            }
+        }
 
-}]);
+        function splitColumn(){
+             if($scope.column2){
+                $scope.max_width_textarea = "max_with_col2";
+                copyColumn2();
+            }else{
+                $scope.max_width_textarea = "max_with_col1";
+                if($scope.data2 && $scope.data2.length > 0){
+                    $scope.section.data += '\n\n' + $scope.data2;
+                }
+            }
+        }
 
+        function copyColumn2(){
+            if($scope.data2 && $scope.data2.length > 0){
+                $scope.section.data += '\n-column2-\n' + $scope.data2
+            }else{
+                var col = $scope.section.data.split('-column2-');
+                if(col.length > 1){
+                    $scope.section.data = col[0].trim();
+                    $scope.data2 = col[1].trim();
+                }
+            }
+        }
 
-sectionController.controller('GroupOfSectionCtrl', [
-    '$scope', '$rootScope', '$routeParams', '$location', '$filter', '$log', 'cfgAppPath',
-    'UserApi', 'SectionsApi',
-    function list ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath,
+    }
+
+    module.controller('GroupOfSectionCtrl', GroupOfSectionCtrl);
+    GroupOfSectionCtrl.$inject =  ['$scope', '$rootScope', '$routeParams', '$location', '$filter', '$log',
+                                    'cfgAppPath', 'UserApi', 'SectionsApi'];
+    function GroupOfSectionCtrl ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath,
     		UserApi, SectionsApi) {
 
 //		$scope.$on("LOAD_GROUPOFSECTION_EVENT", function () {   // event, args
@@ -271,12 +302,12 @@ sectionController.controller('GroupOfSectionCtrl', [
 //    	);
 
 
-}]);
+    }
 
-
-sectionController.controller('UpdateGroupSectionCtrl', [
-    '$rootScope', '$scope', '$routeParams', '$location', '$log', 'cfgAppPath', 'properties', 'SectionsApi', 'SettingService',
-    function($rootScope, $scope, $routeParams, $location, $log, cfgAppPath, properties, SectionsApi, SettingService) {
+    module.controller('UpdateGroupSectionCtrl', UpdateGroupSectionCtrl);
+    UpdateGroupSectionCtrl.$inject =  ['$rootScope', '$scope', '$routeParams', '$location', '$log', 'cfgAppPath',
+                                        'properties', 'SectionsApi', 'SettingService'];
+    function UpdateGroupSectionCtrl($rootScope, $scope, $routeParams, $location, $log, cfgAppPath, properties, SectionsApi, SettingService) {
 
 		SettingService.getTagg($scope);
 		SettingService.getCategory($scope);
@@ -364,7 +395,12 @@ sectionController.controller('UpdateGroupSectionCtrl', [
 	        });
 //	         $rootScope.$broadcast("LOAD_GROUPOFSECTION_EVENT");
 	    }
-}]);
+
+	    $scope.updateGroupSectionCtrl_editSection = function() {
+            $location.path(cfgAppPath.SONG_EDIT.replace(':id', $scope.section.id));
+        }
+
+    }
 
 
 

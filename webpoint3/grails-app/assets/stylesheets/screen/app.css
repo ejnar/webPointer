@@ -10,7 +10,7 @@ html, body {
 }
 body
 {
-   font-size: 0.85em;
+   font-size: 0.9em;
    color: #000;
    font: Verdana, Arial, 'sans-serif';
    margin: 0;
@@ -22,16 +22,24 @@ h1, h2, h3, h4, h5, h6, h7, h8 {
     margin: 0;
     margin-top: 0.4em;
 }
+footer {
+    font-size: 0.9em;
+    float: right;
+    margin: 2.0em 2.0em;
+}
+.noneDecoration{ text-decoration: none;}
+
 
 /* angular-material begian */
 /* Rules for sizing the icon. */
-.material-icons.md-16 { font-size: 1.8vh; }
-.material-icons.md-18 { font-size: 2.6vh; }
-.material-icons.md-20 { font-size: 1.8em; }
-.material-icons.md-22 { font-size: 3.0vw; }
-.material-icons.md-24 { font-size: 4.8vw; }
-.material-icons.md-36 { font-size: 6.2vw; }
-.material-icons.md-48 { font-size: 8.8vw; }
+.material-icons.md-16 { font-size: 1.6vh; }
+.material-icons.md-18 { font-size: 2.4vh; }
+.material-icons.md-20 { font-size: 1.6em; }
+.material-icons.md-22 { font-size: 2.8vw; }
+.material-icons.md-24 { font-size: 4.6vw; }
+.material-icons.md-28 { font-size: 5.4vw; }
+.material-icons.md-36 { font-size: 6.0vw; }
+.material-icons.md-48 { font-size: 8.4vw; }
 .padding-left-3 {margin-left: 5px;}
 .padding-bottom-3 {padding-bottom: 3px;}
 .icon-wrapper {margin: 0 0.1em; display: inline-flex; vertical-align: middle; align-items: center;}
@@ -46,14 +54,22 @@ p.icon-text{ margin: 0.1em 0.2em; }
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
 
+.md-virtual{
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 280px;
+}
+
 md-virtual-repeat-container {
   position: relative;
   display: block;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   border: solid 1px #ccc;
-  padding: 10px;
+  padding: 0px;
 }
+
 .virtualRepeatdemoDeferredLoading #vertical-container {
   height: 292px;
   width: 100%;
@@ -115,8 +131,13 @@ md-backdrop.md-sidenav-backdrop{
     top: 0; right: 0; bottom: 0; left: 0;
 }
 .expandSign{
+    font-size: 1.6em;
     font-weight:bold;
-    padding-right:0.6em;
+    margin: 0 1.0em;
+    text-decoration: none;
+}
+.listItem{
+    padding: 0;
 }
 table
 {
@@ -139,37 +160,33 @@ table tr.vyRow{
 	margin:0px;
     padding:0px;
 }
-div.vyArea_s0{ font-size: 3.0vw;}
-div.vyArea_s1{ font-size: 2.6vw;}
-div.vyArea_s2{ font-size: 2.2vh;}
-div.vyArea_s3{ font-size: 2.8vh;}
 table td.vyArea {
-	width:94%;
-	height:100%;
-	padding: 0.4em 0.05em 0.05em 0.2em;
+	width:100%;
+	padding: 0.6vw 0.05em 0.05em 0.15em;
 	margin: 0;
 }
 div.vyArea {
-    height:96%;
-    line-height: 110%;
+    height:100%;
+    line-height: 100%;
     white-space: pre;
-    overflow: scroll;
-    left: 0px;
-    top: 0px;
-
+    overflow-y: hidden;
+    padding: 0.6vw 0 1.0em 0;
+    margin: 0;
 }
+
+
 div.vyImgArea {
     height:100%;
     /*max-height: 1400px;*/
     left: 0px;
     top: 0px;
 }
-.songContent{
-    width: 480px;
+.songDialogContent{
+    margin: 0.2em 0.2em 0.2em 1.2em;
 }
 p.songtext {
-    font-size: 2.0vh;
-    padding: 0.4em 4.0em 0 0;
+    font-size: 1.9vw;
+    padding-top: 1.2em;
     white-space: pre;
     line-height: 96%;
     width: 100%
@@ -196,29 +213,7 @@ div.printOut .body{
     line-height: 110%;
     white-space: pre;
 }
-
-table td.sideLeftBtn{
-    width:1%;
-    height:100%;
-    /*max-height: 1400px;*/
-	color: #404040;
-	vertical-align: top;
-	padding: 0;
-	margin:0;
-	outline:none
-}
-table td.sideRightBtn{
-    width:1%;
-    height:100%;
-    /*max-height: 1400px;*/
-	color: #404040;
-	vertical-align: top;
-	padding: 0;
-	margin:0;
-	outline:none
-}
 table td.sideLeftPageBtn{
-    width:1%;
     height:100%;
 	color: #404040;
 	vertical-align: top;
@@ -247,9 +242,8 @@ div.toggleSideNav{
 	color: black;
 	font-size:5vw;
 	padding: 0;
-	margin: 0;
+	margin: 1.4vh 1.4vh 0 0;
 }
-
 span.glyphicon-plus-sign, span.glyphicon-pencil, span.glyphicon-remove-circle {
     font-size: 0.9em;
 }
@@ -277,7 +271,64 @@ button{
     display:table-cell;
     float:none;
 }
-@media (max-width: 380px) {
+
+div.sideBtn{
+    height:100%;
+    color: #404040;
+    padding: 4em 0 0 0;
+    margin:0;
+    outline:none
+}
+
+div.sideLeftBtn{
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+div.sideRightBtn{
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+div.vyMainArea {
+    height:100%;
+    width:80%;
+    white-space: pre;
+    padding: 0.8em 0 0 0;
+    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 6.2vw;
+    overflow-y: auto;
+}
+div.vyColumn {
+    font-size: 0.65em;
+    height:100%;
+    width:48%;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+}
+@media (max-width: 400px) {
+    .material-icons.md-28 { font-size: 8.0vh; }
+    .vyArea_s0{ font-size: 3.6vw;}
+    .vyArea_s1{ font-size: 3.0vw;}
+    .vyArea_s2{ font-size: 2.8vh;}
+    .vyArea_s3{ font-size: 3.6vh;}
+    div.menuToggleSideNav{
+    	position: fixed;
+    	top: 1px;
+    	right: 1.0vw;
+    	color: black;
+    	font-size:4.8vw;
+    }
+    .songDialogContent{
+        margin: 0.2em 0.2em 0.2em 0.6em;
+    }
+    p.songtext {
+        font-size: 3.2vw;
+        padding-top: 0.6em;
+    }
     md-sidenav,
     md-sidenav.md-locked-open-add-active,
     md-sidenav.md-closed.md-locked-open-add-active,
@@ -288,6 +339,17 @@ button{
     }
 }
 @media (min-width: 768px) {
+    .vyArea_s0{ font-size: 3.2vw;}
+    .vyArea_s1{ font-size: 2.4vw;}
+    .vyArea_s2{ font-size: 2.6vh;}
+    .vyArea_s3{ font-size: 3.2vh;}
+    div.menuToggleSideNav{
+        position: fixed;
+        top: 1px;
+        right: 6.4vw;
+        color: black;
+        font-size:5.8vw;
+    }
     .container-sm-height {
         display:table;
         padding-left:0px;
@@ -301,7 +363,18 @@ button{
         float:none;
     }
 }
-@media (min-width: 992px) {
+@media (min-width: 980px) {
+    .vyArea_s0 { font-size: 2.8vw;}
+    .vyArea_s1 { font-size: 2.4vw;}
+    .vyArea_s2 { font-size: 2.8vh;}
+    .vyArea_s3 { font-size: 3.8vh;}
+    div.menuToggleSideNav{
+    	position: fixed;
+    	top: 2px;
+    	right: 7.6vw;
+    	color: black;
+    	font-size:5.0vw;
+    }
     .container-md-height {
         display:table;
         padding-left:0px;
@@ -386,3 +459,43 @@ Then just add the alignments Css.
   color: #b94a48;
   display:inline-block;
 }
+div.songList{
+    margin: 0em 1.2em;
+}
+div.songItem > * {
+    display: block;
+    font-size: 1.05em;
+    margin: 0.2em;
+    padding: 0.4em 0.8em;
+    text-decoration: none;
+}
+
+div.songItem:hover{
+    background-color: #eee;
+}
+
+.md-select-css > *{
+    font-size: 0.6em !important;
+    color: white !important;
+    margin-top: 0.4em;
+    margin-right: 2.0em;
+}
+.md-container-select-css{
+    font-size: 0.8em !important;
+    background-color: white !important;
+}
+
+.md-select{
+    font-size: 0.8em;
+    padding: 0em;
+    margin: 0 0 0 0.4em;
+}
+
+/* Bug fix */
+td.md-swipe-left *, td.md-swipe-right *{
+   touch-action : pan-y;
+}
+td.md-swipe-up *, td.md-swipe-down *{
+   touch-action : pan-x;
+}
+
