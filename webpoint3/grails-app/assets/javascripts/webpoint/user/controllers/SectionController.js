@@ -54,24 +54,21 @@ var module = angular.module('webpoint.user');
             copyColumn2();
             evaluate();
 	    	var promise = SectionsApi.update({Id: $scope.section.id}, $scope.section);
-	    	$q.all([promise]).then(function(data) {
-    			$location.path(cfgAppPath.SONGDATA_LIST);
-    	    });
+	    	$q.all([promise]).then(function(data) {  });
 	    };
 	    
 		$scope.updateSectionCtrl_saveSection = function(form) {
 			$log.debug(' --- SectionController.updateSectionCtrl_saveSection:');
 			$log.debug($scope.section);
-
             copyColumn2();
             evaluate();
             var promise = SectionsApi.save($scope.section);
-            $q.all([promise]).then(function(data) {
-                $location.path(cfgAppPath.SONGDATA_LIST);
-            });
+            $q.all([promise]).then(function(data) {  });
 	    }
 
-
+        $scope.updateSectionCtrl_gotoList = function() {
+            $location.path(cfgAppPath.SONGDATA_LIST);
+        }
 
 //	    $scope.updateSectionCtrl_onFileSelect = function() {
 //            $log.debug(' --- SectionController.updateSectionCtrl_onFileSelect:');

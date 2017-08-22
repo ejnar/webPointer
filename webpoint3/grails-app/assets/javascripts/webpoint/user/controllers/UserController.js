@@ -2,66 +2,108 @@
 
 /* Controllers */
 
-var detailController = angular.module('webpoint.user');
+var module = angular.module('webpoint.user');
 
-detailController.controller('UserCtrl', [
-    '$rootScope', '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties',
-    'UserApi', 'RoleApi', 'RoleGroupApi',
-    
-    function($rootScope, $scope, $routeParams, $location, $log, $q, cfgAppPath, properties,
-    		UserApi, RoleApi, RoleGroupApi) {
-    	$log.debug(' --- UserController.userCtrl:');
+    module.controller('UserCtrl', UserCtrl);
+    UserCtrl.$inject = ['$scope', '$log', 'cfgAppPath', '$location', 'hashMap', 'UserApi', 'RoleApi', 'RoleGroupApi'];
+
+    function UserCtrl ($scope, $log, cfgAppPath, $location, hashMap, UserApi, RoleApi, RoleGroupApi) {
+        var userCtrl = this;
+
     	$scope.doSave = true;
-		RoleGroupApi.list( function (resp) { $scope.rolegroups = resp; });
-		RoleApi.list( function (resp) { $scope.roles = resp; });
-		UserApi.list( function (resp) { $log.debug(resp); });
-}]);                                               
+//		RoleGroupApi.list( function (resp) { $scope.rolegroups = resp; });
+//		RoleApi.list( function (resp) { $log.debug(resp);  $scope.roles = resp; });
+        userCtrl.gotoAddUser = gotoAddUser;
+        userCtrl.gotoEditUser = gotoEditUser;
+        userCtrl.newPassword = newPassword
 
-detailController.controller('EditUserCtrl', [
-    '$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties',
-    'UserApi', 'RoleApi', 'RoleGroupApi',
+        function init(){
+            $log.debug(' --- UserController.userCtrl: ');
+            userCtrl.users =  UserApi.User.list();
+            console.info(userCtrl.users);
+        }
 
-    function($scope, $routeParams, $location, $log, $q, cfgAppPath, properties,
-		    UserApi, RoleApi, RoleGroupApi) {
+        function newPassword(user){
+            hashMap.put('DOTOKEN',true);
+            gotoEditUser(user)
+        }
 
-	   $scope.updatUser = function () {
+        function gotoAddUser() {
+            $location.path(cfgAppPath.USER_ADD);
+        }
+
+        function gotoEditUser(user) {
+            $log.debug(user);  // userId
+            $location.path(cfgAppPath.USER_EDIT + user.id);
+        }
+        init();
+
+    }
+
+    module.controller('EditUserCtrl', EditUserCtrl);
+    EditUserCtrl.$inject = ['$scope', '$routeParams', '$log', 'cfgAppPath', 'hashMap', 'UserApi', 'RoleApi', 'RoleGroupApi'];
+    function EditUserCtrl ($scope, $routeParams, $log, cfgAppPath, hashMap, UserApi, RoleApi, RoleGroupApi) {
+        var userCtrl = this;
+
+        $log.debug( $routeParams);
+        loadUser () ;
+
+        $scope.doSave = false;
+        userCtrl.rolegroups = RoleGroupApi.list();
+        userCtrl.roles = RoleApi.list();
+        userCtrl.update = update;
+
+
+	    function update() {
 			$log.debug(' --- UserController.editUserCtrl_updatUser:');
-			$log.debug( $scope.user); 
-			UserApi.User.update({Id: $scope.user.username}, $scope.user).$promise
+			$log.debug( $scope.user);
+			UserApi.User.update({Id: $scope.user.id}, $scope.user).$promise
 				.then( function(resp) {
 					$log.debug(resp);
 				});
-		};
-	   
-		$scope.loadUser = function () {
-			$log.debug(' --- UserController.editUserCtrl_loadUser:');
-			UserApi.User.list().$promise       // {Id: 'dummy'}
-				.then(function(resp) {	
-					$log.debug(resp); 
-					$scope.user = resp[0]; 
-					$scope.user.confirm_email = resp[0].email;
+		}
+
+		function loadUser () {
+			$log.debug(' --- UserController.editUserCtrl_loadUser: ' + hashMap.get('DOTOKEN'));
+			UserApi.User.get({Id: $routeParams.userId, token: hashMap.get('DOTOKEN')}).$promise
+				.then(function(resp) {
+					$log.debug(resp);
+					$scope.user = resp;
+//					$scope.user.confirm_email = resp.email;
 				});
-		};
-}]); 
+			hashMap.remove('DOTOKEN')
+		}
+    }
 
-detailController.controller('AddUserCtrl', [ '$scope', '$log', 'UserApi', 'RoleApi', 'RoleGroupApi',
-	 function($scope, $log, UserApi, RoleApi, RoleGroupApi) {
-		$scope.doSave = true;
-		RoleGroupApi.list( function (resp) { $log.debug(resp); $scope.rolegroups = resp; });
-		RoleApi.list( function (resp) { $log.debug(resp); $scope.roles = resp; });
-	   
-		$scope.addUser = function () {
-			$log.debug(' --- UserController.addUserCtrl_addUser:');
-			var user = $scope.user;
-			user.password = 'tmp';
-			$log.debug(user);
-			UserApi.User.save(user).$promise
-    			.then( function(resp) {
-    				$log.debug(resp);
+    module.controller('AddUserCtrl', AddUserCtrl);
+    AddUserCtrl.$inject = ['$scope', '$log', 'UserApi', 'RoleApi', 'RoleGroupApi'];
 
-    			});
-		};
-}]); 
+    function AddUserCtrl ($scope, $log, UserApi, RoleApi, RoleGroupApi) {
+        var userCtrl = this;
+
+        $scope.doSave = true;
+        userCtrl.save = save;
+
+        function init(){
+            $log.debug(' --- AddUserCtrl.init: ');
+            userCtrl.rolegroups = RoleGroupApi.list();
+            userCtrl.roles = RoleApi.list();
+        }
+
+
+        function save() {
+            $log.debug(' --- UserController.AddUserCtrl_save:');
+            $log.debug($scope.user);
+            var user = $scope.user;
+            $log.debug(user);
+            UserApi.User.save(user).$promise
+                .then( function(resp) {
+                    $log.debug(resp);
+
+                });
+        };
+        init();
+    }
 
 
 //delete $scope.detail;

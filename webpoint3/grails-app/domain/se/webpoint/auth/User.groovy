@@ -15,10 +15,10 @@ class User extends BaseDomain{
 	String email
 	Date created
 	Date updated
-	boolean enabled = true
+	boolean enabled = false
 	boolean accountExpired = false
-	boolean accountLocked = false
-	boolean passwordExpired = false
+	boolean accountLocked = true
+	boolean passwordExpired = true
 	
 	static transients = ['springSecurityService']
 
@@ -66,9 +66,12 @@ class User extends BaseDomain{
 	}
 	
 	protected void generatePassword() {
-		password = org.apache.commons.lang.RandomStringUtils.randomAlphanumeric(10);
+		password = generatePassword(10);
 	}
 
+    static String generatePassword(count) {
+        org.apache.commons.lang.RandomStringUtils.randomAlphanumeric(count);
+    }
 
     static User create(String username, String email, boolean flush = false) {
         def instance = new User(username: username, email: email)

@@ -10,17 +10,14 @@
 //= require /angular/angular-route
 //= require /angular/angular-sanitize
 //= require /angular/angular-local-storage
-//= require /ng-modules/ng-file-upload
 //= require spin.js/spin
 //= require /angular/angular-spinner
 //= require /angular-http-auth/http-auth-interceptor
-//= require /angular-bootstrap/ui-bootstrap-tpls
 
 //= require jquery/jquery
 
 var app = angular.module("webpoint.core", [
-    'http-auth-interceptor', 'ngRoute', 'ngResource', 'ngFileUpload',
-    'ngSanitize', 'angularSpinner', 'ui.bootstrap', 'LocalStorageModule'])
+    'http-auth-interceptor', 'ngRoute', 'ngResource', 'ngSanitize', 'angularSpinner', 'LocalStorageModule'])
     .constant("contextPath", window.contextPath)
     .config(config);
 
@@ -29,7 +26,7 @@ console.log("webpoint.core manifest load complete.");
 
 app.constant(
 		'CONFIG', {
-			DEBUG_LOG: false
+			DEBUG_LOG: true
 		});
 
 
@@ -44,12 +41,12 @@ function config($httpProvider) {
     $httpProvider.interceptors.push('$resourceInterceptor');
 };
 
-
 app.factory('$resourceInterceptor', ['$q', '$log', '$rootScope', '$location', 'AppStatusService',
     function($q, $log, $rootScope, $location, AppStatusService) {
 //    $log.debug('$resourceInterceptor');
     var responseInterceptor = {
         request: function(config) {
+            AppStatusService.resolveXSS(config);
             AppStatusService.xhrCreationsCountUp();
             AppStatusService.updateStatus();
             config.headers = config.headers || {};
@@ -64,6 +61,7 @@ app.factory('$resourceInterceptor', ['$q', '$log', '$rootScope', '$location', 'A
             return $q.reject(rejection);
         },
         response: function(response) {
+            AppStatusService.initXSS(response);
             AppStatusService.xhrResolutionsCountUp();
             AppStatusService.updateStatus();
             return response;
@@ -71,7 +69,6 @@ app.factory('$resourceInterceptor', ['$q', '$log', '$rootScope', '$location', 'A
         responseError: function(responseError) {
             AppStatusService.xhrResolutionsCountUp();
             AppStatusService.updateStatus();
-
             AppStatusService.messageResolver(responseError);
             AppStatusService.statusMessageResolver(responseError);
             return $q.reject(responseError);
@@ -117,13 +114,6 @@ app.run(['$rootScope', '$http', '$location', '$log', 'CashService', 'Access',
         });
 
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
-            $log.debug('$routeChangeStart');
-            if(!Access.isAuthenticated()){
-//                event.preventDefault();
-                $location.path('/login');
-            }
-            $log.debug('next', next);
-            $log.debug('current', current);
 
             var templateUrl = "";
             var requireRoles = [];
@@ -135,17 +125,17 @@ app.run(['$rootScope', '$http', '$location', '$log', 'CashService', 'Access',
                 templateUrl = current.$$route.templateUrl;
                 requireRoles = current.requireRoles;
             }
-
+            Access.isAuthorized(templateUrl);
 //            if(requireRoles && !Access.hasAnyRole(requireRoles)){
 //                $log.debug('not authorized - hasAnyRole');
 //                $location.url('/login');
 //            }
-            if(templateUrl.indexOf('webpoint/user') > 0){
-                if(!Access.hasRole("ROLE_ADMIN")){
-                    $log.debug('not authorized - hasRole');
-                    $location.url('/login');
-                }
-            }
+//            if(templateUrl.indexOf('webpoint/user') > 0){
+//                if(!Access.hasRole("ROLE_ADMIN")){
+//                    $log.debug('not authorized - hasRole');
+//                    $location.url('/login');
+//                }
+//            }
 
          });
 
@@ -184,6 +174,9 @@ app.factory('hashMap', ['$rootScope', function ($rootScope) {
         },
         get: function (key) {
             return mem[key];
+        },
+        remove: function (key) {
+            return mem[key] = null;
         }
     };
 }]);

@@ -6,21 +6,11 @@
 //= require_tree templates
 
 //= require /angular/angular
-//= require /angular/angular-resource
-//= require /angular/angular-route
-//= require /angular/angular-sanitize
-//= require spin.js/spin
-//= require /angular/angular-spinner
-//= require /angular-http-auth/http-auth-interceptor
+//= require /ng-modules/ng-file-upload
 //= require /angular-bootstrap/ui-bootstrap-tpls
 
-//= require jquery/jquery
 
-
-var app = angular.module("webpoint.user", [
-    'webpoint.core',
-    'http-auth-interceptor', 'ngRoute', 'ngResource', 'ngSanitize', 'angularSpinner', 'ui.bootstrap']);
-
+var app = angular.module("webpoint.user", ['webpoint.core', 'ngFileUpload', 'ui.bootstrap']);
 
 console.log("webpoint.user manifest load complete.");
 
@@ -37,7 +27,7 @@ app.constant(
 			PAGE_UPDATE: '/page/update/',
 			SONGS_VIEW: '/songs/view',
 			USER: '/user',
-			USER_EDIT: '/user/:id',
+			USER_EDIT: '/user/',
 			USER_ADD: '/user/add',
 			ceatePageModal: 'static/webpoint/user/views/page/ceatePageModal.html'
 		});
@@ -83,16 +73,16 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath', 'CO
                 controller: 'ViewAllSongsCtrl'
             }).
             when( cfgAppPath.USER_ADD , {
-                templateUrl: 'static/webpoint/user/views/user/addUser.html',
-                controller: 'AddUserCtrl'
+                templateUrl: 'static/webpoint/user/views/user/user.html',
+                controller: 'AddUserCtrl as userCtrl'
             }).
-            when( cfgAppPath.USER_EDIT , {
-                templateUrl: 'static/webpoint/user/views/user/editUser.html',
-                controller: 'EditUserCtrl'
+            when( cfgAppPath.USER_EDIT + ':userId', {
+                templateUrl: 'static/webpoint/user/views/user/user.html',
+                controller: 'EditUserCtrl as userCtrl'
             }).
             when( cfgAppPath.USER, {
-                templateUrl: 'static/webpoint/user/views/user/editUser.html',
-                controller: 'UserCtrl'
+                templateUrl: 'static/webpoint/user/views/user/list.html',
+                controller: 'UserCtrl as userCtrl'
             }).
             when( '/spotify', {
                 templateUrl: 'static/webpoint/user/views/spotify/list.html',

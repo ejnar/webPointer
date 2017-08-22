@@ -41,8 +41,9 @@ class BasicRestController<T> extends RestfulController<T> {
     }
 
     protected void addHeader(controllerName, instanceId) {
-        response.addHeader(HttpHeaders.LOCATION,
-                g.createLink( resource: 'api', action: controllerName, Id: instanceId,  absolute: true))
+        String url = grailsLinkGenerator.link( resource: 'api', action: controllerName, id: instanceId,  absolute: true)
+        // namespace: hasProperty('namespace') ? this.namespace : null
+        response.addHeader(HttpHeaders.LOCATION, url)
     }
 
     protected void notFound() {

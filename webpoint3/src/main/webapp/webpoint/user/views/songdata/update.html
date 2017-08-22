@@ -1,11 +1,18 @@
 <div class="container">
-	<div ng-if="doSave" >
-		<h4 class="page-header">New Song</h4>
-	</div>
-	<div ng-if="!doSave" >
-		<h4 class="page-header">Update Song</h4>
-	</div>
-	<form role="form" name="metaForm" novalidate>
+    <form role="form" name="metaForm" novalidate>
+        <div class="row" >
+            <div class="col-md-10 col-xs-6" ng-if="doSave" ><h4 class="page-header">New Song</h4></div>
+            <div class="col-md-10 col-xs-6" ng-if="!doSave" ><h4 class="page-header">Update Song</h4></div>
+
+            <div class="col-md-2 col-xs-2 col-middle">
+                <button type="button" class="btn btn-success btn-sm"
+                        ng-disabled="metaForm.$error.required"
+                        ng-click="updateGroupSectionCtrl_editSection()">
+                    <span class="glyphicon glyphicon-plus-sign"></span><span>Go To Song</span>
+                </button>
+            </div>
+        </div>
+
 		<!-- pre>
             Modified orgTitle invalid: {{ groupForm.orgTitle.$invalid }}
             Modified orgTitle pristine: {{ groupForm.orgTitle.$pristine }}

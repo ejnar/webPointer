@@ -35,12 +35,24 @@ class BootStrap {
             return output
         }
 
+        JSON.registerObjectMarshaller(PasswordToken) {
+            def output = [:]
+            output['token'] = it.token
+            return output
+        }
+
         JSON.registerObjectMarshaller(UserDetail) {
             def output = [:]
+            output['id'] = it.id
             output['username'] = it.username
             output['email'] = it.email
+            output['enabled'] = it.enabled
+            output['passwordExpired'] = it.passwordExpired
+            output['accountLocked'] = it.accountLocked
+            output['pazz'] = it.pazz
+            output['token'] = it.token
             output['authority'] = it.authority
-            output['rolegroup'] = it.rolegroup
+            output['rolegroups'] = it.rolegroups
             return output
         }
 

@@ -6,22 +6,13 @@
 //= require_tree templates
 
 //= require /angular/angular
-//= require /angular/angular-resource
-//= require /angular/angular-route
-//= require /angular/angular-sanitize
 //= require /angular/angular-aria
 //= require /angular/angular-animate
-//= require spin.js/spin
-//= require /angular/angular-spinner
-//= require /angular-http-auth/http-auth-interceptor
+
 //= require /angular-material/angular-material
 
 
-var app = angular.module("webpoint.screen", [
-    'webpoint.core',
-    'ngMaterial', 'ngAnimate', 'ngAria',
-    'http-auth-interceptor', 'ngRoute', 'ngResource', 'ngSanitize', 'angularSpinner', 'ui.bootstrap']);
-
+var app = angular.module("webpoint.screen", ['webpoint.core', 'ngMaterial', 'ngAnimate', 'ngAria']);
 
 console.log("webpoint.screen manifest load complete.");
 
@@ -33,7 +24,8 @@ app.constant(
             VY:  '/vy/',
             SONGLIST:  '/songList',
             SONGITEM: '/song/',
-            ABOUT: '/about'
+            ABOUT: '/about',
+            ADDPASS: '/pass/'
 		});
 
 app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 'CONFIG',
@@ -77,6 +69,10 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
             when( cfgScreenPath.ABOUT, {
                 templateUrl: 'static/webpoint/screen/views/about.html',
                 controller: 'MenuCtrl'
+            }).
+            when( cfgScreenPath.ADDPASS  + ':token', {
+                templateUrl: 'static/webpoint/screen/views/auth/addpass.html',
+                controller: 'AddPassCtrl as vm'
             }).
             otherwise({
                 redirectTo: cfgScreenPath.pagelist

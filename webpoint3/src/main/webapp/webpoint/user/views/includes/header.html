@@ -37,20 +37,21 @@
 	                    </ul>
 	                </li>
 	            </ul>
-	            <ul class="nav navbar-nav navbar-right">
-	                <li ng-show="isAuthenticated()" class="dropdown user-avatar" uib-dropdown on-toggle="toggled(open)">
+	            <ul class="nav navbar-nav navbar-right" ng-show="isAuthenticated()">
+	                <li class="dropdown user-avatar" uib-dropdown on-toggle="toggled(open)">
 	                    <a href="" class="dropdown-toggle" uib-dropdown-toggle >
 	                        <span>
 	                            <img src="http://www.gravatar.com/avatar/{{currentUser.md5HashEmail}}?s=20&amp;d=mm&amp;r=g">
 	                            <span>{{user.name}}<i class="caret"></i></span>
 	                        </span>
 	                    </a>
-		                <ul class="dropdown-menu">
-		                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#user/add">
-	                        	<i class="glyphicon glyphicon-plus"></i> Add User</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1"  ng-click="openPasswordModel()">
+		                <ul class="dropdown-menu" data-ng-controller="MenuController">
+
+                            <li ng-show="isAdmin()" role="presentation"><a role="menuitem" tabindex="-1" href="#user">
+	                        	<i class="glyphicon glyphicon-plus"></i> List User</a></li>
+							<li ng-show="isAdmin()" role="presentation"><a role="menuitem" tabindex="-1"  ng-click="openPasswordModel()">
 	                        	<i class="glyphicon glyphicon-plus"></i> Update password</a></li>	                      
-	                      	<li role="presentation"><a role="menuitem" tabindex="-1"  ng-click="openGroupModel()">
+	                      	<li ng-show="isAdmin()" role="presentation"><a role="menuitem" tabindex="-1"  ng-click="openGroupModel()">
 	                        	<i class="glyphicon glyphicon-plus"></i> Add Group</a></li>	
 	                     
 		                    <li class="divider"></li>

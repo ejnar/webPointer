@@ -9,14 +9,9 @@ var module = angular.module('webpoint.screen');
 
     function MenuCtrl ($scope, $location, $log, cfgScreenPath, PageListApi, properties, $filter, CashService) {
 
-
-
         $scope.goToSongList = function() {
             $log.debug(' --- mainViewListCtrl_goToSongList ');
             $location.path(cfgScreenPath.SONGLIST);
 
         }
-
     }
-
-

@@ -6,10 +6,10 @@ var app = angular.module('webpoint.core');
 
 
     app.factory('Access', Access);
-    Access.$inject = ['$rootScope', '$log', 'CashService'];
+    Access.$inject = ['$rootScope', '$log', '$location', 'CashService'];
 
 
-    function Access($rootScope, $log, CashService){
+    function Access($rootScope, $log, $location, CashService){
         $log.info('Access');
 
         var access = {
@@ -19,12 +19,15 @@ var app = angular.module('webpoint.core');
             UNAUTHORIZED: 401,
             // "we know who you are, and your profile does not allow you to access this resource"
             FORBIDDEN: 403,
+            isAdmin: isAdmin,
             hasRole: hasRole,
             hasAnyRole: hasAnyRole,
-            isAuthenticated: isAuthenticated
-
+            isAuthenticated: isAuthenticated,
+            isAuthorized: isAuthorized
         }
         return access;
+
+        function isAdmin(){return hasRole("ROLE_ADMIN");}
 
         function hasRole(role) {
             var roles = CashService.getStorage("roles");
@@ -43,6 +46,19 @@ var app = angular.module('webpoint.core');
                 return false;
             else
                 return true;
+        }
+
+        function isAuthorized(templateUrl) {
+            var pass = $location.url().indexOf('pass/');
+            if(!isAuthenticated() && pass != 1){
+                $location.path('/login');
+            }
+            if(templateUrl.indexOf('webpoint/user') > 0){
+                if(!hasRole("ROLE_ADMIN")){
+                    $log.debug('not authorized - hasRole');
+                    $location.url('/login');
+                }
+            }
         }
 
     }

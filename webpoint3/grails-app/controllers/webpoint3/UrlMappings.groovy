@@ -12,28 +12,31 @@ class UrlMappings {
 //            }
 //        }
 
-        "/api/guest/rolegroups"(resources:"RoleGroup")
-        "/api/guest/roles"(resources:"Role")
-        "/api/guest/user"(resources:"UserDetail")
+//        "/api/guest/rolegroups"(resources:"RoleGroup")
+//        "/api/guest/roles"(resources:"Role")
+//        "/api/guest/user"(resources:"UserDetail")
 
-        "/api/guest/viewer"(resources:"ViewerList")
-        "/api/guest/sections"(resources:"Section")
+//        "/api/guest/viewer"(resources:"ViewerList")
+//        "/api/guest/sections"(resources:"Section")
 
-        "/api/guest/pagelist"(resources:"PageList"){
-            "/pageItem"(resources:"PageItem")
-        }
+//        "/api/guest/pagelist"(resources:"PageList"){
+//            "/pageItem"(resources:"PageItem")
+//        }
 
         "/api/guest/vy/$group/$pages"(controller: "Vy", action: "index") {
             constraints {
                 // apply constraints here
             }
         }
+
         "/api/guest/setting"(resources:"Setting")
 
         "/api/rolegroups"(resources:"RoleGroup")
         "/api/roles"(resources:"Role")
         "/api/user"(resources:"UserDetail")
         "/api/auth/$action?"(controller: "Auth" )
+
+        "/api/guest/$action/$value?"(controller: "PasswordToken" )
 
         "/api/sections"(resources:"Section")
         "/api/sections/upload/$id"(controller: "Section", action: "upload")

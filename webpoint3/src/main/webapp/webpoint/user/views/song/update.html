@@ -1,10 +1,14 @@
 <div class="container">
-	<div ng-if="doSave" >
-			<h4 class="page-header">New Song</h4>
-		</div>
-		<div ng-if="!doSave" >
-			<h4 class="page-header">Update Song</h4>
-	</div>
+    <div class="row" >
+        <div class="col-md-10 col-xs-6" ng-if="doSave"><h4 class="page-header">New Song</h4></div>
+        <div class="col-md-10 col-xs-6" ng-if="!doSave"><h4 class="page-header">Update Song</h4></div>
+
+        <div class="col-md-2 col-xs-2 col-middle">
+            <button type="button" class="btn btn-success btn-sm" ng-click="updateSectionCtrl_gotoList()">
+                <span class="glyphicon glyphicon-plus-sign"></span><span>Go Back to list</span>
+            </button>
+        </div>
+    </div>
 	<form role="form" name="sectionForm" novalidate >
 		<div class="panel panel-default">
             <div class="panel-heading">
@@ -114,7 +118,7 @@
                         </div>
 
                     </div>
-                    <div class="controls row">
+                    <div class="controls row" >
                         <div ng-repeat="o in section.objects"  class="col-xs-16 col-sm-12 col-md-8">
                             <img width="400"
                                  src="data:image/JPG;base64,{{o.base64}}">

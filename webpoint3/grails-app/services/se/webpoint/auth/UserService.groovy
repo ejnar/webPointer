@@ -12,33 +12,108 @@ class UserService {
 	private static final log = LogFactory.getLog(this)
 	SpringSecurityService springSecurityService
 	def passwordEncoder
-	
-	
-	@Transactional(readOnly = true)
-	def getUserDetail(){
-		User user = springSecurityService.getCurrentUser()
-		
-		return new UserDetail(username: user.username, email: user.email );
+
+    /**
+     * Get one User
+     *
+     * @param id
+     * @param doToken equal to true generate a token if token is missing and return token
+     * @return
+     */
+    @Transactional(readOnly = true)
+	def getUserDetail(id, doToken){
+        def token;
+        User user;
+        if(id == null) {
+            user = springSecurityService.getCurrentUser()
+        }else{
+            user = User.findById(id)
+            if(doToken) {
+                PasswordToken t = newPasswordToken(id)
+                token = t.token;
+            }
+        }
+        return mapUserDetail(user,token);
 	}
-	
-	
-	def updateUser(String username, String email){
+
+    /**
+     * Get User list
+     *
+     * @return
+     */
+    @Transactional(readOnly = true)
+    def getUserDetails(){
+        List<UserDetail> userDetails = new ArrayList<>()
+        User.findAll().each{ u ->
+            userDetails.add(mapUserDetail(u,null))
+        }
+        return userDetails;
+    }
+
+
+    private def mapUserDetail(user,token){
+        Set<String> rolegroups = user.getAuthoritiesExternal()*.name
+
+//        Set<UserRole> userRole = UserRole.findAllByUser(user);
+//        userRole.each{ u ->
+//            println u.user.username
+//            println u.role
+//        }
+
+        return new UserDetail(
+                id: user.id, username: user.username, token: token,
+                enabled: user.enabled, passwordExpired: user.passwordExpired, accountLocked: user.accountLocked,
+                email: user.email, rolegroups: rolegroups )
+    }
+
+
+    private def newPasswordToken(id){
+        User user = User.findById(id);
+        PasswordToken token = PasswordToken.findByUserId(user.id);
+        if(token == null) {
+            token = PasswordToken.create(user.id, user.email, user.generatePassword(50));
+            user.enabled = true
+            user.save(failOnError: true)
+        }
+        return token;
+    }
+
+    def update(instance){
+        User user = User.findById(instance.id)
+        user.email = instance.email
+        user.enabled = instance.enabled
+        user.accountLocked = instance.accountLocked
+        user.save(failOnError: true)
+        return mapUserDetail(user,null);
+    }
+
+
+
+
+    def updateUserEmail(String username, String email){
 		User user = User.findByUsername(username)
 		user.email = email
 		user.save(failOnError: true)
-		
+
 		return new UserDetail(username: user.username, email: user.email );
 	}
-	
-	
+
+    /**
+     * Create a new user with default settings
+     *
+     * @see User
+     * @param instance
+     * @return
+     */
 	def saveNewUser(instance){
 		log.debug(' --- Create new user - username: '+ instance.username +
-                ' authority: '+ instance.authority +' rolegroup: '+ instance.rolegroup)
+                ' authority: '+ instance.authority +' rolegroup: '+ instance.rolegroups)
 		Role role = Role.findByAuthority(instance.authority);
         log.debug(role)
-		RoleGroup group = RoleGroup.findByName(instance.rolegroup);
+
+		RoleGroup group = RoleGroup.findByName(instance.rolegroups[0]);
         log.debug(group)
-		
+
 		User user = User.findByUsername(instance.username)
 		try {
             if (user == null) {
@@ -106,17 +181,59 @@ class UserService {
 		if (!currentUser) {
 			return
 		}
-		if (passwordEncoder.isPasswordValid(currentUser.password, password.currentPassword, null)) {	
+		if (passwordEncoder.isPasswordValid(currentUser.password, password.currentPassword, null)) {
 			if (password.newPassword.equals(password.confirmPassword)) {
 				currentUser.password = password.newPassword
 				currentUser.save flush:true
-			} 
+			}
 		}else{
 			log.error(' --- Pssword fail to match');
 			throw new GrailsWrappedRuntimeException()
 		}
-
 	}
+
+
+    def setNewPassword(UserPassword password, xss_token) {
+        log.debug(' --- setNewPassword ' + xss_token)
+        if(!xss_token){
+            log.error(' --- xss_token is null');
+            throw new GrailsWrappedRuntimeException()
+        }
+
+        PasswordToken token = PasswordToken.findByToken2(xss_token);
+        User user = User.get(token.userId)
+        if (!user) {
+            log.error(' --- user is null');
+            throw new GrailsWrappedRuntimeException()
+        }
+        if(token.validate(user.email, password.token, xss_token)){
+            user.password = password.newPassword
+            user.passwordExpired = false
+            user.accountLocked = false
+            user.enabled = true
+            user.save flush: true
+            token.delete flush: true
+            println user.password
+        }else{
+            log.error(' --- Password and token fail to match');
+            throw new GrailsWrappedRuntimeException()
+        }
+    }
+
+    def getToken(String arg) {
+        log.debug(' --- getToken ' + arg)
+        PasswordToken token = PasswordToken.findByToken(arg);
+        if(token == null){
+            log.error(' --- Password fail to match');
+            throw new GrailsWrappedRuntimeException()
+        }
+        token.token2 = User.generatePassword(20);
+        token.save flush:true
+
+        return token;
+    }
+
+
 
     def addAuthority(RoleGroup newGroup, Role role){
 

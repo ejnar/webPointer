@@ -9,13 +9,22 @@ userService.factory('UserApi', ['$resource', '$log',
 	$log.debug(' --- UserApi.factory --- '); // interceptor :$resourceInterceptor
 	
 	return	{ 
-			User: $resource('api/user/:Id', {Id: '@Id'},
+			    User: $resource('api/user/:Id', {Id: '@Id'},
 					{
            				'list': { method:'GET', isArray:true, cache:false},
            				'get': { method:'GET'},
            				'save': { method:'POST'},
            				'update': { method:'PUT'}
-					})
+					}),
+				Token: $resource('api/guest/token/:token', {token: '@token'},
+                    {
+                        'get': { method:'GET'},
+                        'update': { method:'PUT'}
+                    }),
+                Pass: $resource('api/guest/update/:token', {token: '@token'},
+                    {
+                        'update': { method:'PUT'}
+                    })
 			};
 	}
 ]);

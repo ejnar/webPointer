@@ -90,3 +90,4 @@ grails create-app webpoint3 --profile angular --features mongodb, asset-pipeline
  * adapt menu icon on song vy page
  * fix md-virtual-repeat-container on songlist
  * add title on song text edit page
+ * change authority to a list on UserDetail

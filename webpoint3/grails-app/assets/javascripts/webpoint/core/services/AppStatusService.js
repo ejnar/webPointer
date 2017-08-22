@@ -6,23 +6,25 @@ var app = angular.module('webpoint.core');
 
 
     app.factory('AppStatusService', AppStatusService);
-    AppStatusService.$inject = ['$rootScope', '$log', 'usSpinnerService', '$timeout', '$location'];
+    AppStatusService.$inject = ['$rootScope', '$log', 'usSpinnerService', '$timeout', '$location', 'CashService'];
 
 
-    function AppStatusService($rootScope, $log, usSpinnerService, $timeout, $location){
+    function AppStatusService($rootScope, $log, usSpinnerService, $timeout, $location, CashService){
         $log.info('AppStatusService');
         var service = {
-        		isLoading : isLoading,
-                updateStatus : updateStatus,
-                xhrCreationsCountUp : xhrCreationsCountUp,
-                xhrResolutionsCountUp: xhrResolutionsCountUp,
-                getLoadingTracker: getLoadingTracker,
-                setBusy: setBusy,
-        		getErrorContainer : getErrorContainer,
-        		submitError : submitError,
-        		submitPromiseToError : submitPromiseToError,
-        		statusMessageResolver: statusMessageResolver,
-        		messageResolver: messageResolver
+            isLoading : isLoading,
+            updateStatus : updateStatus,
+            xhrCreationsCountUp : xhrCreationsCountUp,
+            xhrResolutionsCountUp: xhrResolutionsCountUp,
+            getLoadingTracker: getLoadingTracker,
+            setBusy: setBusy,
+            getErrorContainer : getErrorContainer,
+            submitError : submitError,
+            submitPromiseToError : submitPromiseToError,
+            statusMessageResolver: statusMessageResolver,
+            messageResolver: messageResolver,
+            initXSS: initXSS,
+            resolveXSS: resolveXSS
         };
 
         var xhrCreations = 0;
@@ -82,7 +84,7 @@ var app = angular.module('webpoint.core');
         }
 
         function submitError(message) {
-        	console.info(message);
+//        	console.info(message);
             errorContainer.message = message;
 
             $timeout(function(){
@@ -115,6 +117,21 @@ var app = angular.module('webpoint.core');
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams, fromState) {
             errorContainer.message = undefined;
         });
+
+        function initXSS(response) {
+            if(response.headers('XSS-Token')){
+                CashService.setSessionStorage('XSS-Token', response.headers('XSS-Token'));
+            }
+        }
+
+        function resolveXSS(config){
+            var token = CashService.getSessionStorage ('XSS-Token');
+            if(token){
+                config.headers['XSS-Token'] = token;
+                console.info(config);
+                CashService.setSessionStorage('XSS-Token', null);
+            }
+        }
 
         return service;
     }
