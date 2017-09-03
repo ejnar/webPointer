@@ -22,6 +22,7 @@ class UrlMappings {
 //        "/api/guest/pagelist"(resources:"PageList"){
 //            "/pageItem"(resources:"PageItem")
 //        }
+        "/api/guest/binarydoc"(resources:"BinaryDoc")
 
         "/api/guest/vy/$group/$pages"(controller: "Vy", action: "index") {
             constraints {
@@ -40,6 +41,7 @@ class UrlMappings {
 
         "/api/sections"(resources:"Section")
         "/api/sections/upload/$id"(controller: "Section", action: "upload")
+        "/api/binarydoc"(resources:"BinaryDoc")
 
 //        "/api/groupsofsections"(resources: "GroupOfSection"){
 //            "/sectionmetas"(resources: "SectionMeta")

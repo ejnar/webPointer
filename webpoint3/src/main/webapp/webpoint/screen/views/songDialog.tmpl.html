@@ -1,22 +1,15 @@
 <md-dialog flex-xs="95" layout-fill aria-label="Song">
     <form ng-cloak>
         <md-toolbar>
-            <div layout="row" layout-xs="column" class="md-toolbar-tools">
-                <div layout="row">
-                    <h5 hide-xs>{{song.title}}</h5>
-                    <h6 hide-gt-xs>{{song.title}}</h6>
-                    <span flex></span>
-                    <md-button hide-gt-xs class="md-icon-button" ng-click="cancel()">
-                        <md-icon md-menu-align-target class="material-icons md-36">close</md-icon>
-                    </md-button>
-                </div>
-                <span hide-xs flex></span>
-                <div hide-xs layout="row">
-                    <md-card-content>
+            <div layout="row" class="md-toolbar-tools">
+                <h5 hide-xs>{{song.title}}</h5>
+                <h6 hide-gt-xs>{{song.title}}</h6>
+                <span flex></span>
+                <div hide-xs>
+                    <md-card-content layout="row">
                         <div layout="column" layout-align="space-between center">
                             <md-select ng-change="songItemtCtrl_selectedSongList()" placeholder="Add song" class="md-select-css"
                                     ng-model="selectedSongLists"  data-md-container-class="md-container-select-css" multiple>
-
                                 <md-optgroup label="songLists">
                                     <md-option ng-value="item" ng-repeat="item in songLists">{{item.name}}</md-option>
                                 </md-optgroup>
@@ -24,8 +17,8 @@
                         </div>
                     </md-card-content>
                 </div>
-                <md-button hide-xs class="md-icon-button" ng-click="cancel()">
-                    <md-icon md-menu-align-target class="material-icons ">close</md-icon>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-menu-align-target class="material-icons">close</md-icon>
                 </md-button>
             </div>
         </md-toolbar>
@@ -33,21 +26,30 @@
         <md-dialog-content>
             <div class="songDialogContent">
                 <div layout="row" layout-xs="column">
-                    <div flex="25">
-                        <h4>Links:</h4>
-                        <div ng-repeat="l in song.oLinks" flex>
-                            <a href="{{l.url}}" target="blank">{{l.name}}</a>
-                        </div>
+                    <div show-gt-sm hide flex="20" class="dialogInfo">
+                        <h4>Category:</h4>
+                        <ul>
+                            <li>{{song.category}}</li>
+                            <li ng-repeat="t in song.taggs" ><span>{{t}}</span></li>
+                        </ul>
                     </div>
-                    <div flex class="dialogInfo">
-                        <h4>Category:</h4><span>{{song.category}}</span>
-                        <div ng-repeat="t in song.taggs" flex>
-                            <span>{{t}}</span>
+                    <div layout="row" flex="40" flex-xs="60" class="dialogInfo">
+                        <h4>Links:</h4>
+                        <ul>
+                            <li ng-repeat="l in song.oLinks" ><a href="{{l.url}}" target="blank"><span>{{l.name}}</span></a></li>
+                        </ul>
+                    </div>
+                    <div hide-xs flex="20" class="dialogInfo">
+                        <div class="icon-wrapper pointer" ng-click="vyCtrl_print()" >
+                            <i class="material-icons md-20">local_printshop</i><p class="icon-text"> Print </p>
                         </div>
                     </div>
                 </div>
-                <div layout="row" flex>
-                    <p class="songtext">{{song.data}}</p>
+                <div ng-if="song.type != 'IMAGE'" layout="row" flex class="songtext"
+                     ng-bind-html="song.fdata" />
+
+                <div class="imageArea" ng-if="song.type == 'IMAGE'">
+                    <img class="smallStretch" src="data:image/JPG;base64,{{song.binary.$$state.value[0].base64}}">
                 </div>
             </div>
 

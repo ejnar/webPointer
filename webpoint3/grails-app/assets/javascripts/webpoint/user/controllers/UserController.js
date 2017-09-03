@@ -5,9 +5,9 @@
 var module = angular.module('webpoint.user');
 
     module.controller('UserCtrl', UserCtrl);
-    UserCtrl.$inject = ['$scope', '$log', 'cfgAppPath', '$location', 'hashMap', 'UserApi', 'RoleApi', 'RoleGroupApi'];
+    UserCtrl.$inject = ['$scope', '$log', 'cfgAppPath', '$location', 'hashMap', 'UserApi'];
 
-    function UserCtrl ($scope, $log, cfgAppPath, $location, hashMap, UserApi, RoleApi, RoleGroupApi) {
+    function UserCtrl ($scope, $log, cfgAppPath, $location, hashMap, UserApi) {
         var userCtrl = this;
 
     	$scope.doSave = true;
@@ -41,16 +41,16 @@ var module = angular.module('webpoint.user');
     }
 
     module.controller('EditUserCtrl', EditUserCtrl);
-    EditUserCtrl.$inject = ['$scope', '$routeParams', '$log', 'cfgAppPath', 'hashMap', 'UserApi', 'RoleApi', 'RoleGroupApi'];
-    function EditUserCtrl ($scope, $routeParams, $log, cfgAppPath, hashMap, UserApi, RoleApi, RoleGroupApi) {
+    EditUserCtrl.$inject = ['$scope', '$routeParams', '$log', 'cfgAppPath', 'hashMap', 'UserApi'];
+    function EditUserCtrl ($scope, $routeParams, $log, cfgAppPath, hashMap, UserApi) {
         var userCtrl = this;
 
         $log.debug( $routeParams);
         loadUser () ;
 
         $scope.doSave = false;
-        userCtrl.rolegroups = RoleGroupApi.list();
-        userCtrl.roles = RoleApi.list();
+        userCtrl.rolegroups = UserApi.RoleGroup.list();
+        userCtrl.roles = UserApi.Role.list();
         userCtrl.update = update;
 
 
@@ -76,9 +76,9 @@ var module = angular.module('webpoint.user');
     }
 
     module.controller('AddUserCtrl', AddUserCtrl);
-    AddUserCtrl.$inject = ['$scope', '$log', 'UserApi', 'RoleApi', 'RoleGroupApi'];
+    AddUserCtrl.$inject = ['$scope', '$log', 'UserApi'];
 
-    function AddUserCtrl ($scope, $log, UserApi, RoleApi, RoleGroupApi) {
+    function AddUserCtrl ($scope, $log, UserApi) {
         var userCtrl = this;
 
         $scope.doSave = true;
@@ -86,8 +86,8 @@ var module = angular.module('webpoint.user');
 
         function init(){
             $log.debug(' --- AddUserCtrl.init: ');
-            userCtrl.rolegroups = RoleGroupApi.list();
-            userCtrl.roles = RoleApi.list();
+            userCtrl.rolegroups = UserApi.RoleGroup.list();
+            userCtrl.roles = UserApi.Role.list();
         }
 
 

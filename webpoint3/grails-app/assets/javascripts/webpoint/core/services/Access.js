@@ -30,12 +30,12 @@ var app = angular.module('webpoint.core');
         function isAdmin(){return hasRole("ROLE_ADMIN");}
 
         function hasRole(role) {
-            var roles = CashService.getStorage("roles");
+            var roles = CashService.getSessionStorage("roles");
             return roles != null && roles.indexOf(role) >= 0;
         }
 
         function hasAnyRole (roles){
-            var userRoles = CashService.getStorage("roles");
+            var userRoles = CashService.getSessionStorage("roles");
             return !!userRoles.filter(function (role) {
                 return roles.indexOf(role) >= 0;
             }).length;
@@ -53,6 +53,7 @@ var app = angular.module('webpoint.core');
             if(!isAuthenticated() && pass != 1){
                 $location.path('/login');
             }
+
             if(templateUrl.indexOf('webpoint/user') > 0){
                 if(!hasRole("ROLE_ADMIN")){
                     $log.debug('not authorized - hasRole');

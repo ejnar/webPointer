@@ -198,5 +198,33 @@ describe("webpoint.core module", function() {
             expect(test).toEqual(result);
         });
 
+        it("should change key on Du är en stor Gud F to D", function() {
+
+            var data = 'Am       Dm\n'
+                       'Du är en god Gud,\n'
+                       'G7      Cmaj7   E/H\n'
+                       'du är en god Gud,\n'
+                       'Am       Dm7\n'
+                       'du är en god Gud,\n'
+                       'E7                Am\n'
+                       'full av barmhärtighet.';
+            var section = {};
+            section.key = 'F';
+            section.tokey = 'D';
+            section.data = data;
+            var result = ChangeKeyService.changeKey(section, false);
+            var test = 'F#m      Hm\n'
+                       'Du är en god Gud,\n'
+                       'E7      Amaj7   C#/G#\n'
+                       'du är en god Gud,\n'
+                       'F#m      Hm7\n'
+                       'du är en god Gud,\n'
+                       'C#7               F#m\n'
+                       'full av barmhärtighet.';
+
+            expect(test).toEqual(result);
+        });
+
+
     });
 });

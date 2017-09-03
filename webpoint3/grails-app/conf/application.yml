@@ -34,6 +34,7 @@ grails:
             proxies: false
     gorm:
         failOnError: true
+        autowire: false
     databinding:
         trimStrings: false                  # the default value is true
         convertEmptyStringsToNull: true     # the default value is true
@@ -87,15 +88,16 @@ grails:
               - application/xml
     urlmapping:
         cache:
-            maxsize: 1000
+            maxsize: 10000
     controllers:
         defaultScope: singleton
         upload:
-            maxFileSize: 10000000
-            maxRequestSize: 10000000
+            maxFileSize: 15000000
+            maxRequestSize: 12000000
     converters:
         encoding: UTF-8
 ---
+# YOUR_MAX_SIZE_IN_MB * 1024 * 1024 = BYTES
 #server:
 #    port: 8443                                             # The port to listen on
 #    ssl:

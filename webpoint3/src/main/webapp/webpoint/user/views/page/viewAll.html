@@ -18,8 +18,8 @@
                     <div class="panel-heading" style="font-size:0.8em">{{s.title}}</div>
                     <div class="panel-body">
                         <div ng-if="s.type == 'IMAGE'">
-                            <img width="220" src="data:image/JPG;base64,{{s.objects[0].base64}}">
-                            <!-- img data-ng-src="data:image/JPEG;base64,{{s.object.doc}}" -->
+                            <img width="220" src="data:image/JPG;base64,{{s.binary.$$state.value[0].base64}}">
+                            <!-- img data-ng-src="data:image/JPEG;base64,{{s.object.doc}}"   s.binary.$$state.value[0].base64-->
                         </div>
 						<div ng-if="s.type == 'TEXT' || s.type == 'TEXTCHORDS'" class="mini_song" ng-bind-html="s.data" />
 					</div>

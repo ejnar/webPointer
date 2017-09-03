@@ -32,7 +32,7 @@ var app = angular.module('webpoint.core');
                         }
                         return config;
                     });
-                    CashService.setStorage("roles", user.roles);
+                    CashService.setSessionStorage("roles", user.roles);
 //                    CashService.setSessionStorage("user", user);
                 }).
                 error(function (user) {

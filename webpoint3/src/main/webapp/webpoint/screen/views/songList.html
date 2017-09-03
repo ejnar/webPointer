@@ -33,10 +33,11 @@
 
         <div class="songList" ng-repeat="o in alphabeticalList" flex>
             <h4>{{o.letter}}</h4>
-            <div ng-repeat="s in o.list | orderBy:'title'">
+            <div ng-repeat="s in o.list | orderBy:'title'"  >
                 <div class="songItem">
                     <a href="" ng-click="showAdvanced($event,s)">{{s.title}}</a>
                 </div>
+
             </div>
         </div>
 

@@ -5,37 +5,37 @@
 var module = angular.module('webpoint.screen');
 
     module.controller('SongItemtCtrl', SongItemtCtrl);
-    SongItemtCtrl.$inject = ['$scope', '$location', '$filter', '$log', '$mdDialog', 'song', 'PageListApi', 'SectionsApi', 'PageService'];
+    SongItemtCtrl.$inject = ['$scope', '$location', '$filter', '$log', '$mdDialog', 'song', 'localStorageService', 'cfgScreenPath',
+        'PageListApi', 'SectionsApi', 'PageService', 'BinaryApi'];
 
-    function SongItemtCtrl($scope, $location, $filter, $log, $mdDialog, song, PageListApi, SectionsApi, PageService) {
+    function SongItemtCtrl($scope, $location, $filter, $log, $mdDialog, song, localStorageService, cfgScreenPath,
+        PageListApi, SectionsApi, PageService, BinaryApi) {
 
-    	init();
+        $scope.cancel = cancel;
+
     	function init () {
             $log.debug(' --- SongItemtCtrl.init ' + song.id);
-//            $log.debug(song);
+            $log.debug(song);
             $scope.selectedSongLists = [];
             $scope.song = song;
+            addBinary($scope.song);
             PageListApi.list2().$promise
                 .then( function(resp) {
-                    $log.debug(resp);
+//                    $log.debug(resp);
                     $scope.songLists = resp;
                     initSelectedSongLists(resp, $scope.selectedSongLists );
                 });
-
+            spliteColumns();
         }
 
         $scope.songItemtCtrl_selectedSongList = function() {
             $log.debug(' --- SongItemtCtrl.songItemtCtrl_selectedSongList ');
-            $log.debug($scope.song);
-            $log.debug($scope.selectedSongLists);
             angular.forEach($scope.selectedSongLists, function(s) {
                 if(!s.selected){
                     PageService.addSectionToList(s.id, $scope.song).$promise
                         .then( function(resp) {
-                            $log.debug(resp);
+//                            $log.debug(resp);
                             s.pageParts.push(resp);
-
-                            $log.debug($scope.selectedSongLists);
                         });
                     s.selected = true;
                 }
@@ -43,8 +43,20 @@ var module = angular.module('webpoint.screen');
             findRemovedSongInList($scope.song,$scope.songLists,$scope.selectedSongLists);
         };
 
+        $scope.vyCtrl_print = function() {
+            $log.debug("Go to print page: " + $scope.currentPart );
+            localStorageService.set('printout', $scope.song);
+            $location.path(cfgScreenPath.print);
+            cancel ();
+        };
+
+        function addBinary(section){
+            if(section.type == 'IMAGE'){
+                section.binary = BinaryApi.get({Id: section.id}).$promise
+            }
+        }
+
         function findRemovedSongInList(song,songLists,selectedSongLists){
-            $log.debug('findSongInList');
             angular.forEach(songLists, function(i) {
                 var found = i.pageParts.filter(function (p) {
                     return p.section.id == song.id;
@@ -52,7 +64,6 @@ var module = angular.module('webpoint.screen');
                  $log.debug(found);
                 if(found.length){
                     var foundSelected = $filter('filter')(selectedSongLists, { id: i.id });
-                    $log.debug(' reminded: ',foundSelected);
                     if(!foundSelected.length){
                         PageService.removeSectionInList(i.id, found[0]);
                     }
@@ -73,7 +84,24 @@ var module = angular.module('webpoint.screen');
             });
         }
 
-        $scope.cancel = function() {
+        function spliteColumns() {
+
+            var columns = $scope.song.data.split('-column2-');
+            if(columns.length > 1){
+                $scope.song.fdata = '<div class="vyColumn">';
+                $scope.song.fdata += '<p>' + columns[0] + '</p>';
+                $scope.song.fdata += '</div>';
+
+                $scope.song.fdata += '<div class="vyColumn">';
+                $scope.song.fdata += '<p>' + columns[1] + '</p>';
+                $scope.song.fdata += '</div>';
+            }else{
+                $scope.song.fdata = '<p>' + $scope.song.data + '</p>';
+            }
+
+        }
+
+        function cancel () {
               $mdDialog.cancel();
               var getLocation = function(href) {
                   var l = document.createElement("a");
@@ -87,6 +115,8 @@ var module = angular.module('webpoint.screen');
             l.href = href;
             return l.hostname;
         };
+
+        init();
 
     }
 

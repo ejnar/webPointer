@@ -1,36 +1,31 @@
 <div layout="column" data-ng-init="vyCtrl_loadData()" ng-cloak>
     <section>
         <div id="wrap">
-            <table>
-                <tbody>
-                <tr class="vyRow">
-                    <td class="sideLeftPageBtn" ng-click="vyCtrl_leftPage()"
-                        ng-if="pageList.pageParts[currentPart].section.objects.length > 1">
-                        <i class="material-icons md-22">chevron_left</i>
-                    </td>
-                    <td class="vyArea"
-                        md-swipe-left="vyCtrl_left()" md-swipe-right="vyCtrl_right()">
-                        <div class="vyImgArea"
-                             ng-if="pageList.pageParts[currentPart].section.type == 'IMAGE'" >
-                            <img class="stretch" alt=""
-                                 src="data:image/JPG;base64,{{pageList.pageParts[currentPart].section.objects[currentPage].base64}}">
-                        </div>
-                    </td>
-                    <td class="sideRightPageBtn" ng-click="vyCtrl_rightPage()"
-                        ng-if="pageList.pageParts[currentPart].section.objects.length > 1">
-                        <i class="material-icons md-22">chevron_right</i>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+
+            <div class="sideLeftPageBtn" ng-click="vyCtrl_leftPage()"
+                 ng-if="pageList.pageParts[currentPart].section.binary.$$state.value.length > 0">
+                <i class="material-icons md-24">chevron_left</i>
+            </div>
+            <div ng-if="pageList.pageParts[currentPart].section.type == 'IMAGE'"
+                 class="vyImgArea">
+                <img class="stretch" alt=""
+                     src="data:image/JPG;base64,{{pageList.pageParts[currentPart].section.binary.$$state.value[currentPage].base64}}">
+            </div>
+            <div class="sideRightPageBtn" ng-click="vyCtrl_rightPage()"
+                ng-if="pageList.pageParts[currentPart].section.binary.$$state.value.length > 0">
+                <i class="material-icons md-24">chevron_right</i>
+            </div>
+
             <div ng-if="pageList.pageParts[currentPart].section.type == 'TEXT'
                                 || pageList.pageParts[currentPart].section.type == 'TEXTCHORDS'"
                  class="vyMainArea"  ng-class="fontSize" layout="row"
-                 ng-bind-html="pageList.pageParts[currentPart].section.fdata" />
+                 ng-bind-html="pageList.pageParts[currentPart].section.fdata" >
+            </div>
         </div>
         <div hide-xs class="sideLeftBtn sideBtn" ng-click="vyCtrl_left()" keyleft>
             <i class="material-icons md-48">chevron_left</i>
         </div>
+
         <div class="menuToggleSideNav" ng-click="vyCtrl_toggleSideNavRight1()" aria-label="List">
             <i class="material-icons md-28">menu</i>
         </div>
@@ -129,3 +124,30 @@
         </div>
     </section>
 </div>
+
+
+<!-- div class="vyMainArea">
+    <table>
+        <tbody>
+        <tr class="vyRow">
+            <td class="sideLeftPageBtn" ng-click="vyCtrl_leftPage()"
+                ng-if="pageList.pageParts[currentPart].section.binary.$$state.value.length > 1">
+                <i class="material-icons md-22">chevron_left</i>
+            </td>
+            <td class="vyArea"
+                md-swipe-left="vyCtrl_left()" md-swipe-right="vyCtrl_right()">
+                <div class="vyImgArea"
+                     ng-if="pageList.pageParts[currentPart].section.type == 'IMAGE'" >
+
+                    <img class="stretch" alt=""
+                         src="data:image/JPG;base64,{{pageList.pageParts[currentPart].section.binary.$$state.value[currentPage].base64}}">
+                </div>
+            </td>
+            <td class="sideRightPageBtn" ng-click="vyCtrl_rightPage()"
+                ng-if="pageList.pageParts[currentPart].section.binary.$$state.value.length > 1">
+                <i class="material-icons md-22">chevron_right</i>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div -->

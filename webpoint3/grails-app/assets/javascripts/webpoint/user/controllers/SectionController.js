@@ -6,9 +6,9 @@ var module = angular.module('webpoint.user');
 
     module.controller('UpdateSectionCtrl', UpdateSectionCtrl);
     UpdateSectionCtrl.$inject =  ['$scope', '$routeParams', '$location', '$log', '$q', 'cfgAppPath', 'properties',
-                                    'SectionsApi', 'ChangeKeyService', 'FileUploadService', 'Upload', '$timeout', '$filter'];
+                                    'SectionsApi', 'BinaryApi', 'ChangeKeyService', 'FileUploadService', 'Upload', '$timeout', '$filter'];
     function UpdateSectionCtrl ($scope, $routeParams, $location, $log, $q, cfgAppPath, properties,
-            SectionsApi, ChangeKeyService, FileUploadService, Upload, $timeout, $filter) {
+            SectionsApi, BinaryApi, ChangeKeyService, FileUploadService, Upload, $timeout, $filter) {
 
 		$scope.languages = properties.language;
 		$scope.stypes = properties.stypes;
@@ -17,20 +17,20 @@ var module = angular.module('webpoint.user');
 
 		$scope.doSave = true;
 
-		init();
         function init(){
             $log.debug(' - SectionController.UpdateSectionCtrl.init: ' +  $location.path());
             if($routeParams.id != 'null' && $routeParams.id != ''){
                 $log.debug("SectionApi.get " + $routeParams.id);
+
                 SectionsApi.get({Id: $routeParams.id}).$promise
                     .then(function(resp) {
                         $scope.section = resp;
                         $scope.doSave = false;
                         initColumn();
+                        $scope.binaryDocs = BinaryApi.get({Id: resp.id});
                     });
             }
         }
-
 
         $scope.updateSectionCtrl_updateToKey = function () {
             $log.debug(' --- SectionController.updateSectionCtrl_updateToKey:');
@@ -38,7 +38,20 @@ var module = angular.module('webpoint.user');
             $scope.section.key = $scope.section.tokey;
         };
 
-        function evaluate() {
+        function initColumn(){
+            if($scope.section.data != null && $scope.section.data.indexOf('-column2-') > 0){
+                $scope.column2 = true;
+                splitColumn();
+                var col = $scope.section.data.split('-column2-');
+                if(col.length > 1){
+                    $scope.section.data = col[0].trim();
+                    $scope.data2 = col[1].trim();
+                }
+
+            }
+        }
+
+        function trimRow() {
             $scope.section.data = $scope.section.data.stripHtml();
             var lines = $scope.section.data.split('\n');
             var data = '';
@@ -51,20 +64,27 @@ var module = angular.module('webpoint.user');
 
 	    $scope.updateSectionCtrl_updateSection = function () {
 	    	$log.debug(' --- SectionController.updateSectionCtrl_updateSection:');
-            copyColumn2();
-            evaluate();
-	    	var promise = SectionsApi.update({Id: $scope.section.id}, $scope.section);
-	    	$q.all([promise]).then(function(data) {  });
+            trimRow();
+            var section = copyColumn2();
+	    	SectionsApi.update({Id: section.id}, section);
+//	    	$q.all([promise]).then(function(data) {  });
 	    };
 	    
 		$scope.updateSectionCtrl_saveSection = function(form) {
 			$log.debug(' --- SectionController.updateSectionCtrl_saveSection:');
-			$log.debug($scope.section);
-            copyColumn2();
-            evaluate();
-            var promise = SectionsApi.save($scope.section);
+            trimRow();
+            var section = copyColumn2();
+            var promise = SectionsApi.save(section);
             $q.all([promise]).then(function(data) {  });
 	    }
+
+	    function copyColumn2(){
+	        var section = angular.copy($scope.section);
+            if($scope.data2 && $scope.data2.length > 0){
+                section.data += '\n-column2-\n' + $scope.data2
+            }
+            return section;
+        }
 
         $scope.updateSectionCtrl_gotoList = function() {
             $location.path(cfgAppPath.SONGDATA_LIST);
@@ -137,49 +157,26 @@ var module = angular.module('webpoint.user');
         };
         $scope.max_width_textarea = "max_with_col1";
         $scope.updateSectionCtrl_addColumn2 = function() {
-            $log.debug('updateSectionCtrl_addColumn2 ' + $scope.column2);
+//            $log.debug('updateSectionCtrl_addColumn2 ' + $scope.column2);
             splitColumn();
-        }
-
-        function initColumn(){
-            if($scope.section.data.indexOf('-column2-') > 0){
-                $scope.column2 = true;
-                splitColumn();
-            }
         }
 
         function splitColumn(){
              if($scope.column2){
                 $scope.max_width_textarea = "max_with_col2";
-                copyColumn2();
             }else{
                 $scope.max_width_textarea = "max_with_col1";
-                if($scope.data2 && $scope.data2.length > 0){
-                    $scope.section.data += '\n\n' + $scope.data2;
-                }
             }
         }
 
-        function copyColumn2(){
-            if($scope.data2 && $scope.data2.length > 0){
-                $scope.section.data += '\n-column2-\n' + $scope.data2
-            }else{
-                var col = $scope.section.data.split('-column2-');
-                if(col.length > 1){
-                    $scope.section.data = col[0].trim();
-                    $scope.data2 = col[1].trim();
-                }
-            }
-        }
-
+        init();
     }
 
     module.controller('GroupOfSectionCtrl', GroupOfSectionCtrl);
     GroupOfSectionCtrl.$inject =  ['$scope', '$rootScope', '$routeParams', '$location', '$filter', '$log',
-                                    'cfgAppPath', 'UserApi', 'SectionsApi'];
+                                    'cfgAppPath', 'hashMap', 'UserApi', 'SectionsApi'];
     function GroupOfSectionCtrl ($scope, $rootScope, $routeParams, $location, $filter, $log, cfgAppPath,
-    		UserApi, SectionsApi) {
-
+    		hashMap, UserApi, SectionsApi) {
 //		$scope.$on("LOAD_GROUPOFSECTION_EVENT", function () {   // event, args
 //			$log.debug(' --- LOAD_GROUPOFSECTION_EVENT');     // + args.eventID
 //			$scope.loadSection();
@@ -195,29 +192,23 @@ var module = angular.module('webpoint.user');
 		$scope.itemsPerPage = 20;
 		$scope.items = [];
 		$scope.groups = [];
-		$scope.search = '';
 		$scope.predicate = 'title';
     	$scope.reverse = false;
 
 
-		$scope.groupOfSectionCtrl_loadSection = function() {
-    		$log.debug(' --- GroupOfSectionCtrl.groupOfSectionCtrl_loadSection ');
+        function init(){
+            $log.debug(' --- GroupOfSectionCtrl.init ');
+            $scope.search = hashMap.get('SEARCH_VALUE');
+            loadSection();
+        }
+
+		function loadSection() {
     		SectionsApi.list({max:$scope.maxSize}).$promise
                 .then(function(resp) {
-//                    $log.debug(resp);
                     $scope.items = resp;
                     $scope.totalItems = $scope.items.length;
-                    $scope.createSearchList();
+                    createSearchList();
                 });
-
-    	};
-    	$scope.createSearchList = function (){
-    		var filterList = $filter('filter')($scope.items, $scope.search);
-    		var orderByList = $filter('orderBy')(filterList, $scope.predicate, $scope.reverse);
-
-    		$scope.totalItems = orderByList.length;
-    		var begin = (($scope.currentPage - 1) * $scope.itemsPerPage), end = begin + $scope.itemsPerPage;
-    		$scope.groups = orderByList.slice(begin, end);
     	}
 
     	$scope.groupOfSectionCtrl_editMeta = function(id) {
@@ -225,9 +216,8 @@ var module = angular.module('webpoint.user');
     		$location.path(cfgAppPath.SONGDATA_EDIT + id );
     	}
     	$scope.groupOfSectionCtrl_delSection = function(section) {
-    	    $log.debug(' --- SectionController.groupOfSectionCtrl_delSection - section:', section);
     	    SectionsApi.remove({Id: section.id}, function (resp) {
-                $scope.groupOfSectionCtrl_loadSection();
+                loadSection();
     	    });
 
     	}
@@ -268,22 +258,31 @@ var module = angular.module('webpoint.user');
     	$scope.order = function(predicate, reverse) {
     		$scope.predicate = predicate;
     		$scope.reverse = reverse;
-    		$scope.createSearchList();
+    		createSearchList();
     	};
     	$scope.order('title',false);
 
     	$scope.pageChanged = function(page) {
     		$log.debug('Page changed to: ' + page);
     		$scope.currentPage = page;
-    		$scope.createSearchList();
+    		createSearchList();
     	};
 
     	$scope.groupOfSectionCtrl_searchTable = function(search) {
-    		$scope.search = search;
-    		$log.debug('Search: ' + $scope.search);
-    		$scope.createSearchList();
+//    		$scope.search = search;
+    		hashMap.put('SEARCH_VALUE', search);
+    		createSearchList();
     	}
 
+        function createSearchList (){
+    		var filterList = $filter('filter')($scope.items, hashMap.get('SEARCH_VALUE'));
+    		var orderByList = $filter('orderBy')(filterList, $scope.predicate, $scope.reverse);
+
+    		$scope.totalItems = orderByList.length;
+    		var begin = (($scope.currentPage - 1) * $scope.itemsPerPage), end = begin + $scope.itemsPerPage;
+    		$scope.groups = orderByList.slice(begin, end);
+    	}
+    	init();
 //    	$scope.$watch("search", function(query){
 //    		$log.debug('$watch ' + query);
 ////	    	$scope.groups = $filter("filter")($scope.items, query);

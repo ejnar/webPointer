@@ -9,18 +9,11 @@ sectionController.controller('PageListCtrl', [
     'cfgAppPath', 'PageListApi',
     function ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $uibModal,
         cfgAppPath, PageListApi) {
-        $log.debug(' - PageListController.PageListCtrl:');
 
-		$scope.pageListCtrl_loadPageList = function() {
-			$log.debug(" --- PageListController.pageListCtrl_loadPageList:");
-//			$scope.viewLoading = true;
-    		PageListApi.list(
-    				function (resp) {
-    					$scope.listOfPages = resp;
-//    					$scope.viewLoading = false;
-                    });
-
-    	}
+        function init(){
+            $log.debug(" --- PageListController.pageListCtrl.init:");
+            $scope.listOfPages = PageListApi.list();
+        }
 
     	$scope.pageListCtrl_openModel = function () {
     		var modalInstance = $uibModal.open({
@@ -39,7 +32,7 @@ sectionController.controller('PageListCtrl', [
     	    $log.debug(" --- PageListController.pageListCtrl_delPageList - id:", id);
     		PageListApi.remove({Id: id},
     			function (resp) {
-    				$scope.pageListCtrl_loadPageList();
+    				init();
     			});
     	}
 
@@ -47,13 +40,15 @@ sectionController.controller('PageListCtrl', [
             $log.debug(" --- PageListController.pageListCtrl_goToViewAll ");
             $location.path(cfgAppPath.SONGS_VIEW);
         }
+
+        init();
 }]);
 
 sectionController.controller('ViewAllSongsCtrl', [
     '$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', '$uibModal',
-    'cfgAppPath', 'SectionsApi',
+    'cfgAppPath', 'SectionsApi', 'BinaryApi',
     function ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $uibModal,
-        cfgAppPath, SectionsApi) {
+        cfgAppPath, SectionsApi, BinaryApi) {
         $log.debug(' - PageListController.ViewAllSongsCtrl:');
 
 
@@ -62,11 +57,14 @@ sectionController.controller('ViewAllSongsCtrl', [
 
             SectionsApi.list({max: 1000}).$promise
                 .then( function(resp) {
-//                      $log.debug(resp);
                     $scope.sectionList = resp;
+                    angular.forEach($scope.sectionList, function(s) {
+                        if(s.type == 'IMAGE'){
+                            s.binary = BinaryApi.get({Id: s.id}).$promise
+                        }
+                    });
             });
     	}
-
 
     	$scope.pageListCtrl_goToViewAll = function() {
             $log.debug(" --- PageListController.pageListCtrl_goToViewAll ");

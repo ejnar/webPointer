@@ -4,7 +4,6 @@ import grails.transaction.Transactional
 import grails.web.http.HttpHeaders
 import org.imgscalr.Scalr
 import se.webpoint.rest.BasicRestController
-import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
@@ -37,10 +36,7 @@ class SectionController extends BasicRestController<Section> {
 //        params.offset = 0
 //        println params
         List<Section> list = listAllResources(params)
-        for (a in list) {
-            a.convertToBase64()
-        }
-        respond list, model: [("${resourceName}Count".toString()): countResources()]
+        respond list, model: [("${resourceName}Count".toString()): list.size()]
     }
 
 
@@ -152,33 +148,14 @@ class SectionController extends BasicRestController<Section> {
         params.each { k,v ->
             if(k.startsWith("files"))
                 files.add(v)
+            println v
         }
 
-        instance.objects.clear()
-        files.each {
-            InputStream fileStream = it.inputStream;
-            def imageIn = ImageIO.read(fileStream);
-            BufferedImage scaledImage = Scalr.resize(imageIn, 1600);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write( scaledImage, "png", baos );
-            baos.flush();
-            byte[] bytes = baos.toByteArray();
-            baos.close();
+        sectionService.saveUploaded(instance,files)
 
-            SectionDoc object = new SectionDoc()
-            object.name = it.getOriginalFilename()
-            object.contentType = it.getContentType()
-            object.size = bytes.length
-            object.doc = bytes
-            instance.objects.add(object)
-        }
-        if(instance.objects.get(0).contentType.startsWith('image/')) {
-            instance.type = 'IMAGE'
-        }
-        instance.save flush:true
+        addHeader('sections/upload', instance.id)
 
-//		file.transferTo(new File('/Users/ejnarakerman/dev/project/grails/tmp/' + f.getOriginalFilename()))
-        instance.convertToBase64()
+//        instance.convertInternalBinaryToBase64()
         respond instance, status: OK
 //		response.setStatus(200, OK)  //sendError(200, 'Done')
 	}

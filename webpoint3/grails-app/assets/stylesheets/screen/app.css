@@ -28,6 +28,7 @@ footer {
     margin: 2.0em 2.0em;
 }
 .noneDecoration{ text-decoration: none;}
+.pointer{ cursor: pointer; }
 
 
 /* angular-material begian */
@@ -42,6 +43,7 @@ footer {
 .material-icons.md-48 { font-size: 8.4vw; }
 .padding-left-3 {margin-left: 5px;}
 .padding-bottom-3 {padding-bottom: 3px;}
+div.icon-wrapper {margin: 0.5em;}
 .icon-wrapper {margin: 0 0.1em; display: inline-flex; vertical-align: middle; align-items: center;}
 p.icon-text{ margin: 0.1em 0.2em; }
 .bold{ font-weight: bold;}
@@ -173,63 +175,27 @@ div.vyArea {
     padding: 0.6vw 0 1.0em 0;
     margin: 0;
 }
-
-
-div.vyImgArea {
-    height:100%;
-    /*max-height: 1400px;*/
-    left: 0px;
-    top: 0px;
-}
-.songDialogContent{
-    margin: 0.2em 0.2em 0.2em 1.2em;
-}
-p.songtext {
-    font-size: 1.9vw;
-    padding-top: 1.2em;
-    white-space: pre;
-    line-height: 96%;
-    width: 100%
-}
 a.small {
     font-size: 1.1em;
     margin: 0 1.4em;
     padding:0;
 
 }
-.dialogInfo span{
-    font-size: 0.9em;
-    font-weight:normal;
-    padding:0;
-    margin:0;
-    line-height: 90%;
-}
 
+/****** print *****/
 div.printOut {
-    padding: 1.2em 0 1.4em 0;
-    font-size: 1.3em;
+    padding: 0.2em 0 0.4em 0;
+    font-size: 1.2em;
 }
 div.printOut .body{
-    line-height: 110%;
+    line-height: 100%;
     white-space: pre;
 }
-table td.sideLeftPageBtn{
-    height:100%;
-	color: #404040;
-	vertical-align: top;
-	padding-top: 5em;
-	margin:0;
-	outline:none
+div.printArea{
+    padding: 0.2em;
+    width: 670px;
 }
-table td.sideRightPageBtn{
-    width:1%;
-    height:100%;
-	color: #404040;
-	vertical-align: top;
-	padding-top: 5em;
-	margin:0;
-	outline:none
-}
+/*******************/
 table td.icon-List {
     width: 1%;
     vertical-align: top;
@@ -272,29 +238,97 @@ button{
     float:none;
 }
 
+/* songDialog */
+div.imageArea {
+    padding: 0;
+    padding-top: 0.2em;
+    margin: 0.5em;
+}
+.smallStretch {
+    width:90%;
+}
+.dialogInfo {
+    background-color: #eeeefe;
+    margin: 0.05em;
+    padding:0.2em;
+}
+.dialogInfo span{
+    font-size: 0.9em;
+    font-weight:normal;
+    padding:0;
+    margin:0;
+    line-height: 90%;
+}
+.songDialogContent{
+    margin: 0.2em 0.2em 0.2em 1.2em;
+}
+div.songtext {
+    padding-top: 0.5em;
+}
+div.songtext p {
+    font-size: 1.6vw;
+    white-space: pre;
+    line-height: 96%;
+    width: 100%
+}
+/********************/
+div.sideRightPageBtn{
+    color: #404040;
+    outline:none;
+    width: 10px;
+    height: 100%;
+    position: fixed;
+    top: 20px;
+	right: 5.5vw;
+    z-index: 100;
+}
+div.sideLeftPageBtn{
+	color: #404040;
+	outline:none;
+	width: 10px;
+	height: 100%;
+	position: fixed;
+    top: 20px;
+    left: 1.5vw;
+    z-index: 100;
+}
+.stretch {
+    width:100%;
+    object-fit: cover;
+}
+div.vyImgArea {
+    height:98%;
+    width:90%;
+    position: fixed;
+    top: 0;
+    left: 5.0vw;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+    /*max-height: 1400px;*/
+}
 div.sideBtn{
     height:100%;
     color: #404040;
-    padding: 4em 0 0 0;
+    padding: 2em 0 0 0;
     margin:0;
     outline:none
 }
-
 div.sideLeftBtn{
     position: fixed;
-    top: 0;
+    top: 80px;
     left: 0;
 }
 div.sideRightBtn{
     position: fixed;
-    top: 0;
+    top: 80px;
     right: 0;
 }
 div.vyMainArea {
     height:100%;
     width:80%;
     white-space: pre;
-    padding: 0.8em 0 0 0;
+    padding: 0.05em 0 0 0;
     margin: 0;
     position: fixed;
     top: 0;
@@ -317,17 +351,18 @@ div.vyColumn {
     .vyArea_s3{ font-size: 3.6vh;}
     div.menuToggleSideNav{
     	position: fixed;
-    	top: 1px;
-    	right: 1.0vw;
+    	top: 0;
+    	right: 2.0vw;
     	color: black;
     	font-size:4.8vw;
+    	padding: 0.05em 1.6em;
     }
     .songDialogContent{
         margin: 0.2em 0.2em 0.2em 0.6em;
     }
     p.songtext {
-        font-size: 3.2vw;
-        padding-top: 0.6em;
+        font-size: 6.8vw;
+        padding-top: 0.4em;
     }
     md-sidenav,
     md-sidenav.md-locked-open-add-active,
@@ -345,10 +380,11 @@ div.vyColumn {
     .vyArea_s3{ font-size: 3.2vh;}
     div.menuToggleSideNav{
         position: fixed;
-        top: 1px;
+        top: 0;
         right: 6.4vw;
         color: black;
         font-size:5.8vw;
+        padding: 0.2em;
     }
     .container-sm-height {
         display:table;
@@ -370,10 +406,11 @@ div.vyColumn {
     .vyArea_s3 { font-size: 3.8vh;}
     div.menuToggleSideNav{
     	position: fixed;
-    	top: 2px;
-    	right: 7.6vw;
+    	top: 0;
+    	right: 8.6vw;
     	color: black;
     	font-size:5.0vw;
+    	padding: 0.2em;
     }
     .container-md-height {
         display:table;

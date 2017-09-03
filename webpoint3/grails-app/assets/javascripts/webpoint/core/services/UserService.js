@@ -6,8 +6,6 @@ var userService = angular.module('webpoint.core');
 
 userService.factory('UserApi', ['$resource', '$log',
   function ($resource, $log) {
-	$log.debug(' --- UserApi.factory --- '); // interceptor :$resourceInterceptor
-	
 	return	{ 
 			    User: $resource('api/user/:Id', {Id: '@Id'},
 					{
@@ -24,7 +22,20 @@ userService.factory('UserApi', ['$resource', '$log',
                 Pass: $resource('api/guest/update/:token', {token: '@token'},
                     {
                         'update': { method:'PUT'}
+                    }),
+                Role: $resource('api/roles/:Id', {Id: '@Id'},
+                    {
+                        'list': { method:'GET', isArray:true, cache:false},
+                        'get': { method:'GET'}
+                    }),
+                RoleGroup: $resource('api/rolegroups/:Id', {Id: '@Id'},
+                    {
+                        'list': { method:'GET', isArray:true, cache:false},
+                        'get': { method:'GET'},
+                        'save': { method:'POST'},
+                        'update': { method:'PUT'}
                     })
+
 			};
 	}
 ]);
@@ -44,24 +55,24 @@ userService.factory('AuthorityApi', ['$resource', '$log',
 
 
 
-userService.factory('RoleApi', ['$resource',
-  function ($resource) {
-	return $resource('api/roles/:Id', {Id: '@Id'},
-			{
-       			'list': { method:'GET', isArray:true, cache:false},
-       			'get': { method:'GET'}
-			});
-  }
-]);
-
-userService.factory('RoleGroupApi', ['$resource', '$resourceInterceptor',
-  function ($resource, $resourceInterceptor) {
-	return $resource('api/rolegroups/:Id', {Id: '@Id'},
-			{
-       			'list': { method:'GET', isArray:true, cache:false},
-       			'get': { method:'GET'},
-       			'save': { method:'POST'},
-       			'update': { method:'PUT'}
-			});
-  }
-]);
+//userService.factory('RoleApi', ['$resource',
+//  function ($resource) {
+//	return $resource('api/roles/:Id', {Id: '@Id'},
+//			{
+//       			'list': { method:'GET', isArray:true, cache:false},
+//       			'get': { method:'GET'}
+//			});
+//  }
+//]);
+//
+//userService.factory('RoleGroupApi', ['$resource', '$resourceInterceptor',
+//  function ($resource, $resourceInterceptor) {
+//	return $resource('api/rolegroups/:Id', {Id: '@Id'},
+//			{
+//       			'list': { method:'GET', isArray:true, cache:false},
+//       			'get': { method:'GET'},
+//       			'save': { method:'POST'},
+//       			'update': { method:'PUT'}
+//			});
+//  }
+//]);

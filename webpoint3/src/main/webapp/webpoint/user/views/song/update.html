@@ -56,7 +56,7 @@
                     <div class="col-xs-3 col-sm-2 col-md-2">
                         <div class="form-group">
                             <div class="controls">
-                                <label><input type="checkbox" ng-click="updateSectionCtrl_addColumn2()" ng-model="column2">Column 2</label>
+                                <label><input type="checkbox" ng-click="updateSectionCtrl_addColumn2()" ng-model="column2"/>Column 2</label>
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                                   ng-trim="false" ng-model="section.data" ng-class="max_width_textarea"
                                   required></textarea>
                     </div>
-                    <div class="controls col-sm-6 col-md-4" dynaheight ng-show="column2">
+                    <div class="controls col-sm-6 col-md-5" dynaheight ng-show="column2">
                         <textarea id="data2" name="data2" class="form-control textAreaData max_with_col2" rows="*"
                                   ng-trim="false" ng-model="data2"
                                   ></textarea>
@@ -119,7 +119,7 @@
 
                     </div>
                     <div class="controls row" >
-                        <div ng-repeat="o in section.objects"  class="col-xs-16 col-sm-12 col-md-8">
+                        <div ng-repeat="o in binaryDocs"  class="col-xs-16 col-sm-12 col-md-8">
                             <img width="400"
                                  src="data:image/JPG;base64,{{o.base64}}">
                         </div>

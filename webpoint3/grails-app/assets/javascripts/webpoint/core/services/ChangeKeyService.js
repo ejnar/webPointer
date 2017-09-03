@@ -99,13 +99,11 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         var lines = this.getLines(doHtml,data,linebreak);
         var keydiff = keyDiff(section);
         $log.debug(' - keydiff: ', keydiff);
-
         for(var l=0; l < lines.length; l++){
             result += l != 0 ? linebreak : '';
             var line = lines[l];
             var keyRow = this.validKeyRow(line);
             if(keyRow != null){
-                var matrix = [];
                 var last = -1;
                 for(var k=0; k < keyRow.length; k++){
                     var key = keyRow[k];
@@ -124,22 +122,16 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
                             a[0] = key;
                             a[1] = getIndexValue(KEYS[newKeyindex], getKeyType(section.tokey));
                             a[2] = last = line.indexLastOf(last, key);
-                            a[3] = i;
-                            a[4] = newKeyindex;
-                            matrix.push(a);
+                            try{
+                                line = this.replaceAt(line, a[2], a[1], a[0]);
+                                $log.debug(' ----- line: ', line);
+                            }catch(err){ $log.debug(' ----- ERROR: ', line); }
                             $log.debug(' -----  found key: ', KEYS[i] + ':' + i);
                             $log.debug(' -----  new key: ', KEYS[newKeyindex] + ':' + newKeyindex);
                             break;
                         }
                     }
-                }
-                for(var i=0; i < matrix.length; i++){
-                    var keeys = matrix[i];
-                    $log.debug(' - keeys: ', keeys);
-                    try{
-                        line = this.replaceAt(line, keeys[2], keeys[1], keeys[0]);
-                        $log.debug(' ----- line: ', line);
-                    }catch(err){ $log.debug(' ----- ERROR: ', line); }
+                    $log.debug(' - - - - :', line);
                 }
                 $log.debug(' ---------- found key row: ', line);
             }
@@ -159,18 +151,21 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         var slash = (line.indexOf('/', index-1) == index) ? 1 : 0;
         var str1 = line.substr(0, index + slash);
         var str2 = line.substr((index + offset) + slash);
-        // ex newChar = C#  oldChar = D
+        // ex oldChar = D newChar = C#
         if(newChar.length > 1 && oldChar.length == 1){
             // Check last char in string, if not spaces
             if(str1.substr(-2) == '/'+oldChar){
-//                str2 = addSpace(str2, ' ')
                 str1 = str1.substr(0,str1.length-1);
+                $log.debug('1--',str1);
             }
-            else if(startSufix(str2) || str2.indexOf('/') == 0 || str2.indexOf(' ') == 0){
+            else if(startSufix(str2)){
+                str2 = delSpace(str2, 1);
+            }
+            else if(str2.indexOf('/') == 0 || str2.indexOf(' ') == 0){
                 str2 = delSpace(str2, 1);
             }
 
-        } // ex newChar = A  oldChar = Bb
+        } // ex oldChar = Bb newChar = A
         else if(newChar.length == 1 && oldChar.length > 1){
             if(str2.indexOf('/') == 0){
                 str2 = addSpace(str2, ' ');
@@ -182,7 +177,7 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
             else if((line.length-2) > index){
                 str2 = addSpace(str2, ' ');
             }
-        } // ex newChar = F  oldChar = E
+        } // ex oldChar = E newChar = F
         else if((newChar.length == 1 && oldChar.length == 1) || (newChar.length == 2 && oldChar.length == 2)){
             if(str1.substr(-2) == '/'+oldChar[0]){
                 str2 = addSpace(str2, ' ');
@@ -192,7 +187,14 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         return str1 + nChar + str2;
     };
 
-
+    function debug1(str){
+        $log.debug('indexOf1 /', str.indexOf('/'));
+        $log.debug('indexOf2  ', str.indexOf(' '));
+    }
+    function debug2(str1,str2){
+        $log.debug('1--',str1);
+        $log.debug('2--',str2);
+    }
 
     function keyDiff(section){
         var changeToKeyIndex = 0;
@@ -215,6 +217,13 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         var s1 = str.substr(0, firstSpace);
         var s2 = str.substr(firstSpace+count);
         return s1 + s2;
+    }
+
+    function delSpaceAfter(str, count){
+        if(/\s$/.test(str)) {   // /\s$/.     /(.*)\s+$/
+            return str.substr(0, str.length-count);
+        }
+        return str;
     }
 
     function getIndexValue(arr, cross){
@@ -245,6 +254,7 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
                 return true;
             }
         }
+        return false;
     }
     function isKeyFound(key, keyArray){
         var keyArr = keyArray.split(':');
@@ -254,6 +264,10 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
             }
         }
         return false;
+    }
+
+    function addSpaceLast(str, space){
+        return str + space;
     }
 
     function addSpace(str, space){
@@ -276,9 +290,9 @@ app.service('ChangeKeyService', ['properties', '$log', function(properties, $log
         return st0;
     }
 
-
-
 }]);
+
+
 
 
 

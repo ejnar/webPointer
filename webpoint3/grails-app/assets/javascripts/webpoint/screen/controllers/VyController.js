@@ -6,11 +6,11 @@ var module = angular.module('webpoint.screen');
 
     module.controller('VyCtrl', VyCtrl);
     VyCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath',
-                      'PageListApi', '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService',
+                      'PageListApi', 'BinaryApi', '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService',
                       'CashService', 'RemoveKeyService'];
 
     function VyCtrl ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath,
-                    PageListApi, $mdDialog, properties, ChangeKeyService, VyApi, localStorageService,
+                    PageListApi, BinaryApi, $mdDialog, properties, ChangeKeyService, VyApi, localStorageService,
                     CashService, RemoveKeyService) {
 
     	$scope.currentPart = 0;
@@ -25,6 +25,7 @@ var module = angular.module('webpoint.screen');
                     .then( function(resp) {
 //                        $log.debug(resp);
                         $scope.pageList = resp;
+                        addBinary($scope.pageList);
                         $scope.totalPart = $scope.pageList.pageParts.length;
                         formatText();
                     });
@@ -34,25 +35,35 @@ var module = angular.module('webpoint.screen');
                 if(pageList == null){
                     PageListApi.get({Id: $routeParams.pageListId}).$promise
                         .then( function(resp) {
-//                            $log.debug(resp);
+                            $log.debug(resp.pageParts[0].section.data);
+                            $log.debug(resp.pageParts[0].section.fdata);
                             $scope.pageList = resp;
+                            addBinary($scope.pageList);
                             $scope.totalPart = $scope.pageList.pageParts.length;
                             CashService.stash('PageList',resp);
                             formatText();
                         });
                 }else{
                     $scope.pageList = pageList;
+                    addBinary($scope.pageList);
                     $scope.totalPart = $scope.pageList.pageParts.length;
                     formatText();
                 }
 			}
     	};
 
+        function addBinary(page){
+            angular.forEach(page.pageParts, function(s) {
+                if(s.section.type == 'IMAGE'){
+                    s.section.binary = BinaryApi.get({Id: s.section.id}).$promise
+                }
+            });
+        }
+
     	function formatText(){
     	    removeKeys($scope.pageList);
             spliteColumns($scope.pageList);
     	}
-
 
         function removeKeys(pageList) {
             if($routeParams.withoutkeys){
@@ -66,17 +77,19 @@ var module = angular.module('webpoint.screen');
         function spliteColumns(pageList) {
             for(var i=0; i < pageList.pageParts.length; i++){
                 var part = pageList.pageParts[i];
-                var columns = pageList.pageParts[i].section.data.split('-column2-');
-                if(columns.length > 1){
-                    pageList.pageParts[i].section.fdata = '<div class="vyColumn">';
-                    pageList.pageParts[i].section.fdata += columns[0];
-                    pageList.pageParts[i].section.fdata += '</div>';
+                if(pageList.pageParts[i].section.data != null){
+                    var columns = pageList.pageParts[i].section.data.split('-column2-');
+                    if(columns.length > 1){
+                        pageList.pageParts[i].section.fdata = '<div class="vyColumn">';
+                        pageList.pageParts[i].section.fdata += '<p>' + columns[0] + '</p>';
+                        pageList.pageParts[i].section.fdata += '</div>';
 
-                    pageList.pageParts[i].section.fdata += '<div class="vyColumn">';
-                    pageList.pageParts[i].section.fdata += columns[1];
-                    pageList.pageParts[i].section.fdata += '</div>';
-                }else{
-                    pageList.pageParts[i].section.fdata = pageList.pageParts[i].section.data;
+                        pageList.pageParts[i].section.fdata += '<div class="vyColumn">';
+                        pageList.pageParts[i].section.fdata += '<p>' + columns[1] + '</p>';
+                        pageList.pageParts[i].section.fdata += '</div>';
+                    }else{
+                        pageList.pageParts[i].section.fdata = '<p>' + pageList.pageParts[i].section.data + '</p>';
+                    }
                 }
             }
         }
@@ -259,16 +272,4 @@ var module = angular.module('webpoint.screen');
                 .targetEvent(ev)
             );
         };
-    }
-
-    module.controller('PrintCtrl', PrintCtrl);
-    PrintCtrl.$inject = ['$scope', '$log', 'localStorageService'];
-
-    function PrintCtrl ($scope, $log, localStorageService) {
-
-        $scope.vyCtrl_loadItem = function() {
-            $log.debug("Print current: " );
-            $scope.section = localStorageService.get('printout');
-        };
-
     }

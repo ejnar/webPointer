@@ -31,8 +31,6 @@ class BasicRestController<T> extends RestfulController<T> {
     }
 
 
-
-
     def access() {
         log.debug " --- access"
         accessService.haveAccess()

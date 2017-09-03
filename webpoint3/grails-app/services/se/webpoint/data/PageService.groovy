@@ -51,8 +51,6 @@ class PageService {
 
         for (p in pageList.pageParts) {
             Section section = Section.webConvertedSection(p.section);
-            section.convertToBase64()
-
             p.section = section;
 //            log.debug(section);
             list.pageParts.add(p);

@@ -26,7 +26,7 @@ console.log("webpoint.core manifest load complete.");
 
 app.constant(
 		'CONFIG', {
-			DEBUG_LOG: true
+			DEBUG_LOG: false
 		});
 
 
@@ -113,7 +113,13 @@ app.run(['$rootScope', '$http', '$location', '$log', 'CashService', 'Access',
             $location.path("/login");
         });
 
+
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
+
+//            if (!current) {
+//                $log.debug('On Refresh ');
+////                CashService.clean();
+//            }
 
             var templateUrl = "";
             var requireRoles = [];
@@ -126,16 +132,6 @@ app.run(['$rootScope', '$http', '$location', '$log', 'CashService', 'Access',
                 requireRoles = current.requireRoles;
             }
             Access.isAuthorized(templateUrl);
-//            if(requireRoles && !Access.hasAnyRole(requireRoles)){
-//                $log.debug('not authorized - hasAnyRole');
-//                $location.url('/login');
-//            }
-//            if(templateUrl.indexOf('webpoint/user') > 0){
-//                if(!Access.hasRole("ROLE_ADMIN")){
-//                    $log.debug('not authorized - hasRole');
-//                    $location.url('/login');
-//                }
-//            }
 
          });
 

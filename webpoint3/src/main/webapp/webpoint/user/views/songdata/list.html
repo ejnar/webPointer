@@ -19,7 +19,7 @@
 		</div>
 	</div>
 
-    <div class="table-responsive" data-ng-init="groupOfSectionCtrl_loadSection()" >
+    <div class="table-responsive">
 	    <table class="table-responsive table-striped table-bordered" >
 	        <thead>
 	            <tr>
@@ -27,7 +27,8 @@
 	                <th width="*" ><a href="" ng-click="reverse=!reverse;order('title', reverse)">Title</a></th>
 	                <th width="30%" class="hidden-xs"><a href="" ng-click="reverse=!reverse;order('originalTitle', reverse)">Original Title</a></th>
 	                <th width="8%" ><a href="" ng-click="reverse=!reverse;order('category', reverse)">Category</a></th>
-	                <th width="8%" class="hidden-xs"></th>
+	                <th width="4%" class="hidden-xs"></th>
+					<th width="4%" class="hidden-xs"></th>
 	            </tr>
 	        </thead>
 	        <tbody ng-repeat="g in groups" >   <!--  | filter: searchKeyword  -->
@@ -43,11 +44,11 @@
 	            	<td ng-click="groupOfSectionCtrl_editMeta(g.id)"><a href="">{{g.title}}</a></td>
 	                <td class="hidden-xs" >{{g.originalTitle}}</td>
 	                <td>{{g.category}}</td>
+					<td class="hidden-xs nowrap">
+						<button ng-click="groupOfSectionCtrl_editSection(g)">{{g.type}}</button>
+					</td>
 	                <td class="hidden-xs nowrap">
-	                	<button ng-click="groupOfSectionCtrl_editSection(g)">
-	                    	<span class="glyphicon glyphicon-plus-sign"/>
-	                    </button>
-	                    <button mw-confirm-click="groupOfSectionCtrl_delSection(g)" >
+	                    <button mw-confirm-click="groupOfSectionCtrl_delSection(g)"  mw_confirm_click_message="Are you sure you what to delete the song?"  >
 	                    	<span class="glyphicon glyphicon-remove-circle"/>
 	                    </button>
 	                </td>
