@@ -1,4 +1,4 @@
-    <div>
+    <div ng-controller="MenuCtrl">
         <md-toolbar class="md-hue-2">
             <div class="md-toolbar-tools">
                 <h1 flex md-truncate><a href="/"> Songpoint </a></h1>
@@ -14,9 +14,15 @@
                         </md-menu-item>
                         <md-menu-item ng-hide="hideSongList">
                             <md-button href="#songList">
-                                <div layout="row"> List song {{show}}</div>
+                                <div layout="row"> List song </div>
                             </md-button>
                         </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="cleanCash()">
+                                <div class="row"> Clean cash </div>
+                            </md-button>
+                        </md-menu-item>
+
                         <!-- md-menu-item>
                             <md-button href="#about">
                                 <div layout="row"> About </div>

@@ -14,7 +14,6 @@ var app = angular.module('webpoint.core');
             this.stash(key, value, 3);
         }
 
-
         this.stash = function (key, value, storageSize) {
             $log.debug(' --- CashService.stash: ', key);
 
@@ -29,24 +28,27 @@ var app = angular.module('webpoint.core');
     //        $log.debug(arr);
         };
 
-        this.pop = function (key,id) {
+        this.pop = function (key,id,expiredDays) {
             $log.debug(' --- CashService.pop: ', id);
             var obj = null;
             var arr = localStorageService.get(key);
+
             if(arr){
                 arr.forEach(function(entry) {
                     if(entry.obj.id == id) {
-                        obj = entry;
+                        if(!isExpired(entry.time, expiredDays) || expiredDays == null || expiredDays < 1){
+                            obj = entry;
+                        }
                     }
                 });
             }
             return obj != null ? obj.obj : null;
-        }
+        };
 
         this.clean = function () {
             $log.debug('Clean all');
             localStorageService.clearAll();
-        }
+        };
 
         this.setStorage = function (key, val){
             localStorageService.set(key, val);
@@ -83,4 +85,18 @@ var app = angular.module('webpoint.core');
         localStorageArr.splice(0, count);
 
         return localStorageArr;
+    }
+
+    var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+    // a and b are javascript Date objects
+    // var remainingDays    = dateDiffInDays(a, b);
+    function dateDiffInDays(a, b) {
+      // Discard the time and time-zone information.
+      var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+      var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+      return Math.abs(Math.floor((utc2 - utc1) / _MS_PER_DAY));
+    }
+    function isExpired(date, days) {
+        var remainingDays = dateDiffInDays(new Date(), new Date(date));
+        return (remainingDays > days) ? true: false;
     }

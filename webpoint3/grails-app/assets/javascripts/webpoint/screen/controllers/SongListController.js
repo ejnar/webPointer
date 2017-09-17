@@ -19,7 +19,7 @@ var module = angular.module('webpoint.screen');
     	init();
     	function init () {
             $log.debug(' --- SongListCtrl.init ');
-            SectionsApi.cachedList({max:1000}).$promise
+            SectionsApi.cachedList({max:1000,publish:true}).$promise
                 .then(function(resp) {
 //                    $log.debug(resp);
                     $scope.songs = resp;

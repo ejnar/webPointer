@@ -6,13 +6,18 @@ var module = angular.module('webpoint.screen');
 
 
     module.controller('PrintCtrl', PrintCtrl);
-    PrintCtrl.$inject = ['$scope', '$log', 'localStorageService'];
+    PrintCtrl.$inject = ['$scope', '$log', 'localStorageService', 'RemoveKeyService'];
 
-    function PrintCtrl ($scope, $log, localStorageService) {
+    function PrintCtrl ($scope, $log, localStorageService, RemoveKeyService) {
 
         $scope.printCtrl_loadItem = function() {
             $log.debug("Print current: " );
             $scope.section = localStorageService.get('printout');
+            $log.debug($scope.section.data);
+            if($scope.section.withoutkeys){
+                $scope.section.data = RemoveKeyService.removeKeys(false,$scope.section.data);
+                $log.debug($scope.section.data);
+            }
             spliteColumns();
         };
 

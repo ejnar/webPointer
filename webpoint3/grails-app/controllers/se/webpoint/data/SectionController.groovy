@@ -2,7 +2,9 @@ package se.webpoint.data
 
 import grails.transaction.Transactional
 import grails.web.http.HttpHeaders
+import org.apache.camel.ProducerTemplate
 import org.imgscalr.Scalr
+import se.routing.CamelRouteAware
 import se.webpoint.rest.BasicRestController
 
 import javax.imageio.ImageIO
@@ -15,6 +17,8 @@ class SectionController extends BasicRestController<Section> {
 	
     static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST", update: "PUT", patch: "PATCH", delete: "DELETE"]
+
+    ProducerTemplate producerTemplate
 
 	def camelContext
 	def grailsApplictaion
@@ -33,9 +37,10 @@ class SectionController extends BasicRestController<Section> {
      */
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100000)
-//        params.offset = 0
-//        println params
         List<Section> list = listAllResources(params)
+        if(params.publish) {
+            list = list.findAll { it.publish == true }
+        }
         respond list, model: [("${resourceName}Count".toString()): list.size()]
     }
 
@@ -69,8 +74,7 @@ class SectionController extends BasicRestController<Section> {
         access()
         sectionService.saveSection(instance);
 
-        response.addHeader(HttpHeaders.LOCATION,
-			g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))
+        addHeader(this.controllerName, instance.id)
 		respond instance, [status: CREATED]
 	}
 
@@ -106,8 +110,7 @@ class SectionController extends BasicRestController<Section> {
 
         updateResource(instance)
 
-        response.addHeader(HttpHeaders.LOCATION,
-                g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))
+        addHeader(this.controllerName, instance.id)
         respond instance, [status: OK]
     }
 

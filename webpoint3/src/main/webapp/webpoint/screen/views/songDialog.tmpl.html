@@ -26,14 +26,14 @@
         <md-dialog-content>
             <div class="songDialogContent">
                 <div layout="row" layout-xs="column">
-                    <div show-gt-sm hide flex="20" class="dialogInfo">
+                    <div show-gt-sm hide flex="15" class="dialogInfo">
                         <h4>Category:</h4>
                         <ul>
                             <li>{{song.category}}</li>
                             <li ng-repeat="t in song.taggs" ><span>{{t}}</span></li>
                         </ul>
                     </div>
-                    <div layout="row" flex="40" flex-xs="60" class="dialogInfo">
+                    <div layout="row" flex="35" flex-xs="60" class="dialogInfo">
                         <h4>Links:</h4>
                         <ul>
                             <li ng-repeat="l in song.oLinks" ><a href="{{l.url}}" target="blank"><span>{{l.name}}</span></a></li>
@@ -41,7 +41,10 @@
                     </div>
                     <div hide-xs flex="20" class="dialogInfo">
                         <div class="icon-wrapper pointer" ng-click="vyCtrl_print()" >
-                            <i class="material-icons md-20">local_printshop</i><p class="icon-text"> Print </p>
+                            <i class="material-icons md-20">local_printshop</i><p class="icon-text"> Print include keys</p>
+                        </div>
+                        <div class="icon-wrapper pointer" ng-click="vyCtrl_printExcludeKeys()" >
+                            <i class="material-icons md-20">local_printshop</i><p class="icon-text"> Print exclude keys</p>
                         </div>
                     </div>
                 </div>

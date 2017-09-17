@@ -30,13 +30,13 @@ var module = angular.module('webpoint.screen');
                         formatText();
                     });
             }else{
-                var pageList = CashService.pop('PageList', $routeParams.pageListId);
+                var pageList = CashService.pop('PageList', $routeParams.pageListId, 1);
                 $log.debug(' ----------------- pageList: ', pageList);
                 if(pageList == null){
                     PageListApi.get({Id: $routeParams.pageListId}).$promise
                         .then( function(resp) {
-                            $log.debug(resp.pageParts[0].section.data);
-                            $log.debug(resp.pageParts[0].section.fdata);
+//                            $log.debug(resp.pageParts[0].section.data);
+//                            $log.debug(resp.pageParts[0].section.fdata);
                             $scope.pageList = resp;
                             addBinary($scope.pageList);
                             $scope.totalPart = $scope.pageList.pageParts.length;

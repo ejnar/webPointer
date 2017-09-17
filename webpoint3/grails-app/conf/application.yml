@@ -23,8 +23,6 @@ environments:
             databaseName: "webpoint-prod"
 
 ---
-
----
 grails:
     profile: angular
     codegen:
@@ -34,7 +32,7 @@ grails:
             proxies: false
     gorm:
         failOnError: true
-        autowire: false
+#        autowire: false
     databinding:
         trimStrings: false                  # the default value is true
         convertEmptyStringsToNull: true     # the default value is true
@@ -96,6 +94,14 @@ grails:
             maxRequestSize: 12000000
     converters:
         encoding: UTF-8
+---
+twitter:
+  routing:
+    consumerkey: "${TWITTER_CONSUMER_KEY}"
+    consumersecret: "${TWITTER_CONSUMER_SECRET}"
+    oauth:
+      accesstoken: "${TWITTER_ACCESS_TOKEN}"
+      accesstokensecret: "${TWITTER_ACCESS_TOKEN_SECRET}"
 ---
 # YOUR_MAX_SIZE_IN_MB * 1024 * 1024 = BYTES
 #server:

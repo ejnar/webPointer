@@ -6,7 +6,6 @@ import grails.web.http.HttpHeaders
 
 import static org.springframework.http.HttpStatus.*
 
-//import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 
 	def springSecurityService;
@@ -14,8 +13,6 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
     static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]   // patch: "PATCH",
 
-	
-	def camelContext
 	def grailsApplictaion
 	
 	

@@ -12,10 +12,12 @@ var module = angular.module('webpoint.screen');
         PageListApi, SectionsApi, PageService, BinaryApi) {
 
         $scope.cancel = cancel;
+        $scope.vyCtrl_print = print;
+        $scope.vyCtrl_printExcludeKeys = printExcludeKeys;
 
     	function init () {
             $log.debug(' --- SongItemtCtrl.init ' + song.id);
-            $log.debug(song);
+//            $log.debug(song);
             $scope.selectedSongLists = [];
             $scope.song = song;
             addBinary($scope.song);
@@ -43,12 +45,17 @@ var module = angular.module('webpoint.screen');
             findRemovedSongInList($scope.song,$scope.songLists,$scope.selectedSongLists);
         };
 
-        $scope.vyCtrl_print = function() {
+        function print () {
             $log.debug("Go to print page: " + $scope.currentPart );
             localStorageService.set('printout', $scope.song);
             $location.path(cfgScreenPath.print);
             cancel ();
-        };
+        }
+
+        function printExcludeKeys () {
+            $scope.song.withoutkeys = true
+            print ();
+        }
 
         function addBinary(section){
             if(section.type == 'IMAGE'){

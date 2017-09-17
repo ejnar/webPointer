@@ -5,17 +5,31 @@ import grails.transaction.Transactional
 import org.apache.commons.logging.LogFactory
 import org.grails.web.errors.GrailsWrappedRuntimeException
 import org.imgscalr.Scalr
+import se.routing.CamelRoute
 import se.webpoint.auth.RoleGroup
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 
 @Transactional
-class SectionService {
+class SectionService extends CamelRoute{
 
 
     private static final log = LogFactory.getLog(this)
     SpringSecurityService springSecurityService
+
+
+    def Section getAllSection(publish) {
+        Set<Section> sections;
+
+        if(publish) {
+            sections = Section.findByPublish(true)
+        }else{
+            sections = Section.findAll()
+        }
+        sections
+    }
+
 
 
     def Section getSection(id) {
@@ -45,6 +59,11 @@ class SectionService {
         instance.roleGroupSet = roleGroupSet
 
         instance.insert flush:true
+
+//        sendMessage("seda:input","seda.saveSection " + instance.title)
+
+        sendMessage("direct:twitter","New title have been added: " + instance.title)
+
         instance
     }
 

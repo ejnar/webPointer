@@ -14,4 +14,8 @@ var module = angular.module('webpoint.screen');
             $location.path(cfgScreenPath.SONGLIST);
 
         }
+
+        $scope.cleanCash = function() {
+            CashService.clean();
+        };
     }

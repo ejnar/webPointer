@@ -312,16 +312,16 @@ div.sideBtn{
     color: #404040;
     padding: 2em 0 0 0;
     margin:0;
-    outline:none
+    outline:none;
 }
 div.sideLeftBtn{
     position: fixed;
-    top: 80px;
+    top: 120px;
     left: 0;
 }
 div.sideRightBtn{
     position: fixed;
-    top: 80px;
+    top: 120px;
     right: 0;
 }
 div.vyMainArea {

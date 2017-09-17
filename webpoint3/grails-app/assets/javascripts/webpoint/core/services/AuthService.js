@@ -20,7 +20,7 @@ var app = angular.module('webpoint.core');
 
         function login(username,password) {
             $log.debug('login');
-            $http.post('auth/api/login', { username: username, password: password }, {ignoreAuthModule: true} ).
+            $http.post('auth/api/login', { username: username.toLowerCase(), password: password }, {ignoreAuthModule: true} ).
                 success(function (user) {
                     $log.debug(user);
                     $rootScope.currentUser = user.username;

@@ -17,7 +17,7 @@ buildscript {
     }
 }
 
-version "0.9.7.8.3"
+version "0.9.7.8.5"
 group "webpoint3"
 
 apply plugin:"eclipse"
@@ -55,6 +55,7 @@ dependencies {
     assets "com.craigburke:js-closure-wrap-asset-pipeline:1.2.0"
 
     compile "org.springframework.boot:spring-boot-starter-logging"
+
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-tomcat"
@@ -65,6 +66,21 @@ dependencies {
     compile "org.grails.plugins:spring-security-core:$springSecurityCoreVersion"
     compile "org.grails.plugins:spring-security-rest:$springSecurityRestVersion"
     compile "org.grails.plugins:spring-security-rest-gorm:$springSecurityRestVersion"
+
+    // Apache Camel
+    compile "org.apache.camel:camel-core:2.18.3"  // 2.15.3 2.18.3 2.19.0
+    compile "org.apache.camel:camel-spring-boot:2.18.3"
+    compile "org.apache.camel:camel-twitter:2.18.3"
+    compile "org.apache.camel:camel-stream:2.18.3"
+
+//    compile "org.apache.camel:camel-groovy:2.15.3"
+//    compile "org.apache.activemq:activemq-camel:5.14.4"  // 5.11.1
+//    runtime "org.apache.camel:camel-stream:2.15.3"
+//    runtime "org.apache.camel:camel-netty:2.15.3"
+//    runtime "org.apache.camel:camel-netty4:2.15.3"
+//    runtime "org.apache.camel:camel-spring:2.15.3"
+//    runtime "org.apache.camel:camel-jms:2.15.3"
+//    runtime "org.apache.activemq:activemq-pool:5.11.1"
 
 //    compile 'javax.websocket:javax.websocket-api:1.0'
 //    compile "org.springframework:spring-websocket"
@@ -92,18 +108,6 @@ dependencies {
 
     profile "org.grails.profiles:angular"
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.8.2"
-
-//    compile "org.apache.camel:camel-core:2.19.0"  // 2.15.3 2.18.3
-//    compile "org.apache.camel:camel-spring-boot-starter:2.19.0"
-//    compile "org.apache.activemq:activemq-camel:5.14.4"  // 5.11.1
-    //runtime "org.apache.camel:camel-groovy:2.15.3"
-    //runtime "org.apache.camel:camel-stream:2.15.3"
-    //runtime "org.apache.camel:camel-netty:2.15.3"
-    // runtime "org.apache.camel:camel-netty4:2.15.3"
-    // runtime "org.apache.camel:camel-spring:2.15.3"
-    // runtime "org.apache.camel:camel-jms:2.15.3"
-    // runtime "org.apache.activemq:activemq-pool:5.11.1"
-
 
     testCompile "org.grails:grails-plugin-testing"
     testCompile "org.grails.plugins:geb"
@@ -200,7 +204,11 @@ bootRun {
 
 processResources {
     filesMatching("**/*.yml") {
-        expand(MONGO_WEBPOINT_HOST: MONGO_WEBPOINT_HOST, MONGO_WEBPOINT_USER: MONGO_WEBPOINT_USER, MONGO_WEBPOINT_PASS: MONGO_WEBPOINT_PASS)
+        expand(MONGO_WEBPOINT_HOST: MONGO_WEBPOINT_HOST, MONGO_WEBPOINT_USER: MONGO_WEBPOINT_USER,
+                MONGO_WEBPOINT_PASS: MONGO_WEBPOINT_PASS,
+                TWITTER_CONSUMER_KEY: TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET: TWITTER_CONSUMER_SECRET,
+                TWITTER_ACCESS_TOKEN: TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET: TWITTER_ACCESS_TOKEN_SECRET
+        )
     }
 }
 
