@@ -16,6 +16,6 @@ var module = angular.module('webpoint.screen');
         }
 
         $scope.cleanCash = function() {
-            CashService.clean();
+            CashService.setSessionStorage('excludeCache', true);
         };
     }

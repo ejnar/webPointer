@@ -16,8 +16,7 @@ class UserController extends RestfulController<User>  {
 	UserService userService;
 	
 	SpringSecurityService springSecurityService
-	
-	def camelContext
+
 	def grailsApplictaion
 	
 	

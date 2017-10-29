@@ -27,6 +27,7 @@ test-app -unit:javascript ChangeKeyServiceSpec
 Integration
 test-app -integration se.webpoint.data.UserServiceSpec
 
+test-app -unit:javascript RemoveKeyServiceSpec
 
 --------------------------
 *** Bower dependencies
@@ -68,6 +69,11 @@ grails create-app webpoint3 --profile angular --features mongodb, asset-pipeline
 * Db dump
  - mongodump
  - mongorestore
+
+mongodump --db database_name
+mongorestore --db database_name path_to_bson_file
+
+mongodump -h 127.0.0.1 -u user -p pass --db webpoint --port 00000 --out /Users/ejnarakerman/dump/fold
 
 
 ----------------------------

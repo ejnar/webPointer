@@ -53,6 +53,9 @@ class BootStrap {
             output['token'] = it.token
             output['authority'] = it.authority
             output['rolegroups'] = it.rolegroups
+            output['role'] = it.role
+            output['systemRole'] = it.systemRole
+
             return output
         }
 
@@ -84,6 +87,10 @@ class BootStrap {
             Role roleSysAdmin = Role.findByAuthority("SYS_ROLE_ADMIN") ?: new Role(authority: "SYS_ROLE_ADMIN", system: true, order: 0).save(flush: true, failOnError: true)
             Role roleAdmin = Role.findByAuthority("ROLE_ADMIN") ?: new Role(authority: "ROLE_ADMIN", system: false, order: 1).save(flush: true, failOnError: true)
             Role roleView = Role.findByAuthority("ROLE_VIEW") ?: new Role(authority: "ROLE_VIEW", system: false, order: 5).save(flush: true, failOnError: true)
+
+            Role.findByAuthority("ROLE_USER") ?: new Role(authority: "ROLE_USER", system: false, order: 3).save(flush: true, failOnError: true)
+            Role.findByAuthority("ROLE_CLIENT") ?: new Role(authority: "ROLE_CLIENT", system: false, order: 4).save(flush: true, failOnError: true)
+
 
             RoleGroup groupSysAdmin = RoleGroup.findByName("SYS_GROUP_ADMIN") ?: new RoleGroup(name: "SYS_GROUP_ADMIN", system: true).save(flush: true, failOnError: true)
             RoleGroup groupAdmin = RoleGroup.findByName("GROUP_ADMIN") ?: new RoleGroup(name: "GROUP_ADMIN", system: false).save(flush: true, failOnError: true)
@@ -129,7 +136,13 @@ class BootStrap {
 ////            user.encodePassword
 ////            user.save(flush: true, failOnError: true)
 //            UserRoleGroup.get(user.id, groupPingst.id) ?: UserRoleGroup.create(user, groupPingst, true)
+
+//            Role.findByAuthority("ROLE_USER") ?: new Role(authority: "ROLE_USER", system: false, order: 3).save(flush: true, failOnError: true)
+//            Role.findByAuthority("ROLE_CLIENT") ?: new Role(authority: "ROLE_CLIENT", system: false, order: 4).save(flush: true, failOnError: true)
+
         }
+
+
 
     }
     def destroy = {

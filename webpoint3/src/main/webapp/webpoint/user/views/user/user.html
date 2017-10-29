@@ -44,7 +44,7 @@
 							ng-messages-include="common/views/messages/error.html" ></span>
 					</label>
         			<div class="controls">
-						<select name="role" ng-model="user.authority" ng-selected="user.authority" ng-disabled="!doSave"
+						<select name="role" ng-model="user.authority" ng-selected="user.authority"
 		        			class="form-control" ng-options="role.authority as role.authority for role in userCtrl.roles" required>
 		        			<option value="">Pick a role</option>
 		        		</select>  					        	
@@ -97,6 +97,14 @@
                     </div>
                 </div>
             </div>
+			<div class="col-md-2">
+				<div class="control-group">
+					<label class="control-label" for="enabled">System role:</label>
+					<div class="controls">
+						<input name="enabled" type="checkbox" ng-model="user.systemRole.system" ng-disabled="doSave" class="form-control" >
+					</div>
+				</div>
+			</div>
 		</div>
 
 

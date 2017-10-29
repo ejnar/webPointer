@@ -28,6 +28,14 @@ class UserRole extends BaseDomain {
         builder.toHashCode()
     }
 
+
+    static UserRole getByUser(ObjectId userId) {
+        UserRole.where {
+            user == User.load(userId)
+        }
+    }
+
+
     static UserRole get(ObjectId userId, ObjectId roleId) {
         criteriaFor(userId, roleId).get()
     }

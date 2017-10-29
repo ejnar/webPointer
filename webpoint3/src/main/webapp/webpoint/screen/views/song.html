@@ -13,6 +13,11 @@
         <md-subheader >Song list</md-subheader>
 
 
+        <div ng-if="song.type == 'TEXT'
+                                || song.type == 'TEXTCHORDS'"
+             class="vyMainArea"  ng-class="fontSize" layout="row"
+             ng-bind-html="song.data" >
+        </div>
 
     </md-content>
 

@@ -109,67 +109,6 @@ class RoleGroupController  {   // extends RestfulController<RoleGroup>
 		bindData instance, getObjectToBind()
 		instance
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-//	/**
-//	 * Saves a resource
-//	 */
-//	@Transactional
-//	def save() {
-//		if(handleReadOnly()) {
-//			return
-//		}
-//		def instance = createResource()
-//
-//		instance.validate()
-//		if (instance.hasErrors()) {
-//			respond instance.errors, view:'create' // STATUS CODE 422
-//			return
-//		}
-//
-//		instance.save flush:true
-//
-//		respond instance
-//	}
-//
-//	/**
-//	 * Updates a resource for the given id
-//	 * @param id
-//	 */
-//	@Transactional
-//	def update() {
-//		if(handleReadOnly()) {
-//			return
-//		}
-//
-//		def instance = queryForResource(params.id)
-//		if (instance == null) {
-//			notFound()
-//			return
-//		}
-//
-//		instance.properties = getObjectToBind()
-//
-//		if (instance.hasErrors()) {
-//			respond instance.errors, view:'edit' // STATUS CODE 422
-//			return
-//		}
-//
-//		instance.save flush:true
-//		
-//		respond instance
-//	}
-//
-//	
-//	
-//	protected void notFound() {
-//		render status: NOT_FOUND 
-//	}
+
 	
 }

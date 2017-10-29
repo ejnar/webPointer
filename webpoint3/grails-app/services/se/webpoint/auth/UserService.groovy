@@ -53,17 +53,24 @@ class UserService {
 
     private def mapUserDetail(user,token){
         Set<String> rolegroups = user.getAuthoritiesExternal()*.name
-
-//        Set<UserRole> userRole = UserRole.findAllByUser(user);
-//        userRole.each{ u ->
-//            println u.user.username
-//            println u.role
-//        }
-
+        Set<UserRole> userRoles = UserRole.findAllByUser(user);
+        List<UserRole> oUserRoles = userRoles.stream().filter({ ur ->  !ur.role.system }).collect()
+        List<UserRole> sUserRoles = userRoles.stream().filter({ ur ->  ur.role.system }).collect()
+        String authority = "";
+        if(!oUserRoles.isEmpty()){
+            authority = oUserRoles[0].role.authority;
+        }
+        Role sRole = null;
+        if(!sUserRoles.isEmpty()) {
+            UserRole sUserRole = sUserRoles[0];
+            if (sUserRole != null) {
+                sRole = sUserRole.role
+            }
+        }
         return new UserDetail(
-                id: user.id, username: user.username, token: token,
+                id: user.id, username: user.username, token: token, authority: authority,
                 enabled: user.enabled, passwordExpired: user.passwordExpired, accountLocked: user.accountLocked,
-                email: user.email, rolegroups: rolegroups )
+                email: user.email, rolegroups: rolegroups, systemRole: sRole)
     }
 
 
@@ -79,15 +86,53 @@ class UserService {
     }
 
     def update(instance){
+
         User user = User.findById(instance.id)
         user.email = instance.email
         user.enabled = instance.enabled
         user.accountLocked = instance.accountLocked
         user.save(failOnError: true)
+
+        Set<UserRole> userRoles = UserRole.findAllByUser(user);
+        Set<UserRole> oUserRoles = userRoles.findAll {it.role.system == false}
+        Role role = Role.findByAuthority(instance.authority);
+        if(oUserRoles.isEmpty()) {
+            UserRole userRole = new UserRole();
+            userRole.setRole(role);
+            userRole.setUser(user);
+            userRole.save(flush: true);
+        }else{
+            UserRole userRole = oUserRoles.getAt(0)
+            if(oUserRoles.size() > 1){
+                for (ur in oUserRoles) {
+                    ur.delete flush:true
+                }
+            }
+            if(!userRole.getRole().equals(role)) {
+                userRole.setRole(role);
+                userRole.save(flush: true)
+            }
+        }
+        if(oUserRoles.size() > 1){
+            log.fatal(" To many roles ");
+        }
+        Set<UserRole> sysUserRoles = userRoles.findAll {it.role.system == true}
+        if(instance.systemRole && sysUserRoles.isEmpty()) {
+            if(instance.systemRole.system) {
+                Role r = Role.findByAuthority('SYS_ROLE_ADMIN');
+                UserRole userRole = new UserRole()
+                userRole.setUser(user);
+                userRole.setRole(r);
+                userRole.save(flush: true)
+            }
+        }else if (instance.systemRole && !sysUserRoles.isEmpty()){
+            if(!instance.systemRole.system) {
+                UserRole userRole = sysUserRoles.getAt(0)
+                userRole.delete flush: true
+            }
+        }
         return mapUserDetail(user,null);
     }
-
-
 
 
     def updateUserEmail(String username, String email){
@@ -122,6 +167,7 @@ class UserService {
 
 				UserRole userRole = UserRole.get(user.id, role.id) ?: UserRole.create(user, role, true)
 				log.debug(userRole)
+
 				UserRoleGroup userRoleGroup = UserRoleGroup.get(user.id, group.id) ?: UserRoleGroup.create(user, group, true)
 				log.debug(userRoleGroup)
 

@@ -15,6 +15,11 @@ class UserDetail extends BaseDomain implements Validateable{
     String pazz
     String token
 
+    Role role
+    Role systemRole
+
+    static transients = ['role', 'systemRole']
+
 	UserDetail(){
 	}
 

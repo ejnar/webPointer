@@ -1,9 +1,11 @@
 package se.webpoint.rest
 
 import grails.rest.RestfulController
+import grails.transaction.Transactional
 import grails.web.http.HttpHeaders
 import se.webpoint.auth.AccessService
 
+import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 
 /**
@@ -47,4 +49,26 @@ class BasicRestController<T> extends RestfulController<T> {
     protected void notFound() {
         render status: NOT_FOUND
     }
+
+
+    /**
+     * Saves a resource
+     */
+    @Override
+    @Transactional
+    def save() {
+        log.info " --- save:"
+
+        def instance = createResource()
+        if(instance == null){
+            notFound()
+            return
+        }
+        access()
+        instance.insert flush:true
+
+        addHeader(this.controllerName, instance.id)
+        respond instance, [status: CREATED]
+    }
+
 }

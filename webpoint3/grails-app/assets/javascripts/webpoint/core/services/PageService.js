@@ -6,18 +6,25 @@ var pageService = angular.module('webpoint.core');
 
 
     pageService.factory('PageService', PageService);
-    PageService.$inject = ['$log', 'PageListDataApi'];
+    PageService.$inject = ['$log', 'PageListDataApi', 'PageListApi'];
 
 
-    function PageService($log, PageListDataApi){
+    function PageService($log, PageListDataApi, PageListApi){
         $log.info('PageService');
-
         var service = {
             addSectionToList: addSectionToList,
-            removeSectionInList: removeSectionInList
+            removeSectionInList: removeSectionInList,
+            listApi: PageListApi,
+            excludeCache: excludeCache
 
         }
         return service;
+
+        function excludeCache(exclude){
+            var method = 'getCache';
+            if(exclude) method = 'get';
+            return method;
+        }
 
         function addSectionToList(pageListId, section) {
 			$log.debug(" --- PageService.addSectionToList - section:", section);
@@ -64,6 +71,7 @@ pageService.factory('PageListApi', ['$resource', '$q', '$timeout', '$log',
            			'list': { method:'GET', isArray:true, cache:true},
            			'list2': { method:'GET', isArray:true, cache:false},
            			'get': { method:'GET' },
+           			'getCache': { method:'GET', cache:true},
            			'save': { method:'POST'},
            			'update': { method:'PUT'},
            			'remove': { method:'DELETE'}

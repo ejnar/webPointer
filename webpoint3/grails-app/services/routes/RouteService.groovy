@@ -1,8 +1,9 @@
 package routes
 
-
+import grails.util.Environment
 import org.apache.camel.LoggingLevel
 import org.apache.camel.builder.RouteBuilder
+import twitter4j.TwitterException
 
 
 public class RouteService extends RouteBuilder {
@@ -21,7 +22,9 @@ public class RouteService extends RouteBuilder {
         from('seda:input').to('stream:out');
         // Twitter
         from("direct:twitter")
-                .to("twitter://timeline/user?consumerKey=${config.twitter.routing.consumerkey}&consumerSecret=${config.twitter.routing.consumersecret}&accessToken=${config.twitter.routing.oauth.accesstoken}&accessTokenSecret=${config.twitter.routing.oauth.accesstokensecret}");
+                .handleFault().onException(TwitterException.class).continued(true).end()
+                .to("twitter://timeline/user?consumerKey=${config.twitter.routing.consumerkey}&consumerSecret=${config.twitter.routing.consumersecret}&accessToken=${config.twitter.routing.oauth.accesstoken}&accessTokenSecret=${config.twitter.routing.oauth.accesstokensecret}")
+                ;
 
 //        from("activemq:my.queueName")
 //                .log(LoggingLevel.INFO,"consumed message from queue my.queueName")

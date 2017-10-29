@@ -42,10 +42,12 @@ var app = angular.module('webpoint.core');
             xhrResolutions++;
         }
 
-        function updateStatus() {
+        function updateStatus(excludeSpinner) {
             loadingTracker.active = isLoading();
             if(loadingTracker.active){
-                usSpinnerService.spin('spinner-1');
+                if(!excludeSpinner){
+                    usSpinnerService.spin('spinner-1');
+                }
             }else{
                 $timeout(function(){
                     usSpinnerService.stop('spinner-1');

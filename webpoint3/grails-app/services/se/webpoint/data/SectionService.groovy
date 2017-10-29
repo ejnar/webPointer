@@ -59,10 +59,8 @@ class SectionService extends CamelRoute{
         instance.roleGroupSet = roleGroupSet
 
         instance.insert flush:true
-
 //        sendMessage("seda:input","seda.saveSection " + instance.title)
-
-        sendMessage("direct:twitter","New title have been added: " + instance.title)
+        sendMessage("direct:twitter","New song added: " + instance.title)
 
         instance
     }

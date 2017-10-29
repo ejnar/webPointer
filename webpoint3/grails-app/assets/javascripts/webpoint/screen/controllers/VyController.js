@@ -5,53 +5,87 @@
 var module = angular.module('webpoint.screen');
 
     module.controller('VyCtrl', VyCtrl);
-    VyCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath',
-                      'PageListApi', 'BinaryApi', '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService',
-                      'CashService', 'RemoveKeyService'];
+    VyCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath', '$interval',
+                      '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService', 'PageService',
+                      'Access', 'CashService', 'RemoveKeyService', 'SectionCashService', 'BinaryApi'];
 
-    function VyCtrl ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath,
-                    PageListApi, BinaryApi, $mdDialog, properties, ChangeKeyService, VyApi, localStorageService,
-                    CashService, RemoveKeyService) {
-
+    function VyCtrl ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath, $interval,
+                     $mdDialog, properties, ChangeKeyService, VyApi, localStorageService, PageService,
+                    Access, CashService, RemoveKeyService, SectionCashService, BinaryApi) {
+        var promiseInterval;
+        $scope.activeSong = null;
     	$scope.currentPart = 0;
     	$scope.currentPage = 0;
     	$scope.totalPart = 1;
-    	$scope.vyCtrl_loadData = function() {
+
+        (function init() {
+             vyCtrl_loadData();
+        })();
+
+    	function vyCtrl_loadData() {
             $log.debug(' --- VyController.vyCtrl_loadData:');
-//            localStorageService.clearAll();
 //            $log.debug($routeParams);
             if($routeParams.group){
                 VyApi.get({group: $routeParams.group, pages: $routeParams.pages}).$promise
                     .then( function(resp) {
-//                        $log.debug(resp);
+                        $log.debug(resp);
                         $scope.pageList = resp;
                         addBinary($scope.pageList);
                         $scope.totalPart = $scope.pageList.pageParts.length;
                         formatText();
                     });
             }else{
-                var pageList = CashService.pop('PageList', $routeParams.pageListId, 1);
-                $log.debug(' ----------------- pageList: ', pageList);
-                if(pageList == null){
-                    PageListApi.get({Id: $routeParams.pageListId}).$promise
-                        .then( function(resp) {
-//                            $log.debug(resp.pageParts[0].section.data);
-//                            $log.debug(resp.pageParts[0].section.fdata);
-                            $scope.pageList = resp;
-                            addBinary($scope.pageList);
-                            $scope.totalPart = $scope.pageList.pageParts.length;
-                            CashService.stash('PageList',resp);
-                            formatText();
-                        });
-                }else{
-                    $scope.pageList = pageList;
-                    addBinary($scope.pageList);
-                    $scope.totalPart = $scope.pageList.pageParts.length;
-                    formatText();
-                }
+                var exclude = CashService.getSessionStorage('excludeCache', true);
+                $log.debug(' ----------------- pageList: ', exclude);
+                var method = PageService.excludeCache(exclude);
+                PageService.listApi [method] ({Id: $routeParams.pageListId}, function(resp) {
+                        $log.debug(resp);
+                        $scope.pageList = resp;
+                        addBinary($scope.pageList);
+                        $scope.totalPart = $scope.pageList.pageParts.length;
+                        CashService.setSessionStorage('excludeCache', false);
+                        formatText();
+
+                    });
+			}
+			if(Access.isClient()){
+			    promiseInterval = $interval( function(){ callAtInterval(); }, 3000);
 			}
     	};
 
+    	function callAtInterval() {
+//            console.log("$scope.callAtInterval - Interval occurred");
+            SectionCashService.sectionCashApi.get({Id: $routeParams.pageListId}, function (resp) {
+                $log.debug(resp);
+                if($scope.activeSong == null){
+                    $scope.activeSong = resp;
+                }else if($scope.activeSong.currentSectionId != resp.currentSectionId ){
+                    $scope.activeSong = resp;
+                    $scope.activeSong.active = true;
+                    $log.debug($scope.activeSong);
+                    if($scope.activeSong.currentSectionId != null){
+                        $scope.pageList.pageParts.forEach(function(entry) {
+                            if(entry.section.id == $scope.activeSong.currentSectionId){
+                                $scope.activeSong.section = entry.section;
+                            }
+                        });
+                    }
+                    document.getElementById("snackbar").className = "show";
+                }
+                else{
+                    document.getElementById("snackbar").className = "";
+//                    setTimeout(function(){ document.getElementById("snackbar").className = ""; }, 6000);
+                }
+                if(resp.refresh){
+                    CashService.setSessionStorage('excludeCache', true);
+                }
+            });
+
+        }
+        $scope.$on('$destroy',function(){
+            if(promiseInterval)
+                $interval.cancel(promiseInterval);
+        });
         function addBinary(page){
             angular.forEach(page.pageParts, function(s) {
                 if(s.section.type == 'IMAGE'){
@@ -72,6 +106,11 @@ var module = angular.module('webpoint.screen');
                     pageList.pageParts[i].section.data = RemoveKeyService.removeKeys(true,pageList.pageParts[i].section.data);
                 }
             }
+        }
+
+
+        function updateCash(){
+            SectionCashService.updatePageListCach($scope.pageList.id, $scope.pageList.pageParts[$scope.currentPart].section.id, false);
         }
 
         function spliteColumns(pageList) {
@@ -108,7 +147,8 @@ var module = angular.module('webpoint.screen');
     			$scope.currentPart = 0;
     		}else if($scope.currentPart < 0){
     			$scope.currentPart = $scope.totalPart-1;
-    		}	
+    		}
+            updateCash();
       	};
 
 
@@ -121,7 +161,7 @@ var module = angular.module('webpoint.screen');
     	};
 
     	$scope.nextPage = function(index) {
-    	    console.log($scope.pageList.pageParts[$scope.currentPart].section.objects.length)
+//    	    console.log($scope.pageList.pageParts[$scope.currentPart].section.objects.length)
     		$scope.currentPage = $scope.currentPage + index;
     		if($scope.currentPage >= $scope.pageList.pageParts[$scope.currentPart].section.objects.length){
     			$scope.currentPage = 0;
@@ -146,6 +186,7 @@ var module = angular.module('webpoint.screen');
 //            $log.debug('Click in list: ', index);
             $scope.currentPart = index;
             $scope.vyCtrl_closeSidenav('sidenav-right_1');
+            updateCash();
         };
 
         $scope.vyCtrl_changeSize = function () {
@@ -254,7 +295,7 @@ var module = angular.module('webpoint.screen');
 
         $scope.vyCtrl_cleanCash = function() {
             $log.debug("Clean cash ");
-            CashService.clean();
+            CashService.setSessionStorage('excludeCache', true);
         };
 
         $scope.showAlert = function(ev) {

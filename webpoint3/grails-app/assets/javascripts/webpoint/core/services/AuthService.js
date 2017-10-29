@@ -2,14 +2,13 @@
 
 /* Services */
 
-var app = angular.module('webpoint.core');
+var module = angular.module('webpoint.core');
 
 
-    app.factory('AuthService', AuthService);
-    AuthService.$inject = ['$rootScope', '$log', '$http', '$resource', 'authService', 'SettingService', 'CashService'];
+    module.factory('AuthService', AuthService);
+    AuthService.$inject = ['$rootScope', '$log', '$http', 'authService', 'SettingService', 'CashService', 'AuthorityApi'];
 
-
-    function AuthService($rootScope, $log, $http, $resource, authService, SettingService, CashService){
+    function AuthService($rootScope, $log, $http, authService, SettingService, CashService, AuthorityApi){
         $log.info('AppService');
         var service = {
             login : login,
@@ -33,6 +32,10 @@ var app = angular.module('webpoint.core');
                         return config;
                     });
                     CashService.setSessionStorage("roles", user.roles);
+                    AuthorityApi.Auth.userRole({}, function(resp) {
+                        $log.debug(resp);
+                        CashService.setSessionStorage("uRole", resp.authority);
+                    });
 //                    CashService.setSessionStorage("user", user);
                 }).
                 error(function (user) {
@@ -48,6 +51,7 @@ var app = angular.module('webpoint.core');
         function logout() {
             SettingService.forceCashUpdate();
             var config = {headers: {'X-Auth-Token': sessionStorage.authToken }};
+            CashService.setSessionStorage("roles", null);
             $http.post('auth/api/logout', {}, config).
                 success(function (user) {
                     $rootScope.$broadcast('event:auth-logoutRequest');
@@ -59,3 +63,18 @@ var app = angular.module('webpoint.core');
         }
 
     }
+
+
+module.factory('AuthorityApi', ['$resource', '$log',
+	function ($resource, $log) {
+		$log.debug(' --- AuthorityApi.factory --- ');
+
+		return	{
+                    Auth: $resource('api/auth/:Id', {Id: '@Id'},
+                            {
+                                'password': { method: 'PUT', url: 'api/auth/password'},
+                                'userRole': { method: 'GET', url: 'api/auth/userrole'}
+                            })
+				};
+		}
+]);

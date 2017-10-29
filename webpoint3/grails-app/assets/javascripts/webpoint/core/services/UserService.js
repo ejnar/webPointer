@@ -2,9 +2,9 @@
 
 /* Services */
 
-var userService = angular.module('webpoint.core');
+var module = angular.module('webpoint.core');
 
-userService.factory('UserApi', ['$resource', '$log',
+module.factory('UserApi', ['$resource', '$log',
   function ($resource, $log) {
 	return	{ 
 			    User: $resource('api/user/:Id', {Id: '@Id'},
@@ -34,23 +34,15 @@ userService.factory('UserApi', ['$resource', '$log',
                         'get': { method:'GET'},
                         'save': { method:'POST'},
                         'update': { method:'PUT'}
+                    }),
+                UserRole: $resource('api/userroles/:Id', {Id: '@Id'},
+                    {
+                        'list': { method:'GET', isArray:true, cache:false},
+                        'get': { method:'GET'}
                     })
 
 			};
 	}
-]);
-
-userService.factory('AuthorityApi', ['$resource', '$log',
-	function ($resource, $log) {
-		$log.debug(' --- AuthorityApi.factory --- ');
-		
-		return	{ 
-				Auth: $resource('api/auth/:Id', {Id: '@Id'},
-						{
-	           				'password': { method: 'PUT', url: 'api/auth/password'}
-						})
-				};
-		}
 ]);
 
 

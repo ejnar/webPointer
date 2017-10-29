@@ -6,16 +6,19 @@ var module = angular.module('webpoint.screen');
 
     module.controller('SongItemtCtrl', SongItemtCtrl);
     SongItemtCtrl.$inject = ['$scope', '$location', '$filter', '$log', '$mdDialog', 'song', 'localStorageService', 'cfgScreenPath',
-        'PageListApi', 'SectionsApi', 'PageService', 'BinaryApi'];
+        'PageListApi', 'SectionsApi', 'PageService', 'BinaryApi', 'SectionCashService'];
 
     function SongItemtCtrl($scope, $location, $filter, $log, $mdDialog, song, localStorageService, cfgScreenPath,
-        PageListApi, SectionsApi, PageService, BinaryApi) {
+        PageListApi, SectionsApi, PageService, BinaryApi, SectionCashService) {
 
         $scope.cancel = cancel;
         $scope.vyCtrl_print = print;
         $scope.vyCtrl_printExcludeKeys = printExcludeKeys;
 
-    	function init () {
+        (function init() {
+             load ();
+        })();
+    	function load () {
             $log.debug(' --- SongItemtCtrl.init ' + song.id);
 //            $log.debug(song);
             $scope.selectedSongLists = [];
@@ -34,9 +37,10 @@ var module = angular.module('webpoint.screen');
             $log.debug(' --- SongItemtCtrl.songItemtCtrl_selectedSongList ');
             angular.forEach($scope.selectedSongLists, function(s) {
                 if(!s.selected){
+                    SectionCashService.updatePageListCach(s.id, null, true);
                     PageService.addSectionToList(s.id, $scope.song).$promise
                         .then( function(resp) {
-//                            $log.debug(resp);
+                            $log.debug(resp);
                             s.pageParts.push(resp);
                         });
                     s.selected = true;
@@ -122,8 +126,6 @@ var module = angular.module('webpoint.screen');
             l.href = href;
             return l.hostname;
         };
-
-        init();
 
     }
 

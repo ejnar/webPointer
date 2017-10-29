@@ -7,9 +7,9 @@ appDirectives.directive('keyright', [ '$document', '$parse', '$log', function($d
 	return {
 		restrict: 'A',
 		link: function(scope, iElement, iAttrs) {
-			$log.debug(scope);
-			$log.debug(iElement);
-			$log.debug(iAttrs);
+//			$log.debug(scope);
+//			$log.debug(iElement);
+//			$log.debug(iAttrs);
 			var onClick = $parse( iAttrs.ngClick );
 			$document.bind('keydown', function(e) {
 				if(e.which == 39){

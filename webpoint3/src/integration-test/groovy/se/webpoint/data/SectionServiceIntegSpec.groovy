@@ -27,22 +27,21 @@ class SectionServiceIntegSpec extends BaseSpecification {
         section.delete flush:true
     }
 
-    void "test saveSection"() {
-        given:
-        User user = setupUser('SectionServiceIntegSpec2')
-        mockSecurityService.loadCurrentUser() >> user
-        service.springSecurityService = mockSecurityService
-        Section instance = new Section(title: 'SectionServiceIntegSpec2', category: 'category', language: 'ENG', data: 'data', type: 'type', key: 'F')
-
-        when:
-        Section savedS = service.saveSection(instance)
-
-        then:
-        savedS.key.equals('F')
-        savedS.roleGroupSet.size() == 1
-
-        cleanup:
-        savedS.delete flush:true
-        cleanUser(user)
-    }
+//    void "test saveSection"() {
+//        given:
+//        User user = setupUser('SectionServiceIntegSpec2')
+//        mockSecurityService.loadCurrentUser() >> user
+//        service.springSecurityService = mockSecurityService
+//        Section instance = new Section(title: 'SectionServiceIntegSpec2', category: 'category', language: 'ENG', data: 'data', type: 'type', key: 'F')
+//        Section section = service.saveSection(instance)
+//
+//        expect:
+//        section.title.equals('SectionServiceIntegSpec2')
+//        section.key.equals('F')
+//        section.roleGroupSet.size() == 1
+//
+//        cleanup:
+//        section.delete flush:true
+//        cleanUser(user)  //
+//    }
 }

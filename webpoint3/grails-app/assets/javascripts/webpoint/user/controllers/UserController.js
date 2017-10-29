@@ -45,14 +45,14 @@ var module = angular.module('webpoint.user');
     function EditUserCtrl ($scope, $routeParams, $log, cfgAppPath, hashMap, UserApi) {
         var userCtrl = this;
 
-        $log.debug( $routeParams);
-        loadUser () ;
-
         $scope.doSave = false;
         userCtrl.rolegroups = UserApi.RoleGroup.list();
         userCtrl.roles = UserApi.Role.list();
         userCtrl.update = update;
 
+        (function init() {
+            loadUser();
+        })();
 
 	    function update() {
 			$log.debug(' --- UserController.editUserCtrl_updatUser:');
@@ -69,7 +69,13 @@ var module = angular.module('webpoint.user');
 				.then(function(resp) {
 					$log.debug(resp);
 					$scope.user = resp;
-//					$scope.user.confirm_email = resp.email;
+                    if($scope.user.systemRole)
+                        $scope.user.systemRole.system = true;
+                    else{
+                        $scope.user.systemRole = {}
+                        $scope.user.systemRole.system = false;
+                    }
+//                    $log.debug($scope.user);
 				});
 			hashMap.remove('DOTOKEN')
 		}

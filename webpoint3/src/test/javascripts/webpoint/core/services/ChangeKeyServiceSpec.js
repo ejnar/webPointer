@@ -226,5 +226,12 @@ describe("webpoint.core module", function() {
         });
 
 
+//        F                       Am     G                         C/E  F
+//        Oändlig och för evigt,  Du som har skapat    allt
+//        F       Am   G         C/E   F
+//        Gud  alls - mäktig.
+
+
+
     });
 });

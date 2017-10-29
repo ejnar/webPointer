@@ -16,6 +16,7 @@ var app = angular.module('webpoint.core');
 
         this.stash = function (key, value, storageSize) {
             $log.debug(' --- CashService.stash: ', key);
+            $log.debug(value);
 
             var arr = localStorageService.get(key);
             arr = $filter('orderBy')(arr, 'time');
@@ -28,7 +29,11 @@ var app = angular.module('webpoint.core');
     //        $log.debug(arr);
         };
 
-        this.pop = function (key,id,expiredDays) {
+        this.pop = function (key,id,expiredDays){
+            return this.pop(key,id,expiredDays,null);
+        }
+
+        this.pop = function (key,id,expiredDays,def) {
             $log.debug(' --- CashService.pop: ', id);
             var obj = null;
             var arr = localStorageService.get(key);
@@ -42,7 +47,7 @@ var app = angular.module('webpoint.core');
                     }
                 });
             }
-            return obj != null ? obj.obj : null;
+            return obj != null ? obj.obj : def;
         };
 
         this.clean = function () {
@@ -67,6 +72,12 @@ var app = angular.module('webpoint.core');
         this.getSessionStorage = function (key){
             return localStorageService.get(key, 'sessionStorage');
         };
+
+        this.getSessionStorage = function (key,def){
+            var val = localStorageService.get(key, 'sessionStorage');
+            return val != null ? val : def;
+        };
+
 
     }
 

@@ -9,6 +9,10 @@ var module = angular.module('webpoint.screen');
 
     function MainViewListCtrl ($scope, $location, $log, cfgScreenPath, PageListApi, properties, $filter, CashService) {
 
+        (function init() {
+            loadPageList();
+        })();
+
     	$scope.mainViewListCtrl_gotoScreen = function(id) {
             $log.debug(' --- MainViewController.mainViewListCtrl_gotoScreen - id:', id);
 
@@ -19,14 +23,18 @@ var module = angular.module('webpoint.screen');
         }
 
 		$scope.items = []; 
-  		$scope.mainViewListCtrl_loadPageList = function() {
+  	    function loadPageList() {
 			$log.debug(' --- MainViewListController.mainViewListCtrl_loadPageList:');
 
             if($location.search().cleancash){
                 $log.debug(' --- clean cash: ');
-                CashService.clean();
+                CashService.setSessionStorage('excludeCache', true);
             }
-    		$scope.items = PageListApi.list();
+    		PageListApi.list().$promise
+    		    .then( function(resp) {
+                    $log.debug(resp);
+                    $scope.items = resp;
+                });
     	}
 
     	$scope.mainViewListCtrl_clickExpand = function(p) {

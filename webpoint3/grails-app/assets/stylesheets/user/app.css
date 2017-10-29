@@ -30,7 +30,7 @@ textarea.textAreaData{
     min-width: 200px;
     /*white-space: pre;*/
 }
-.max_with_col1{max-width: 455px;}
+.max_with_col1{width: 485px;}
 .max_with_col2{width: 355px; max-width: 355px;}
 
 .nowrap { white-space:nowrap;}

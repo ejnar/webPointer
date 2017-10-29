@@ -1,4 +1,5 @@
-<div layout="column" data-ng-init="vyCtrl_loadData()" ng-cloak>
+<div layout="column" ng-cloak>
+    <div id="snackbar">{{activeSong.section.title}}</div>
     <section>
         <div id="wrap">
 
@@ -25,7 +26,6 @@
         <div hide-xs class="sideLeftBtn sideBtn" ng-click="vyCtrl_left()" keyleft>
             <i class="material-icons md-48">chevron_left</i>
         </div>
-
         <div class="menuToggleSideNav" ng-click="vyCtrl_toggleSideNavRight1()" aria-label="List">
             <i class="material-icons md-28">menu</i>
         </div>

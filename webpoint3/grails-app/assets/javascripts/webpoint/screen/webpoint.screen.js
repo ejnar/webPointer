@@ -23,7 +23,7 @@ app.constant(
 			print:  '/print',
             VY:  '/vy/',
             SONGLIST:  '/songList',
-            SONGITEM: '/song/',
+            SONG: '/song/',
             ABOUT: '/about',
             ADDPASS: '/pass/'
 		});
@@ -62,9 +62,9 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
                 templateUrl: 'static/webpoint/screen/views/songList.html',
                 controller: 'SongListCtrl'
             }).
-            when( cfgScreenPath.SONGITEM + ':id', {
+            when( cfgScreenPath.SONG + ':id', {
                 templateUrl: 'static/webpoint/screen/views/song.html',
-                controller: 'SongItemtCtrl'
+                controller: 'SongCtrl'
             }).
             when( cfgScreenPath.ABOUT, {
                 templateUrl: 'static/webpoint/screen/views/about.html',

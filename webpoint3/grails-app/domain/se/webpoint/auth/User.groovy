@@ -19,7 +19,7 @@ class User extends BaseDomain{
 	boolean accountExpired = false
 	boolean accountLocked = true
 	boolean passwordExpired = true
-	
+
 	static transients = ['springSecurityService']
 
 	static constraints = {

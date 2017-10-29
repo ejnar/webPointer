@@ -5,6 +5,8 @@
 var sectionService = angular.module('webpoint.core');
 
 
+
+
 sectionService.factory('SectionsApi', ['$resource', '$log',
 	function ($resource, $log) {
 		return $resource('api/sections/:Id', {Id: '@Id'},

@@ -43,12 +43,12 @@ function config($httpProvider) {
 
 app.factory('$resourceInterceptor', ['$q', '$log', '$rootScope', '$location', 'AppStatusService',
     function($q, $log, $rootScope, $location, AppStatusService) {
-//    $log.debug('$resourceInterceptor');
     var responseInterceptor = {
         request: function(config) {
+//            console.info(config)
             AppStatusService.resolveXSS(config);
             AppStatusService.xhrCreationsCountUp();
-            AppStatusService.updateStatus();
+            AppStatusService.updateStatus(config.excludeSpinner);
             config.headers = config.headers || {};
             if (sessionStorage.authToken) {
                 config.headers.Authorization = 'Bearer ' + sessionStorage.authToken;

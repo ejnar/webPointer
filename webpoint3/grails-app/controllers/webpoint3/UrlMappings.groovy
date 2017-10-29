@@ -11,13 +11,14 @@ class UrlMappings {
 //                // apply constraints here
 //            }
 //        }
-
 //        "/api/guest/rolegroups"(resources:"RoleGroup")
 //        "/api/guest/roles"(resources:"Role")
 //        "/api/guest/user"(resources:"UserDetail")
 
 //        "/api/guest/viewer"(resources:"ViewerList")
 //        "/api/guest/sections"(resources:"Section")
+//        "/api/guest/sectioncash"(resources:"SectionCash")
+
 
 //        "/api/guest/pagelist"(resources:"PageList"){
 //            "/pageItem"(resources:"PageItem")
@@ -34,6 +35,7 @@ class UrlMappings {
 
         "/api/rolegroups"(resources:"RoleGroup")
         "/api/roles"(resources:"Role")
+//        "/api/userroles"(resources:"UserRole")
         "/api/user"(resources:"UserDetail")
         "/api/auth/$action?"(controller: "Auth" )
 
@@ -42,6 +44,7 @@ class UrlMappings {
         "/api/sections"(resources:"Section")
         "/api/sections/upload/$id"(controller: "Section", action: "upload")
         "/api/binarydoc"(resources:"BinaryDoc")
+        "/api/sectioncash"(resources:"SectionCash")
 
 //        "/api/groupsofsections"(resources: "GroupOfSection"){
 //            "/sectionmetas"(resources: "SectionMeta")
