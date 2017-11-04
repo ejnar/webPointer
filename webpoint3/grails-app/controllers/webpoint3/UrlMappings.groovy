@@ -23,6 +23,9 @@ class UrlMappings {
 //        "/api/guest/pagelist"(resources:"PageList"){
 //            "/pageItem"(resources:"PageItem")
 //        }
+
+//        "/app"(controller: "Example" )
+
         "/api/guest/binarydoc"(resources:"BinaryDoc")
 
         "/api/guest/vy/$group/$pages"(controller: "Vy", action: "index") {

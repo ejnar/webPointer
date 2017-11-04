@@ -5,9 +5,9 @@
 //= require_tree directives
 //= require_tree templates
 
-//= require /angular/angular
-//= require /angular/angular-aria
-//= require /angular/angular-animate
+//= require /angular/angular-aria.min
+//= require /angular/angular-animate.min
+//= require /angular-websocket/angular-websocket
 
 //= require /angular-material/angular-material
 

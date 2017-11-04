@@ -28,6 +28,6 @@
     <div ng-view=""></div>
     <div ng-include="'static/webpoint/user/views/includes/footer.html'"></div>
 </div>
-<asset:javascript src="/webpoint/webpoint.js"/>
+<asset:javascript src="/webpoint/webpoint.user.js"/>
 </body>
 </html>

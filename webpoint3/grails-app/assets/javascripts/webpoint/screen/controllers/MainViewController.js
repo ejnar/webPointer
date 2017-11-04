@@ -5,13 +5,65 @@
 var module = angular.module('webpoint.screen');
 
     module.controller('MainViewListCtrl', MainViewListCtrl);
-    MainViewListCtrl.$inject = ['$scope', '$location', '$log', 'cfgScreenPath', 'PageListApi', 'properties', '$filter', 'CashService'];
+    MainViewListCtrl.$inject = ['$scope', '$location', '$log', 'cfgScreenPath', 'PageListApi', 'properties', '$filter', 'CashService', '$stomp'];
 
-    function MainViewListCtrl ($scope, $location, $log, cfgScreenPath, PageListApi, properties, $filter, CashService) {
+    function MainViewListCtrl ($scope, $location, $log, cfgScreenPath, PageListApi, properties, $filter, CashService, $stomp) {
 
         (function init() {
             loadPageList();
         })();
+
+        $stomp.setDebug(function (args) {
+            $log.debug(args)
+        })
+
+        var headers = {
+              login: 'mylogin',
+              passcode: 'mypasscode',
+              // additional header
+              'client-id': 'my-client-id'
+            };
+
+//        $stomp
+//          .connect('/stomp', headers)
+//
+//          // frame = CONNECTED headers
+//          .then(function (frame) {
+//            var subscription = $stomp.subscribe('/topic/hello', function (payload, headers, res) {
+////              console.info(res);
+//
+//              $scope.payload = payload
+//
+//                }, {
+//                  'headers': 'are awesome'
+//                });
+//
+//            // Unsubscribe
+////            subscription.unsubscribe()
+//
+//            // Send message
+//            $stomp.send('/app/hello', { "message": "Sigurd"},
+//            {
+//              priority: 9,
+//              custom: 42 // Custom Headers
+//            })
+//
+//            // Disconnect
+////            $stomp.disconnect().then(function () {
+////              $log.info('disconnected')
+////            })
+//
+//          })
+
+
+
+
+
+
+
+
+
+
 
     	$scope.mainViewListCtrl_gotoScreen = function(id) {
             $log.debug(' --- MainViewController.mainViewListCtrl_gotoScreen - id:', id);
@@ -22,7 +74,8 @@ var module = angular.module('webpoint.screen');
             $location.path(cfgScreenPath.SCREEN + id + withoutkeys);
         }
 
-		$scope.items = []; 
+		$scope.items = [];
+
   	    function loadPageList() {
 			$log.debug(' --- MainViewListController.mainViewListCtrl_loadPageList:');
 
@@ -32,7 +85,7 @@ var module = angular.module('webpoint.screen');
             }
     		PageListApi.list().$promise
     		    .then( function(resp) {
-                    $log.debug(resp);
+//                    $log.debug(resp);
                     $scope.items = resp;
                 });
     	}

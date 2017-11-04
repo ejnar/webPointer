@@ -5,19 +5,19 @@
 //= require_tree directives
 //= require_tree templates
 
-//= require /angular/angular
-//= require /angular/angular-resource
-//= require /angular/angular-route
-//= require /angular/angular-sanitize
+//= require /angular/angular-resource.min
+//= require /angular/angular-route.min
+//= require /angular/angular-sanitize.min
 //= require /angular/angular-local-storage
 //= require spin.js/spin
 //= require /angular/angular-spinner
 //= require /angular-http-auth/http-auth-interceptor
+//= require /ng-stomp/ng-stomp.standalone.min
 
 //= require jquery/jquery
 
 var app = angular.module("webpoint.core", [
-    'http-auth-interceptor', 'ngRoute', 'ngResource', 'ngSanitize', 'angularSpinner', 'LocalStorageModule'])
+    'http-auth-interceptor', 'ngRoute', 'ngResource', 'ngSanitize', 'angularSpinner', 'LocalStorageModule', 'ngStomp'])
     .constant("contextPath", window.contextPath)
     .config(config);
 
@@ -26,7 +26,7 @@ console.log("webpoint.core manifest load complete.");
 
 app.constant(
 		'CONFIG', {
-			DEBUG_LOG: false
+			DEBUG_LOG: true
 		});
 
 

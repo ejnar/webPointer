@@ -17,7 +17,7 @@ buildscript {
     }
 }
 
-version "0.9.7.8.9"
+version "0.9.7.9.0"
 group "webpoint3"
 
 apply plugin:"eclipse"
@@ -82,8 +82,6 @@ dependencies {
 //    runtime "org.apache.camel:camel-jms:2.15.3"
 //    runtime "org.apache.activemq:activemq-pool:5.11.1"
 
-//    compile 'javax.websocket:javax.websocket-api:1.0'
-//    compile "org.springframework:spring-websocket"
     compile "org.grails.plugins:grails-spring-websocket:2.3.0"
     compile "org.imgscalr:imgscalr-lib:4.2"
 
@@ -117,28 +115,34 @@ dependencies {
 }
 bower {
     'angular'('1.5.x') {
-        source 'angular.js'
+        source 'angular.min.js'
     }
     'angular-resource'('1.5.x') {
-        source 'angular-resource.js' >> '/angular/'
+        source 'angular-resource.min.js' >> '/angular/'
     }
     'angular-route'('1.5.x') {
-        source 'angular-route.js' >> '/angular/'
+        source 'angular-route.min.js' >> '/angular/'
     }
     'angular-sanitize'('1.5.x') {
-        source 'angular-sanitize.js' >> '/angular/'
+        source 'angular-sanitize.min.js' >> '/angular/'
     }
     'angular-animate'('1.5.x') {
-        source 'angular-animate.js' >> '/angular/'
+        source 'angular-animate.min.js' >> '/angular/'
     }
     'angular-aria'('1.5.x') {
-        source 'angular-aria.js' >> '/angular/'
+        source 'angular-aria.min.js' >> '/angular/'
     }
     'angular-mocks'('1.5.x') {
         source 'angular-mocks.js' >> '/angular/'
     }
     'angular-messages'('1.5.x') {
         source 'angular-messages.js' >> '/angular/'
+    }
+    'angular-websocket'('2.0.x') {
+        source 'dist/angular-websocket.js' >> '/angular-websocket/'
+    }
+    'ng-stomp'('0.x.x') {
+        source 'dist/ng-stomp.standalone.min.js' >> '/ng-stomp/'
     }
     'angular-http-auth'('1.5.x') {
         source 'src/http-auth-interceptor.js' >> '/angular-http-auth/'

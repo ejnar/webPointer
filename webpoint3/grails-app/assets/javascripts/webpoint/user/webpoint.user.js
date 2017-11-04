@@ -5,7 +5,6 @@
 //= require_tree directives
 //= require_tree templates
 
-//= require /angular/angular
 //= require /ng-modules/ng-file-upload
 //= require /angular-bootstrap/ui-bootstrap-tpls
 

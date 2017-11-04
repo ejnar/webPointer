@@ -7,11 +7,11 @@ var module = angular.module('webpoint.screen');
     module.controller('VyCtrl', VyCtrl);
     VyCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath', '$interval',
                       '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService', 'PageService',
-                      'Access', 'CashService', 'RemoveKeyService', 'SectionCashService', 'BinaryApi'];
+                      'Access', 'CashService', 'RemoveKeyService', 'SectionCashService', 'BinaryApi', '$stomp'];
 
     function VyCtrl ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath, $interval,
                      $mdDialog, properties, ChangeKeyService, VyApi, localStorageService, PageService,
-                    Access, CashService, RemoveKeyService, SectionCashService, BinaryApi) {
+                    Access, CashService, RemoveKeyService, SectionCashService, BinaryApi, $stomp) {
         var promiseInterval;
         $scope.activeSong = null;
     	$scope.currentPart = 0;
@@ -19,6 +19,7 @@ var module = angular.module('webpoint.screen');
     	$scope.totalPart = 1;
 
         (function init() {
+             socket();
              vyCtrl_loadData();
         })();
 
@@ -48,10 +49,61 @@ var module = angular.module('webpoint.screen');
 
                     });
 			}
-			if(Access.isClient()){
-			    promiseInterval = $interval( function(){ callAtInterval(); }, 3000);
-			}
+//			if(Access.isClient()){
+//			    promiseInterval = $interval( function(){ callAtInterval(); }, 3000);
+//			}
     	};
+
+        var headers = { login: 'mylogin', passcode: 'mypasscode'};
+        function socket() {
+            $stomp.setDebug(function (args) { $log.debug(args) });
+            $stomp.connect('/stomp', headers)
+               // frame = CONNECTED headers
+                .then(function (frame) {
+                    var subscription = $stomp.subscribe('/topic/song', function (payload, headers, res) {
+                        console.info(payload);
+                        updateActiveSong(payload);
+//                        $log.debug($scope.activeSong);
+//                        if($scope.activeSong.currentSectionId != null){
+//                            $scope.pageList.pageParts.forEach(function(entry) {
+//
+//                                if(entry.section.id == $scope.activeSong.currentSectionId){
+//                                    $scope.$apply(function () {
+//                                       $scope.activeSong.section = entry.section;
+//                                    });
+//                                    document.getElementById("snackbar").className = "show";
+//                                    setTimeout(function(){ document.getElementById("snackbar").className = ""; }, 8000);
+//                                    console.info($scope.activeSong.section.title);
+//                                }
+//                            });
+//                        }
+
+
+                    }, {'headers': 'are awesome' });
+                 // Disconnect
+     //            $stomp.disconnect().then(function () {
+     //              $log.info('disconnected')
+     //            })
+
+               });
+        }
+        function updateActiveSong(payload){
+            $scope.activeSong = payload;
+            $scope.activeSong.active = true;
+            if($scope.activeSong.currentSectionId != null){
+                $scope.pageList.pageParts.forEach(function(entry) {
+
+                    if(entry.section.id == $scope.activeSong.currentSectionId){
+                        $scope.$apply(function () {
+                           $scope.activeSong.section = entry.section;
+                        });
+                        document.getElementById("snackbar").className = "show";
+                        setTimeout(function(){ document.getElementById("snackbar").className = ""; }, 8000);
+                        console.info($scope.activeSong.section.title);
+                    }
+                });
+            }
+        }
 
     	function callAtInterval() {
 //            console.log("$scope.callAtInterval - Interval occurred");

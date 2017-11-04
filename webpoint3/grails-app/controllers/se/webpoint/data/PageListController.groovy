@@ -11,8 +11,8 @@ class PageListController extends RestfulController<PageList>  {
     static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST", update: "PUT", patch: "PATCH", delete: "DELETE"]
 
-    def camelContext
-	def grailsApplictaion
+//    def camelContext
+//	def grailsApplictaion
 
     PageService pageService
 

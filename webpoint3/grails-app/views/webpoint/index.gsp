@@ -26,6 +26,6 @@
     <span us-spinner="{radius:20, width:8, length: 10}" spinner-key="spinner-1"></span>
     <div ng-view=""></div>
 </div>
-<asset:javascript src="/webpoint/webpoint.main.js"/>
+<asset:javascript src="/webpoint/webpoint.screen.js"/>
 </body>
 </html>

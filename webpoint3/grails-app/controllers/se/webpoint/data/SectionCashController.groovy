@@ -3,6 +3,7 @@ package se.webpoint.data
 import grails.transaction.Transactional
 import org.bson.types.ObjectId
 import se.webpoint.rest.BasicRestController
+import se.webpoint.websocket.BrokerService
 
 import static org.springframework.http.HttpStatus.CREATED
 
@@ -12,6 +13,8 @@ class SectionCashController extends BasicRestController<SectionCash> {
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT"]
 
+
+    BrokerService brokerService
 
     SectionCashController() {
         super(SectionCash)
@@ -70,7 +73,7 @@ class SectionCashController extends BasicRestController<SectionCash> {
             sectionCash[0].delete flush:true
             instance.insert flush:true
         }
-
+        brokerService.sendSongUpdate(instance)
 
         addHeader(this.controllerName, instance.pageListId)
         respond instance, [status: CREATED]

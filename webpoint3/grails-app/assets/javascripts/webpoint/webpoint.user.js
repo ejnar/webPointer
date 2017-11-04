@@ -1,5 +1,5 @@
 //= wrapped
-//= require /angular/angular
+//= require /angular/angular.min
 //= require /webpoint/core/webpoint.core
 //= require /webpoint/user/webpoint.user
 

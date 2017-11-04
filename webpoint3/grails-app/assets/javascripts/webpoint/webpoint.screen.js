@@ -1,8 +1,7 @@
 //= wrapped
-//= require /angular/angular
+//= require /angular/angular.min
 //= require /webpoint/core/webpoint.core
 //= require /webpoint/screen/webpoint.screen
-
 
 var app = angular.module("webpoint.main", [
 	"webpoint.core",
