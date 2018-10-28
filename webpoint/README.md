@@ -87,6 +87,8 @@ mongorestore --db database_name path_to_bson_file
 
 mongodump -h 127.0.0.1 -u user -p pass --db webpoint --port 00000 --out /Users/admin/dump/fold
 
+db.section.find( {"title": /Du är underbar/, "publish": true} )
+
 
 #### Node
  Update Node

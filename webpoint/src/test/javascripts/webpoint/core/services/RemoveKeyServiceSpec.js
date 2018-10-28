@@ -13,7 +13,7 @@ describe("webpoint.core module", function() {
             expect(RemoveKeyService).toBeDefined();
         }));
 
-        it("should remove keys", function() {
+        it("should remove keys 1", function() {
 
             var data = '\n' +
                         'Bb    Bb/E     Eb/Bb  Bb   Cm7 Eb/F   Bb\n' +
@@ -42,7 +42,7 @@ describe("webpoint.core module", function() {
 
         });
 
-        it("should remove keys", function() {
+        it("should remove keys 2", function() {
 
             var data = '\n' +
                         'Am         Dm\n' +
@@ -65,7 +65,7 @@ describe("webpoint.core module", function() {
 
         });
 
-        it("should remove keys", function() {
+        it("should remove keys 3", function() {
 
             var data = '\n' +
                 '    F                     C/D       Dm7\n' +
@@ -86,5 +86,32 @@ describe("webpoint.core module", function() {
                 '';
             expect(test).toEqual(result);
         });
+
+        it("should remove keys 4", function() {
+
+            var data = '\n' +
+               'D        A/C#           Am/C      H7\n' +
+               'Jesus, Du är underbar\n' +
+               'Em      Em7           Asus A\n' +
+               'Jesus, Du är underbar\n' +
+               '           D                 A/E\n' +
+               'Det är Dig som jag älskar,\n' +
+               '          F#m-5       H7                   Em\n' +
+               'det är Dig jag vill ge allt som jag har.\n' +
+               '     G/A              A7    D\n' +
+               'O Jesus,  Du är underbar';
+            var result = RemoveKeyService.removeKeys(false,data);
+
+            var test = '\n' +
+               'Jesus, Du är underbar\n' +
+               'Jesus, Du är underbar\n' +
+               'Det är Dig som jag älskar,\n' +
+               'det är Dig jag vill ge allt som jag har.\n' +
+               'O Jesus,  Du är underbar\n' +
+               '';
+            expect(test).toEqual(result);
+        });
+
+
     });
 });

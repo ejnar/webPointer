@@ -9,8 +9,8 @@ var KEYS = ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B
 var KEYS = ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B:Cb'];
 var KEYLIST = ['C','C#','Db','D','D#','Eb','E','F','F#','Gb','G','G#','Ab','A','A#','Bb','H','B','Cb'];
 
-var MATCH_KEY_SUFIX = new RegExp("\\w{1,2}['sus','sus4','maj','m','m7','m6']{2}\\w", "gi");
-var MATCH_KEY_WORD_SUFIX = new RegExp("\\b(sus|sus4|maj|m7|m6)\\b", "gi");
+var MATCH_KEY_SUFIX = new RegExp("\\w{1,2}['sus','sus4','maj','m','m6','m7','m9','m\\-']{2}\\w", "gi");
+var MATCH_KEY_WORD_SUFIX = new RegExp("\\b(sus|sus4|maj|m6|m7|m9|m-)\\b", "gi");
 //var MATCH_KEY_SUFIX = new RegExp("["+KEYLIST+"]+["+KEY_SUFIX+"]", "gi");
 var MATCH_KEYS_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "gi");
 var MATCH_FIRST_KEYS_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "g");

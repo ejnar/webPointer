@@ -108,6 +108,23 @@ class BootStrap {
             UserRoleGroup.get(admin.id, groupAdmin.id) ?: UserRoleGroup.create(admin, groupAdmin, true)
             UserRoleGroup.get(admin.id, groupPingst.id) ?: UserRoleGroup.create(admin, groupPingst, true)
         }
+        if (Environment.current == Environment.PRODUCTION) {
+            // insert Production environment specific code here
+//            User admin = User.findByUsername("admin") ?: new User(username: 'admin', password: '123', email: 'ejnar.ak@glocalnet.net').save(flush: true, failOnError: true)
+//            admin.password = ""
+//            admin.encodePassword
+//            admin.save(flush: true, failOnError: true)
+//
+//            User user = User.findByUsername("user") ?: new User(username: 'user', password: 'jesus', email: 'eaakerman@gmail.com').save(flush: true, failOnError: true)
+////            user.password = "123"
+////            user.encodePassword
+////            user.save(flush: true, failOnError: true)
+//            UserRoleGroup.get(user.id, groupPingst.id) ?: UserRoleGroup.create(user, groupPingst, true)
+
+//            Role.findByAuthority("ROLE_USER") ?: new Role(authority: "ROLE_USER", system: false, order: 3).save(flush: true, failOnError: true)
+//            Role.findByAuthority("ROLE_CLIENT") ?: new Role(authority: "ROLE_CLIENT", system: false, order: 4).save(flush: true, failOnError: true)
+
+        }
 
 //        if (Environment.current != Environment.DEVELOPMENT || Environment.current != Environment.TEST) {
 //
@@ -155,23 +172,6 @@ class BootStrap {
 //            Setting.findByKey("category") ?: new Setting(key: "category", groups: ['SYS_GROUP_ADMIN'], values: ['Worship', 'Christian', 'Hymns', 'Gospel', 'Christmas carols', 'Traditional']).save(flush: true, failOnError: true)
 //            Setting.findByKey("tagg") ?: new Setting(key: "tagg", groups: ['GROUP_PINGST_TRELLEBORG'], values: ['Praise', 'Speedy', 'Trashy', 'Ballad']).save(flush: true, failOnError: true)
 //        }
-        if (Environment.current == Environment.PRODUCTION) {
-            // insert Production environment specific code here
-//            User admin = User.findByUsername("admin") ?: new User(username: 'admin', password: '123', email: 'ejnar.ak@glocalnet.net').save(flush: true, failOnError: true)
-//            admin.password = ""
-//            admin.encodePassword
-//            admin.save(flush: true, failOnError: true)
-//
-//            User user = User.findByUsername("user") ?: new User(username: 'user', password: 'jesus', email: 'eaakerman@gmail.com').save(flush: true, failOnError: true)
-////            user.password = "123"
-////            user.encodePassword
-////            user.save(flush: true, failOnError: true)
-//            UserRoleGroup.get(user.id, groupPingst.id) ?: UserRoleGroup.create(user, groupPingst, true)
-
-//            Role.findByAuthority("ROLE_USER") ?: new Role(authority: "ROLE_USER", system: false, order: 3).save(flush: true, failOnError: true)
-//            Role.findByAuthority("ROLE_CLIENT") ?: new Role(authority: "ROLE_CLIENT", system: false, order: 4).save(flush: true, failOnError: true)
-
-        }
 
     }
     def destroy = {
