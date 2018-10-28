@@ -2,8 +2,10 @@ package se.webpoint.auth
 
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.rest.RestfulController
-import grails.transaction.Transactional
-import org.springframework.http.HttpStatus
+import grails.gorm.transactions.Transactional
+
+import static org.springframework.http.HttpStatus.NOT_FOUND
+
 
 class UserController extends RestfulController<User>  {
 	
@@ -14,8 +16,7 @@ class UserController extends RestfulController<User>  {
 	UserService userService;
 	
 	SpringSecurityService springSecurityService
-	
-	def camelContext
+
 	def grailsApplictaion
 	
 	
@@ -105,7 +106,7 @@ class UserController extends RestfulController<User>  {
 	
 	
 	protected void notFound() {
-		render status: HttpStatus.NOT_FOUND
+		render status: NOT_FOUND 
 	}
 	
 }

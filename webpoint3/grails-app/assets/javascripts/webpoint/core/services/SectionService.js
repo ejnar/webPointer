@@ -12,7 +12,7 @@ sectionService.factory('SectionsApi', ['$resource', '$log',
 		return $resource('api/sections/:Id', {Id: '@Id'},
 				{
 	       			'cachedList': { method:'GET', cache: true, isArray:true},
-	       			'list': { method:'GET', isArray:true},
+	       			'list': { method:'GET', isArray:true, cache: false},
 	       			'get': { method:'GET'},
 	       			'save': { method:'POST'},
 	       			'update': { method:'PUT'}

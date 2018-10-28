@@ -4,7 +4,7 @@
 
 var module = angular.module('webpoint.screen');
 
-    module.controller('VyCtrl', VyCtrl);
+    module.controller('VyCtrl', VyCtrl);  // '$timeout'
     VyCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath', '$interval',
                       '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService', 'PageService',
                       'Access', 'CashService', 'RemoveKeyService', 'SectionCashService', 'BinaryApi', '$stomp'];
@@ -19,8 +19,10 @@ var module = angular.module('webpoint.screen');
     	$scope.totalPart = 1;
 
         (function init() {
-             socket();
-             vyCtrl_loadData();
+            if(Access.isClient()){
+                socket();
+            }
+            vyCtrl_loadData();
         })();
 
     	function vyCtrl_loadData() {
@@ -49,42 +51,17 @@ var module = angular.module('webpoint.screen');
 
                     });
 			}
-//			if(Access.isClient()){
-//			    promiseInterval = $interval( function(){ callAtInterval(); }, 3000);
-//			}
     	};
 
-        var headers = { login: 'mylogin', passcode: 'mypasscode'};
         function socket() {
             $stomp.setDebug(function (args) { $log.debug(args) });
+            var headers = { login: 'songpoint', passcode: 'qwerty', pageListId: $routeParams.pageListId};
             $stomp.connect('/stomp', headers)
-               // frame = CONNECTED headers
                 .then(function (frame) {
-                    var subscription = $stomp.subscribe('/topic/song', function (payload, headers, res) {
-                        console.info(payload);
+                    var subscription = $stomp.subscribe('/topic/'+$routeParams.pageListId, function (payload, headers, res) {
+                        $log.debug(payload)
                         updateActiveSong(payload);
-//                        $log.debug($scope.activeSong);
-//                        if($scope.activeSong.currentSectionId != null){
-//                            $scope.pageList.pageParts.forEach(function(entry) {
-//
-//                                if(entry.section.id == $scope.activeSong.currentSectionId){
-//                                    $scope.$apply(function () {
-//                                       $scope.activeSong.section = entry.section;
-//                                    });
-//                                    document.getElementById("snackbar").className = "show";
-//                                    setTimeout(function(){ document.getElementById("snackbar").className = ""; }, 8000);
-//                                    console.info($scope.activeSong.section.title);
-//                                }
-//                            });
-//                        }
-
-
                     }, {'headers': 'are awesome' });
-                 // Disconnect
-     //            $stomp.disconnect().then(function () {
-     //              $log.info('disconnected')
-     //            })
-
                });
         }
         function updateActiveSong(payload){
@@ -92,51 +69,39 @@ var module = angular.module('webpoint.screen');
             $scope.activeSong.active = true;
             if($scope.activeSong.currentSectionId != null){
                 $scope.pageList.pageParts.forEach(function(entry) {
-
                     if(entry.section.id == $scope.activeSong.currentSectionId){
                         $scope.$apply(function () {
                            $scope.activeSong.section = entry.section;
                         });
-                        document.getElementById("snackbar").className = "show";
-                        setTimeout(function(){ document.getElementById("snackbar").className = ""; }, 8000);
-                        console.info($scope.activeSong.section.title);
+                        showDelay();
                     }
                 });
             }
         }
 
-    	function callAtInterval() {
-//            console.log("$scope.callAtInterval - Interval occurred");
-            SectionCashService.sectionCashApi.get({Id: $routeParams.pageListId}, function (resp) {
-                $log.debug(resp);
-                if($scope.activeSong == null){
-                    $scope.activeSong = resp;
-                }else if($scope.activeSong.currentSectionId != resp.currentSectionId ){
-                    $scope.activeSong = resp;
-                    $scope.activeSong.active = true;
-                    $log.debug($scope.activeSong);
-                    if($scope.activeSong.currentSectionId != null){
-                        $scope.pageList.pageParts.forEach(function(entry) {
-                            if(entry.section.id == $scope.activeSong.currentSectionId){
-                                $scope.activeSong.section = entry.section;
-                            }
-                        });
-                    }
-                    document.getElementById("snackbar").className = "show";
-                }
-                else{
+        var oneTimer;
+        function showDelay(){
+            $scope.count = 0;
+            $interval.cancel(oneTimer);
+            document.getElementById("snackbar").className = "show";
+            oneTimer = $interval(function() {
+                if ($scope.count >= 4) {
+                  $interval.cancel(oneTimer);
+                  if(document.getElementById("snackbar") != null){
                     document.getElementById("snackbar").className = "";
-//                    setTimeout(function(){ document.getElementById("snackbar").className = ""; }, 6000);
+                  }
+                } else {
+                  $scope.count++;
                 }
-                if(resp.refresh){
-                    CashService.setSessionStorage('excludeCache', true);
-                }
-            });
-
+            }, 2000);
         }
+
         $scope.$on('$destroy',function(){
-            if(promiseInterval)
-                $interval.cancel(promiseInterval);
+            if(Access.isClient()){
+                $stomp.disconnect().then(function () {
+                    $log.info('disconnected')
+                });
+            }
         });
         function addBinary(page){
             angular.forEach(page.pageParts, function(s) {

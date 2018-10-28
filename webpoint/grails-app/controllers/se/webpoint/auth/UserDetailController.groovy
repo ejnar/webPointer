@@ -1,25 +1,22 @@
 package se.webpoint.auth
 
 import grails.plugin.springsecurity.SpringSecurityService
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import grails.web.http.HttpHeaders
-import org.springframework.http.HttpStatus
 import se.webpoint.rest.BasicRestController
+
+import static org.springframework.http.HttpStatus.OK
 
 class UserDetailController extends BasicRestController<UserDetail> {   // extends RestfulController<UserDetail>
 
-	static allowedMethods = [save: "POST", update: "PUT"]
+	static allowedMethods = [save: "POST", update: "PUT", updatePass: "PUT"]
 
-	
 	UserService userService
-	SpringSecurityService springSecurityService
-	
+
 	UserDetailController() {
 		super(UserDetail)
 	}
-	
-	
-	
+
 	/**
 	 * Lists all resources up to the given maximum
 	 *
@@ -27,14 +24,11 @@ class UserDetailController extends BasicRestController<UserDetail> {   // extend
 	 * @return A list of resources
 	 */
 	def index() {
-		log.debug(" debug ---------------  log4j test password")
-		println 'UserDetailController.index'
-		List<UserDetail> users = new ArrayList()
-		users.add(userService.getUserDetail())
+		log.debug ' --- UserDetailController.index '
+
+        List<UserDetail> users = userService.getUserDetails()
 		respond users, model: [("${UserDetail}Count".toString()): users.size()]
 	}
-
-	
 
 	/**
 	 * Shows a single resource
@@ -42,8 +36,8 @@ class UserDetailController extends BasicRestController<UserDetail> {   // extend
 	 * @return The rendered resource or a 404 if it doesn't exist
 	 */
 	def show() {
-		println 'UserDetailController.show'		
-		respond userService.getUserDetail()
+        log.debug ' --- UserDetailController.show - params: [{}]', params
+		respond userService.getUserDetail(params.id, params.token)
 	}
 	
 	/**
@@ -51,9 +45,10 @@ class UserDetailController extends BasicRestController<UserDetail> {   // extend
 	 */
 	@Transactional
 	def save() {
-		println "save user: " + params
+        log.debug ' --- UserDetailController.save - params: [{}]', params
 		
 		def instance = createResource()
+        println instance
 		if(instance == null){
 			notFound()
 			return
@@ -62,25 +57,37 @@ class UserDetailController extends BasicRestController<UserDetail> {   // extend
 		
 		respond user
 	}
-	
-	
-	
+
 	/**
 	 * Updates a resource for the given id
 	 * @param id
 	 */
 	def update(UserDetail instance) {
-		println " --- update UserDetail: " + params.controller
-	
-		instance = userService.updateUser(instance.username, instance.email)
-		
-		String location = g.createLink( resource: 'api', action: 'user', Username: instance.username,  absolute: true)
-		response.addHeader(HttpHeaders.LOCATION, location)
+        log.debug ' --- UserDetailController.update - UserDetail: [{}]', instance
+		instance = userService.update(instance)
+
+        addHeader('user', instance.id)
 //		println new JsonBuilder( instance ).toPrettyString()
 //		println new JSON(instance).toString()
-		respond instance, [status: HttpStatus.OK]
+//		response.addHeader(HttpHeaders.LOCATION,
+//				grailsLinkGenerator.link( resource: 'api', action: 'user', id: instance.id, absolute: true,
+//						namespace: hasProperty('namespace') ? this.namespace : null ))
+		respond instance, [status: OK]
 	}
-	
+
+    def updatePass(UserDetail instance) {
+        log.debug ' --- UserDetailController.updatePass - params: [{}]', params
+
+        instance = userService.updateUserEmail(instance.username, instance.email)
+
+        String location = g.createLink( resource: 'api', action: 'user', Username: instance.username,  absolute: true)
+        response.addHeader(HttpHeaders.LOCATION, location)
+//		println new JsonBuilder( instance ).toPrettyString()
+//		println new JSON(instance).toString()
+        respond instance, [status: OK]
+    }
+
+
 	/**
 	 * Creates a new instance of the resource for the given parameters
 	 *

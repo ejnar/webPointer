@@ -6,6 +6,13 @@ environments:
             host: "localhost"
             port: 27017
             databaseName: "webpoint-dev"
+         logging:
+            jul:
+               usebridge: true
+         plugin:
+            springsecurity:
+               debug:
+                  useFilter: true
    test:
       grails:
          mongodb:
@@ -21,6 +28,9 @@ environments:
             username: "${MONGO_WEBPOINT_USER}"
             password: "${MONGO_WEBPOINT_PASS}"
             databaseName: "webpoint-prod"
+         logging:
+            jul:
+               usebridge: false
 
 ---
 grails:
@@ -32,25 +42,19 @@ grails:
             proxies: false
     gorm:
         failOnError: true
-        # Whether to autowire entities. 
-        # Disabled by default for performance reasons.
-        autowire: false         
-        reactor:
-            # Whether to translate GORM events into Reactor events
-            # Disabled by default for performance reasons
-            events: false
+#        autowire: false
+    databinding:
+        trimStrings: false                  # the default value is true
+        convertEmptyStringsToNull: true     # the default value is true
 info:
     app:
         name: '@info.app.name@'
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
 spring:
-    main:
-        banner-mode: "off"
     groovy:
         template:
             check-template-location: false
-
 # Spring Actuator Endpoints are Disabled by Default
 endpoints:
     enabled: false
@@ -69,26 +73,52 @@ grails:
                         - Presto
                         - Trident
         types:
-            json:
-              - application/json
-              - text/json   
-            hal:
-              - application/hal+json
-              - application/hal+xml  
-            xml:
-              - text/xml
-              - application/xml                                 
+            all: '*/*'
             atom: application/atom+xml
             css: text/css
             csv: text/csv
+            form: application/x-www-form-urlencoded
+            html:
+              - text/html
+              - application/xhtml+xml
             js: text/javascript
+            json:
+              - application/json
+              - text/json
+            multipartForm: multipart/form-data
             rss: application/rss+xml
             text: text/plain
-            all: '*/*'            
+            hal:
+              - application/hal+json
+              - application/hal+xml
+            xml:
+              - text/xml
+              - application/xml
     urlmapping:
         cache:
-            maxsize: 1000
+            maxsize: 10000
     controllers:
         defaultScope: singleton
+        upload:
+            maxFileSize: 15000000
+            maxRequestSize: 12000000
     converters:
         encoding: UTF-8
+---
+twitter:
+  routing:
+    consumerkey: "${TWITTER_CONSUMER_KEY}"
+    consumersecret: "${TWITTER_CONSUMER_SECRET}"
+    oauth:
+      accesstoken: "${TWITTER_ACCESS_TOKEN}"
+      accesstokensecret: "${TWITTER_ACCESS_TOKEN_SECRET}"
+---
+# YOUR_MAX_SIZE_IN_MB * 1024 * 1024 = BYTES
+#server:
+#    port: 8443                                             # The port to listen on
+#    ssl:
+#        enabled: true                                      # Activate HTTPS mode on the server port
+#        key-store: <the-location-of-your-keystore>         # e.g. /etc/tomcat7/keystore/tomcat.keystore
+#        key-store-password: <your-key-store-password>      # e.g. changeit
+#        key-alias: <your-key-alias>                        # e.g. tomcat
+#        key-password: <usually-the-same-as-your-key-store-password>

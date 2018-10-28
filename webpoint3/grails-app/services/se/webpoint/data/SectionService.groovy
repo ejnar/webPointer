@@ -7,9 +7,11 @@ import org.grails.web.errors.GrailsWrappedRuntimeException
 import org.imgscalr.Scalr
 import se.routing.CamelRoute
 import se.webpoint.auth.RoleGroup
+import se.webpoint.auth.User
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
+import java.util.stream.Collectors
 
 @Transactional
 class SectionService extends CamelRoute{
@@ -17,6 +19,20 @@ class SectionService extends CamelRoute{
 
     private static final log = LogFactory.getLog(this)
     SpringSecurityService springSecurityService
+
+
+
+    def List<Section> getAllSectionByGroup(params) {
+        User user = springSecurityService.loadCurrentUser()
+        Set<RoleGroup> rolegroups = user.getAuthoritiesExternal()
+        List<RoleGroup> rolegroupsList = rolegroups.stream().collect(Collectors.toList());
+        List<Section> sections = Section.createCriteria().list{
+            eq("publish", Boolean.parseBoolean(params.publish))
+            and { 'in' ("roleGroupSet.name",rolegroupsList*.name) }
+
+        }
+        sections
+    }
 
 
     def Section getAllSection(publish) {

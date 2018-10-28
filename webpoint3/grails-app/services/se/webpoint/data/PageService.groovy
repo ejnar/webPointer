@@ -26,7 +26,6 @@ class PageService {
         for (rg in rolegroups) {
             pageLists.addAll(PageList.getPageListsByGroup(rg.name))
         }
-
         pageLists
     }
 

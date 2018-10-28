@@ -59,7 +59,6 @@ pageService.factory('VyApi', ['$resource', '$q', '$timeout', '$log',
 
 				});
 	}
-
 ]);
 
 pageService.factory('PageListApi', ['$resource', '$q', '$timeout', '$log',

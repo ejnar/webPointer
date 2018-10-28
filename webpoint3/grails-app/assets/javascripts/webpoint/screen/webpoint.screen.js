@@ -7,9 +7,8 @@
 
 //= require /angular/angular-aria.min
 //= require /angular/angular-animate.min
-//= require /angular-websocket/angular-websocket
 
-//= require /angular-material/angular-material
+//= require /angular-material/angular-material.min
 
 
 var app = angular.module("webpoint.screen", ['webpoint.core', 'ngMaterial', 'ngAnimate', 'ngAria']);

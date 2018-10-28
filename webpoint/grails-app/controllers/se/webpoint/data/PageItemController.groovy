@@ -1,10 +1,14 @@
 package se.webpoint.data
 
 import grails.rest.RestfulController
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import grails.web.http.HttpHeaders
-import org.springframework.http.HttpStatus
+import groovy.util.logging.Slf4j
+import org.bson.types.ObjectId
 
+import static org.springframework.http.HttpStatus.*
+
+@Slf4j
 class PageItemController extends RestfulController<PageItem>  {
 
     static responseFormats = ['json', 'xml']
@@ -36,11 +40,9 @@ class PageItemController extends RestfulController<PageItem>  {
 	 * Saves a resource
 	 */
 	@Transactional
-	def save() {  
-		log.info " --- save PageItem: "
-		log.debug params
+	def save() {
+		log.debug ' --- PageItemController.save - params: [{}]', params
 //        println request.reader.text
-
         request.JSON.each { k,v ->
             params[k] = v
 //            println k +':'+ v
@@ -48,10 +50,10 @@ class PageItemController extends RestfulController<PageItem>  {
 		PageItem instance = pageService.addPageItem(params.style,params.color,params.section.id,params.PageListId)
 
 		String location = g.createLink( resource: 'api', absolute: true) + '/pagelist/' + params.PageListId + '/pagedata/' + instance.key
-//		println location
 
 		response.addHeader(HttpHeaders.LOCATION, location)
-		respond instance, [status: HttpStatus.CREATED]
+
+		respond instance, [status: CREATED]
 	}
 	
 	
@@ -61,21 +63,20 @@ class PageItemController extends RestfulController<PageItem>  {
 	 */
 	@Transactional
 	def delete() {
-        log.info " --- PageItemController.delete "
-        log.debug params
+        log.debug ' --- PageItemController.delete - params: [{}]', params
 
 		PageList pageList = pageService.removePageItem(params.id, params.PageListId)
 		
 		String location = g.createLink( resource: 'api', absolute: true) + '/pagelist/' + params.PageListId + '/pagedata/' + params.id
 
 		response.addHeader(HttpHeaders.LOCATION, location)
-		respond pageList, [status: HttpStatus.NO_CONTENT]
+		respond pageList, [status: NO_CONTENT]
 	}
 	
 	
 	
 	protected void notFound() {
-		render status: HttpStatus.NOT_FOUND
+		render status: NOT_FOUND 
 	}
 	
 }

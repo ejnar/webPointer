@@ -17,7 +17,7 @@ buildscript {
     }
 }
 
-version "0.9.7.9.0"
+version "0.9.7.9.2"
 group "webpoint3"
 
 apply plugin:"eclipse"
@@ -136,19 +136,19 @@ bower {
         source 'angular-mocks.js' >> '/angular/'
     }
     'angular-messages'('1.5.x') {
-        source 'angular-messages.js' >> '/angular/'
+        source 'angular-messages.min.js' >> '/angular/'
     }
-    'angular-websocket'('2.0.x') {
-        source 'dist/angular-websocket.js' >> '/angular-websocket/'
-    }
+//    'angular-websocket'('2.0.x') {
+//        source 'dist/angular-websocket.js' >> '/angular-websocket/'
+//    }
     'ng-stomp'('0.x.x') {
         source 'dist/ng-stomp.standalone.min.js' >> '/ng-stomp/'
     }
     'angular-http-auth'('1.5.x') {
-        source 'src/http-auth-interceptor.js' >> '/angular-http-auth/'
+        source 'dist/http-auth-interceptor.min.js' >> '/angular-http-auth/'
     }
     'angular-bootstrap'('2.0.x') {
-        source 'ui-bootstrap-tpls.js' >> '/angular-bootstrap/'
+        source 'ui-bootstrap-tpls.min.js' >> '/angular-bootstrap/'
     }
     'bootstrap'('3.x.x') {
         source 'dist/css/bootstrap.css' >> '/bootstrap/css/'
@@ -156,25 +156,25 @@ bower {
         source 'dist/fonts/**' >> '/bootstrap/fonts/'
     }
     'ng-file-upload'('12.2.x') {
-        source 'ng-file-upload.js' >> '/ng-modules/'
+        source 'ng-file-upload.min.js' >> '/ng-modules/'
     }
 //    'angular-cookies'('1.4.x') {
 //        source 'angular-cookies.js' >> '/angular/'
 //    }
     'angular-local-storage'('0.5.x') {
-        source 'dist/angular-local-storage.js' >> '/angular/'
+        source 'dist/angular-local-storage.min.js' >> '/angular/'
     }
 //    'ngStorage'('0.3.x') {
 //        source 'ngStorage.js' >> '/angular/'
 //    }
     'angular-spinner'('0.8.x') {
-        source 'angular-spinner.js' >> '/angular/'
+        source 'angular-spinner.min.js' >> '/angular/'
     }
     'spin.js'('2.x.x') {
-        source 'spin.js' >> '/spin.js/'
+        source 'spin.min.js' >> '/spin.js/'
     }
     'angular-material'('1.1.x') {
-        source 'angular-material.js' >> '/angular-material/'
+        source 'angular-material.min.js' >> '/angular-material/'
         source 'angular-material.css' >> '/angular-material/'
     }
     'material-design-icons'('2.2.x') {

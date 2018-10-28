@@ -1,14 +1,14 @@
 package se.webpoint.auth
 
 import grails.plugin.springsecurity.SpringSecurityService
-import grails.transaction.Transactional
-import org.apache.commons.logging.LogFactory
+import grails.gorm.transactions.Transactional
+import groovy.util.logging.Slf4j
 import org.grails.web.errors.GrailsWrappedRuntimeException
 
+@Slf4j
 @Transactional
 class RoleGroupService {
-	
-	private static final log = LogFactory.getLog(this)
+
 	SpringSecurityService springSecurityService
 	
 	
@@ -22,7 +22,7 @@ class RoleGroupService {
 	
 	@Transactional
 	def save(RoleGroup instance){
-		log.debug(' --- Create new RoleGroup ' + instance.name)
+        log.debug ' --- RoleGroupService.save - instance: [{}]', instance
 		
 		instance.validate()
 		if (instance.hasErrors()) {

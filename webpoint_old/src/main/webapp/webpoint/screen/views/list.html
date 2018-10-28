@@ -1,0 +1,28 @@
+<div id="content" sha-loading-spinner="viewLoading" data-ng-init="mainViewListCtrl_loadPageList()"  ng-cloak layout-gt-sm="row" layout="column">
+
+    <div flex-gt-sm="150" flex>
+        <md-toolbar layout="row" class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <span>Lists</span>
+            </div>
+        </md-toolbar>
+
+        <md-list flex>
+            <md-subheader class="md-no-sticky">List of songs collections</md-subheader>
+            <md-list-item class="md-2-line" ng-repeat="p in items">
+                <div class="md-list-item-text" layout="column">
+                    <h3>
+                        <span class="expandSign" ng-if="p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">-</span>
+                        <span class="expandSign" ng-if="!p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">+</span>
+                        <a href="" ng-click="mainViewListCtrl_gotoScreen(p.id)">{{p.category}}&nbsp;&Verbar;&nbsp;{{p.name}}</a>
+                    </h3>
+                    <p ng-if="p.expanded" layout="column">
+                        <span ng-repeat="part in pageList.pageParts">&nbsp;&nbsp;&bull;&nbsp;{{part.section.title}}</span>
+                    </p>
+                </div>
+                <md-divider ></md-divider>
+            </md-list-item>
+        </md-list>
+    </div>
+
+</div>

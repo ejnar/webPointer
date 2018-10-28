@@ -3,69 +3,103 @@
 /* Services */
 
 var pageService = angular.module('webpoint.core');
+    pageService.factory('PageService', PageService);
+    PageService.$inject = ['$log', 'PageListDataApi', 'PageListApi'];
 
+    function PageService($log, PageListDataApi, PageListApi){
+        $log.info('PageService');
+        var service = {
+            addSectionToList: addSectionToList,
+            removeSectionInList: removeSectionInList,
+            listApi: PageListApi,
+            excludeCache: excludeCache
 
-pageService.factory('VyApi', ['$resource', '$q', '$timeout', '$resourceInterceptor', '$log',
-    function ($resource, $q, $timeout, $resourceInterceptor, $log) {
+        }
+        return service;
 
-		$log.info(' --- PageService.VyApi.factory --- ');
+        function excludeCache(exclude){
+            var method = 'getCache';
+            if(exclude) method = 'get';
+            return method;
+        }
+
+        function addSectionToList(pageListId, section) {
+			$log.debug(" --- PageService.addSectionToList - section:", section);
+
+			var pageItem = {};
+			pageItem.key = '';
+			pageItem.color = 'white';
+			pageItem.style = 'default';
+			pageItem.section = section;
+
+            return PageListDataApi.save({pageListId: pageListId}, pageItem);
+        }
+
+        function removeSectionInList (pageListId, item) {
+            PageListDataApi.remove({pageListId: pageListId, Id: item.key},
+                function (resp) {
+                    $log.debug(resp);
+                });
+        }
+
+    }
+
+pageService.factory('VyApi', ['$resource', '$q', '$timeout', '$log',
+    function ($resource, $q, $timeout, $log) {
+
+		$log.info(' --- PageService.VyApi.factory --- ');  // , interceptor : $resourceInterceptor
 		return $resource('api/vy/:group/:pages', {group: '@group', pages: '@pages'},
 				{
-           			'list': { method:'GET', isArray:true, cache:false, interceptor : $resourceInterceptor },
-           			'get': { method:'GET', interceptor : $resourceInterceptor }
+           			'list': { method:'GET', isArray:true, cache:true },
+           			'get': { method:'GET' }
 
 				});
 	}
-
 ]);
 
+pageService.factory('PageListApi', ['$resource', '$q', '$timeout', '$log',
+    function ($resource, $q, $timeout, $log) {
 
-
-pageService.factory('PageListApi', ['$resource', '$q', '$timeout', '$resourceInterceptor', '$log',
-    function ($resource, $q, $timeout, $resourceInterceptor, $log) {
-	
 		$log.info(' --- PageService.PageListApi.factory --- ');
 		return $resource('api/pagelist/:Id', {Id: '@Id'},
 				{
-           			'list': { method:'GET', isArray:true, cache:false, interceptor : $resourceInterceptor },
-           			'get': { method:'GET', interceptor : $resourceInterceptor },   //
-           			'save': { method:'POST', interceptor : $resourceInterceptor },
-           			'update': { method:'PUT', interceptor : $resourceInterceptor },   //PATCH
-           			'remove': { method:'DELETE', interceptor : $resourceInterceptor }
+           			'list': { method:'GET', isArray:true, cache:true},
+           			'list2': { method:'GET', isArray:true, cache:false},
+           			'get': { method:'GET' },
+           			'getCache': { method:'GET', cache:true},
+           			'save': { method:'POST'},
+           			'update': { method:'PUT'},
+           			'remove': { method:'DELETE'}
 				});
 	}
-
 ]);
 
+pageService.factory('PageListDataApi', ['$resource', '$q', '$timeout', '$log',
+    function ($resource, $q, $timeout, $log) {
 
-pageService.factory('PageListDataApi', ['$resource', '$q', '$timeout', '$resourceInterceptor', '$log',
-    function ($resource, $q, $timeout, $resourceInterceptor, $log) {
-	
 		$log.info(' --- PageService.PageListDataApi.factory ');
 		return $resource('api/pagelist/:pageListId/pageItem/:Id', {pageListId: '@pageListId', Id: '@Id'},
-//		return $resource('api/pagedata/:pageListId', {pageListId: '@pageListId'},
 				{
-   					'list': { method:'GET', isArray:true, interceptor : $resourceInterceptor},
-   					'get': { method:'GET', interceptor : $resourceInterceptor},
-   					'save': { method:'POST', interceptor : $resourceInterceptor},
-   					'update': { method:'PUT', interceptor : $resourceInterceptor},
+   					'list': { method:'GET', isArray:true},
+   					'get': { method:'GET'},
+   					'save': { method:'POST'},
+   					'update': { method:'PUT'},
    					'remove': { method:'DELETE'}
 				});
 	}
-
 ]);
 
-pageService.factory('PageDataSectionApi', ['$resource', '$q', '$timeout', '$resourceInterceptor', '$log',
-    function ($resource, $q, $timeout, $resourceInterceptor, $log) {
+pageService.factory('PageDataSectionApi', ['$resource', '$q', '$timeout', '$log',
+    function ($resource, $q, $timeout, $log) {
 
 		$log.info(' --- PageService.PageDataSectionApi.factory ');
 		return $resource('api/pagedata/:pagedataId/section/:Id', {pagedataId: '@pagedataId', Id: '@Id'},
 //		return $resource('api/pagedata/:pageListId', {pageListId: '@pageListId'},
 				{
-   					'list': { method:'GET', isArray:true, interceptor : $resourceInterceptor},
-   					'get': { method:'GET', interceptor : $resourceInterceptor},
-   					'save': { method:'POST', interceptor : $resourceInterceptor},
-   					'update': { method:'PUT', interceptor : $resourceInterceptor},
+   					'list': { method:'GET', isArray:true},
+   					'get': { method:'GET'},
+   					'save': { method:'POST'},
+   					'update': { method:'PUT'},
    					'remove': { method:'DELETE'}
 				});
 	}

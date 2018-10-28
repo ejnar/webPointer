@@ -1,23 +1,23 @@
 package se.webpoint.data
 
 import grails.plugin.springsecurity.SpringSecurityService
-import grails.transaction.Transactional
-import org.apache.commons.logging.LogFactory
+import grails.gorm.transactions.Transactional
+import groovy.util.logging.Slf4j
 import org.bson.types.ObjectId
 import org.grails.web.errors.GrailsWrappedRuntimeException
 import se.webpoint.auth.RoleGroup
 import se.webpoint.auth.User
+import sun.misc.BASE64Encoder
 
+@Slf4j
 @Transactional
 class PageService {
 
-
-    private static final log = LogFactory.getLog(this)
     SpringSecurityService springSecurityService
 
 
     def getAllPageLists() {
-        log.debug(' --- Get all PageList')
+        log.debug ' --- Get all PageList'
         User user = springSecurityService.loadCurrentUser()
         Set<RoleGroup> rolegroups = user.getAuthoritiesExternal()
 
@@ -25,7 +25,6 @@ class PageService {
         for (rg in rolegroups) {
             pageLists.addAll(PageList.getPageListsByGroup(rg.name))
         }
-
         pageLists
     }
 
@@ -50,8 +49,6 @@ class PageService {
 
         for (p in pageList.pageParts) {
             Section section = Section.webConvertedSection(p.section);
-            section.convertToBase64()
-
             p.section = section;
 //            log.debug(section);
             list.pageParts.add(p);
@@ -65,7 +62,7 @@ class PageService {
 
     @Transactional
     def savePageList(PageList instance) {
-        log.debug(' --- Create PageList')
+        log.debug ' --- PageService.savePageList - instance: [{}]', instance
 
         instance.validate()
         if (instance.hasErrors()) {
@@ -75,14 +72,12 @@ class PageService {
 //        log.debug principal
         def user = springSecurityService.loadCurrentUser()
         for (a in user.getAuthorities()) {
-            log.debug a
             if (!a.system)
                 instance.addGroup(a.name)
 //			for (b in a.getAuthorities()) {
 //                log.debug b.authority
 //			}
         }
-        println instance
         instance.save flush: true;
         instance
     }
@@ -93,7 +88,7 @@ class PageService {
      */
     @Transactional
     def removePagePart(sectionId) {
-        log.debug(' --- Remove PagePart - sectionId: ' + sectionId)
+        log.debug ' --- Remove PagePart - sectionId: [{}]', sectionId
 
         ObjectId objectId
         if(sectionId instanceof String)
@@ -131,7 +126,7 @@ class PageService {
 
     @Transactional
     def addPageItem(style, color, sectionId, pageListId) {
-        log.debug('-- Add PageItem - PageList: ' + pageListId)
+        log.debug ' --- Add PageItem - pageListId: [{}]', pageListId
         PageItem instance = new PageItem(key: ObjectId.get().toHexString(), style: style, color: color);
         Section section = Section.findById(sectionId);
         instance.section = section;
@@ -142,15 +137,15 @@ class PageService {
         }
         PageList pageList = PageList.findById(pageListId);
         pageList.pageParts.add(instance);
-        pageList.updated = new Date()
-        pageList.save flush:true
-        instance
+        pageList.updated = new Date();
+        pageList.save flush:true;
+        instance;
     }
 
 
     @Transactional
     def removePageItem(id, pageListId) {
-        log.debug(' --- Remove PageItem - id: ' + id)
+        log.debug ' --- Remove PageItem - id: [{}]', id
         PageList pageList = PageList.findById(pageListId);
 
         List<PageItem> pageParts = new ArrayList()

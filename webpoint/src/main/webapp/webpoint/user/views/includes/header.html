@@ -1,6 +1,4 @@
-
 <div class="container">
-	<span us-spinner="{radius:20, width:8, length: 10}" spinner-key="spinner-1"></span>
 	<nav class="navbar navbar-default" role="navigation">  <!-- navbar-fixed-top -->
 	        <div class="navbar-header">   <!--  data-toggle="collapse" data-target=".navbar-collapse" -->
 	            <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed"   >
@@ -17,18 +15,29 @@
 	                 <!-- is-open="status.isopen" ng-disabled="disabled" -->
 	                <li class="dropdown" uib-dropdown on-toggle="toggled(open)">
 	                    <a href="" id="simple-dropdown" uib-dropdown-toggle class="dropdown-toggle" >
-	                    	<i class="glyphicon glyphicon-align-center"></i> Section <b class="caret"></b>
+	                    	<i class="glyphicon glyphicon-list"></i>
+							<span>Menu</span><b class="caret"></b>
 	                    </a>
 	                    <ul class="dropdown-menu" role="menu" >
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#section">
-	                        	<i class="glyphicon glyphicon-list"></i> All Section</a></li>
-	               
-	                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#groupOfPagesList">
-	                        	<i class="glyphicon glyphicon-plus"></i> Add new page list</a></li>
+	                        <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#song">
+                                    <span>Song data</span>
+                                </a>
+                            </li>
+	                        <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#page">
+                                    <span>Song lists</span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="/">
+                                    <span>View song lists</span>
+                                </a>
+                            </li>
 	                    </ul>
 	                </li>
 	            </ul>
-	            <ul class="nav navbar-nav navbar-right">
+	            <ul class="nav navbar-nav navbar-right" ng-show="isAuthenticated()">
 	                <li class="dropdown user-avatar" uib-dropdown on-toggle="toggled(open)">
 	                    <a href="" class="dropdown-toggle" uib-dropdown-toggle >
 	                        <span>
@@ -36,15 +45,17 @@
 	                            <span>{{user.name}}<i class="caret"></i></span>
 	                        </span>
 	                    </a>
-		                <ul class="dropdown-menu">
-		                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#adduser">
-	                        	<i class="glyphicon glyphicon-plus"></i> Add User</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1"  ng-click="openPasswordModel()">
+		                <ul class="dropdown-menu" data-ng-controller="MenuController">
+
+                            <li ng-show="isAdmin()" role="presentation"><a role="menuitem" tabindex="10" href="#user">
+	                        	<i class="glyphicon glyphicon-plus"></i> List User</a></li>
+							<li ng-show="isAdmin()" role="presentation"><a role="menuitem" tabindex="11"  ng-click="openPasswordModel()">
 	                        	<i class="glyphicon glyphicon-plus"></i> Update password</a></li>	                      
-	                      	<li role="presentation"><a role="menuitem" tabindex="-1"  ng-click="openGroupModel()">
-	                        	<i class="glyphicon glyphicon-plus"></i> Add Group</a></li>	
-	                     
-		                    <li class="divider"></li>
+	                      	<li ng-show="isAdmin()" role="presentation"><a role="menuitem" tabindex="12"  ng-click="openGroupModel()">
+	                        	<i class="glyphicon glyphicon-plus"></i> Add Group</a></li>
+							<li ng-show="isAdmin()" role="presentation"><a role="menuitem" tabindex="13"  ng-click="openSetting()">
+								<i class="glyphicon glyphicon-plus"></i> Setting</a></li>
+							<li class="divider"></li>
 		                    <li><a ng-click="logout()" role="menuitem" >
 		                    	<i class="glyphicon glyphicon-log-out"></i>
 		                        <span>Log out</span>

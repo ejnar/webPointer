@@ -1,9 +1,12 @@
 package se.webpoint.auth
 
+import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
+import groovy.transform.TypeCheckingMode
 import se.webpoint.data.BaseDomain
 
+@GrailsCompileStatic
 @EqualsAndHashCode(includes='name')
 @ToString(includes='name', includeNames=true, includePackage=false)
 class RoleGroup extends BaseDomain {
@@ -16,6 +19,7 @@ class RoleGroup extends BaseDomain {
 		system defaultValue: false
 	}
 
+    @GrailsCompileStatic(TypeCheckingMode.SKIP)
 	Set<Role> getAuthorities() {
 		RoleGroupRole.findAllByRoleGroup(this)*.role as Set
 	}
@@ -30,6 +34,7 @@ class RoleGroup extends BaseDomain {
         instance
     }
 
+    @GrailsCompileStatic(TypeCheckingMode.SKIP)
     static boolean remove(String sName, boolean flush = false) {
         if (sName == null) return false
 

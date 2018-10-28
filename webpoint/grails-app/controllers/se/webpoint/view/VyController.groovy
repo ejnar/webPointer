@@ -1,10 +1,13 @@
 package se.webpoint.view
 
 import grails.web.http.HttpHeaders
-import org.springframework.http.HttpStatus
+import groovy.util.logging.Slf4j
 import se.webpoint.data.PageList
 import se.webpoint.data.PageService
 
+import static org.springframework.http.HttpStatus.OK
+
+@Slf4j
 class VyController {
 
     static responseFormats = ['json', 'xml']
@@ -12,15 +15,15 @@ class VyController {
     PageService pageService
 
     def index() {
-        log.info " --- VyController.index "
-        log.debug params
+        log.debug ' --- VyController.index - params: [{}]', params
 
         PageList pageList = pageService.getPageListByGroupAndName(params.group, params.pages)
+        println pageList.pageParts[0].section.data
+        println pageList.pageParts[1].section.data
 
         String location = g.createLink( resource: 'api', absolute: true) + '/vy/' //+ params.PageListId + '/pagedata/' + params.id
-        println location
         response.addHeader(HttpHeaders.LOCATION, location)
 //        respond '', [status: NO_CONTENT]
-        respond pageList, [status: HttpStatus.OK]
+        respond pageList, [status: OK]
     }
 }

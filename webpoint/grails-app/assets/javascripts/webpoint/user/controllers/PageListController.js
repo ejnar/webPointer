@@ -6,21 +6,14 @@ var sectionController = angular.module('webpoint.user');
 
 sectionController.controller('PageListCtrl', [
     '$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', '$uibModal',
-    'tmpCash', 'cfgAppPath', 'PageListApi', 'sharedProperties',
+    'cfgAppPath', 'PageListApi',
     function ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $uibModal,
-        tmpCash, cfgAppPath, PageListApi, sharedProperties) {
-        $log.debug(' - PageListController.PageListCtrl:');
+        cfgAppPath, PageListApi) {
 
-		$scope.pageListCtrl_loadPageList = function() {
-			$log.debug(" --- PageListController.pageListCtrl_loadPageList:");
-//			$scope.viewLoading = true;
-    		PageListApi.list(
-    				function (resp) {
-    					$scope.listOfPages = resp;
-//    					$scope.viewLoading = false;
-                    });
-    		$scope.orderProp = 'name';
-    	}
+        function init(){
+            $log.debug(" --- PageListController.pageListCtrl.init:");
+            $scope.listOfPages = PageListApi.list();
+        }
 
     	$scope.pageListCtrl_openModel = function () {
     		var modalInstance = $uibModal.open({
@@ -32,51 +25,55 @@ sectionController.controller('PageListCtrl', [
     	
     	$scope.pageListCtrl_editPageList = function(id) {
     		$log.debug(" --- PageListController.pageListCtrl_editPageList - id:", id);
-    		$location.path(cfgAppPath.groupOfPagesUpdate + id );
+    		$location.path(cfgAppPath.PAGE_UPDATE + id );
     	}
   	
     	$scope.pageListCtrl_delPageList = function(id) {
     	    $log.debug(" --- PageListController.pageListCtrl_delPageList - id:", id);
     		PageListApi.remove({Id: id},
     			function (resp) {
-    				$scope.pageListCtrl_loadPageList();
+    				init();
     			});
     	}
 
     	$scope.pageListCtrl_goToViewAll = function() {
             $log.debug(" --- PageListController.pageListCtrl_goToViewAll ");
-            $location.path(cfgAppPath.viewAllSongs);
+            $location.path(cfgAppPath.SONGS_VIEW);
         }
+
+        init();
 }]);
 
 sectionController.controller('ViewAllSongsCtrl', [
     '$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', '$uibModal',
-    'tmpCash', 'cfgAppPath', 'SectionsApi', 'sharedProperties',
+    'cfgAppPath', 'SectionsApi', 'BinaryApi',
     function ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $uibModal,
-        tmpCash, cfgAppPath, SectionsApi, sharedProperties) {
+        cfgAppPath, SectionsApi, BinaryApi) {
         $log.debug(' - PageListController.ViewAllSongsCtrl:');
 
 
 		$scope.viewAllSongsCtrl_loadSongList = function() {
 			$log.debug(" --- PageListController.viewAllSongsCtrl_loadSongList:");
 
-    		SectionsApi.list(
-    		    function (resp) {
-    		        $log.debug(resp);
-    				$scope.sectionList = resp;
-                });
-    		$scope.orderProp = 'name';
+            SectionsApi.list({max: 1000}).$promise
+                .then( function(resp) {
+                    $scope.sectionList = resp;
+                    angular.forEach($scope.sectionList, function(s) {
+                        if(s.type == 'IMAGE'){
+                            s.binary = BinaryApi.get({Id: s.id}).$promise
+                        }
+                    });
+            });
     	}
-
 
     	$scope.pageListCtrl_goToViewAll = function() {
             $log.debug(" --- PageListController.pageListCtrl_goToViewAll ");
-            $location.path(cfgAppPath.viewAllSongs);
+            $location.path(cfgAppPath.SONGS_VIEW);
         }
 
         $scope.pageListCtrl_backPageList = function(id) {
             $log.debug(" --- PageListController.pageListCtrl_editPageList - id:", id);
-            $location.path(cfgAppPath.groupOfPagesUpdate + id );
+            $location.path(cfgAppPath.PAGE_UPDATE + id );
         }
 
 }]);
@@ -94,7 +91,7 @@ sectionController.controller('ModalInstanceCtrl',[ '$scope', '$location', '$uibM
 			    function (resp) {
 				    $log.debug(resp);
 				    $uibModalInstance.close('close');
-				    $location.path(cfgAppPath.groupOfPagesUpdate + resp.id);
+				    $location.path(cfgAppPath.PAGE_UPDATE + resp.id);
 			    });
 
 	    };
@@ -109,25 +106,36 @@ sectionController.controller('ModalInstanceCtrl',[ '$scope', '$location', '$uibM
 
 sectionController.controller('UpdatePageListCtrl', [
 	'$rootScope', '$scope', '$routeParams', '$location', '$log',
-	'cfgAppPath', 'properties', 'SectionsApi', 'PageListApi', 'PageListDataApi', '$filter', 'SettingService',
+	'cfgAppPath', 'properties', 'SectionsApi', 'PageListApi', 'PageListDataApi', '$filter', 'SettingService', 'PageService',
     function($rootScope, $scope, $routeParams, $location, $log,
-        cfgAppPath, properties, SectionsApi, PageListApi, PageListDataApi, $filter, SettingService) {
-        $log.debug(' - PageListController.UpdatePageListCtrl:');
+        cfgAppPath, properties, SectionsApi, PageListApi, PageListDataApi, $filter, SettingService, PageService) {
+
+        $scope.alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
 		$scope.updatePageListCtrl_loadSectionList = function() {
             $log.debug(" --- PageListController.updatePageListCtrl_loadSectionList");
-            SettingService.getCategory($scope);
-            SettingService.getFilterItems($scope);
+//            SettingService.getCategory($scope);
+//            SettingService.getFilterItems($scope);
             $scope.choosenCategory = [];
-            SectionsApi.list(function (resp) {
-                $log.debug(resp);
-                $scope.meta = resp;
-                $scope.metaFilteredList = resp;
-                $scope.updatePageListCtrl_loadPageList();
+            SectionsApi.list({max: 1000, publish:true}).$promise
+                .then( function(resp) {
+                    $log.debug(resp);
+                    $scope.meta = resp;
+                    $scope.metaFilteredList = resp;
+                    $scope.updatePageListCtrl_loadPageList();
             });
-   		    $scope.orderProp = 'title';
 		}
 
+        $scope.updatePageListCtrl_alphabetFilter = function(char) {
+            $log.debug(" --- PageListController.updatePageListCtrl_alphabetFilter " + char);
+            if(char){
+                $scope.metaFilteredList = $filter('filter')($scope.meta, function (o) {
+                    return o.title.search(new RegExp('^' + char , "i")) == 0;
+                });
+            }else{
+                $scope.metaFilteredList = $scope.meta;
+            }
+        };
 
 		$scope.updatePageListCtrl_pickFilterCategory = function(category) {
             $log.debug(" --- PageListController.updatePageListCtrl_pickFilterCategory " + category);
@@ -167,7 +175,7 @@ sectionController.controller('UpdatePageListCtrl', [
 
 	        PageListApi.get({Id: $routeParams.pageListId}).$promise
 			    .then( function(resp) {
-                    $log.debug(resp);
+//                    $log.debug(resp);
 	    		    $scope.pageDataList = resp;
 //	    		    angular.forEach($scope.pageDataList.pageParts, function(d) {
 //                        $log.debug(d);
@@ -185,19 +193,10 @@ sectionController.controller('UpdatePageListCtrl', [
 		$scope.updatePageListCtrl_addSectionToList = function(section) {
 			$log.debug(" --- PageListController.updatePageListCtrl_addSectionToList - section:", section);
 
-			var pageItem = {};
-			pageItem.key = '';
-			pageItem.color = 'white';
-			pageItem.style = 'default';
-//			pageData.sections = [];
-			pageItem.section = section;
-//			pageData.sectionMetas.push(meta);
-
-            PageListDataApi.save({pageListId: $routeParams.pageListId}, pageItem,    //
-                function (resp) {
-            	    $log.debug(resp);
-            		$scope.updatePageListCtrl_loadPageList();
-            	});
+            PageService.addSectionToList($routeParams.pageListId, section).$promise
+                .then( function(resp) {
+                    $scope.updatePageListCtrl_loadPageList();
+                });
 		}
 
 		$scope.updatePageListCtrl_delPageData = function(pageData) {

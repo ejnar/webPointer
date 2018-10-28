@@ -1,11 +1,14 @@
 package se.webpoint.auth
 
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.DetachedCriteria
 import groovy.transform.ToString
+import groovy.transform.TypeCheckingMode
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.bson.types.ObjectId
 import se.webpoint.data.BaseDomain
 
+@GrailsCompileStatic
 @ToString(cache=true, includeNames=true, includePackage=false)
 class UserRoleGroup extends BaseDomain{
 
@@ -49,6 +52,7 @@ class UserRoleGroup extends BaseDomain{
 		instance
 	}
 
+    @GrailsCompileStatic(TypeCheckingMode.SKIP)
     static boolean remove(User u, RoleGroup rg, boolean flush = false) {
         if (u == null || rg == null) return false
 
@@ -59,6 +63,7 @@ class UserRoleGroup extends BaseDomain{
         rowCount
     }
 
+    @GrailsCompileStatic(TypeCheckingMode.SKIP)
     static void removeAll(User u, boolean flush = false) {
         if (u == null) return
 
@@ -67,6 +72,7 @@ class UserRoleGroup extends BaseDomain{
         if (flush) { UserRoleGroup.withSession { it.flush() } }
     }
 
+    @GrailsCompileStatic(TypeCheckingMode.SKIP)
     static void removeAll(RoleGroup rg, boolean flush = false) {
         if (rg == null) return
 

@@ -5,25 +5,24 @@
 //= require_tree directives
 //= require_tree templates
 
-//= require /angular/angular
 //= require /angular/angular-resource
 //= require /angular/angular-route
 //= require /angular/angular-sanitize
 //= require /angular/angular-local-storage
-//= require /ng-modules/ng-file-upload
 //= require spin.js/spin
 //= require /angular/angular-spinner
-//= require /angular/http-auth-interceptor
-//= require /angular/ui-bootstrap-tpls
-
+//= require /angular-http-auth/http-auth-interceptor
+//= require /ng-modules/ng-stomp.standalone.min
 
 var app = angular.module("webpoint.core", [
-    'http-auth-interceptor', 'ngRoute', 'ngResource', 'ngFileUpload',
-    'ngSanitize', 'angularSpinner', 'ui.bootstrap', 'LocalStorageModule'])
+    'http-auth-interceptor', 'ngRoute', 'ngResource', 'ngSanitize', 'angularSpinner', 'LocalStorageModule', 'ngStomp'])
     .constant("contextPath", window.contextPath)
     .config(config);
 
-console.log("webpoint.core manifest load complete.");
+app.constant(
+		'CONFIG', {
+			DEBUG_LOG: true
+		});
 
 app.config(function (localStorageServiceProvider) {
   localStorageServiceProvider
@@ -33,84 +32,114 @@ app.config(function (localStorageServiceProvider) {
 
 function config($httpProvider) {
 //    $httpProvider.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-//    $httpProvider.interceptors.push(httpRequestInterceptor);
-    $httpProvider.interceptors.push('authInterceptor');
+    $httpProvider.interceptors.push('$resourceInterceptor');
 };
 
-
-app.factory('authInterceptor', function ($rootScope, $window, $log) {
-    return {
-        request: function (config) {
-//          $log.debug('authInterceptor');
-//          $log.debug(config);
+app.factory('$resourceInterceptor', ['$q', '$log', '$rootScope', '$location', 'AppStatusService',
+    function($q, $log, $rootScope, $location, AppStatusService) {
+    var responseInterceptor = {
+        request: function(config) {
+//            console.info(config)
+            AppStatusService.resolveXSS(config);
+            AppStatusService.xhrCreationsCountUp();
+            AppStatusService.updateStatus(config.excludeSpinner);
             config.headers = config.headers || {};
-            if ($window.sessionStorage.token) {
-                config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+            if (sessionStorage.authToken) {
+                config.headers.Authorization = 'Bearer ' + sessionStorage.authToken;
             }
             return config;
-        }
-    };
-});
-
-app.factory('$resourceInterceptor', function ($q, $log, $location, usSpinnerService) {
-    return {
-        'responseError': function(responseError) {
-            if (responseError.status === 403) { // authentication issue
-                usSpinnerService.stop('spinner-1');
-                $location.url('/login');
-            }
-            if (responseError.status === 500) { // authentication issue
-                usSpinnerService.stop('spinner-1');
-            }
-//            $log.debug(responseError);
-            if (responseError.status < 0) {
-                $log.debug(' Server down:');
-            }
-            else{
-                $log.debug('status: ' + responseError.status + ' info: ' + responseError.statusText);
-            }
+        },
+        requestError: function (rejection) {
+            AppStatusService.xhrResolutionsCountUp();
+            AppStatusService.updateStatus();
+            return $q.reject(rejection);
+        },
+        response: function(response) {
+            AppStatusService.initXSS(response);
+            AppStatusService.xhrResolutionsCountUp();
+            AppStatusService.updateStatus();
+            return response;
+        },
+        responseError: function(responseError) {
+            AppStatusService.xhrResolutionsCountUp();
+            AppStatusService.updateStatus();
+            AppStatusService.messageResolver(responseError);
+            AppStatusService.statusMessageResolver(responseError);
             return $q.reject(responseError);
         }
     };
-});
+    return responseInterceptor;
+}]);
+
 
 app.config(['usSpinnerConfigProvider', function (usSpinnerConfigProvider) {
 //    usSpinnerConfigProvider.setDefaults({color: 'blue'});
     usSpinnerConfigProvider.setTheme('bigBlue', {color: 'blue', radius: 20});
 }]);
 
-app.run(['$rootScope', '$http', '$location', '$log', 'usSpinnerService', 'localStorageService',
-    function ($rootScope, $http, $location, $log, usSpinnerService, localStorageService) {
+app.run(['$rootScope', '$http', '$location', '$log', 'CashService', 'Access',
+    function ($rootScope, $http, $location, $log, CashService, Access) {
 //		$log.debug(' --- startup -------- LocalToken: ' + sessionStorage.authToken);
         $http.defaults.headers.common['X-Auth-Token'] = sessionStorage.authToken;
 
         $rootScope.$on('event:auth-loginRequired', function () {
-            $log.debug('Showing login form');
-            usSpinnerService.stop('spinner-1');
+//            $log.debug('Showing login form');
             $location.path('/login');
         });
         $rootScope.$on('event:auth-loginFailed', function () {
-            $log.debug('Showing login error message');
-            usSpinnerService.stop('spinner-1');
+//            $log.debug('Showing login error message');
             $('#login-error').show();
         });
         $rootScope.$on('event:auth-loginConfirmed', function () {
-            $log.debug('Redirecting to home');
+//            $log.debug('Redirecting to home');
             $rootScope.isAuthenticated = true;
             $http.defaults.headers.common['X-Auth-Token'] = sessionStorage.authToken;
             $log.debug('User have succefully login - ' + $rootScope.currentUser);
             $location.path('/');
         });
         $rootScope.$on('event:auth-logoutRequest', function () {
-            $log.debug('Logging out user');
+//            $log.debug('Logging out user');
             delete $http.defaults.headers.common["X-Auth-Token"]
             $rootScope.isAuthenticated = false;
             $rootScope.currentUser = null;
             sessionStorage.clear();
-            localStorageService.clearAll();
-            usSpinnerService.stop('spinner-1');
+            CashService.clean();
             $location.path("/login");
         });
+
+
+        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+
+//            if (!current) {
+//                $log.debug('On Refresh ');
+////                CashService.clean();
+//            }
+
+            var templateUrl = "";
+            var requireRoles = [];
+            if(next && next.$$route != undefined){
+                templateUrl = next.$$route.templateUrl;
+                requireRoles = next.requireRoles;
+
+            }else if(current && current.$$route != undefined){
+                templateUrl = current.$$route.templateUrl;
+                requireRoles = current.requireRoles;
+            }
+            Access.isAuthorized(templateUrl);
+
+         });
+
+         $rootScope.$on("$routeChangeError", function (event, current, previous, rejection) {
+//            $log.debug('$routeChangeError');
+         });
+
+         $rootScope.$on("$locationChangeStart", function (event, next, current) {
+//            $log.debug('$locationChangeStart');
+//            $log.debug('event', event);
+//            $log.debug('next', next);
+//            $log.debug('current', current);
+         });
+
 }]);
 
 function empty(e) {
@@ -126,20 +155,6 @@ function empty(e) {
     }
 };
 
-app.service('sharedProperties', function () {
-	 var property = {
-			 doSave: true,
-//			 categories: {'Worship','Christian','Hymns'}
-	 };
-
-   return {
-   	getProperty: function() {
-           return property;
-       }
-   };
-});
-
-
 app.factory('hashMap', ['$rootScope', function ($rootScope) {
 	var mem = {};
     return {
@@ -149,70 +164,12 @@ app.factory('hashMap', ['$rootScope', function ($rootScope) {
         },
         get: function (key) {
             return mem[key];
-        }
-    };
-}]);
-
-
-app.factory('tmpCash', ['$rootScope', function ($rootScope) {
-	var mem = {};
-    return {
-        put: function (key, value) {
-            $rootScope.$emit('scope.stored', key);
-            mem[key] = value;
         },
-        get: function (key) {
-            return mem[key];
+        remove: function (key) {
+            return mem[key] = null;
         }
     };
 }]);
-
-//app.factory('$exceptionHandler', function ($log) {
-//    return function (exception, cause) {
-//    	$log.debug('********** - Exception: ' + exception.status + ' ' + exception.statusText + ' - **********');
-//    	$log.debug(exception);
-//    	$log.debug('**********');
-////    	$log.debug(cause);
-//    	alert(exception.status + '  ' + exception.statusText);
-//    };
-//});
-
-//function httpRequestInterceptor(contextPath) {
-//    return {
-//        request: function (config) {
-//            console.info('httpRequestInterceptor');
-////            console.info(config);
-////            console.info(contextPath);
-//            if (!config.url.indexOf("/") == 0 && contextPath) {
-//                config.url = contextPath + "/" + config.url;
-//            }
-//            return config;
-//        }
-//    };
-//}
-
-// Redirect to login page
-//app.factory('httpInterceptor', function ($q, $window, $location, $log) {
-//
-//    return function (promise) {
-//        $log.debug('httpInterceptor');
-//        var success = function (response) {
-//            $log.debug(response);
-//            return response;
-//        };
-//        var error = function (response) {
-//            $log.debug(response);
-//            if (response.status === 401) {
-//                $location.url('/login');
-//                $log.debug('status: 401' + response.status);
-//            }
-//            return $q.reject(response);
-//        };
-//        return promise.then(success, error);
-//    };
-//});
-
-console.log("webpoint.core load new String function.");
 
 String.prototype.insertAt = function(index, string) {
   if((this.length) <= index || index < 0)
@@ -240,4 +197,15 @@ String.prototype.indexLastOf = function(preIndex, character) {
 }
 String.prototype.stripHtml = function() {
     return this.replace(/(<([^>]+)>)/ig,"");
+}
+String.prototype.ltrim = function( chars ) {
+    chars = chars || "\\s*";
+    return this.replace( new RegExp("^[" + chars + "]+", "g"), "" );
+}
+String.prototype.rtrim = function( chars ) {
+    chars = chars || "\\s*";
+    return this.replace( new RegExp("[" + chars + "]+$", "g"), "" );
+}
+String.prototype.trim = function( chars ) {
+    return this.rtrim(chars).ltrim(chars);
 }

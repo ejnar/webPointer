@@ -1,44 +1,167 @@
 package se.webpoint.auth
 
 import grails.plugin.springsecurity.SpringSecurityService
-import grails.transaction.Transactional
-import org.apache.commons.logging.LogFactory
+import grails.gorm.transactions.Transactional
+import groovy.util.logging.Slf4j
 import org.grails.web.errors.GrailsWrappedRuntimeException
-//import org.springframework.boot.cli.util.Log
 
+@Slf4j
 @Transactional
 class UserService {
-	
-	private static final log = LogFactory.getLog(this)
-	SpringSecurityService springSecurityService
+
+    SecurityService securityService
 	def passwordEncoder
-	
-	
-	@Transactional(readOnly = true)
-	def getUserDetail(){
-		User user = springSecurityService.getCurrentUser()
-		
-		return new UserDetail(username: user.username, email: user.email );
+
+    /**
+     * Get one User
+     *
+     * @param id
+     * @param doToken equal to true generate a token if token is missing and return token
+     * @return
+     */
+    @Transactional(readOnly = true)
+	def getUserDetail(id, doToken){
+        def token;
+        User user;
+        if(id == null) {
+            user = securityService.getCurrentUser()
+        }else{
+            user = User.findById(id)
+            if(doToken) {
+                PasswordToken t = newPasswordToken(id)
+                token = t.token;
+            }
+        }
+        return mapUserDetail(user,token);
 	}
-	
-	
-	def updateUser(String username, String email){
+
+    /**
+     * Get User list
+     *
+     * @return
+     */
+    @Transactional(readOnly = true)
+    def getUserDetails(){
+        List<UserDetail> userDetails = new ArrayList<>()
+        User.findAll().each{ u ->
+            userDetails.add(mapUserDetail(u,null))
+        }
+        return userDetails;
+    }
+
+
+    private def mapUserDetail(user,token){
+        Set<String> rolegroups = user.getAuthoritiesExternal()*.name
+        Set<UserRole> userRoles = UserRole.findAllByUser(user);
+        List<UserRole> oUserRoles = userRoles.stream().filter({ ur ->  !ur.role.system }).collect()
+        List<UserRole> sUserRoles = userRoles.stream().filter({ ur ->  ur.role.system }).collect()
+        String authority = "";
+        if(!oUserRoles.isEmpty()){
+            authority = oUserRoles[0].role.authority;
+        }
+        Role sRole = null;
+        if(!sUserRoles.isEmpty()) {
+            UserRole sUserRole = sUserRoles[0];
+            if (sUserRole != null) {
+                sRole = sUserRole.role
+            }
+        }
+
+        Set<String> authorities = new HashSet<>();
+        authorities.addAll(oUserRoles.stream().map({r -> r.authority}).collect())
+        authorities.addAll(rolegroups);
+
+        return new UserDetail(
+                id: user.id, username: user.username, token: token, authority: authority, authorities: authorities,
+                enabled: user.enabled, passwordExpired: user.passwordExpired, accountLocked: user.accountLocked,
+                email: user.email, rolegroups: rolegroups, systemRole: sRole)
+    }
+
+
+    private def newPasswordToken(id){
+        User user = User.findById(id);
+        PasswordToken token = PasswordToken.findByUserId(user.id);
+        if(token == null) {
+            token = PasswordToken.create(user.id, user.email, user.generatePassword(50));
+            user.enabled = true
+            user.save(failOnError: true)
+        }
+        return token;
+    }
+
+    def update(instance){
+
+        User user = User.findById(instance.id)
+        user.email = instance.email
+        user.enabled = instance.enabled
+        user.accountLocked = instance.accountLocked
+        user.save(failOnError: true)
+
+        Set<UserRole> userRoles = UserRole.findAllByUser(user);
+        Set<UserRole> oUserRoles = userRoles.findAll {it.role.system == false}
+        Role role = Role.findByAuthority(instance.authority);
+        if(oUserRoles.isEmpty()) {
+            UserRole userRole = new UserRole();
+            userRole.setRole(role);
+            userRole.setUser(user);
+            userRole.save(flush: true);
+        }else{
+            UserRole userRole = oUserRoles.getAt(0)
+            if(oUserRoles.size() > 1){
+                for (ur in oUserRoles) {
+                    ur.delete flush:true
+                }
+            }
+            if(!userRole.getRole().equals(role)) {
+                userRole.setRole(role);
+                userRole.save(flush: true)
+            }
+        }
+        if(oUserRoles.size() > 1){
+            log.fatal(" To many roles ");
+        }
+        Set<UserRole> sysUserRoles = userRoles.findAll {it.role.system == true}
+        if(instance.systemRole && sysUserRoles.isEmpty()) {
+            if(instance.systemRole.system) {
+                Role r = Role.findByAuthority('SYS_ROLE_ADMIN');
+                UserRole userRole = new UserRole()
+                userRole.setUser(user);
+                userRole.setRole(r);
+                userRole.save(flush: true)
+            }
+        }else if (instance.systemRole && !sysUserRoles.isEmpty()){
+            if(!instance.systemRole.system) {
+                UserRole userRole = sysUserRoles.getAt(0)
+                userRole.delete flush: true
+            }
+        }
+        return mapUserDetail(user,null);
+    }
+
+
+    def updateUserEmail(String username, String email){
 		User user = User.findByUsername(username)
 		user.email = email
 		user.save(failOnError: true)
-		
+
 		return new UserDetail(username: user.username, email: user.email );
 	}
-	
-	
+
+    /**
+     * Create a new user with default settings
+     *
+     * @see User
+     * @param instance
+     * @return
+     */
 	def saveNewUser(instance){
-		log.debug(' --- Create new user - username: '+ instance.username +
-                ' authority: '+ instance.authority +' rolegroup: '+ instance.rolegroup)
+        log.debug ' --- UserService.saveNewUser - instance: [{}]', instance
 		Role role = Role.findByAuthority(instance.authority);
         log.debug(role)
-		RoleGroup group = RoleGroup.findByName(instance.rolegroup);
+
+		RoleGroup group = RoleGroup.findByName(instance.rolegroups[0]);
         log.debug(group)
-		
+
 		User user = User.findByUsername(instance.username)
 		try {
             if (user == null) {
@@ -47,6 +170,7 @@ class UserService {
 
 				UserRole userRole = UserRole.get(user.id, role.id) ?: UserRole.create(user, role, true)
 				log.debug(userRole)
+
 				UserRoleGroup userRoleGroup = UserRoleGroup.get(user.id, group.id) ?: UserRoleGroup.create(user, group, true)
 				log.debug(userRoleGroup)
 
@@ -58,7 +182,7 @@ class UserService {
                 log.debug('-------------------------')
             }
         }catch(All){
-            Log.error(All)
+            log.error(All)
         }
 		return user
 	}
@@ -66,7 +190,7 @@ class UserService {
 
     @Transactional
     def UserRoleGroup addAuthorityToUserRoleGroup(user, roleGroup, allowedAuthority = 5){  // user, roleGroup
-        println 'addAuthorityToGroup'
+        log.debug ' --- UserService.addAuthorityToUserRoleGroup - allowedAuthority: [{}]', allowedAuthority
         if(user == null || roleGroup == null)
             throw new GrailsWrappedRuntimeException()
 
@@ -88,10 +212,9 @@ class UserService {
      */
     @Transactional
 	def createRoleGroup(username){
-        log.debug(username)
+        log.debug ' --- UserService.createRoleGroup - username: [{}]', username
         def group_name = 'GROUP_' + username.toUpperCase();
         RoleGroup group = RoleGroup.findByName(group_name) ?: RoleGroup.create(group_name, true)
-        log.debug(group)
         return group
     }
 
@@ -101,25 +224,67 @@ class UserService {
      * @return
      */
 	def updatePassword(UserPassword password) {
-		def currentUserId = springSecurityService.getCurrentUser().id
+		def currentUserId = securityService.currentUser().id
 		User currentUser = User.get(currentUserId)
 		if (!currentUser) {
 			return
 		}
-		if (passwordEncoder.isPasswordValid(currentUser.password, password.currentPassword, null)) {	
+		if (passwordEncoder.isPasswordValid(currentUser.password, password.currentPassword, null)) {
 			if (password.newPassword.equals(password.confirmPassword)) {
 				currentUser.password = password.newPassword
 				currentUser.save flush:true
-			} 
+			}
 		}else{
 			log.error(' --- Pssword fail to match');
 			throw new GrailsWrappedRuntimeException()
 		}
-
 	}
 
-    def addAuthority(RoleGroup newGroup, Role role){
 
+    def setNewPassword(UserPassword password, xss_token) {
+        log.debug ' --- UserService.setNewPassword - xss_token: [{}]', xss_token
+        if(!xss_token){
+            log.error ' --- xss_token is null'
+            throw new GrailsWrappedRuntimeException()
+        }
+
+        PasswordToken token = PasswordToken.findByToken2(xss_token);
+        User user = User.get(token.userId)
+        if (!user) {
+            log.error ' --- user is null'
+            throw new GrailsWrappedRuntimeException()
+        }
+        if(token.validate(user.email, password.token, xss_token)){
+            user.password = password.newPassword
+            user.passwordExpired = false
+            user.accountLocked = false
+            user.enabled = true
+            user.save flush: true
+            token.delete flush: true
+            println user.password
+        }else{
+            log.error ' --- Password and token fail to match'
+            throw new GrailsWrappedRuntimeException()
+        }
+    }
+
+    def getToken(String arg) {
+        log.debug ' --- UserService.getToken - arg: [{}]', arg
+        PasswordToken token = PasswordToken.findByToken(arg);
+        if(token == null){
+            log.error ' --- Password fail to match'
+            throw new GrailsWrappedRuntimeException()
+        }
+        token.token2 = User.generatePassword(20);
+        token.save flush:true
+
+        return token;
+    }
+
+
+
+    def addAuthority(RoleGroup newGroup, Role role){
+        log.debug ' --- UserService.addAuthority - newGroup: [{}]', newGroup
         RoleGroupRole.create(newGroup, roleAdmin, true)
     }
 

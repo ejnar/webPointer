@@ -37,10 +37,15 @@ class SectionController extends BasicRestController<Section> {
      */
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100000)
-        List<Section> list = listAllResources(params)
-        if(params.publish) {
-            list = list.findAll { it.publish == true }
-        }
+        println params
+        List<Section> list;
+        if(params.publish == 'exclude')
+            list = listAllResources(params)
+        else
+            list = sectionService.getAllSectionByGroup(params)
+//        if(params.publish) {
+//            list = list.findAll { it.publish == true }
+//        }
         respond list, model: [("${resourceName}Count".toString()): list.size()]
     }
 

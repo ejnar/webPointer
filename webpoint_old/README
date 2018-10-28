@@ -1,0 +1,110 @@
+
+
+
+
+Keys
+cmd -  Comment/uncomment with line comment
+cmd alt -
+
+--------------------------
+*** Grails
+
+Build project files for IDE
+./gradlew idea --refresh-dependencies
+
+./gradlew assemble --refresh-dependencies
+
+
+./gradlew karmaRun -PkarmaDebug=true
+
+grails dependency-report
+
+--------------------------
+*** Test
+Unit
+test-app -unit se.webpoint.data.UserServiceSpec
+test-app -unit:javascript ChangeKeyServiceSpec
+Integration
+test-app -integration se.webpoint.data.UserServiceSpec
+
+
+--------------------------
+*** Bower dependencies
+
+Update angular script
+./gradlew bowerRefresh -PbowerDebug=true
+
+./gradlew bowerInstall -PbowerDebug=true
+
+Installs all the bower dependencies you have set in your build.gradle
+bowerInstall
+
+Refreshes bower dependencies (if you add or modify your bower configuration)
+bowerRefresh
+
+Removes bower dependencies and clears Bower’s cache
+bowerClean
+
+--------------------------
+*** SDK
+Update Grails
+sdk list grails
+
+
+--------------------------
+*** JBoss modifications
+
+--- build.gradle ---
+runtime 'javax.xml.bind:jaxb-api:2.2.12'
+provided "org.springframework.boot:spring-boot-starter-tomcat"
+
+Add: src/main/webapp/WEB-INF/jboss-deployment-structure.xml
+--------------------------
+*** Grails
+
+grails create-app webpoint3 --profile angular --features mongodb, asset-pipeline, json-views, security
+
+grails s2-quickstart se.webpoint.auth User Role --groupClassName=Group
+
+grails s2-create-persistent-token se.webpoint.auth.AuthenticationToken
+
+*** Mongo
+* Db dump
+ - mongodump
+ - mongorestore
+
+
+----------------------------
+ Update Node
+
+ sudo npm cache clean -f
+ sudo npm install -g n
+ sudo n stable
+
+
+ ---------------------------
+ Util
+
+ ps -aux
+ kill -9 <PID<
+
+
+Docker:
+
+ Recreate and restart:
+    docker-compose -f docker-composer.yml up -d
+ Shutdown:
+    docker-compose -f docker-composer.yml down
+
+ View procces:
+    docker ps
+
+ Verify changes in Dockerfile and recreate:
+    docker-compose build
+
+ Enter container:
+    docker exec -it <mycontainer> bash
+
+
+Security:
+s2-quickstart  se.webpoint.auth User Role --groupClassName=RoleGroup

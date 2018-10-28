@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+  mongo-db:
+    image: mongo
+    container_name: webpoint
+    ports:  # for demo/debug purpose only
+      - 27017:27017
+    restart: always
+    volumes:
+        - $HOME/data/mongo/webpoint-dev:/data/db
+        - $HOME/data/mongo/dumps:/data/dumps
+#    entrypoint: ["mongorestore", "--db webpoint-dev", "/data/dumps"]
+#    onrun:
+#        - mongorestore -d webpoint-dev /data/mongo/dumps/webpoint-dev
+    # entrypoint: [ "/usr/bin/mongod", "--journal", "--smallfiles", "--rest" ]
+    #volumes:
+    #  - $HOME/data/mongo:/data/db
+    #  - $HOME/data/mongo:/data/bkp
+    # entrypoint: ["mongorestore", "-h localhost:27017", "--db webpoint-dev", "/dump/webpoint-dev"]
+    #    entrypoint: [ "/usr/bin/mongod", "--journal", "--smallfiles", "--rest" ]
+
+#    networks
+#      - mongo
+#    environment:
+#      MONGODB_APPLICATION_DATABASE: webpoint-dev
+#      MONGODB_APPLICATION_USER: $MONGODB_APPLICATION_USER
+#      MONGODB_APPLICATION_PASS: $MONGODB_APPLICATION_PASS
+#      MONGODB_ADMIN_USER: $MONGODB_ADMIN_USER
+#      MONGODB_ADMIN_PASS: $MONGODB_ADMIN_PASS~
+#  mongosetup:
+#    image: mongo
+#    volumes:
+#      - ./dump/webpoint-dev:/dump
+#    entrypoint: ["mongorestore", "--host", "webpoint-dev", "/dump"]
+#    networks:
+#      - mongo
+#networks:
+#    mongo:

@@ -1,11 +1,11 @@
 package se.webpoint.data
 
 import grails.rest.RestfulController
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import grails.web.http.HttpHeaders
-import org.springframework.http.HttpStatus
 
-//import org.codehaus.groovy.grails.web.servlet.HttpHeaders
+import static org.springframework.http.HttpStatus.*
+
 class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 
 	def springSecurityService;
@@ -13,23 +13,15 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
     static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]   // patch: "PATCH",
 
-	
-	def camelContext
 	def grailsApplictaion
-	
-	
+
 	GroupOfSectionController() {
 		super(GroupOfSection)
 	}
-	
-	
-	
+
 	def index(Integer max) {
-		log.info " --- GroupOfSectionController.index: "
-		log.debug params
-		
-		println "index " + grailsApplication.metadata['app.name']
-		
+		log.debug ' --- GroupOfSectionController.index - params: [{}]', params
+
 //		def prop = grailsApplictaion.config['test.hello']
 			
 //		if (camelContext.routes.size() == 0) {
@@ -49,9 +41,7 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 //		respond groupOfSections, [status: OK]     // BAD_REQUEST
 		
 		params.max = Math.min(max ?: 10, 100)
-		
 		println countResources();
-		
 		respond listAllResources(params), model: [("${resourceName}Count".toString()): countResources()]
 	}
 
@@ -70,9 +60,8 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 	 */
 	@Override
 	@Transactional
-	def save() {   // GroupOfSection instance
-		log.info " --- GroupOfSectionController.save: "
-		log.debug params
+	def save() {
+		log.debug ' --- GroupOfSectionController.save - params: [{}]', params
 //		println request.reader.text
 		def instance = createResource()
 		if(instance == null){
@@ -88,7 +77,7 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 		instance.save flush:true
 		response.addHeader(HttpHeaders.LOCATION,
 			g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))
-		respond instance, [status: HttpStatus.CREATED]
+		respond instance, [status: CREATED]
 		
 	}
 
@@ -97,8 +86,7 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 	@Override
 	@Transactional
 	def update() {
-		log.info " --- GroupOfSectionController.update: "
-		log.debug params
+		log.debug ' --- GroupOfSectionController.update - params: [{}]', params
 
 		GroupOfSection instance = GroupOfSection.findById(params.id);
 		println instance.getTimestamp();
@@ -116,7 +104,7 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 		instance.save flush:true
 		response.addHeader(HttpHeaders.LOCATION,
 			g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))
-		respond instance, [status: HttpStatus.OK]
+		respond instance, [status: OK]
 		
 	}
 
@@ -127,8 +115,7 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 	 */
 	@Transactional
 	def delete() {
-        log.info " --- GroupOfSectionController.delete: "
-        log.debug params
+        log.debug ' --- GroupOfSectionController.delete - params: [{}]', params
 
 		GroupOfSection instance = GroupOfSection.findById(params.id);
 		if (instance == null) {
@@ -141,13 +128,13 @@ class GroupOfSectionController extends RestfulController<GroupOfSection>  {
 		instance.delete flush:true
 		response.addHeader(HttpHeaders.LOCATION,
 			g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))
-		respond instance, [status: HttpStatus.NO_CONTENT]
+		respond instance, [status: NO_CONTENT]
 	}
 
 	
 	
 	protected void notFound() {
-		render status: HttpStatus.NOT_FOUND
+		render status: NOT_FOUND 
 	}
 	
 }

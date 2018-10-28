@@ -1,6 +1,6 @@
 <div layout="column" ng-cloak>
     <div id="snackbar">{{activeSong.section.title}}</div>
-    <section>
+
         <div id="wrap">
 
             <div class="sideLeftPageBtn" ng-click="vyCtrl_leftPage()"
@@ -16,7 +16,6 @@
                 ng-if="pageList.pageParts[currentPart].section.binary.$$state.value.length > 0">
                 <i class="material-icons md-24">chevron_right</i>
             </div>
-
             <div ng-if="pageList.pageParts[currentPart].section.type == 'TEXT'
                                 || pageList.pageParts[currentPart].section.type == 'TEXTCHORDS'"
                  class="vyMainArea"  ng-class="fontSize" layout="row"
@@ -122,7 +121,7 @@
                 </md-content>
             </md-sidenav>
         </div>
-    </section>
+
 </div>
 
 

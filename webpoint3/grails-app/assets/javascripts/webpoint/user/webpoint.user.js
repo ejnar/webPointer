@@ -5,8 +5,8 @@
 //= require_tree directives
 //= require_tree templates
 
-//= require /ng-modules/ng-file-upload
-//= require /angular-bootstrap/ui-bootstrap-tpls
+//= require /ng-modules/ng-file-upload.min
+//= require /angular-bootstrap/ui-bootstrap-tpls.min
 
 
 var app = angular.module("webpoint.user", ['webpoint.core', 'ngFileUpload', 'ui.bootstrap']);

@@ -1,9 +1,12 @@
 package se.webpoint.rest
 
 import grails.rest.RestfulController
+import grails.gorm.transactions.Transactional
 import grails.web.http.HttpHeaders
-import org.springframework.http.HttpStatus
 import se.webpoint.auth.AccessService
+
+import static org.springframework.http.HttpStatus.CREATED
+import static org.springframework.http.HttpStatus.NOT_FOUND
 
 /**
  * Created by ejnarakerman on 08/07/16.
@@ -30,8 +33,6 @@ class BasicRestController<T> extends RestfulController<T> {
     }
 
 
-
-
     def access() {
         log.debug " --- access"
         accessService.haveAccess()
@@ -40,11 +41,34 @@ class BasicRestController<T> extends RestfulController<T> {
     }
 
     protected void addHeader(controllerName, instanceId) {
-        response.addHeader(HttpHeaders.LOCATION,
-                g.createLink( resource: 'api', action: controllerName, Id: instanceId,  absolute: true))
+        String url = grailsLinkGenerator.link( resource: 'api', action: controllerName, id: instanceId,  absolute: true)
+        // namespace: hasProperty('namespace') ? this.namespace : null
+        response.addHeader(HttpHeaders.LOCATION, url)
     }
 
     protected void notFound() {
-        render status: HttpStatus.NOT_FOUND
+        render status: NOT_FOUND
     }
+
+
+    /**
+     * Saves a resource
+     */
+    @Override
+    @Transactional
+    def save() {
+        log.info " --- save:"
+
+        def instance = createResource()
+        if(instance == null){
+            notFound()
+            return
+        }
+        access()
+        instance.insert flush:true
+
+        addHeader(this.controllerName, instance.id)
+        respond instance, [status: CREATED]
+    }
+
 }

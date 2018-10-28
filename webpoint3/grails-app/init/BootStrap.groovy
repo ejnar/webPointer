@@ -105,9 +105,13 @@ class BootStrap {
             RoleGroupRole.get(groupPingst.id, roleView.id) ?: RoleGroupRole.create(groupPingst, roleView, true)
 
             User admin = User.findByUsername("admin") ?: new User(username: 'admin', password: '123', email: 'eaakerman@gmail.com').save(flush: true, failOnError: true)
-//            admin.password = ""
-//            admin.encodePassword
-//            admin.save(flush: true, failOnError: true)
+            admin.password = "admin"
+            admin.encodePassword
+            admin.enabled = true
+            admin.accountExpired = false
+            admin.accountLocked = false
+            admin.passwordExpired = false
+            admin.save(flush: true, failOnError: true)
             UserRoleGroup.get(admin.id, groupSysAdmin.id) ?: UserRoleGroup.create(admin, groupSysAdmin, true)
             UserRoleGroup.get(admin.id, groupAdmin.id) ?: UserRoleGroup.create(admin, groupAdmin, true)
             UserRoleGroup.get(admin.id, groupPingst.id) ?: UserRoleGroup.create(admin, groupPingst, true)

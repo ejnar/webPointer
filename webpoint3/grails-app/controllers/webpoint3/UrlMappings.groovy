@@ -11,29 +11,23 @@ class UrlMappings {
 //                // apply constraints here
 //            }
 //        }
-//        "/api/guest/rolegroups"(resources:"RoleGroup")
-//        "/api/guest/roles"(resources:"Role")
-//        "/api/guest/user"(resources:"UserDetail")
-
-//        "/api/guest/viewer"(resources:"ViewerList")
-//        "/api/guest/sections"(resources:"Section")
-//        "/api/guest/sectioncash"(resources:"SectionCash")
-
-
+        "/api/guest/rolegroups"(resources:"RoleGroup")
+        "/api/guest/roles"(resources:"Role")
+        "/api/guest/user"(resources:"UserDetail")
+        "/api/guest/viewer"(resources:"ViewerList")
+        "/api/guest/sections"(resources:"Section")
+        "/api/guest/sectioncash"(resources:"SectionCash")
 //        "/api/guest/pagelist"(resources:"PageList"){
 //            "/pageItem"(resources:"PageItem")
 //        }
-
 //        "/app"(controller: "Example" )
-
-        "/api/guest/binarydoc"(resources:"BinaryDoc")
+//        "/api/guest/binarydoc"(resources:"BinaryDoc")
 
         "/api/guest/vy/$group/$pages"(controller: "Vy", action: "index") {
             constraints {
                 // apply constraints here
             }
         }
-
         "/api/guest/setting"(resources:"Setting")
 
         "/api/rolegroups"(resources:"RoleGroup")

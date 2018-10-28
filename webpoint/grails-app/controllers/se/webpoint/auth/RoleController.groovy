@@ -1,8 +1,9 @@
 package se.webpoint.auth
 
-import grails.transaction.Transactional
-import org.apache.commons.logging.LogFactory
-import org.springframework.http.HttpStatus
+import grails.gorm.transactions.Transactional
+
+import static org.springframework.http.HttpStatus.CREATED
+
 
 @Transactional(readOnly = true)
 class RoleController   { 
@@ -10,8 +11,7 @@ class RoleController   {
 	
     static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST"]
-	
-	private static final log = LogFactory.getLog(this)
+
 	Class<Role> resource
 	
 	RoleService roleService
@@ -28,7 +28,7 @@ class RoleController   {
 	 */
 	def index() {
 		List<Role> roles = roleService.getRoles();
-		respond roles, [status: HttpStatus.OK]   //, model: [("${RoleController.class}Count".toString()): roles.size()]
+		respond roles, model: [("${RoleController.class}Count".toString()): roles.size()]
 	}
 	
 	@Transactional
@@ -44,7 +44,7 @@ class RoleController   {
 			return
 		}
 		
-		respond role, [status: HttpStatus.CREATED]
+		respond role, [status: CREATED]
 	}
 		
     /**

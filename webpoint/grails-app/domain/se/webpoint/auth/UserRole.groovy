@@ -1,11 +1,14 @@
 package se.webpoint.auth
 
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.DetachedCriteria
 import groovy.transform.ToString
+import groovy.transform.TypeCheckingMode
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.bson.types.ObjectId
 import se.webpoint.data.BaseDomain
 
+@GrailsCompileStatic
 @ToString(cache=true, includeNames=false, includePackage=false)
 class UserRole extends BaseDomain {
 
@@ -28,6 +31,14 @@ class UserRole extends BaseDomain {
         builder.toHashCode()
     }
 
+    @GrailsCompileStatic(TypeCheckingMode.SKIP)
+    static UserRole getByUser(ObjectId userId) {
+        UserRole.where {
+            user == User.load(userId)
+        }
+    }
+
+
     static UserRole get(ObjectId userId, ObjectId roleId) {
         criteriaFor(userId, roleId).get()
     }
@@ -49,6 +60,7 @@ class UserRole extends BaseDomain {
         instance
     }
 
+    @GrailsCompileStatic(TypeCheckingMode.SKIP)
     static boolean remove(User u, Role r, boolean flush = false) {
         if (u == null || r == null) return false
 
@@ -59,6 +71,7 @@ class UserRole extends BaseDomain {
         rowCount
     }
 
+    @GrailsCompileStatic(TypeCheckingMode.SKIP)
     static void removeAll(User u, boolean flush = false) {
         if (u == null) return
 
@@ -67,6 +80,7 @@ class UserRole extends BaseDomain {
         if (flush) { UserRole.withSession { it.flush() } }
     }
 
+    @GrailsCompileStatic(TypeCheckingMode.SKIP)
     static void removeAll(Role r, boolean flush = false) {
         if (r == null) return
 

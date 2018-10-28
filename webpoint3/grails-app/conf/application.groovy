@@ -45,9 +45,6 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/login/**',       access: ['permitAll']],
         [pattern: '/auth/api/**',    access: ['permitAll']],
         [pattern: '/logout/**',      access: ['permitAll']],
-        [pattern: '/ws/**',          access: ['permitAll']],
-        [pattern: '/stomp/**',       access: ['permitAll']],
-        [pattern: '/topic/**',       access: ['permitAll']],
         [pattern: '/**',             access: ['permitAll']]
 ]
 grails.plugin.springsecurity.rememberMe.persistent = false

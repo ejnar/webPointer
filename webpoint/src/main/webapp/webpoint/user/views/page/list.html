@@ -2,20 +2,20 @@
 	<div class="page-header">
 		<div class="row">
 			<div class="col-md-6">
-				<h4>Group of songs</h4>
+				<h4>Song Lists</h4>
 			</div>
-			<div class="col-md-6">
-				<br />
-
-				<button type="button" class="btn btn-success pull-right" ng-click="pageListCtrl_openModel()">
-					<span class="glyphicon glyphicon-plus-sign"/>&nbsp;Create</button>
-                <button type="button" class="btn .btn-info pull-right" ng-click="pageListCtrl_goToViewAll()">
-                    <span class="glyphicon glyphicon-plus-sign"/>&nbsp;View</button>
+			<div class="col-md-6 col-xs-6 col-middle">
+				<button type="button" class="btn btn-success btn-sm pull-right" ng-click="pageListCtrl_openModel()">
+					<span class="glyphicon glyphicon-plus-sign"></span><span>Create</span>
+				</button>
+				<button type="button" class="btn btn-sm pull-right" ng-click="pageListCtrl_goToViewAll()">
+					<span class="glyphicon glyphicon-plus-sign"></span><span>View</span>
+				</button>
 			</div>
 		</div>
 	</div>
-	<div sha-loading-spinner="viewLoading">
-   		<div class="table-responsive" data-ng-init="pageListCtrl_loadPageList()" >
+	<div>
+   		<div class="table-responsive">
 		    <table class="table table-bordered table-hover" >
 		        <thead>
 		            <tr>
@@ -25,7 +25,7 @@
 		                <th width="8%"></th>
 		            </tr>
 		        </thead>
-		        <tbody ng-repeat="g in listOfPages | orderBy:orderProp">
+		        <tbody ng-repeat="g in listOfPages | orderBy:'name'">
 		            <tr ng-click="pageListCtrl_editPageList(g.id)" title="Click to edit" >
 		                <!-- td>
 		              		<button ng-if="g.expanded" ng-click="g.expanded = false">-</button>

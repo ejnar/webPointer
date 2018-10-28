@@ -2,26 +2,54 @@
 
 /* Controllers */
 
-var vyController = angular.module('webpoint.screen');
+var module = angular.module('webpoint.screen');
 
-vyController.controller('MainViewListCtrl', [
-    '$scope', '$location', '$log', 'cfgScreenPath', 'PageListApi', 'properties',
-    function list ($scope, $location, $log, cfgScreenPath, PageListApi, properties) {
+    module.controller('MainViewListCtrl', MainViewListCtrl);
+    MainViewListCtrl.$inject = ['$scope', '$location', '$log', 'cfgScreenPath', 'PageListApi', 'properties', '$filter', 'CashService', '$stomp'];
+
+    function MainViewListCtrl ($scope, $location, $log, cfgScreenPath, PageListApi, properties, $filter, CashService, $stomp) {
+
+        (function init() {
+            loadPageList();
+        })();
 
     	$scope.mainViewListCtrl_gotoScreen = function(id) {
             $log.debug(' --- MainViewController.mainViewListCtrl_gotoScreen - id:', id);
-            $location.path(cfgScreenPath.main + id );
+
+            var item = $filter("filter")($scope.items, {id: id});
+            var withoutkeys = item.length > 0 && $scope.withoutkeys ? '/withoutkeys' : '';
+
+            $location.path(cfgScreenPath.SCREEN + id + withoutkeys);
         }
 
-		$scope.items = []; 
-  		$scope.mainViewListCtrl_loadPageList = function() {
+
+        $scope.mainViewListCtrl_gotoSlideShow = function(id) {
+            $log.debug(' --- MainViewController.mainViewListCtrl_gotoSlideShow - id:', id);
+
+            var item = $filter("filter")($scope.items, {id: id});
+            var withoutkeys = item.length > 0 && $scope.withoutkeys ? '/withoutkeys' : '';
+
+            $location.path(cfgScreenPath.SLIDESHOW + id + withoutkeys);
+        }
+
+		$scope.items = [];
+
+  	    function loadPageList() {
 			$log.debug(' --- MainViewListController.mainViewListCtrl_loadPageList:');
-			$scope.viewLoading = true;
-    		PageListApi.list( function (resp) {
-    	        $log.debug(resp);
-    			$scope.items = resp;
-    			$scope.viewLoading = false;
-            });
+
+            if($location.search().cleancash){
+                $log.debug(' --- clean cash: ');
+                CashService.setSessionStorage('excludeCache', true);
+                PageListApi.list2().$promise
+                    .then( function(resp) {
+                        $scope.items = resp;
+                    });
+            }else{
+                PageListApi.list().$promise
+                    .then( function(resp) {
+                        $scope.items = resp;
+                    });
+            }
     	}
 
     	$scope.mainViewListCtrl_clickExpand = function(p) {
@@ -34,6 +62,6 @@ vyController.controller('MainViewListCtrl', [
             }
         }
 
-}]);
+    }
 
 

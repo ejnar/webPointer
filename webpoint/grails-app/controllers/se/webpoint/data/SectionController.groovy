@@ -1,19 +1,26 @@
 package se.webpoint.data
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import grails.web.http.HttpHeaders
+import groovy.util.logging.Slf4j
+import org.apache.camel.ProducerTemplate
 import org.imgscalr.Scalr
-import org.springframework.http.HttpStatus
+import se.routing.CamelRouteAware
 import se.webpoint.rest.BasicRestController
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 
+import static org.springframework.http.HttpStatus.*
+
+@Slf4j
 class SectionController extends BasicRestController<Section> {
 	
 	
     static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST", update: "PUT", patch: "PATCH", delete: "DELETE"]
+
+    ProducerTemplate producerTemplate
 
 	def camelContext
 	def grailsApplictaion
@@ -31,16 +38,18 @@ class SectionController extends BasicRestController<Section> {
      * @return A list of resources
      */
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        log.debug ' --- SectionController.index - params: [{}]', params
+        params.max = Math.min(max ?: 10, 100000)
 
-        List<Section> list = listAllResources(params)
-
-        for (a in list) {
-            a.convertToBase64()
-        }
-
-
-        respond list, model: [("${resourceName}Count".toString()): countResources()]
+        List<Section> list;
+        if(params.publish == 'exclude')
+            list = sectionService.getAllSection(false)   // listAllResources(params)
+        else
+            list = sectionService.getAllSectionByGroup(params)
+//        if(params.publish) {
+//            list = list.findAll { it.publish == true }
+//        }
+        respond list, model: [("${resourceName}Count".toString()): list.size()]
     }
 
 
@@ -51,7 +60,7 @@ class SectionController extends BasicRestController<Section> {
 	 * @return The rendered resource or a 404 if it doesn't exist
 	 */
 	def show() {
-		log.info " --- SectionController.show:"
+		log.debug ' --- SectionController.show - params: [{}]', params
         respond sectionService.getSection(params.id)
 	}
 
@@ -61,8 +70,7 @@ class SectionController extends BasicRestController<Section> {
     @Override
 	@Transactional
 	def save() {
-        log.info " --- SectionController.save:"
-        log.debug params
+        log.debug ' --- SectionController.save - params: [{}]', params
 
         def instance = createResource()
         println instance
@@ -73,9 +81,8 @@ class SectionController extends BasicRestController<Section> {
         access()
         sectionService.saveSection(instance);
 
-        response.addHeader(HttpHeaders.LOCATION,
-			g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))
-		respond instance, [status: HttpStatus.CREATED]
+        addHeader(this.controllerName, instance.id)
+		respond instance, [status: CREATED]
 	}
 
 
@@ -86,7 +93,8 @@ class SectionController extends BasicRestController<Section> {
     @Override
     @Transactional
     def update() {
-        log.info " --- SectionController.update: "
+        log.debug ' --- SectionController.update - params: [{}]', params
+
         if(handleReadOnly()) {
             return
         }
@@ -97,9 +105,7 @@ class SectionController extends BasicRestController<Section> {
             notFound()
             return
         }
-
         instance.properties = getObjectToBind()
-
         if (instance.hasErrors()) {
             transactionStatus.setRollbackOnly()
             respond instance.errors, view:'edit' // STATUS CODE 422
@@ -109,11 +115,17 @@ class SectionController extends BasicRestController<Section> {
         if(instance.data != null)
             instance.data = instance.data.expand()
 
-        updateResource instance
+        log.debug ' --- SectionController.update - instance: [{}]', instance
+//        updateResource(instance)
+//        instance.publish = true
+        // Workaround to update a object
+        // First delete and then a insert
+        Section section = instance
+        instance.delete flush:true
+        section.insert flush:true
 
-        response.addHeader(HttpHeaders.LOCATION,
-                g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))
-        respond instance, [status: HttpStatus.OK]
+        addHeader(this.controllerName, instance.id)
+        respond instance, [status: OK]
     }
 
 
@@ -124,8 +136,7 @@ class SectionController extends BasicRestController<Section> {
 	@Override
 	@Transactional
 	def delete() {
-		log.info " --- SectionController.delete: "
-		log.debug params
+        log.debug ' --- SectionController.delete - params: [{}]', params
 		if(handleReadOnly()) {
 			return
 		}
@@ -133,54 +144,34 @@ class SectionController extends BasicRestController<Section> {
 		def instance = queryForResource(params.id)
 		if (instance == null) {
 			transactionStatus.setRollbackOnly()
-			render status: HttpStatus.NOT_FOUND
+			render status: NOT_FOUND
 			return
 		}
 		pageService.removePagePart(params.id)
 
         instance.delete flush:true
 
-        render status: HttpStatus.NO_CONTENT
+        render status: NO_CONTENT
 	}
 
 
 	def upload() {
-		log.info " --- UploadController.upload:"
-		log.debug params
+        log.debug ' --- SectionController.upload - params: [{}]', params
 
         Section instance = Section.findById(params.id)
         List files = new ArrayList()
         params.each { k,v ->
             if(k.startsWith("files"))
                 files.add(v)
+            println v
         }
 
-        instance.objects.clear()
-        files.each {
-            InputStream fileStream = it.inputStream;
-            def imageIn = ImageIO.read(fileStream);
-            BufferedImage scaledImage = Scalr.resize(imageIn, 1600);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write( scaledImage, "png", baos );
-            baos.flush();
-            byte[] bytes = baos.toByteArray();
-            baos.close();
+        sectionService.saveUploaded(instance,files)
 
-            SectionDoc object = new SectionDoc()
-            object.name = it.getOriginalFilename()
-            object.contentType = it.getContentType()
-            object.size = bytes.length
-            object.doc = bytes
-            instance.objects.add(object)
-        }
-        if(instance.objects.get(0).contentType.startsWith('image/')) {
-            instance.type = 'IMAGE'
-        }
-        instance.save flush:true
+        addHeader('sections/upload', instance.id)
 
-//		file.transferTo(new File('/Users/ejnarakerman/dev/project/grails/tmp/' + f.getOriginalFilename()))
-        instance.convertToBase64()
-        respond instance, status: HttpStatus.OK
+//        instance.convertInternalBinaryToBase64()
+        respond instance, status: OK
 //		response.setStatus(200, OK)  //sendError(200, 'Done')
 	}
 	

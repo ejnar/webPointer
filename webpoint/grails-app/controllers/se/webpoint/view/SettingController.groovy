@@ -1,8 +1,9 @@
 package se.webpoint.view
 
-import grails.transaction.Transactional
-import org.springframework.http.HttpStatus
+import grails.gorm.transactions.Transactional
 import se.webpoint.rest.BasicRestController
+
+import static org.springframework.http.HttpStatus.OK
 
 class SettingController extends BasicRestController<Setting> {
 
@@ -19,9 +20,10 @@ class SettingController extends BasicRestController<Setting> {
      * @return The rendered resource or a 404 if it doesn't exist
      */
     def show() {
-        log.info " --- SettingController.show:"
-        log.debug params
-        respond Setting.getSetting(params.id)
+        log.debug '--- SettingController.show - params: [{}]', params
+        Setting s = Setting.getSetting(params.id);
+        println s
+        respond s
     }
 
 
@@ -33,11 +35,9 @@ class SettingController extends BasicRestController<Setting> {
     @Override
     @Transactional
     def update() {
-        log.info " --- SettingController.update: "
-        log.debug params
+        log.debug '--- SettingController.update - params: [{}]', params
 
         def instance = queryForResource(params.id)
-        log.debug instance
         if (instance == null) {
             notFound()
             return
@@ -47,11 +47,11 @@ class SettingController extends BasicRestController<Setting> {
             respond instance.errors, view:'edit' // STATUS CODE 422
             return
         }
-        log.debug instance.values
+//        log.debug '--- SettingController.update - values: [{}]', instance.values
         instance.save flush:true
 
         addHeader(this.controllerName, instance.Id)
-        respond instance, [status: HttpStatus.OK]
+        respond instance, [status: OK]
     }
 
 

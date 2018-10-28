@@ -1,0 +1,65 @@
+
+'use strict';
+
+/* Services */
+
+var module = angular.module('webpoint.core');
+
+    module.service('RemoveKeyService', RemoveKeyService);
+    RemoveKeyService.$inject = ['$log', 'ChangeKeyService'];    // properties
+
+    function RemoveKeyService($log, ChangeKeyService) {         // properties
+
+        this.removeKeys = function (doHtml,data) {
+            var result = '';
+            var linebreak = '\n';
+            var lines = ChangeKeyService.getLines(doHtml,data,linebreak); //data.split('<br />');
+
+            angular.forEach(lines, function(l) {
+                if(!ChangeKeyService.validKeyRow(l)) {
+//                    $log.debug('validKeyRow:', l);
+                    result += l + linebreak;
+                }
+            });
+            data = result;
+            $log.debug(result);
+            return result;
+        };
+    }
+
+var module = angular.module('webpoint.core');
+
+    module.service('RemoveKeyService', ['$log', 'ChangeKeyService', function($log, ChangeKeyService) {
+        this.removeKeys = function (doHtml,data) {
+            var result = '';
+            var linebreak = '\n';
+            var lines = ChangeKeyService.getLines(doHtml,data,linebreak);
+
+            angular.forEach(lines, function(l) {
+                if(!ChangeKeyService.validKeyRow(l)) {
+//                    $log.debug('validKeyRow:', l);
+                    result += l + linebreak;
+                }
+            });
+            data = result;
+            $log.debug(result);
+            return result;
+        };
+}]);
+
+
+//node {
+//    version = '8.12.0'
+//    npmVersion = '6.4.1'
+//    download = true
+//    nodeModulesDir = file("${project.projectDir}")
+//}
+
+//dependencyManagement {
+//    imports {
+//        mavenBom "org.grails:grails-bom:$grailsVersion"
+//    }
+//    applyMavenExclusions false
+//}
+
+

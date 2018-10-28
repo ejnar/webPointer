@@ -18,12 +18,8 @@ class BrokerService {
 
     void hello() {
         def msg = 'hello from service!'
-
-        def obj = JSON.parse(msg)
-
         brokerMessagingTemplate.convertAndSend "/topic/hello", msg
     }
-
 
     void sendSongUpdate(SectionCash section) {
         log.debug(' --- sendSongUpdate')
@@ -35,6 +31,6 @@ class BrokerService {
                 '"refresh": "'+section.refresh+'", ' +
                 '"created": "'+section.created+'" } /* some comment */')
 
-        brokerMessagingTemplate.convertAndSend "/topic/song",  object
+        brokerMessagingTemplate.convertAndSend "/topic/"+section.pageListId,  object
     }
 }

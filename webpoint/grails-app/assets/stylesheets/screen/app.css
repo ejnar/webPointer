@@ -1,0 +1,631 @@
+/* app css stylesheet */
+html, code, kbd, pre, samp {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+html, body {
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+body
+{
+   font-size: 0.9em;
+   color: #000;
+   font: Verdana, Arial, 'sans-serif';
+   margin: 0;
+   padding: 0;
+}
+h1, h2, h3, h4, h5, h6, h7, h8 {
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+    margin-top: 0.4em;
+}
+footer {
+    font-size: 0.9em;
+    float: right;
+    margin: 2.0em 2.0em;
+}
+.noneDecoration{ text-decoration: none;}
+.pointer{ cursor: pointer; }
+
+
+/* angular-material begian */
+/* Rules for sizing the icon. */
+.material-icons.md-16 { font-size: 1.6vh; }
+.material-icons.md-18 { font-size: 2.4vh; }
+.material-icons.md-20 { font-size: 1.6em; }
+.material-icons.md-22 { font-size: 2.8vw; }
+.material-icons.md-24 { font-size: 4.6vw; }
+.material-icons.md-28 { font-size: 5.4vw; }
+.material-icons.md-36 { font-size: 6.0vw; }
+.material-icons.md-48 { font-size: 8.4vw; }
+.padding-left-3 {margin-left: 5px;}
+.padding-bottom-3 {padding-bottom: 3px;}
+div.icon-wrapper {margin: 0.5em;}
+.icon-wrapper {margin: 0 0.1em; display: inline-flex; vertical-align: middle; align-items: center;}
+p.icon-text{ margin: 0.1em 0.2em; }
+.bold{ font-weight: bold;}
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+
+.md-virtual{
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 280px;
+}
+
+md-virtual-repeat-container {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: solid 1px #ccc;
+  padding: 0px;
+}
+
+.virtualRepeatdemoDeferredLoading #vertical-container {
+  height: 292px;
+  width: 100%;
+  max-width: 400px; }
+
+.virtualRepeatdemoDeferredLoading .repeated-item {
+  border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
+  height: 40px;
+  padding-top: 10px; }
+
+.virtualRepeatdemoDeferredLoading md-content {
+  margin: 16px; }
+
+.virtualRepeatdemoDeferredLoading md-virtual-repeat-container {
+  border: solid 1px grey; }
+
+.virtualRepeatdemoDeferredLoading .md-virtual-repeat-container .md-virtual-repeat-offsetter div {
+  padding-left: 16px; }
+
+
+md-sidenav,
+md-sidenav.md-locked-open-add-active,
+md-sidenav.md-closed.md-locked-open-add-active,
+md-sidenav.md-locked-open {
+  width: 340px;
+  min-width: 300px;
+  max-width: 340px;
+}
+.md-subheader{
+    font-size: 0.9em;
+}
+.title-sm{
+    font-size: 1.0em;
+    font-weight: bold;
+    color:gray;
+}
+.size-text{
+    font-size: 1.2em;
+}
+
+md-list-item.sidenav-list-item  {
+    font-size: 1.0em;
+}
+md-list-item.sidenav-list-item span.mdl-list_item-primary-content  {
+    margin:0 0.2em;
+}
+md-list-item.sidenav-list-item span.mdl-list_item-secondary-action{
+    margin-right:0.4em;
+}
+md-backdrop.md-sidenav-backdrop{
+    display:none;
+}
+/* angular-material end */
+
+#wrap {
+    position: absolute;
+    height: 100%;
+    top: 0; right: 0; bottom: 0; left: 0;
+}
+.expandSign{
+    font-size: 1.4em;
+    font-weight:bold;
+    text-decoration: none;
+    /*margin: 0.4vw 2.6vw 0 2.8vw;
+    text-align: center;
+    vertical-align: middle;*/
+}
+.rowPart{
+    font-size: 1.0em;
+    font-weight:bold;
+    padding: 0.4em 0 0 0;
+    color:#0022cc;
+    cursor: pointer;
+    /*vertical-align: middle;*/
+}
+
+table
+{
+ height: 100%;
+ width: 100%;
+}
+table.vy {
+    display: table;
+    width: 100%;
+    height:100%;
+    margin-top:0px;
+    border: 10px;
+}
+table tr{
+	margin:0px;
+    padding:0px;
+}
+table tr.vyRow{
+	height:100%;
+	margin:0px;
+    padding:0px;
+}
+table td.vyArea {
+	width:100%;
+	padding: 0.6vw 0.05em 0.05em 0.15em;
+	margin: 0;
+}
+div.vyArea {
+    height:100%;
+    line-height: 100%;
+    white-space: pre;
+    overflow-y: hidden;
+    padding: 0.6vw 0 1.0em 0;
+    margin: 0;
+}
+a.small {
+    font-size: 1.1em;
+    margin: 0 1.4em;
+    padding:0;
+
+}
+
+/****** print *****/
+div.printOut {
+    padding: 0.2em 0 0.4em 0;
+    font-size: 1.2em;
+}
+div.printOut .body{
+    line-height: 100%;
+    white-space: pre;
+}
+div.printArea{
+    padding: 0.2em;
+    width: 670px;
+}
+/*******************/
+table td.icon-List {
+    width: 1%;
+    vertical-align: top;
+    color: #888;
+    padding: 0.2em 0.4em 0 0;
+    margin: 0;
+}
+
+div.toggleSideNav{
+	color: black;
+	font-size:5vw;
+	padding: 0;
+	margin: 1.4vh 1.4vh 0 0;
+}
+span.glyphicon-plus-sign, span.glyphicon-pencil, span.glyphicon-remove-circle {
+    font-size: 0.9em;
+}
+button{
+    padding:0.1vh;
+    margin-left:0.2em;
+    margin-right:0.2em;
+}
+
+.angular-with-newlines {
+  white-space: pre;
+  /* white-space: pre-line; */
+}
+
+/* columns of same height styles */
+.container-xs-height {
+    display:table;
+    padding-left:0px;
+    padding-right:0px;
+}
+.row-xs-height {
+    display:table-row;
+}
+.col-xs-height {
+    display:table-cell;
+    float:none;
+}
+
+/* songDialog */
+div.imageArea {
+    padding: 0;
+    padding-top: 0.2em;
+    margin: 0.5em;
+}
+.smallStretch {
+    width:90%;
+}
+.dialogInfo-select {
+    background-color: #eeeefe;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.bottom{
+    position: relative;
+    bottom: 0;
+}
+.dialogInfo {
+    background-color: #eeeefe;
+    margin: 0.05em;
+    padding:0.2em;
+}
+.dialogInfo span{
+    font-size: 0.9em;
+    font-weight:normal;
+    padding:0;
+    margin:0;
+    line-height: 94%;
+}
+.songDialogContent{
+    margin: 0.2em 0.2em 0.2em 1.2em;
+}
+div.songtext {
+    padding-top: 0.5em;
+}
+div.songtext p {
+    font-size: 1.6vw;
+    white-space: pre;
+    line-height: 96%;
+    width: 100%
+}
+/********************/
+div.sideRightPageBtn{
+    color: #404040;
+    outline:none;
+    width: 10px;
+    height: 100%;
+    position: fixed;
+    top: 20px;
+	right: 5.5vw;
+    z-index: 100;
+}
+div.sideLeftPageBtn{
+	color: #404040;
+	outline:none;
+	width: 10px;
+	height: 100%;
+	position: fixed;
+    top: 20px;
+    left: 1.5vw;
+    z-index: 100;
+}
+.stretch {
+    width:100%;
+    object-fit: cover;
+}
+div.vyImgArea {
+    height:98%;
+    width:88%;
+    position: fixed;
+    top: 0;
+    left: 5.0vw;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+    /*max-height: 1400px;*/
+}
+div.sideBtn{
+    height:100%;
+    color: #404040;
+    padding: 2em 0 0 0;
+    margin:0;
+    outline:none;
+}
+div.sideLeftBtn{
+    position: fixed;
+    top: 120px;
+    left: 0;
+}
+div.sideRightBtn{
+    position: fixed;
+    top: 120px;
+    right: 0;
+}
+div.vyMainArea {
+    height:100%;
+    width:80%;
+    white-space: pre;
+    padding: 0.05em 0 0 0;
+    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 6.2vw;
+    overflow-y: auto;
+}
+div.vyColumn {
+    font-size: 0.70em;
+    height:100%;
+    width:49%;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+}
+@media (max-width: 400px ) {
+    .material-icons.md-28 { font-size: 8.0vh; }
+    .vyArea_s0{ font-size: 3.4vw;}
+    .vyArea_s1{ font-size: 3.0vw;}
+    .vyArea_s2{ font-size: 2.6vh;}
+    .vyArea_s3{ font-size: 3.4vh;}
+    div.vyMainArea {
+        height:100%;
+        width:85%;
+        white-space: pre;
+        padding: 0;
+        margin: 0;
+        position: fixed;
+        top: 0;
+        left: 1.0vw;
+        overflow-y: auto;
+    }
+    div.vyColumn {
+        font-size: 0.6em;
+        height:100%;
+        width:50%;
+        padding: 0;
+        margin: 0;
+        vertical-align: top;
+    }
+    div.menuToggleSideNav{
+    	position: fixed;
+    	top: 0;
+    	right: 0.0vw;
+    	color: black;
+    	font-size:4.8vw;
+    	padding: 0.1em 0.8em;
+    }
+    .songDialogContent{
+        margin: 0.2em 0.2em 0.2em 0.6em;
+    }
+    div.songtext p {
+        font-size: 2.0vw;
+        padding:0;
+        white-space: pre;
+        width: 100%
+    }
+    md-sidenav,
+    md-sidenav.md-locked-open-add-active,
+    md-sidenav.md-closed.md-locked-open-add-active,
+    md-sidenav.md-locked-open {
+      width: 240px;
+      min-width: 200px;
+      max-width: 240px;
+    }
+}
+@media (min-width: 568px) {
+    .vyArea_s0{ font-size: 3.2vw;}
+    .vyArea_s1{ font-size: 2.4vw;}
+    .vyArea_s2{ font-size: 2.6vh;}
+    .vyArea_s3{ font-size: 3.2vh;}
+    div.menuToggleSideNav{
+        position: fixed;
+        top: 0;
+        right: 6.4vw;
+        color: black;
+        font-size:5.8vw;
+        padding: 0.2em;
+    }
+    .container-sm-height {
+        display:table;
+        padding-left:0px;
+        padding-right:0px;
+    }
+    .row-sm-height {
+        display:table-row;
+    }
+    .col-sm-height {
+        display:table-cell;
+        float:none;
+    }
+}
+@media (min-width: 980px) {
+    .vyArea_s0 { font-size: 2.8vw;}
+    .vyArea_s1 { font-size: 2.4vw;}
+    .vyArea_s2 { font-size: 2.6vh;}
+    .vyArea_s3 { font-size: 3.8vh;}
+    div.menuToggleSideNav{
+    	position: fixed;
+    	top: 0;
+    	right: 8.6vw;
+    	color: black;
+    	font-size:5.0vw;
+    	padding: 0.2em;
+    }
+    .container-md-height {
+        display:table;
+        padding-left:0px;
+        padding-right:0px;
+    }
+    .row-md-height {
+        display:table-row;
+    }
+    .col-md-height {
+        display:table-cell;
+        float:none;
+    }
+}
+@media (min-width: 1200px) {
+    .container-lg-height {
+        display:table;
+        padding-left:0px;
+        padding-right:0px;
+    }
+    .row-lg-height {
+        display:table-row;
+    }
+    .col-lg-height {
+        display:table-cell;
+        float:none;
+    }
+}
+
+Then just add the alignments Css.
+
+/* firefox fix */
+.img-responsive {
+    width: 100%;
+}
+
+/* vertical alignment styles */
+.col-top {
+    vertical-align:top;
+}
+.col-middle {
+    vertical-align:middle;
+}
+.col-bottom {
+    vertical-align:bottom;
+}
+
+[tooltip]:before {  
+	content : attr(tooltip);
+	position : absolute;
+    padding: 4px 8px;
+    margin: -60px 0 0 -60px;
+    background: #fefdcd;
+    border: 2px solid #c0c0c0;
+    border-radius: 4px;
+    box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);
+    -webkit-transition: opacity .15s ease-in-out;
+    -moz-transition: opacity .15s ease-in-out;
+    -ms-transition: opacity .15s ease-in-out;
+    -o-transition: opacity .15s ease-in-out;
+    transition: opacity .15s ease-in-out;
+    z-index: 1;
+    opacity : 0;
+}
+[tooltip]:hover:before {        
+    opacity : 1;
+}
+
+.ng-invalid {
+    border-color: #b94a48;
+    outline-color: #b94a48;
+}
+
+.ng-valid {
+    border-color: green;
+    outline-color: green;
+}
+
+.messages {
+  font-size: smaller;
+  padding-left: 8px;
+  padding-bottom: 2px;
+  color: #b94a48;
+  display:inline-block;
+}
+div.songList{
+    margin: 0em 1.2em;
+}
+div.songItem > * {
+    display: block;
+    font-size: 1.05em;
+    margin: 0.2em;
+    padding: 0.4em 0.8em;
+    text-decoration: none;
+}
+
+div.songItem:hover{
+    background-color: #eee;
+}
+
+.md-select-css md-select-menu {
+
+}
+
+.md-select-css > *{
+    font-size: 0.9em !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.md-container-select-css{
+    font-size: 0.8em !important;
+    background-color: white !important;
+}
+.md-select-value{
+    margin: 10px !important;
+    padding: 0 !important;
+}
+.md-select{
+    padding: 0 !important;
+    margin: 0 0 0 0.4em;
+}
+.scroll-songList{
+    font-size: 0.9em;
+    height: 60px;
+    overflow-y: scroll;
+    padding: 1px;
+    margin: 0 1px 2px 1px;
+    border: 1px solid #DDD;
+}
+
+
+/* Bug fix */
+td.md-swipe-left *, td.md-swipe-right *{
+   touch-action : pan-y;
+}
+td.md-swipe-up *, td.md-swipe-down *{
+   touch-action : pan-x;
+}
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: #eee; /* Black background color */
+    color: #000; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 10px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+    font-size: 1.2em;
+}
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+    visibility: visible; /* Show the snackbar */
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}

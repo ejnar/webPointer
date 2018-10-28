@@ -1,9 +1,11 @@
 package se.webpoint.data
 
 import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
 import se.webpoint.auth.RoleGroup
 import sun.misc.BASE64Encoder
 
+//@ToString
 @EqualsAndHashCode(includes='id')
 class Section extends BaseDomain {
 
@@ -11,42 +13,42 @@ class Section extends BaseDomain {
     String language
     String originalTitle
     String category
+    String author
     String[] taggs
 
     String data
 	String type
 	String key
 	Date updated
+    boolean publish = true
 
-//    SectionDoc[] objects
     List<SectionDoc> objects = new ArrayList()
-
 	Set<RoleGroup> roleGroupSet;
-    static embedded = ['roleGroupSet', 'objects']
+    List<Link> oLinks = new ArrayList()
 
-//	static transients = ['sectionMeta']
-//	static belongsTo = [sectionMeta: SectionMeta]
+    static embedded = ['roleGroupSet', 'objects', 'oLinks']
+
 
 	static constraints = {
-        title index: true, indexAttributes: [unique: true, dropDups: true]
+        title index: true, indexAttributes: [unique: false]
         language nullable: false
         originalTitle nullable: true, blank:true
         category nullable: false
+        author nullable: true, blank:true
         taggs nullable: true
-
 		data nullable: true, blank:true
-        objects nullable: true
         type nullable: true, blank:true
 		key nullable: true, blank:true
 		updated nullable: true
         roleGroupSet nullable: true
+        oLinks nullable: true
+        objects nullable: true
 	}
 
     static mapping = {
 //		stateless true
     }
     def beforeInsert () {
-        if(originalTitle == null) originalTitle = title;
         updated = new Date();
     }
     def beforeUpdate () { updated = new Date();}
@@ -63,16 +65,10 @@ class Section extends BaseDomain {
         }
     }
 
-    def void addSectionDoc(){
-        objects.add(new SectionDoc());
-    }
-
-
     static Section webConvertedSection(id){
         Section webSection = Section.findById(id);
         webConverter(webSection)
     }
-
 
     static Section webConverter(Section section){
         if(section.data != null && section.data.length() > 0) {
@@ -82,43 +78,33 @@ class Section extends BaseDomain {
         section
     }
 
-
-    def void convertToBase64(){
-        if(objects != null && type == 'IMAGE' ){
-            objects.each {
-                it.base64 = new BASE64Encoder().encode(it.doc);
-                it.doc = null
-            }
-        }
-
-    }
-
-
-	String toString(){
-		"id: ${id} type: ${type} key: ${key} updated: ${updated}"
-	}   
+//	String toString(){
+//		"id: ${id} type: ${type} key: ${key} updated: ${updated}"
+//	}
 }
+
 
 class SectionDoc{
 
     String name
-    String contentType
-    int size
-    byte[] doc
-    String base64
+    String externalUrl
+
+}
+
+
+class Link {
+    String name
+    String url
 
     static constraints = {
-        contentType nullable: true
-        doc nullable: true
-        base64 nullable: true
+        name nullable: true, blank:true
+        url nullable: true, blank:true
     }
 
     @Override
     public String toString() {
-        return "SectionDoc{" +
+        return "Link{" +
                 "name='" + name + '\'' +
-                ", contentType='" + contentType + '\'' +
-                ", size=" + size +
                 '}';
     }
 }

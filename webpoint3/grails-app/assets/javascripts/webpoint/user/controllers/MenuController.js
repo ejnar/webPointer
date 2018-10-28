@@ -53,14 +53,14 @@ var module = angular.module('webpoint.core');
     }
 
     module.controller('ModalInstanceGroupCtrl', ModalInstanceGroupCtrl);
-    ModalInstanceGroupCtrl.$inject = ['$scope', '$location', '$uibModalInstance', '$log', 'RoleGroupApi'];
-	function ModalInstanceGroupCtrl ($scope, $location, $uibModalInstance, $log, RoleGroupApi ) {
+    ModalInstanceGroupCtrl.$inject = ['$scope', '$location', '$uibModalInstance', '$log', 'UserApi'];
+	function ModalInstanceGroupCtrl ($scope, $location, $uibModalInstance, $log, UserApi ) {
 
 		$scope.addGroup = function () {
 			$log.debug('addGroup');
 		 	$log.debug($scope.group);
 
-		 	RoleGroupApi.save($scope.group).$promise
+		 	UserApi.RoleGroup.save($scope.group).$promise
 		 		.then( function(resp) {
 		 			$log.debug(resp);
 					$uibModalInstance.close('close');

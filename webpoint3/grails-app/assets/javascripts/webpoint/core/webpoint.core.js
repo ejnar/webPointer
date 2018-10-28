@@ -8,10 +8,10 @@
 //= require /angular/angular-resource.min
 //= require /angular/angular-route.min
 //= require /angular/angular-sanitize.min
-//= require /angular/angular-local-storage
-//= require spin.js/spin
-//= require /angular/angular-spinner
-//= require /angular-http-auth/http-auth-interceptor
+//= require /angular/angular-local-storage.min
+//= require spin.js/spin.min
+//= require /angular/angular-spinner.min
+//= require /angular-http-auth/http-auth-interceptor.min
 //= require /ng-stomp/ng-stomp.standalone.min
 
 //= require jquery/jquery

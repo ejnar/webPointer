@@ -203,7 +203,7 @@ var module = angular.module('webpoint.user');
         }
 
 		function loadSection() {
-    		SectionsApi.list({max:$scope.maxSize}).$promise
+    		SectionsApi.list({max:$scope.maxSize,publish:'exclude'}).$promise
                 .then(function(resp) {
                     $scope.items = resp;
                     $scope.totalItems = $scope.items.length;

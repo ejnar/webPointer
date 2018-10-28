@@ -2,8 +2,8 @@ package se.webpoint.data
 
 import org.bson.types.ObjectId
 
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.ZonedDateTime
 
 //import org.bson.types.BSONTimestamp
 

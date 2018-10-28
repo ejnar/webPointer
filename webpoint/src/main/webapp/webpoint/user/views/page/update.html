@@ -5,18 +5,21 @@
                 <h4>Create Song List</h4>
             </div>
             <div class="col-md-6">
-                <br />
-                <button type="button" class="btn btn-primary pull-right" back>
-                        <span class="glyphicon glyphicon-arrow-left"/> Back</button>
+                <button type="button" class="btn btn-primary btn-sm pull-right" back>
+                    <span class="glyphicon glyphicon-arrow-left"></span><span>Go back</span>
+                </button>
             </div>
         </div>
     </div>
-    <!-- Single button -->
     <div class="row">
+        <div class="col-md-2 col-xs-3">
+            <input placeholder="Search word" type="search" value="" class="form-control"
+                   ng-model="search"  ng-change="updatePageListCtrl_alphabetFilter(search)"/>
+        </div>
         <div class="col-md-1 col-xs-3">
             <div class="btn-group" uib-dropdown is-open="status.isopen">
-                <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
-                    Filter <span class="caret"/>
+                <button id="single-button" type="button" class="btn btn-primary btn-sm" uib-dropdown-toggle ng-disabled="disabled">
+                    <span>Filter</span><span class="caret"/>
                 </button>
                 <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                     <li role="menuitem" ng-repeat="category in filterItems">  <!-- categories -->
@@ -30,7 +33,7 @@
                 <input type="checkbox" ng-model="filterAnd" ng-change="updatePageListCtrl_filterAndChange()">AND
             </label>
         </div>
-        <div class="col-md-10 col-xs-12">
+        <div class="col-md-8 col-xs-12">
             <div role="filteritem" ng-repeat="category in choosenCategory">
                 <div class="alert filterItem alert-success"  >
                     <button type='button' class='close' ng-click="updatePageListCtrl_closeFilterItem(category)"
@@ -40,27 +43,28 @@
             </div>
         </div>
     </div>
+
     <form role="form" name="pageListForm" novalidate>
 		<div class="row">	
-			<div class="col-md-7" data-ng-init="updatePageListCtrl_loadSectionList()" >
-			    <table class="table table-bordered table-hover" >
-			        <thead>
-			            <tr>
-			                <th width="*">Name</th>
-			                <th width="1%">Type</th>
-			            </tr>
-			        </thead>
-			        <tbody ng-repeat="s in metaFilteredList | orderBy:orderProp">
-			            <tr ng-click="updatePageListCtrl_addSectionToList(s)" title="Click to add">
-			                <td>{{s.title}}</td>
-		                    <td>
+			<div class="table-responsive-sm col-6 col-sm-6 table-scroll-list" data-ng-init="updatePageListCtrl_loadSectionList()" >
+                <table class="table table-bordered table-hover" >
+                    <thead>
+                        <tr>
+                            <th width="*" >Name</th>
+                            <th width="1%" >Type</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="s in metaFilteredList | orderBy: 'title'">
+                        <tr ng-click="updatePageListCtrl_addSectionToList(s)" title="Click to add">
+                            <td>{{s.title}}</td>
+                            <td>
                                 <directive-sectiontype sectiontype="{{s.type}}"></directive-sectiontype>
                             </td>
-			            </tr>
-			        </tbody>
-			    </table>
+                        </tr>
+                    </tbody>
+                </table>
 			</div>
-			<div class="col-md-5">
+			<div class="table-responsive-sm col-6 col-sm-6 table-scroll-list">
 				<table class="table table-bordered table-striped" >
 			        <thead>
 			            <tr>

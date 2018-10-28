@@ -1,28 +1,34 @@
-<div id="content" sha-loading-spinner="viewLoading" data-ng-init="mainViewListCtrl_loadPageList()"  ng-cloak layout-gt-sm="row" layout="column">
+<div layout="column" ng-cloak>
+    <md-content>
+        <div ng-include="'static/webpoint/screen/views/menu.html'"></div>
+        <md-list>
+            <md-subheader class="md-no-sticky">List of songs collections
+                <span flex-offset="0" flex-offset-gt-xs="5">
+                    <md-checkbox aria-label="Checkbox Remove key" ng-model="withoutkeys">Remove key</md-checkbox>
+                </span>
+            </md-subheader>
+            <div ng-repeat="p in items">
 
-    <div flex-gt-sm="150" flex>
-        <md-toolbar layout="row" class="md-hue-2">
-            <div class="md-toolbar-tools">
-                <span>Lists</span>
-            </div>
-        </md-toolbar>
+                <div layout="row"  layout-margin>
+                    <div flex="5" flex-offset="5" >
+                        <a href class="expandSign" ng-if="p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">-</a>
+                        <a href class="expandSign" ng-if="!p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">+</a>
+                    </div>
+                    <div flex="60" class="rowPart" ng-click="mainViewListCtrl_gotoScreen(p.id)" >{{p.name}}</div>
 
-        <md-list flex>
-            <md-subheader class="md-no-sticky">List of songs collections</md-subheader>
-            <md-list-item class="md-2-line" ng-repeat="p in items">
-                <div class="md-list-item-text" layout="column">
-                    <h3>
-                        <span class="expandSign" ng-if="p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">-</span>
-                        <span class="expandSign" ng-if="!p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">+</span>
-                        <a href="" ng-click="mainViewListCtrl_gotoScreen(p.id)">{{p.category}}&nbsp;&Verbar;&nbsp;{{p.name}}</a>
-                    </h3>
-                    <p ng-if="p.expanded" layout="column">
-                        <span ng-repeat="part in pageList.pageParts">&nbsp;&nbsp;&bull;&nbsp;{{part.section.title}}</span>
-                    </p>
+                    <div flex="20" flex class="rowPart" md-position-mode = "target-right target"
+                         ng-click="mainViewListCtrl_gotoSlideShow(p.id)">
+                        <md-icon md-menu-align-target class="material-icons">slideshow</md-icon>
+                    </div>
+
+                </div>
+                <div flex-offset="5" ng-if="p.expanded" >
+                    <div ng-repeat="part in pageList.pageParts">&nbsp;&nbsp;&bull;&nbsp;{{part.section.title}}</div>
                 </div>
                 <md-divider ></md-divider>
-            </md-list-item>
+            </div>
         </md-list>
-    </div>
 
+    </md-content>
+    <div ng-include="'static/webpoint/screen/views/include/footer.html'"></div>
 </div>

@@ -1,0 +1,35 @@
+<div data-ng-init="loadUser()">
+	<div >
+			<h3 class="page-header">Edit User</h3>
+	</div>
+	<form role="form" name="userForm" novalidate >	
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="control-group" 
+					ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }" >  
+	        		<label class="control-label" for="email">Email:</label>
+					<div class="controls">  
+						<input name="email" type="email"
+							class="form-control" ng-model="user.email" required/>
+					</div>
+					<br/>
+					<div class="controls">  
+						<input name="confirm_email" type="email"
+							class="form-control" ng-model="user.confirm_email" match="user.email" />
+					</div>
+					<div class="messages" ng-show="userForm.confirm_email.$error.match">Fields do not match!</div>
+				</div>
+			</div>
+		</div>
+		
+		<br/>
+		<div class="form-actions" >
+			<button type="submit" class="btn btn-primary" 
+                ng-disabled="userForm.$error.required"
+                ng-click="updatUser(userForm)" >Add User</button>
+		</div>
+		
+
+	</form>
+</div>

@@ -20,7 +20,7 @@ var module = angular.module('webpoint.user');
         function init(){
             $log.debug(' --- UserController.userCtrl: ');
             userCtrl.users =  UserApi.User.list();
-            console.info(userCtrl.users);
+//            console.info(userCtrl.users);
         }
 
         function newPassword(user){

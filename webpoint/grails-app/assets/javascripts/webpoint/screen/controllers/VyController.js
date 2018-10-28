@@ -2,46 +2,146 @@
 
 /* Controllers */
 
-var vyController = angular.module('webpoint.screen');
+var module = angular.module('webpoint.screen');
 
-vyController.controller('VyCtrl', [
-    '$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath',
-    'PageListApi', '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService', 'CashService',
-    function list ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath,
-                    PageListApi, $mdDialog, properties, ChangeKeyService, VyApi, localStorageService, CashService) {
+    module.controller('VyCtrl', VyCtrl);  // '$timeout'
+    VyCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath', '$interval',
+                      '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService', 'PageService',
+                      'Access', 'CashService', 'RemoveKeyService', 'SectionCashService', 'BinaryApi', '$stomp'];
 
+    function VyCtrl ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath, $interval,
+                     $mdDialog, properties, ChangeKeyService, VyApi, localStorageService, PageService,
+                    Access, CashService, RemoveKeyService, SectionCashService, BinaryApi, $stomp) {
+        var promiseInterval;
+        $scope.activeSong = null;
     	$scope.currentPart = 0;
     	$scope.currentPage = 0;
     	$scope.totalPart = 1;
-    	$scope.vyCtrl_loadData = function() {
+
+        (function init() {
+            if(Access.isClient()){
+                socket();
+            }
+            vyCtrl_loadData();
+        })();
+
+    	function vyCtrl_loadData() {
             $log.debug(' --- VyController.vyCtrl_loadData:');
-//            localStorageService.clearAll();
-            $log.debug($routeParams);
+//            $log.debug($routeParams);
             if($routeParams.group){
                 VyApi.get({group: $routeParams.group, pages: $routeParams.pages}).$promise
                     .then( function(resp) {
-                        $log.debug(resp);
-                        $scope.pageList = resp;
-                        $scope.totalPart = $scope.pageList.pageParts.length;
+                        initVy();
                     });
             }else{
-                var pageList = CashService.pop('PageList', $routeParams.pageListId);
-                $log.debug(' ----------------- pageList: ', pageList);
-                if(pageList == null){
-                    PageListApi.get({Id: $routeParams.pageListId}).$promise
-                        .then( function(resp) {
-                            $log.debug(resp);
-                            $scope.pageList = resp;
-                            $scope.totalPart = $scope.pageList.pageParts.length;
-                            CashService.stash('PageList',resp);
-                        });
-                }else{
-                    $scope.pageList = pageList;
-                    $scope.totalPart = $scope.pageList.pageParts.length;
-                }
+                var exclude = CashService.getSessionStorage('excludeCache', true);
+                $log.debug(' ----------------- pageList: ', exclude);
+                var method = PageService.excludeCache(exclude);
+                PageService.listApi [method] ({Id: $routeParams.pageListId}, function(resp) {
+                        CashService.setSessionStorage('excludeCache', false);
+                        initVy(resp);
+                    });
 			}
-
     	};
+
+        function initVy(resp){
+            $log.debug(resp);
+            $scope.pageList = resp;
+            addBinary($scope.pageList);
+            $scope.totalPart = $scope.pageList.pageParts.length;
+    	    removeKeys($scope.pageList);
+            spliteColumns($scope.pageList);
+    	}
+
+
+
+        function socket() {
+            $stomp.setDebug(function (args) { $log.debug(args) });
+            var headers = { login: 'songpoint', passcode: 'qwerty', pageListId: $routeParams.pageListId};
+            $stomp.connect('/stomp', headers)
+                .then(function (frame) {
+                    var subscription = $stomp.subscribe('/topic/'+$routeParams.pageListId, function (payload, headers, res) {
+                        $log.debug(payload)
+                        updateActiveSong(payload);
+                    }, {'headers': 'are awesome' });
+               });
+        }
+        function updateActiveSong(payload){
+            $scope.activeSong = payload;
+            $scope.activeSong.active = true;
+            if($scope.activeSong.currentSectionId != null){
+                $scope.pageList.pageParts.forEach(function(entry) {
+                    // TODO test what type of data
+                    $log.debug(entry.section);
+                    if(entry.section.id == $scope.activeSong.currentSectionId){
+                        $scope.$apply(function () {
+                           $scope.activeSong.section = entry.section;
+                           document.getElementById("snackbar").className = "show";
+                        });
+                        showDelay();
+                    }
+                });
+            }
+        }
+        var oneTimer;
+        function showDelay(){
+            $interval.cancel(oneTimer);
+            oneTimer = $interval(function() {
+              if(document.getElementById("snackbar") != null){
+                document.getElementById("snackbar").className = "";
+              }
+              $interval.cancel(oneTimer);
+            }, 5000);
+        }
+
+        $scope.$on('$destroy',function(){
+            if(Access.isClient()){
+                $stomp.disconnect().then(function () {
+                    $log.info('disconnected')
+                });
+            }
+        });
+        function addBinary(page){
+            angular.forEach(page.pageParts, function(s) {
+                if(s.section.type == 'IMAGE'){
+                    s.section.binary = BinaryApi.get({Id: s.section.id}).$promise
+                }
+            });
+        }
+
+        function removeKeys(pageList) {
+            if($routeParams.withoutkeys){
+                for(var i=0; i < pageList.pageParts.length; i++){
+                    var part = pageList.pageParts[i];
+                    pageList.pageParts[i].section.data = RemoveKeyService.removeKeys(true,pageList.pageParts[i].section.data);
+                }
+            }
+        }
+
+
+        function updateCash(){
+            SectionCashService.updatePageListCach($scope.pageList.id, $scope.pageList.pageParts[$scope.currentPart].section.id, false);
+        }
+
+        function spliteColumns(pageList) {
+            for(var i=0; i < pageList.pageParts.length; i++){
+                var part = pageList.pageParts[i];
+                if(pageList.pageParts[i].section.data != null){
+                    var columns = pageList.pageParts[i].section.data.split('-column2-');
+                    if(columns.length > 1){
+                        pageList.pageParts[i].section.fdata = '<div class="vyColumn">';
+                        pageList.pageParts[i].section.fdata += '<p>' + columns[0] + '</p>';
+                        pageList.pageParts[i].section.fdata += '</div>';
+
+                        pageList.pageParts[i].section.fdata += '<div class="vyColumn">';
+                        pageList.pageParts[i].section.fdata += '<p>' + columns[1] + '</p>';
+                        pageList.pageParts[i].section.fdata += '</div>';
+                    }else{
+                        pageList.pageParts[i].section.fdata = '<p>' + pageList.pageParts[i].section.data + '</p>';
+                    }
+                }
+            }
+        }
 
     	$scope.vyCtrl_right = function() {
     		$scope.nextData(1);
@@ -57,7 +157,8 @@ vyController.controller('VyCtrl', [
     			$scope.currentPart = 0;
     		}else if($scope.currentPart < 0){
     			$scope.currentPart = $scope.totalPart-1;
-    		}	
+    		}
+            updateCash();
       	};
 
 
@@ -70,7 +171,7 @@ vyController.controller('VyCtrl', [
     	};
 
     	$scope.nextPage = function(index) {
-    	    console.log($scope.pageList.pageParts[$scope.currentPart].section.objects.length)
+//    	    console.log($scope.pageList.pageParts[$scope.currentPart].section.objects.length)
     		$scope.currentPage = $scope.currentPage + index;
     		if($scope.currentPage >= $scope.pageList.pageParts[$scope.currentPart].section.objects.length){
     			$scope.currentPage = 0;
@@ -87,25 +188,27 @@ vyController.controller('VyCtrl', [
             // Component lookup should always be available since we are not using `ng-if`
             $mdSidenav(navID).close()
                 .then(function () {
-                $log.debug("close RIGHT is done");
+//                $log.debug("close RIGHT is done");
             });
         };
 
         $scope.vyCtrl_clickLNavList = function (index) {
-            $log.debug('Click in list: ', index);
+//            $log.debug('Click in list: ', index);
             $scope.currentPart = index;
             $scope.vyCtrl_closeSidenav('sidenav-right_1');
+            updateCash();
         };
 
-        $scope.vyCtrl_changeSize = function (index) {
-            $log.debug('Change css: ', index);
+        $scope.vyCtrl_changeSize = function () {
             $scope.fontSize = "vyArea_s1";
-            if(index != undefined){
-                $scope.fontSize = "vyArea_s" + index;
+            if($scope.selectedSize != undefined){
+                $scope.fontSize = "vyArea_s" + $scope.selectedSize;
+            }else{
+                $scope.selectedSize = 1;
             }
-
+            return ' Size ' + $scope.selectedSize;
         };
-        $scope.vyCtrl_changeSize();
+        $scope.vyCtrl_changeSize(1);
 
         $scope.vyCtrl_toggleSideNavRight1 = buildToggler('sidenav-right_1', 'sidenav-right_2');
         $scope.vyCtrl_toggleSideNavRight2 = buildToggler('sidenav-right_2', 'sidenav-right_1');
@@ -148,7 +251,7 @@ vyController.controller('VyCtrl', [
             $mdSidenav(navID)
               .toggle()
               .then(function () {
-                $log.debug("toggle " + navID + " is done");
+//                $log.debug("toggle " + navID + " is done");
               });
           }, 400);
         }
@@ -161,7 +264,7 @@ vyController.controller('VyCtrl', [
             $mdSidenav(navID)
               .toggle()
               .then(function () {
-                $log.debug("toggle " + navID + " is done");
+//                $log.debug("toggle " + navID + " is done");
               });
           }
         }
@@ -173,7 +276,7 @@ vyController.controller('VyCtrl', [
         $scope.keys = properties.keys;
         $scope.selectedKey;
         $scope.vyCtrl_getSelectedKey = function() {
-            $log.debug("Selected key: " + $scope.selectedKey );
+//            $log.debug("Selected key: " + $scope.selectedKey );
             if ($scope.selectedKey) {
                 return $scope.selectedKey;
             } else {
@@ -190,6 +293,7 @@ vyController.controller('VyCtrl', [
             $scope.pageList.pageParts[$scope.currentPart].section.data = ChangeKeyService.changeKey(section, true);
             section.key = $scope.selectedKey;
             $log.debug(" Data: ", $scope.pageList.pageParts[$scope.currentPart].section.data);
+            formatText();
         };
 
         $scope.vyCtrl_print = function() {
@@ -199,7 +303,10 @@ vyController.controller('VyCtrl', [
             $location.path(cfgScreenPath.print);
         };
 
-
+        $scope.vyCtrl_cleanCash = function() {
+            $log.debug("Clean cash ");
+            CashService.setSessionStorage('excludeCache', true);
+        };
 
         $scope.showAlert = function(ev) {
             // Appending dialog to document.body to cover sidenav in docs app
@@ -216,17 +323,4 @@ vyController.controller('VyCtrl', [
                 .targetEvent(ev)
             );
         };
-
-
-}]);
-
-vyController.controller('PrintCtrl', [
-    '$scope', '$location', '$log', 'cfgScreenPath', 'localStorageService',
-    function list ($scope, $location, $log, cfgScreenPath, localStorageService) {
-
-    $scope.vyCtrl_loadItem = function() {
-        $log.debug("Print current: " );
-        $scope.section = localStorageService.get('printout');
-    };
-
-}]);
+    }

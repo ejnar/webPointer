@@ -1,17 +1,18 @@
 package se.webpoint.data
 
 import grails.rest.RestfulController
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import grails.web.http.HttpHeaders
-import org.springframework.http.HttpStatus
+
+import static org.springframework.http.HttpStatus.*
 
 class PageListController extends RestfulController<PageList>  {
 
     static responseFormats = ['json', 'xml']
 	static allowedMethods = [save: "POST", update: "PUT", patch: "PATCH", delete: "DELETE"]
 
-    def camelContext
-	def grailsApplictaion
+//    def camelContext
+//	def grailsApplictaion
 
     PageService pageService
 
@@ -45,7 +46,7 @@ class PageListController extends RestfulController<PageList>  {
 //		println request.reader.text
 		PageList list = pageService.getPageList(params.id);
 
-		respond list, [status: HttpStatus.OK]
+		respond list, [status: OK]
 	}
 	
 	
@@ -56,25 +57,23 @@ class PageListController extends RestfulController<PageList>  {
 	 */
 	@Transactional
 	def save() {
-        log.info "save PageList: "+ params
+		log.debug ' --- PageListController.save - params: [{}]', params
 
 		def instance = createResource()	
 		if(instance == null){
 			notFound()
 			return
 		}
-
         pageService.savePageList(instance)
 
-        log.debug instance
 		response.addHeader(HttpHeaders.LOCATION,
 			g.createLink( resource: 'api'  , action: this.controllerName,id: instance.id, absolute: true))
-		respond instance, [status: HttpStatus.CREATED]
+		respond instance, [status: CREATED]
 	}
 	
 	
 	protected void notFound() {
-		render status: HttpStatus.NOT_FOUND
+		render status: NOT_FOUND 
 	}
 	
 }

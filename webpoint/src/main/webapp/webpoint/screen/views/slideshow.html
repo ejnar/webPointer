@@ -1,0 +1,22 @@
+<div layout="column" ng-cloak>
+    <div id="snackbar">{{tmpSong.section.title}}</div>
+    <div id="wrap">
+        <div ng-if="pageList.pageParts[currentPart].section.type == 'IMAGE'"
+             class="vyImgArea">
+            <img class="stretch" alt=""
+                 src="data:image/JPG;base64,{{pageList.pageParts[currentPart].section.binary.$$state.value[currentPage].base64}}">
+        </div>
+        <div ng-if="activeSong.section.type == 'TEXT'
+                            || activeSong.section.type == 'TEXTCHORDS'"
+             class="vyMainArea"  ng-class="fontSize" layout="row"
+             ng-bind-html="activeSong.section.fdata" >
+        </div>
+    </div>
+    <div hide-xs class="sideLeftBtn sideBtn" ng-click="slideShowCtrl_left()" keyleft>
+        <i class="material-icons md-48">chevron_left</i>
+    </div>
+    <div hide-xs class="sideRightBtn sideBtn" ng-click="slideShowCtrl_right()" keyright>
+        <i class="material-icons md-48">chevron_right</i>
+    </div>
+
+</div>

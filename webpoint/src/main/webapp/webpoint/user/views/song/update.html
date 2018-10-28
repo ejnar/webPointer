@@ -1,0 +1,136 @@
+<div class="container">
+    <div class="row" >
+        <div class="col-md-10 col-xs-6" ng-if="doSave"><h4 class="page-header">New Song</h4></div>
+        <div class="col-md-10 col-xs-6" ng-if="!doSave">
+            <h4>Update Song</h4><h5>{{section.title}}</h5>
+        </div>
+
+        <div class="col-md-2 col-xs-2 col-middle">
+            <button type="button" class="btn btn-success btn-sm" ng-click="updateSectionCtrl_gotoList()">
+                <span class="glyphicon glyphicon-plus-sign"></span><span>Go Back to list</span>
+            </button>
+        </div>
+    </div>
+	<form role="form" name="sectionForm" novalidate >
+		<div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3 col-sm-2 col-md-1 margin_width">
+                        <div ng-if="doSave" ng-show="section.type!='IMAGE'" class="form-actions" > <!--  || sectionForm.$invalid -->
+                            <button class="btn btn-primary btn-xs"
+                                    ng-disabled="sectionForm.$error.required"
+                                    ng-click="updateSectionCtrl_saveSection(sectionForm)"> Add Song </button>
+                        </div>
+                        <div ng-if="!doSave" ng-show="section.type!='IMAGE'" class="form-actions" >
+                            <button class="btn btn-primary btn-xs"
+                                    ng-disabled="sectionForm.$error.required"
+                                    ng-click="updateSectionCtrl_updateSection(sectionForm)"> Update Song </button>
+                        </div>
+                        <div ng-show="section.type=='IMAGE'" class="form-actions" >
+                            <button class="btn btn-primary btn-xs"
+                                    ng-click="updateSectionCtrl_updateFile(sectionForm)"> Update file </button>
+                        </div>
+                    </div>
+                    <div class="col-xs-3 col-sm-2 col-md-1 margin_width">
+                        <div class="form-group" ng-class="{ 'has-error' : sectionForm.sectionType.$invalid
+                            && !sectionForm.sectionType.$pristine }" >
+                            <!-- label class="control-label" for="sectionType_id">Type</label -->
+                            <div class="controls">
+                                <select id="sectionType_id" name="sectionType" ng-model="section.type"
+                                        ng-options="stype as stype for stype in stypes" required>
+                                    <option value="">- Pick a type -</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3 col-sm-2 col-md-2">
+                        <div class="form-group" ng-class="{ 'has-error' : sectionForm.key.$invalid && !sectionForm.key.$pristine }" >
+                            <!-- label class="control-label" for="language_id">Key</label
+                                 ng-disabled="section.key != undefined && section.key != null" -->
+                            <div class="controls">
+                                <select id="key_id" name="key" ng-model="section.key" ng-show="section.type=='TEXTCHORDS'"
+                                        class="input-medium" ng-options="key as key for key in keyList">
+                                    <option value="">Pick a key</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3 col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label><input type="checkbox" ng-click="updateSectionCtrl_addColumn2()" ng-model="column2"/>Column 2</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3 col-sm-2 col-md-2">
+                        <div class="form-group" ng-class="{ 'has-error' : sectionForm.tokey.$invalid
+                            && !sectionForm.tokey.$pristine }" >
+                            <!-- label class="control-label" for="language_id">Key</label -->
+                            <div class="controls">
+                                <select id="tokey_id" name="tokey" ng-model="section.tokey" ng-show="section.type=='TEXTCHORDS'"
+                                        class="input-medium" ng-options="key as key for key in keyList">
+                                    <option value="">Change to key</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-1">
+                        <div ng-show="section.type=='TEXTCHORDS' && section.tokey!=null" class="form-actions" >
+                            <button class="btn btn-primary btn-xs"
+                                    ng-disabled="sectionForm.$error.required"
+                                    ng-click="updateSectionCtrl_updateToKey(sectionForm)">Update new key</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div class="form-group row" ng-show="section.type!='IMAGE'"
+                     ng-class="{ 'has-error' : sectionForm.data.$invalid && !sectionForm.data.$pristine }" >
+                    <!-- label class="control-label" for="data_id">Data</label -->
+                    <div class="controls col-sm-6 col-md-5" dynaheight>
+                        <textarea id="data" name="data" class="form-control textAreaData" rows="*"
+                                  ng-trim="false" ng-model="section.data" ng-class="max_width_textarea"
+                                  required></textarea>
+                    </div>
+                    <div class="controls col-sm-6 col-md-5" dynaheight ng-show="column2">
+                        <textarea id="data2" name="data2" class="form-control textAreaData max_with_col2" rows="*"
+                                  ng-trim="false" ng-model="data2"
+                                  ></textarea>
+                    </div>
+
+                </div>
+                <div class="form-group" ng-show="section.type=='IMAGE'">
+                    <!-- label class="control-label" for="data_id">Data</label -->
+                    <div class="controls row">
+                        <!-- div class="col-xs-8 col-sm-6 col-md-4">
+                            <input name="upload" type="file" ng-file-model="myFile" />
+                            <span ng-show="file_size_warning">File size is exceeded! </span>
+                        </div -->
+                        <div class="col-xs-16 col-sm-12 col-md-8">
+                            <div ngf-drop ngf-select ng-model="files" class="drop-box" ngf-keep="true"
+                                 ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
+                                 accept="image/*,application/pdf" ngf-pattern="'image/*,application/pdf'">
+                                    Drop pdfs or images here or click to upload</div>
+                            <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+
+                            <div class="drop-box-info" ng-show="file_size_warning">File size is exceeded! </div>
+                            <div class="drop-box-info" ng-repeat="f in files" >File added: {{f.name}} {{f.$error}} {{f.$errorParam}}</div>
+
+                        </div>
+
+                    </div>
+                    <div class="controls row" >
+                        <div ng-repeat="o in binaryDocs"  class="col-xs-16 col-sm-12 col-md-8">
+                            <img width="400"
+                                 src="data:image/JPG;base64,{{o.base64}}">
+                        </div>
+                    </div>
+
+                </div>
+
+                </div>
+            </div>
+		</div>
+	</form>
+</div>

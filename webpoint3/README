@@ -97,3 +97,25 @@ mongodump -h 127.0.0.1 -u user -p pass --db webpoint --port 00000 --out /Users/e
  * fix md-virtual-repeat-container on songlist
  * add title on song text edit page
  * change authority to a list on UserDetail
+
+
+ Docker:
+
+  Recreate and restart:
+     docker-compose -f docker-composer.yml up -d
+  Shutdown:
+     docker-compose -f docker-composer.yml down
+
+  View procces:
+     docker ps
+     docker container ls
+
+  Verify changes in Dockerfile and recreate:
+     docker-compose build
+
+  Enter container:
+     docker exec -it <mycontainer> bash
+
+
+ Security:
+ s2-quickstart  se.webpoint.auth User Role --groupClassName=RoleGroup

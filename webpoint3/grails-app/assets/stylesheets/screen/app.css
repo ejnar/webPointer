@@ -338,31 +338,52 @@ div.vyMainArea {
 div.vyColumn {
     font-size: 0.70em;
     height:100%;
-    width:48%;
+    width:49%;
     padding: 0;
     margin: 0;
     vertical-align: top;
 }
 @media (max-width: 400px ) {
     .material-icons.md-28 { font-size: 8.0vh; }
-    .vyArea_s0{ font-size: 3.6vw;}
+    .vyArea_s0{ font-size: 3.4vw;}
     .vyArea_s1{ font-size: 3.0vw;}
-    .vyArea_s2{ font-size: 2.8vh;}
-    .vyArea_s3{ font-size: 3.6vh;}
+    .vyArea_s2{ font-size: 2.6vh;}
+    .vyArea_s3{ font-size: 3.4vh;}
+    div.vyMainArea {
+        height:100%;
+        width:85%;
+        white-space: pre;
+        padding: 0;
+        margin: 0;
+        position: fixed;
+        top: 0;
+        left: 1.0vw;
+        overflow-y: auto;
+    }
+    div.vyColumn {
+        font-size: 0.6em;
+        height:100%;
+        width:50%;
+        padding: 0;
+        margin: 0;
+        vertical-align: top;
+    }
     div.menuToggleSideNav{
     	position: fixed;
     	top: 0;
-    	right: 2.0vw;
+    	right: 0.0vw;
     	color: black;
     	font-size:4.8vw;
-    	padding: 0.05em 1.6em;
+    	padding: 0.1em 0.8em;
     }
     .songDialogContent{
         margin: 0.2em 0.2em 0.2em 0.6em;
     }
-    p.songtext {
-        font-size: 6.8vw;
-        padding-top: 0.4em;
+    div.songtext p {
+        font-size: 2.0vw;
+        padding:0;
+        white-space: pre;
+        width: 100%
     }
     md-sidenav,
     md-sidenav.md-locked-open-add-active,
@@ -401,7 +422,7 @@ div.vyColumn {
 }
 @media (min-width: 980px) {
     .vyArea_s0 { font-size: 2.8vw;}
-    .vyArea_s1 { font-size: 2.3vw;}
+    .vyArea_s1 { font-size: 2.4vw;}
     .vyArea_s2 { font-size: 2.6vh;}
     .vyArea_s3 { font-size: 3.8vh;}
     div.menuToggleSideNav{

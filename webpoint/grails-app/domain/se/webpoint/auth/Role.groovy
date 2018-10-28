@@ -1,9 +1,12 @@
 package se.webpoint.auth
 
+import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
+import groovy.transform.TypeCheckingMode
 import se.webpoint.data.BaseDomain
 
+@GrailsCompileStatic
 @EqualsAndHashCode(includes='authority')
 @ToString(includes='authority', includeNames=true, includePackage=false)
 class Role extends BaseDomain {
@@ -21,6 +24,7 @@ class Role extends BaseDomain {
 		authority blank: false, unique: true
 	}
 
+    @GrailsCompileStatic(TypeCheckingMode.SKIP)
 	Set<Role> getRoleGroups() {
 		RoleGroupRole.findAllByRole(this).collect { it.roleGroup }
 	}
