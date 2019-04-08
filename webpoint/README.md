@@ -1,12 +1,17 @@
 
-## README
+# README
+#### Version: 0.9.8.0.3
 
 
 ### Backlogg ---------
   
+   * minimize weight on right side slide song menu
+   * add right side slide song menu on slide show page
+   * update key change 
+   * add func for remove keys on slide show
+   * filter on public list page 
    * adapt menu icon on song vy page
    * fix md-virtual-repeat-container on songlist
-   * add title on song text edit page
    * change authority to a list on UserDetail  - in test state
 
 
@@ -24,6 +29,8 @@ Build project files for IDE
 ./gradlew -Dgrails.env=prod assemble --refresh-dependencies
 
 ./gradlew karmaRun -PkarmaDebug=true --refresh-dependencies
+
+./gradlew karmaRun -PkarmaDebug=true --debug --stacktrace
 
 #### Grails command
 
@@ -45,11 +52,12 @@ karmaClean |    Deletes the karma config file and removes the dependencies
 | | 
 | --- | 
 | **Unit** | 
-|test-app -unit se.webpoint.data.UserServiceSpec
-|test-app -unit:javascript ChangeKeyServiceSpec
-| test-app -unit:javascript RemoveKeyServiceSpec
+|test-app -unit se.webpoint.data.UserServiceSpec |
+|test-app -unit:javascript ChangeKeyServiceSpec  |
+|test-app -unit:javascript RemoveKeyServiceSpec  |
+|test-app -unit:javascript -echoOut              |
 |**Integration**|
-|test-app -integration se.webpoint.data.UserServiceSpec
+|test-app -integration se.webpoint.data.UserServiceSpec |
 
 
 
@@ -93,9 +101,10 @@ db.section.find( {"title": /Du är underbar/, "publish": true} )
 #### Node
  Update Node
 
- sudo npm cache clean -f
- sudo npm install -g n
- sudo n stable
+ - node -v
+ - sudo npm cache clean -f
+ - sudo npm install -g n
+ - sudo n stable
 
 #### Docker:
 
@@ -106,7 +115,7 @@ docker-compose -f docker-composer.yml down|Shutdown
 docker ps|View procces
 docker container ls|View procces
 docker-compose build|Verify changes in Dockerfile and recreate
-docker exec -it <mycontainer> bash|Enter container
+docker exec -it [container_ref] bash|Enter container
 docker run -d -p 8080:8080 me/myapp|Access the exposed port 8080 on your host system, e.g. point your browser at http://localhost:8080/ 4
     
 ### Java

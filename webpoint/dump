@@ -1,3 +1,173 @@
+    function ChangeKeyService($log, properties, UtilService) {
+        var includePrint = true;
+
+        var LINEBREAK = '\n';
+        var KEYS = ['C','C#:Db','D','D#:Eb','E','F','F#:Gb','G','G#:Ab','A','A#:Bb','H:B:Cb'];
+        var MATCH_KEYROW_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]{1,2}", "gi");
+        this.changeKey = function (section, doHtml) {
+            print(' - ChangeKeyService.changeKeyConfig: ', section);
+            var data = section.data;
+            var lines = UtilService.getLines(doHtml,data,LINEBREAK);
+            var result = '';
+            var keydiff = keyDiff(section.key,section.tokey);
+
+            for(var l=0; l < lines.length; l++){
+                result += l != 0 ? LINEBREAK : '';
+                var line = lines[l];
+                var validKeyRow = UtilService.findValidKeyRow(line);
+                var keyRow = line.match(MATCH_KEYROW_REG);
+                print(' --  keyRow: ', keyRow);
+                if(validKeyRow && keyRow != null){
+                    var last = -1;
+                    for(var k=0; k < keyRow.length; k++){
+                        var key = keyRow[k];
+                        key = key.removeLast('/');
+                        for(var i=0; i < KEYS.length; i++){
+                            if(isKeyFound(key, KEYS[i])){
+                                var newKeyindex = 0;
+                                if(i+keydiff < 0){
+                                    newKeyindex = KEYS.length + (i+keydiff);
+                                }else if(i+keydiff > (KEYS.length -1)){
+                                    newKeyindex = (i+keydiff) - (KEYS.length);
+                                }else{
+                                    newKeyindex = i+keydiff;
+                                }
+                                var a = [];
+                                a[0] = key;  // old key
+                                a[1] = getIndexValue(KEYS[newKeyindex], getKeyType(section.tokey)); // new key
+                                a[2] = last = line.indexLastOf(last, key); // index
+                                try{
+                                    line = this.replaceAt(line, a[2], a[1], a[0]);
+                                }catch(err){ $log.info(' ----- ERROR: ', line); }
+                                // print(' ---  found key: ', KEYS[i] + ':' + i);
+                                // print(' ---  new key: ', KEYS[newKeyindex] + ':' + newKeyindex);
+                                break;
+                            }
+                        }
+                        print(' - - - - :', line);
+                    }
+                    print(' ---------- found key row: ', line);
+                }
+                result += line; // + linebreak;
+            }
+            return result;
+        };
+
+
+var KEYLIST = ['C','C#','Db','D','D#','Eb','E','F','F#','Gb','G','G#','Ab','A','A#','Bb','H','B','Cb'];
+var MATCH_KEY_SUFIX = new RegExp("["+KEYLIST+"]+["+KEY_SUFIX+"]", "gi");
+var MATCH_FIRST_KEYS_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "g");
+var MATCH_KEY_WORD_SUFIX = new RegExp("\\b(sus|sus4|maj|m6|m7|m9|m-|11)\\b", "gi");
+var MATCH_KEY_SUFIX = new RegExp("\\w{1,2}['sus','sus4','maj','m','m6','m7','m9','m\\-','11']{2}\\w", "gi");
+
+        this.removeKeys = function (doHtml,data) {
+            var result = '';
+            var linebreak = '\n';
+            var lines = ChangeKeyService.getLines(doHtml,data,linebreak);
+
+            for(var i=0; i < lines.length; i++){
+                if(!this.validKeyRow(lines[i])) {
+                    result += lines[i] + linebreak;
+                }
+            }
+            data = result;
+            $log.debug(result);
+            return result;
+        };
+
+        var MATCH_KEYROW_REG = new RegExp("\\b[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]{1,2}", "gi");
+        var MATCH_CONTAINWORD_REG = new RegExp("\\w{1,}[^C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb,/,' ']\\w", "g");
+
+        this.validKeyRow = function (line) {
+            print(' - line: ', line);
+            var keyRow = line.match(MATCH_KEYROW_REG);
+            print(' -- keyRow: ', keyRow);
+            var containWord = line.match(MATCH_CONTAINWORD_REG);
+            print(' -- containWord: ', containWord);
+            var isKeyRow = this.foundKeyRow(containWord,keyRow);
+            print(' -- isKeyRow: ', isKeyRow);
+
+            if((keyRow != null && keyRow.length > 0) &&
+                (containWord == null || (containWord != null && isKeyRow) ))
+            {
+                return true;
+            }
+            return false;
+        };
+
+        this.foundKeyRow = function (containWord,keyRow) {
+            var isKeyRow = false;
+            if(containWord != null){
+                for(var i=0; i < containWord.length; i++){
+                    print(' -- containWord[i]: ', containWord[i]);
+                    if(this.matchWordSuffix(i,containWord,keyRow)){
+                        print(' --- matchWordSuffix: ', true);
+                        isKeyRow = true;
+                        break;
+                    }
+                    print(' --- ');
+                    var word = this.matchKeySuffix(i,containWord);
+                    if(word){
+                        print(' --- matchKeySuffix: ', true);
+                        isKeyRow = this.matchFirstKey(word);
+                        break;
+                    }
+                }
+            }
+            return isKeyRow;
+        };
+
+        this.removeSpace = function (index,containWord,keyRow) {
+            var result;
+            var w1 = containWord[index];
+            for(var j=0; j < keyRow.length; j++){
+                print(' --- replace this: ', keyRow[j]);
+                w1 = w1.replaceAll(keyRow[j], '');   // <-
+            }
+            return w1;
+        }
+
+        var MATCH_KEY_WORD_SUFFIX = new RegExp("\\b(sus|sus4|maj|m6|m7|m9|m-|11)\\b", "gi");
+        this.matchWordSuffix = function (i,containWord,keyRow) {
+            if(!keyRow){
+                return false;
+            }
+            var word = this.removeSpace(i,containWord,keyRow);
+            print(' --- removeSpace: ', word);
+            var w = word.match(MATCH_KEY_WORD_SUFFIX);
+            print(' --- matchWordSuffix: ', w);
+            if(w){
+                return true;
+            }
+            return false;
+        }
+
+        var MATCH_KEY_SUFIX = new RegExp("\\w{1,2}['sus','sus4','maj','m','m6','m7','m9','m\\-','11']{2}\\w", "gi");
+        this.matchKeySuffix = function (index,containWord) {
+            var w = containWord[index].match(MATCH_KEY_SUFIX);
+            print(' matchKeySuffix: ', w);
+            return w;
+        }
+
+//        var MATCH_KEYS_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "gi");
+        var MATCH_FIRST_KEYS_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "g");
+        this.matchFirstKey = function (word) {
+            var isKeyRow = false;
+            for(var j=0; j < word.length; j++){
+                isKeyRow = false;
+                var match = word[j].match(MATCH_FIRST_KEYS_REG);
+                print(' ---- matchFirstKey: ', match);
+                if(match){
+                   isKeyRow = true;
+                   print(' ---- isKeyRow: ', isKeyRow);
+                   print(' ---- word[j]: ', word[j]);
+                   print(' ---- MATCH_KEY_SUFIX', word[j].match(MATCH_KEY_SUFIX));
+                }
+            }
+            return isKeyRow;
+        }
+
+
 
 'use strict';
 
@@ -63,3 +233,12 @@ var module = angular.module('webpoint.core');
 //}
 
 
+
+//function getHttpConfig(authToken) {
+//    // console.log('getHttpConfig' + authToken);
+//    return {
+//        headers: {
+//            'X-Auth-Token': authToken
+//        }
+//    };
+//}

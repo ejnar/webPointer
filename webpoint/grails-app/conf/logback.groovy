@@ -27,7 +27,7 @@ appender('STDOUT', ConsoleAppender) {
 }
 
 // TRACE, DEBUG, INFO, WARN, ERROR, ALL or OFF
-root(INFO, ['STDOUT'])
+root(DEBUG, ['STDOUT'])
 
 def targetDir = BuildSettings.TARGET_DIR
 if (Environment.isDevelopmentMode() ) {  // && targetDir
@@ -55,6 +55,6 @@ if (Environment.isDevelopmentMode() ) {  // && targetDir
     logger("se.webpoint", ALL, ["STDOUT"], false)
     logger("grails.app.controllers.se.webpoint", ALL, ["STDOUT"], false)
     logger("grails.app.services.se.webpoint", ALL, ["STDOUT"], false)
-    logger("grails.app", INFO, ["STDOUT"], false)
+    logger("grails.app", ALL, ["STDOUT"], false)
 
 }

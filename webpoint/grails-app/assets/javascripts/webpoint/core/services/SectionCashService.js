@@ -23,7 +23,7 @@ var module = angular.module('webpoint.core');
                 sectionCash.currentSectionId = currentSectionId
                 sectionCash.refresh = refresh;
                 SectionCashApi.save(sectionCash, function (resp) {
-                    $log.debug(resp);
+                    // $log.debug(resp);
                 });
             }
         }

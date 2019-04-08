@@ -247,7 +247,6 @@ Then just add the alignments Css.
   width: 140px;
   float:left;
   display: inline-block;
-
 }
 .drop-box {
     background: #F8F8F8;
@@ -300,4 +299,11 @@ display: block;
 .table-fixed tbody td,
 .table-fixed thead > tr > th {
     float: left;
+}
+.noLineBreak {
+    line-height: 100%;
+    white-space: pre;
+    overflow-y: hidden;
+    padding: 0;
+    margin: 0;
 }

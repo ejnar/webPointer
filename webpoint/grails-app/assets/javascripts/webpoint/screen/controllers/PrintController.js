@@ -4,7 +4,6 @@
 
 var module = angular.module('webpoint.screen');
 
-
     module.controller('PrintCtrl', PrintCtrl);
     PrintCtrl.$inject = ['$scope', '$log', 'localStorageService', 'RemoveKeyService'];
 

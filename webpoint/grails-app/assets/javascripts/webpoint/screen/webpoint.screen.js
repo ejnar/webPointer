@@ -45,6 +45,10 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
                 templateUrl: 'static/webpoint/screen/views/slideshow.html',
                 controller: 'SlideShowCtrl'
             }).
+            when( cfgScreenPath.SLIDESHOW  + ':pageListId/:withoutkeys', {
+                templateUrl: 'static/webpoint/screen/views/slideshow.html',
+                controller: 'SlideShowCtrl'
+            }).
             when( cfgScreenPath.VY  + ':group/:pages', {
                 templateUrl: 'static/webpoint/screen/views/vy.html',
                 controller: 'VyCtrl'
@@ -61,12 +65,12 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
             }).
             when( cfgScreenPath.SONGLIST, {
                 templateUrl: 'static/webpoint/screen/views/songList.html',
-                controller: 'SongListCtrl'
+                controller: 'SongListCtrl as vm'
             }).
-            when( cfgScreenPath.SONG + ':id', {
-                templateUrl: 'static/webpoint/screen/views/song.html',
-                controller: 'SongCtrl'
-            }).
+//            when( cfgScreenPath.SONG + ':id', {
+//                templateUrl: 'static/webpoint/screen/views/song.html',
+//                controller: 'SongCtrl'
+//            }).
             when( cfgScreenPath.ABOUT, {
                 templateUrl: 'static/webpoint/screen/views/about.html',
                 controller: 'MenuCtrl'

@@ -14,11 +14,15 @@
                         <a href class="expandSign" ng-if="p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">-</a>
                         <a href class="expandSign" ng-if="!p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">+</a>
                     </div>
-                    <div flex="60" class="rowPart" ng-click="mainViewListCtrl_gotoScreen(p.id)" >{{p.name}}</div>
+                    <div flex="50" class="rowPart" ng-click="mainViewListCtrl_gotoScreen(p.id)" >{{p.name}}</div>
 
-                    <div flex="20" flex class="rowPart" md-position-mode = "target-right target"
+                    <div flex="30" flex class="rowPart" md-position-mode = "target-right target"
                          ng-click="mainViewListCtrl_gotoSlideShow(p.id)">
                         <md-icon md-menu-align-target class="material-icons">slideshow</md-icon>
+                    </div>
+                    <div flex="20" flex class="rowPart" md-position-mode = "target-right target"
+                         ng-click="mainViewListCtrl_gotoSlideShowExludeKeys(p.id)">
+                        <md-icon md-menu-align-target class="material-icons">slideshow</md-icon> Singers
                     </div>
 
                 </div>

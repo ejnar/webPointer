@@ -163,14 +163,14 @@ var module = angular.module('webpoint.screen');
 
 
     	$scope.vyCtrl_rightPage = function() {
-    		$scope.nextPage(1);
+    		nextPage(1);
     	};
 
     	$scope.vyCtrl_leftPage = function() {
-    		$scope.nextPage(-1);
+    		nextPage(-1);
     	};
 
-    	$scope.nextPage = function(index) {
+    	function nextPage (index) {
 //    	    console.log($scope.pageList.pageParts[$scope.currentPart].section.objects.length)
     		$scope.currentPage = $scope.currentPage + index;
     		if($scope.currentPage >= $scope.pageList.pageParts[$scope.currentPart].section.objects.length){

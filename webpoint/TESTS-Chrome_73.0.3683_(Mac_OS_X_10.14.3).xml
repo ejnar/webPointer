@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<testsuite name="Chrome 73.0.3683 (Mac OS X 10.14.3)" package="" timestamp="2019-04-02T17:36:23" id="0" hostname="Ejnars-MBP" tests="21" errors="0" failures="0" time="0.117">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"/>
+  </properties>
+  <testcase name="webpoint.core module ChangeKeyService should change key from C to D" time="0.026" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should change key from C to D and back" time="0.007" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should change key on I saw Mommy kissing Santa Claus" time="0.007" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should change key on Du är en stor Gud F to D" time="0.004" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should change key from Bb to A" time="0.005" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should change key on You Dance over me" time="0.004" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should change key from C to D" time="0.005" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should be injected" time="0.004" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should change row2" time="0.004" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should change row3" time="0.004" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should change row1" time="0.004" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should contain word" time="0.004" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module ChangeKeyService should contain keys" time="0.005" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module RemoveKeyService should be injected" time="0.003" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module RemoveKeyService should remove keys 2" time="0.004" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module RemoveKeyService should remove keys 3" time="0.003" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module RemoveKeyService should remove keys 1" time="0.004" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module RemoveKeyService should remove keys 4" time="0.003" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module RemoveKeyService should validKeyRow 5" time="0.007" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core module RemoveKeyService should not validKeyRow 6" time="0.004" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core module"/>
+  <testcase name="webpoint.core UserApi should get application data on .list()" time="0.006" classname="Chrome_73_0_3683_(Mac_OS_X_10_14_3).webpoint.core"/>
+  <system-out>
+    <![CDATA[Chrome 73.0.3683 (Mac OS X 10.14.3) LOG: 'webpoint.screen manifest load complete.'
+,Chrome 73.0.3683 (Mac OS X 10.14.3) LOG: 'webpoint.user manifest load complete.'
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- keyRow: ', ['D', 'A#', 'A', 'C#', 'A', 'C', 'H']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- containWord: ', ['sus']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- isKeyRow: ', true
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- keyRow: ', ['D', 'A#', 'A', 'C#', 'A', 'C', 'H']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- containWord: ', ['sus4', 'Am7']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- isKeyRow: ', true
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- keyRow: ', ['D', 'A#', 'A', 'C#', 'A', 'C', 'H']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- containWord: ', ['Dmaj7', 'sus4', 'Am7']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- isKeyRow: ', true
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- keyRow: ', ['D', 'A#', 'A', 'C#', 'A', 'C', 'H']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- containWord: ', ['Dmaj7', 'sus4', 'Am7']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- isKeyRow: ', true
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- keyRow: ', ['H', 'ge', 'fa', 'ba', 'd']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- containWord: ', ['Him', 'me-l', 'ens', 'son', 'kär', 'lekens', 'ge-s', 'talt', 'o-f', 'att-b', 'nåd']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- isKeyRow: ', false
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- keyRow: ', ['de', 'ha', 'e', 'ba', 'be', 'h']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- containWord: ', ['Vär', 'l-d', 'har', 'ing-e', 'som', 'jag', 'ker', 'Je-s', 'jag', 'be-h', 'ver']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- isKeyRow: ', false
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- keyRow: ', ['de', 'ge', 'a', 'h', 'g', 'ba', 'be', 'h']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- containWord: ', ['vär', 'de-r', 'in-g', 'an-n', 'hög', 'bara', 'Je-s', 'jag', 'be-h', 'ver']
+,Chrome 73.0.3683 (Mac OS X 10.14.3) INFO: ' --- isKeyRow: ', false
+
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

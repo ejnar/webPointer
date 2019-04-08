@@ -6,19 +6,26 @@ var module = angular.module('webpoint.screen');
 
     module.controller('SongListCtrl', SongListCtrl);
     SongListCtrl.$inject = ['$scope', '$location', '$log', '$mdDialog', 'cfgScreenPath',
-        '$filter', 'SectionsApi', '$timeout'];
+        '$filter', 'SectionsApi', '$timeout', 'SettingService'];
 
     function SongListCtrl ($scope, $location, $log, $mdDialog, cfgScreenPath,
-        $filter, SectionsApi, $timeout) {
+        $filter, SectionsApi, $timeout, SettingService) {
 
+        var vm = this;
         var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+        var MATCH_NO_LETTER = new RegExp("[a-zA-Z]", "i");
         var alphabeticalList = [];
+        $scope.taggs = [];
 
-        $scope.alphabeticalList = alphabeticalList;
+        vm.searchByFreeText = searchByFreeText;
+        vm.showAdvanced = showAdvanced;
+        vm.searchByTagg = searchByTagg;
+        vm.toggle_visibility = toggle_visibility;
 
-    	init();
     	function init () {
             $log.debug(' --- SongListCtrl.init ');
+            $scope.activePanel = false;
+            SettingService.getTagg($scope);
             SectionsApi.cachedList({max:1000,publish:true}).$promise
                 .then(function(resp) {
                     $log.debug(resp);
@@ -27,9 +34,10 @@ var module = angular.module('webpoint.screen');
                 });
         }
 
-        var MATCH_NO_LETTER = new RegExp("[a-zA-Z]", "i");
         function createAlphabeticalList (list) {
             $log.debug(' --- createAlphabeticalList :');
+
+            $scope.alphabeticalList = alphabeticalList;
             var listObj = {};
             alphabet.forEach(function(c) {
                 listObj = {};
@@ -51,13 +59,42 @@ var module = angular.module('webpoint.screen');
             alphabeticalList.push(listObj);
         }
 
-        $scope.songListCtrl_gotoSong = function(p) {
-            $log.debug(' --- songListCtrl_gotoSong - id:', p.id );
-            $location.path(cfgScreenPath.SONGITEM);
+        function searchByFreeText (search) {
+            $log.debug(' --- searchTable - search:', search );
+            alphabeticalList = [];
+            var filterList = $filter('filter')($scope.songs, search);
+            $log.debug(' --- searchTable - filterList:', filterList );
+            createAlphabeticalList (filterList);
+            $log.debug(' --- searchTable - alphabeticalList:', alphabeticalList );
         }
 
+        function searchByTagg (){
+            $log.debug(' --- searchByTagg - tagg:', $scope.currentTagg );
+            alphabeticalList = [];
+            var filterList = $filter('filter')($scope.songs, function(s) {
+                var index = s.taggs.indexOf($scope.currentTagg);
+                if(index > -1) { return true;}
+                else { return false; }
+            });
+            // $log.debug(' --- searchTable - filterList:', filterList );
+            createAlphabeticalList (filterList);
+            // $log.debug(' --- searchTable - alphabeticalList:', alphabeticalList );
+        }
 
-        $scope.showAdvanced = function(ev,s) {
+        function toggle_visibility(id) {
+           $log.debug(' --- toggle_visibility :', id);
+           var e = document.getElementById(id);
+           if($scope.activePanel) {
+             $scope.activePanel = false;
+             $scope.search = '';
+             $scope.currentTagg = '';
+             createAlphabeticalList ($scope.songs);
+           } else {
+              $scope.activePanel = true;
+           }
+        }
+
+        function showAdvanced (ev,s) {
             $mdDialog.show({
               controller: SongItemtCtrl,
               templateUrl: 'static/webpoint/screen/views/songDialog.tmpl.html',
@@ -74,7 +111,8 @@ var module = angular.module('webpoint.screen');
 //            }, function() {
 //              $scope.status = 'You cancelled the dialog.';
 //            });
-        };
+        }
+        init();
 
         // In this example, we set up our model using a plain object.
         // Using a class works too. All that matters is that we implement
@@ -116,7 +154,6 @@ var module = angular.module('webpoint.screen');
         };
     }
 
-var module = angular.module('webpoint.screen');
 
     module.controller('SongVirtualListCtrl', SongVirtualListCtrl);
     SongVirtualListCtrl.$inject = ['$scope', '$location', '$log', '$timeout',

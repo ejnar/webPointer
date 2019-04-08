@@ -10,7 +10,7 @@ var module = angular.module('webpoint.core');
 
 
         function init() {
-            $log.info('MenuController.init');
+            $log.debug('MenuController.init');
         }
 
 		$scope.openPasswordModel = function () {
@@ -90,7 +90,6 @@ var module = angular.module('webpoint.core');
         init();
     }
 
-
     module.controller('ModalInstancePassCtrl', ModalInstancePassCtrl);
     ModalInstancePassCtrl.$inject = ['$scope', '$location', '$uibModalInstance', '$log', 'AuthorityApi'];
 	function ModalInstancePassCtrl ($scope, $location, $uibModalInstance, $log, AuthorityApi) {
@@ -136,14 +135,4 @@ var module = angular.module('webpoint.core');
 			$log.debug('cancel');
 			$uibModalInstance.dismiss('cancel');
 		}
-    }
-
-
-    function getHttpConfig(authToken) {
-        console.log('getHttpConfig' + authToken);
-        return {
-            headers: {
-                'X-Auth-Token': authToken
-            }
-        };
     }

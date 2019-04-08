@@ -15,21 +15,19 @@ var module = angular.module('webpoint.screen');
 
     	$scope.mainViewListCtrl_gotoScreen = function(id) {
             $log.debug(' --- MainViewController.mainViewListCtrl_gotoScreen - id:', id);
-
             var item = $filter("filter")($scope.items, {id: id});
             var withoutkeys = item.length > 0 && $scope.withoutkeys ? '/withoutkeys' : '';
-
             $location.path(cfgScreenPath.SCREEN + id + withoutkeys);
         }
 
-
         $scope.mainViewListCtrl_gotoSlideShow = function(id) {
             $log.debug(' --- MainViewController.mainViewListCtrl_gotoSlideShow - id:', id);
+            $location.path(cfgScreenPath.SLIDESHOW + id);
+        }
 
-            var item = $filter("filter")($scope.items, {id: id});
-            var withoutkeys = item.length > 0 && $scope.withoutkeys ? '/withoutkeys' : '';
-
-            $location.path(cfgScreenPath.SLIDESHOW + id + withoutkeys);
+        $scope.mainViewListCtrl_gotoSlideShowExludeKeys = function(id) {
+            $log.debug(' --- MainViewController.mainViewListCtrl_gotoSlideShowExludeKeys - id:', id);
+            $location.path(cfgScreenPath.SLIDESHOW + id + '/withoutkeys');
         }
 
 		$scope.items = [];

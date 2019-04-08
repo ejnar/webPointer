@@ -8,15 +8,13 @@ describe("webpoint.core module", function() {
         beforeEach(angular.mock.inject(function (_RemoveKeyService_) {
             RemoveKeyService = _RemoveKeyService_;
         }));
-
         it('should be injected', inject(function () {
             expect(RemoveKeyService).toBeDefined();
         }));
 
-        it("should remove keys 1", function() {
+        it("should removeValidKeyRows 1", function() {
 
-            var data = '\n' +
-                        'Bb    Bb/E     Eb/Bb  Bb   Cm7 Eb/F   Bb\n' +
+            var data =  'Bb    Bb/E     Eb/Bb  Bb   Cm7 Eb/F   Bb\n' +
                         'Helig, helig, he   -    lig är Herren Sebaot\n' +
                         'Bb              Cm7 F7 Bb   Eb     C7     F\n' +
                         'Helig, helig, he   -   lig    är Herren Sebaot\n' +
@@ -28,10 +26,9 @@ describe("webpoint.core module", function() {
                         'Hela jorden är full av din härlighet\n' +
                         'Eb    F7  Bb\n' +
                         'Ära vare Gud';
-            var result = RemoveKeyService.removeKeys(false,data);
+            var result = RemoveKeyService.removeValidKeyRows(false,data);
 
-            var test = '\n' +
-                        'Helig, helig, he   -    lig är Herren Sebaot\n' +
+            var test =  'Helig, helig, he   -    lig är Herren Sebaot\n' +
                         'Helig, helig, he   -   lig    är Herren Sebaot\n' +
                         'Hela jorden är full av din härlighet\n' +
                         'Hela jorden är full av din härlighet\n' +
@@ -39,13 +36,11 @@ describe("webpoint.core module", function() {
                         'Ära vare Gud\n' +
                         '';
             expect(test).toEqual(result);
-
         });
 
-        it("should remove keys 2", function() {
+        it("should removeValidKeyRows 2", function() {
 
-            var data = '\n' +
-                        'Am         Dm\n' +
+            var data =  'Am         Dm\n' +
                         'Du är en god Gud,\n' +
                         'G7        Cmaj7      E/H\n' +
                         'du är en god Gud,\n' +
@@ -53,63 +48,130 @@ describe("webpoint.core module", function() {
                         'du är en god Gud,\n' +
                         'E7                      Am\n' +
                         'full av barmhärtighet.';
-            var result = RemoveKeyService.removeKeys(false,data);
+            var result = RemoveKeyService.removeValidKeyRows(false,data);
 
-            var test = '\n' +
-                        'Du är en god Gud,\n' +
+            var test =  'Du är en god Gud,\n' +
                         'du är en god Gud,\n' +
                         'du är en god Gud,\n' +
-                        'full av barmhärtighet.\n' +
-                        '';
+                        'full av barmhärtighet.\n';
             expect(test).toEqual(result);
 
         });
 
-        it("should remove keys 3", function() {
+        it("should removeValidKeyRows 3", function() {
 
-            var data = '\n' +
-                '    F                     C/D       Dm7\n' +
-                'Jag till - ber Dig alls - mäk - tig Gud\n' +
-                'Gm7       Bb/C    F\n' +
-                ' ing - en är som Du\n' +
-                'Bb/C F                 C/D       Dm7\n' +
-                ' Jag till - ber dig, å fri - dens Kung\n' +
-                'Gm7               Bbmaj/C    C\n' +
-                ' Och mitt hjär-ta ro - par ut';
-            var result = RemoveKeyService.removeKeys(false,data);
+            var data =  '    F                     C/D       Dm7\n' +
+                        'Jag till - ber Dig alls - mäk - tig Gud\n' +
+                        'Gm7       Bb/C    F\n' +
+                        ' ing - en är som Du\n' +
+                        'Bb/C F                 C/D       Dm7\n' +
+                        ' Jag till - ber dig, å fri - dens Kung\n' +
+                        'Gm7               Bbmaj/C    C\n' +
+                        ' Och mitt hjär-ta ro - par ut';
+            var result = RemoveKeyService.removeValidKeyRows(false,data);
 
-            var test = '\n' +
-                'Jag till - ber Dig alls - mäk - tig Gud\n' +
-                ' ing - en är som Du\n' +
-                ' Jag till - ber dig, å fri - dens Kung\n' +
-                ' Och mitt hjär-ta ro - par ut\n' +
-                '';
+            var test =  'Jag till - ber Dig alls - mäk - tig Gud\n' +
+                        ' ing - en är som Du\n' +
+                        ' Jag till - ber dig, å fri - dens Kung\n' +
+                        ' Och mitt hjär-ta ro - par ut\n';
             expect(test).toEqual(result);
         });
 
-        it("should remove keys 4", function() {
+        it("should removeValidKeyRows 4", function() {
 
-            var data = '\n' +
-               'D        A/C#           Am/C      H7\n' +
-               'Jesus, Du är underbar\n' +
-               'Em      Em7           Asus A\n' +
-               'Jesus, Du är underbar\n' +
-               '           D                 A/E\n' +
-               'Det är Dig som jag älskar,\n' +
-               '          F#m-5       H7                   Em\n' +
-               'det är Dig jag vill ge allt som jag har.\n' +
-               '     G/A              A7    D\n' +
-               'O Jesus,  Du är underbar';
-            var result = RemoveKeyService.removeKeys(false,data);
+            var data = 'D        A/C#           Am/C      H7\n' +
+                       'Jesus, Du är underbar\n' +
+                       'Em      Em7           Asus A\n' +
+                       'Jesus, Du är underbar\n' +
+                       '           D                 A/E\n' +
+                       'Det är Dig som jag älskar,\n' +
+                       '          F#m-5       H7                   Em\n' +
+                       'det är Dig jag vill ge allt som jag har.\n' +
+                       '     G/A              A7    D\n' +
+                       'O Jesus,  Du är underbar';
+            var result = RemoveKeyService.removeValidKeyRows(false,data);
 
-            var test = '\n' +
-               'Jesus, Du är underbar\n' +
-               'Jesus, Du är underbar\n' +
-               'Det är Dig som jag älskar,\n' +
-               'det är Dig jag vill ge allt som jag har.\n' +
-               'O Jesus,  Du är underbar\n' +
-               '';
+            var test = 'Jesus, Du är underbar\n' +
+                       'Jesus, Du är underbar\n' +
+                       'Det är Dig som jag älskar,\n' +
+                       'det är Dig jag vill ge allt som jag har.\n' +
+                       'O Jesus,  Du är underbar\n';
             expect(test).toEqual(result);
+        });
+
+        it("should removeValidKeyRows 5", function() {
+
+            var data = 'D        A/C#           Am/C      H7\n' +
+                       'Jesus, Du är underbar\n' +
+                       'Em      Em7           Asus A\n' +
+                       'Jesus, Du är underbar\n' +
+                       '           D                 A/E\n' +
+                       'Det är Dig som jag älskar,\n' +
+                       '                          \n' +
+                       '          F#m-5       H7                   Em\n' +
+                       'det är Dig jag vill ge allt som jag har.\n' +
+                       '     G/A              A7    D\n' +
+                       'O Jesus,  Du är underbar';
+            var result = RemoveKeyService.removeValidKeyRows(false,data);
+
+            var test = 'Jesus, Du är underbar\n' +
+                       'Jesus, Du är underbar\n' +
+                       'Det är Dig som jag älskar,\n' +
+                       '                          \n' +
+                       'det är Dig jag vill ge allt som jag har.\n' +
+                       'O Jesus,  Du är underbar\n';
+            expect(test).toEqual(result);
+        });
+
+        it("should validKeyRow 1", function() {
+
+            var line = 'D   A#sus     A/C#           Am/C      H7';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(true).toEqual(result);
+
+            var line = 'D   A#sus4     Am7/C#     Am/C      H7';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(true).toEqual(result);
+
+            var line = 'Dmaj7   A#sus4     Am7/C#     Am/C      H7';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(true).toEqual(result);
+
+            var line = 'Dmaj7   A#sus4     Am7/C#     Am/C      H7';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(true).toEqual(result);
+
+            var line = 'Bbmaj  Dsus    Ebmaj';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(true).toEqual(result);
+
+            var line = 'BbmajDsus  Gb/Eb  Ebmaj';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(true).toEqual(result);
+
+        });
+
+        it("should not validKeyRow 2", function() {
+
+            // Him-me-lens son kär-lek-ens ge-stalt så o-fatt-bar i nåd
+            var line = 'Him-me-lens son kär-lekens ge-stalt så o-fatt-bar i nåd';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(false).toEqual(result);
+
+            // Värl-den har ing-et som jag sö-ker ba-ra Je-sus jag be-hö-ver
+            var line = 'Värl-den har ing-et som jag sö-ker ba -ra Je-sus jag be-hö-ver';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(false).toEqual(result);
+
+            //vär-de-rar in-get an-nat hög-re ba-ra Je-sus jag be-hö-ver
+            var line = 'vär-de-rar in-get an-nat hög-re bara Je-sus jag be-hö-ver ';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(false).toEqual(result);
+
+            var line = 'Dette lengsel deg';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(false).toEqual(result);
+
         });
 
 

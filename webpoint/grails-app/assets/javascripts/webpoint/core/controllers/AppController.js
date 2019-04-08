@@ -9,7 +9,6 @@ var module = angular.module('webpoint.core');
 
     function AppController ($scope, $log, Access, AuthService, AppStatusService) {
 
-
         function init() {
             $log.info('AppController.init');
             $scope.loadingTracker = AppStatusService.getLoadingTracker();
@@ -29,13 +28,3 @@ var module = angular.module('webpoint.core');
     	};
     	init();
     }
-
-
-function getHttpConfig(authToken) {
-    console.log('getHttpConfig' + authToken);
-    return {
-        headers: {
-            'X-Auth-Token': authToken
-        }
-    };
-}

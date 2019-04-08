@@ -1,46 +1,63 @@
 <div ng-cloak  layout="column">
 
     <md-content  flex>
-        <div ng-init="hideSongList = true" ng-include="'static/webpoint/screen/views/menu.html'"></div>
-        <md-subheader >Song list</md-subheader>
-
-        <!-- div class="md-virtual">
-            <md-virtual-repeat-container id="vertical-container" >
-                <div md-virtual-repeat="s in infiniteItems" md-on-demand
-                     class="repeated-item" flex>
-                    <h5>
-                        {{s}}
-                    </h5>
-                    <md-divider ></md-divider>
-                </div>
-            </md-virtual-repeat-container>
-
-
-            <md-virtual-repeat-container id="vertical-container" md-top-index="topIndex">
-                <div md-virtual-repeat="o in alphabeticalList" md-item-size="10"
-                     class="repeated-item" flex>
-                    <h4>{{o.letter}}</h4>
-                    <div ng-repeat="s in o.list | orderBy:'title'">
-                        <div class="songItem">
-                            <a href="" ng-click="showAdvanced($event,s)">{{s.title}}</a>
-                        </div>
+        <form>
+            <div ng-init="hideSongList = true" ng-include="'static/webpoint/screen/views/menu.html'"></div>
+            <md-subheader>
+                <div layout="row" layout-xs="column">
+                    <div flex="10">Song list</div>
+                    <div flex="10" flex-sm>
+                        <md-button class="md-button-small" ng-click="vm.toggle_visibility('searchPanel')">Search panel</md-button>
                     </div>
                 </div>
-            </md-virtual-repeat-container>
-
-        </div -->
-        <md-divider ></md-divider>
-
-        <div class="songList" ng-repeat="o in alphabeticalList" flex>
-            <h4>{{o.letter}}</h4>
-            <div ng-repeat="s in o.list | orderBy:'title'"  layout="row">
-                <div class="songItem" flex="70">
-                    <a href="" ng-click="showAdvanced($event,s)">{{s.title}}</a>
-                </div>
-                <div flex></div>
+            </md-subheader>
+            <div id="searchPanel" layout="row" layout-xs="column" ng-show="activePanel">
+                <div flex="5"></div>
+                <md-input-container flex="20" class="md-input-container-small" flex-sm>
+                    <label class="active">Search:</label>
+                    <input mdInput type="search" value=""
+                           ng-model="search"  ng-change="vm.searchByFreeText(search)"/>
+                </md-input-container>
+                <md-input-container flex="10" class="md-select-css-small" flex-sm>
+                    <md-select ng-change="vm.searchByTagg()" placeholder="Select tagg" ng-model="currentTagg" >
+                        <md-option ng-value="" ></md-option>
+                        <md-option ng-value="tagg" ng-repeat="tagg in taggs">{{tagg}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-divider ></md-divider>
             </div>
-        </div>
-
+            <!-- div class="md-virtual">
+                <md-virtual-repeat-container id="vertical-container" >
+                    <div md-virtual-repeat="s in infiniteItems" md-on-demand
+                         class="repeated-item" flex>
+                        <h5>
+                            {{s}}
+                        </h5>
+                        <md-divider ></md-divider>
+                    </div>
+                </md-virtual-repeat-container>
+                <md-virtual-repeat-container id="vertical-container" md-top-index="topIndex">
+                    <div md-virtual-repeat="o in alphabeticalList" md-item-size="10"
+                         class="repeated-item" flex>
+                        <h4>{{o.letter}}</h4>
+                        <div ng-repeat="s in o.list | orderBy:'title'">
+                            <div class="songItem">
+                                <a href="" ng-click="showAdvanced($event,s)">{{s.title}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </md-virtual-repeat-container>
+            </div -->
+            <div class="songList" ng-repeat="o in alphabeticalList" flex>
+                <h4>{{o.letter}}</h4>
+                <div ng-repeat="s in o.list | orderBy:'title'" layout="row">
+                    <div class="songItem" flex="70">
+                        <a href="" ng-click="vm.showAdvanced($event,s)">{{s.title}}</a>
+                    </div>
+                    <div flex></div>
+                </div>
+            </div>
+        </form>
     </md-content>
     <!-- div>
         <div infinite-scroll='loadMore()' infinite-scroll-distance='20'>

@@ -16,6 +16,8 @@ var module = angular.module('webpoint.screen');
     	$scope.currentPart = 0;
     	$scope.currentPage = 0;
     	$scope.totalPart = 1;
+    	$scope.mainCss = 'vyMainArea';
+    	$scope.fontSize = "vyArea_s1";
 
         (function init() {
             if(Access.isClient()){
@@ -60,8 +62,9 @@ var module = angular.module('webpoint.screen');
             if($routeParams.withoutkeys){
                 for(var i=0; i < pageList.pageParts.length; i++){
                     var part = pageList.pageParts[i];
-                    pageList.pageParts[i].section.data = RemoveKeyService.removeKeys(true,pageList.pageParts[i].section.data);
+                    pageList.pageParts[i].section.data = RemoveKeyService.removeValidKeyRows(true,pageList.pageParts[i].section.data);
                 }
+                $scope.mainCss = 'vyMainAreaLarge';
             }
         }
         function spliteColumns(pageList) {
@@ -148,14 +151,14 @@ var module = angular.module('webpoint.screen');
         }
 
     	$scope.slideShowCtrl_right = function() {
-    		$scope.nextData(1);
+    		nextData(1);
     	};
 
     	$scope.slideShowCtrl_left = function() {
-    		$scope.nextData(-1);
+    		nextData(-1);
     	};
 
-    	$scope.nextData = function(index) {
+        function nextData(index) {
     		$scope.currentPart = $scope.currentPart + index;
     		if($scope.currentPart == $scope.totalPart){
     			$scope.currentPart = 0;
@@ -164,11 +167,10 @@ var module = angular.module('webpoint.screen');
     		}
 
     		angular.forEach($scope.pageList.pageParts, function(s) {
-                if($scope.currentPart == s.counter){
+                if($scope.currentPart === s.counter){
                     $scope.activeSong.section = s.section;
                 }
             });
-
             updateCash();
       	};
 
@@ -176,4 +178,5 @@ var module = angular.module('webpoint.screen');
             $location.path(cfgScreenPath.pagelist);
         };
 
+//        init();
     }

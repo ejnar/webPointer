@@ -5,9 +5,7 @@
 var module = angular.module('webpoint.core');
 
     module.controller('LoginController', LoginController);
-
     LoginController.$inject = ['AuthService', '$log'];
-
     function LoginController (AuthService, $log) {
         var vm = this;
 

@@ -18,4 +18,8 @@ abstract class BaseDomain implements Serializable {
     def getIsoDate(){
         return ZonedDateTime.now().format( DateTimeFormatter.ISO_INSTANT )
     }
+
+    def getCreateDate(){
+        return id.getDate();
+    }
 }

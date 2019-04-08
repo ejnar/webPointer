@@ -6,7 +6,6 @@ var module = angular.module('webpoint.screen');
 
     module.controller('SongCtrl', SongCtrl);
     SongCtrl.$inject = ['$scope', '$location', '$filter', '$log', '$routeParams', 'SectionCashApi'];
-
     function SongCtrl($scope, $location, $filter, $log, $routeParams, SectionCashApi) {
 
     	function init () {
@@ -19,9 +18,6 @@ var module = angular.module('webpoint.screen');
 
                 });
         }
-
-
-
-        init();
+//        init();
 
     }

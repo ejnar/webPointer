@@ -168,7 +168,6 @@ var module = angular.module('webpoint.user');
                 $scope.max_width_textarea = "max_with_col1";
             }
         }
-
         init();
     }
 
@@ -269,12 +268,13 @@ var module = angular.module('webpoint.user');
     	};
 
     	$scope.groupOfSectionCtrl_searchTable = function(search) {
-//    		$scope.search = search;
     		hashMap.put('SEARCH_VALUE', search);
     		createSearchList();
     	}
 
         function createSearchList (){
+            $log.debug(' --- GroupOfSectionCtrl.createSearchList ');
+            $log.debug($scope.items);
     		var filterList = $filter('filter')($scope.items, hashMap.get('SEARCH_VALUE'));
     		var orderByList = $filter('orderBy')(filterList, $scope.predicate, $scope.reverse);
 

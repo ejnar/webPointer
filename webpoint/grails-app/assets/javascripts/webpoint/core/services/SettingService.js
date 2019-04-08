@@ -68,6 +68,10 @@ settingService.service('SettingService', ['SettingApi', '$rootScope', 'CashServi
    this.getTagg = function (scope) {
         $log.debug(' --- SettingService.getTagg:');
 
+        if(!scope.taggs){
+            scope.taggs = [];
+        }
+
         SettingApi.get({Id: 'tagg'}, function (resp) {
             $log.debug(resp);
             scope.taggs = resp.values;

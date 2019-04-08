@@ -2,13 +2,12 @@
 
 /* Controllers */
 
-var sectionController = angular.module('webpoint.user');
+var module = angular.module('webpoint.user');
 
-sectionController.controller('PageListCtrl', [
-    '$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', '$uibModal',
-    'cfgAppPath', 'PageListApi',
-    function ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $uibModal,
-        cfgAppPath, PageListApi) {
+    module.controller('PageListCtrl', PageListCtrl);
+    PageListCtrl.$inject =  ['$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', '$uibModal', 'cfgAppPath', 'PageListApi'];
+
+    function PageListCtrl ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $uibModal, cfgAppPath, PageListApi) {
 
         function init(){
             $log.debug(" --- PageListController.pageListCtrl.init:");
@@ -42,12 +41,13 @@ sectionController.controller('PageListCtrl', [
         }
 
         init();
-}]);
+    }
 
-sectionController.controller('ViewAllSongsCtrl', [
-    '$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', '$uibModal',
-    'cfgAppPath', 'SectionsApi', 'BinaryApi',
-    function ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $uibModal,
+    module.controller('ViewAllSongsCtrl', ViewAllSongsCtrl);
+    ViewAllSongsCtrl.$inject =  ['$scope', '$rootScope', '$routeParams', '$location', '$timeout', '$q', '$log', '$uibModal',
+        'cfgAppPath', 'SectionsApi', 'BinaryApi'];
+
+    function ViewAllSongsCtrl ($scope, $rootScope, $routeParams, $location, $timeout, $q, $log, $uibModal,
         cfgAppPath, SectionsApi, BinaryApi) {
         $log.debug(' - PageListController.ViewAllSongsCtrl:');
 
@@ -57,6 +57,7 @@ sectionController.controller('ViewAllSongsCtrl', [
 
             SectionsApi.list({max: 1000}).$promise
                 .then( function(resp) {
+                    $log.debug(resp);
                     $scope.sectionList = resp;
                     angular.forEach($scope.sectionList, function(s) {
                         if(s.type == 'IMAGE'){
@@ -76,14 +77,12 @@ sectionController.controller('ViewAllSongsCtrl', [
             $location.path(cfgAppPath.PAGE_UPDATE + id );
         }
 
-}]);
+    }
 
+    module.controller('ModalInstanceCtrl', ModalInstanceCtrl);
+    ModalInstanceCtrl.$inject = [ '$scope', '$location', '$uibModalInstance', '$log', 'cfgAppPath', 'PageListApi'];
 
-
-
-sectionController.controller('ModalInstanceCtrl',[ '$scope', '$location', '$uibModalInstance', '$log', 'cfgAppPath', 'PageListApi',
-
-    function ($scope, $location, $uibModalInstance, $log, cfgAppPath, PageListApi) {
+    function ModalInstanceCtrl ($scope, $location, $uibModalInstance, $log, cfgAppPath, PageListApi) {
         $log.debug(' - PageListController.ModalInstanceCtrl:');
 	    $scope.modalInstanceCtrl_addPageList = function () {
    		    $log.debug(" --- PageListController.modalInstanceCtrl_addPageList:");
@@ -99,15 +98,13 @@ sectionController.controller('ModalInstanceCtrl',[ '$scope', '$location', '$uibM
 	    $scope.modalInstanceCtrl_cancel = function () {
 	        $uibModalInstance.dismiss('cancel');
 	    };
-}]);
+    }
 
+    module.controller('UpdatePageListCtrl', UpdatePageListCtrl);
+	UpdatePageListCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$location', '$log', 'cfgAppPath', 'properties',
+	    'SectionsApi', 'PageListApi', 'PageListDataApi', '$filter', 'SettingService', 'PageService'];
 
-
-
-sectionController.controller('UpdatePageListCtrl', [
-	'$rootScope', '$scope', '$routeParams', '$location', '$log',
-	'cfgAppPath', 'properties', 'SectionsApi', 'PageListApi', 'PageListDataApi', '$filter', 'SettingService', 'PageService',
-    function($rootScope, $scope, $routeParams, $location, $log,
+    function UpdatePageListCtrl ($rootScope, $scope, $routeParams, $location, $log,
         cfgAppPath, properties, SectionsApi, PageListApi, PageListDataApi, $filter, SettingService, PageService) {
 
         $scope.alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
@@ -209,7 +206,7 @@ sectionController.controller('UpdatePageListCtrl', [
 			
 		}
 		
-}]);
+    }
 
 function filterSearch(choosenCategory, meta, filterAnd){
     var isCategory = choosenCategory.indexOf(meta.category) !== -1;

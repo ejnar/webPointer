@@ -97,9 +97,8 @@ md-sidenav,
 md-sidenav.md-locked-open-add-active,
 md-sidenav.md-closed.md-locked-open-add-active,
 md-sidenav.md-locked-open {
-  width: 340px;
-  min-width: 300px;
-  max-width: 340px;
+  min-width: 280px;
+  max-width: 320px;
 }
 .md-subheader{
     font-size: 0.9em;
@@ -120,7 +119,7 @@ md-list-item.sidenav-list-item span.mdl-list_item-primary-content  {
     margin:0 0.2em;
 }
 md-list-item.sidenav-list-item span.mdl-list_item-secondary-action{
-    margin-right:0.4em;
+    margin-right:0.2em;
 }
 md-backdrop.md-sidenav-backdrop{
     display:none;
@@ -343,7 +342,7 @@ div.sideRightBtn{
 }
 div.vyMainArea {
     height:100%;
-    width:80%;
+    width:85%;
     white-space: pre;
     padding: 0.05em 0 0 0;
     margin: 0;
@@ -351,6 +350,19 @@ div.vyMainArea {
     top: 0;
     left: 6.2vw;
     overflow-y: auto;
+}
+div.vyMainAreaLarge {
+    font-size: 2.6vw;
+    height:100%;
+    width:87%;
+    white-space: pre;
+    padding: 0.05em 0 0 0;
+    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 6.2vw;
+    overflow-y: auto;
+    line-height: 102%;
 }
 div.vyColumn {
     font-size: 0.70em;
@@ -579,6 +591,29 @@ div.songItem:hover{
     border: 1px solid #DDD;
 }
 
+.md-input-container-small {
+    padding: 0;
+    margin: 0.7em 1em 0 1em;
+}
+.md-select-css-small {
+    margin: 0 2em !important;
+    padding: 0 !important;
+}
+.md-button-small {
+    font-size: 0.9em;
+    margin: 0;
+    padding: 0 1.4em;
+    height: 20px;
+}
+md-button  {
+    margin: 0 !important;
+    padding: 0.4em !important;
+}
+.material-cust-medium-button {
+    width: 150px;
+    height: 70px;
+    padding-top: 13px;
+}
 
 /* Bug fix */
 td.md-swipe-left *, td.md-swipe-right *{

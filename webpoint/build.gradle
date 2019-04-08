@@ -13,7 +13,7 @@ buildscript {
     }
 }
 
-version "0.9.8.0.0"
+version "0.9.8.0.5"
 group "webpoint"
 
 apply plugin:"eclipse"
@@ -184,7 +184,9 @@ karma {
     // basePath = 'grails-app/assets'
     profile 'angularJS'
     preprocessors = [
-            'grails-app/assets/javascripts/**/*.js': ['wrap']
+            'grails-app/assets/javascripts/**/*.js': ['wrap'],
+            // 'grails-app/assets/javascripts/webpoint/screen/**/*.js': ['wrap'],
+            // 'grails-app/assets/javascripts/webpoint/user/**/*.js': ['wrap'],
     ]
     wrapPreprocessor = [
             template: "(function () { 'use strict';  <%= contents %> })()"
@@ -192,7 +194,8 @@ karma {
     colors = true
     frameworks = ['jasmine']
     browsers = ['Chrome']  // 'Chrome' , 'PhantomJS'
-    reporters = ['junit']
+    reporters = ['progress']  // junit, progress, dots, spec
+    logLevel = ['DEBUG']
 }
 
 assets {
