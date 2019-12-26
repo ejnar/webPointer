@@ -65,6 +65,16 @@ settingService.service('SettingService', ['SettingApi', '$rootScope', 'CashServi
         }
     };
 
+    this.getLang = function (scope) {
+        $log.debug(' --- SettingService.getLang:');
+
+        if(!scope.langs){
+            scope.langs = [];
+        }
+        scope.langs.push('eng');
+        scope.langs.push('swe');
+    };
+
    this.getTagg = function (scope) {
         $log.debug(' --- SettingService.getTagg:');
 

@@ -27,8 +27,9 @@
                             <li ng-repeat="l in song.oLinks" ><a href="{{l.url}}" target="blank"><span>{{l.name}}</span></a></li>
                         </ul>
                     </div>
-                    <div hide-xs flex="25" class="dialogInfo-select">
-                        <md-select ng-change="songItemtCtrl_selectedSongList()" md-container-class="md-select-css" class="md-select-css"
+                    <!--  -->
+                    <div ng-show="!onlyView" hide-xs flex="25" class="dialogInfo-select">
+                        <md-select ng-change="selectedSongList()" md-container-class="md-select-css" class="md-select-css"
                                    placeholder="Add song" ng-model="selectedSongLists"  data-md-container-class="md-container-select-css" multiple>
                             <md-option ng-value="item" ng-repeat="item in songLists">{{item.name}}</md-option>
                         </md-select>

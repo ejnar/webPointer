@@ -108,6 +108,11 @@ md-sidenav.md-locked-open {
     font-weight: bold;
     color:gray;
 }
+.title-md{
+    font-size: 1.1em;
+    font-weight: bold;
+    color:gray;
+}
 .size-text{
     font-size: 1.2em;
 }
@@ -123,6 +128,16 @@ md-list-item.sidenav-list-item span.mdl-list_item-secondary-action{
 }
 md-backdrop.md-sidenav-backdrop{
     display:none;
+}
+.md-dialog-container {
+  height: 99% !important;
+  position: fixed !important;
+  top: 2px !important;
+}
+md-dialog {
+  max-width: 80%;
+  max-height: 80%;
+  top: 2px;
 }
 /* angular-material end */
 
@@ -326,7 +341,7 @@ div.vyImgArea {
 div.sideBtn{
     height:100%;
     color: #404040;
-    padding: 2em 0 0 0;
+    padding: 0;
     margin:0;
     outline:none;
 }
@@ -342,27 +357,26 @@ div.sideRightBtn{
 }
 div.vyMainArea {
     height:100%;
-    width:85%;
+    width:86%;
     white-space: pre;
     padding: 0.05em 0 0 0;
     margin: 0;
     position: fixed;
     top: 0;
-    left: 6.2vw;
+    left: 6.0vw;
     overflow-y: auto;
 }
-div.vyMainAreaLarge {
-    font-size: 2.6vw;
+div.slideShowMainArea {
     height:100%;
-    width:87%;
+    width:92%;
     white-space: pre;
     padding: 0.05em 0 0 0;
     margin: 0;
     position: fixed;
     top: 0;
-    left: 6.2vw;
+    left: 4.2vw;
     overflow-y: auto;
-    line-height: 102%;
+    line-height: 150%;
 }
 div.vyColumn {
     font-size: 0.70em;
@@ -551,8 +565,8 @@ div.songList{
 }
 div.songItem > * {
     display: block;
-    font-size: 1.05em;
-    margin: 0.2em;
+    font-size: 1.2em;
+    margin: 0.2em 0;
     padding: 0.4em 0.8em;
     text-decoration: none;
 }
@@ -599,16 +613,46 @@ div.songItem:hover{
     margin: 0 2em !important;
     padding: 0 !important;
 }
-.md-button-small {
-    font-size: 0.9em;
-    margin: 0;
-    padding: 0 1.4em;
-    height: 20px;
+.button-md {
+    font-size: 1.0em;
+    margin: 0 0.1em;
+    width: 160px;
+    background-color: #ececec;
+}
+.button-sm {
+    font-size: 0.8em;
+    margin: 0 1.2em;
+    padding: 0;
+    width: 140px;
+    height: 10px;
+    background-color: #ececec
+}
+.button-ok {
+    color:#606060;
+}
+.button-disable {
+    color:#a0a0a0;
 }
 md-button  {
     margin: 0 !important;
     padding: 0.4em !important;
 }
+.tabSongList {
+    width: 50vw;
+    left:20px;
+    position: relative;
+}
+
+.tabsdemoDynamicHeight md-content {
+  background-color: transparent !important; }
+  .tabsdemoDynamicHeight md-content md-tabs {
+    background: #f6f6f6;
+    border: 1px solid #e1e1e1; }
+    .tabsdemoDynamicHeight md-content md-tabs md-tabs-wrapper {
+      background: white; }
+  .tabsdemoDynamicHeight md-content h1:first-child {
+    margin-top: 0; }
+
 .material-cust-medium-button {
     width: 150px;
     height: 70px;

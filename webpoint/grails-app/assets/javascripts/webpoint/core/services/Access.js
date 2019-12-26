@@ -24,19 +24,25 @@ var app = angular.module('webpoint.core');
             hasRole: hasRole,
             hasAnyRole: hasAnyRole,
             isAuthenticated: isAuthenticated,
-            isAuthorized: isAuthorized
+            isAuthorized: isAuthorized,
+            isViewer: isViewer,
+            viewRole: viewRole
         }
         return access;
 
         function isAdmin(){return hasRole("ROLE_ADMIN");}
+        function isViewer(){return hasURole("ROLE_VIEW");}
         function isClient(){return hasURole("ROLE_CLIENT");}
-
 
         function hasURole(role) {
             var roles = CashService.getSessionStorage("uRole");
             return roles != null && roles.indexOf(role) >= 0;
         }
 
+        function viewRole() {
+            $log.debug(CashService.getSessionStorage("roles"));
+            $log.debug(CashService.getSessionStorage("uRole"));
+        }
 
         function hasRole(role) {
             var roles = CashService.getSessionStorage("roles");

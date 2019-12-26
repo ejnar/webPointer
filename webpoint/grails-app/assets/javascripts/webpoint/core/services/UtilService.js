@@ -8,24 +8,63 @@ var module = angular.module('webpoint.core');
 
     function UtilService() {
         var includePrint = false;
-        var MATCH_KEYROW = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]{1,2}", "g");
+        var MATCH_KEYROW = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "g");
+        var MATCH_WORDS = new RegExp("(Chorus|Bridge|Verse)", "g");
+        var MATCH_SUFFIX = new RegExp("(m|7|s|b|#|9|/)", "g");
         this.findValidKeyRow = function (line) {
             print(' - line: ', line);
+            if(line.split("|").length > 1){
+                return true;
+            }
+            var words = line.match(MATCH_WORDS);
+            print(' -- words: ', words);
+            if(words){
+                return false;
+            }
             var parts = line.match(/\S+/g)
             print(' -- parts: ', parts);
             if(parts){
-                var countNull = 0;
-                for(var i=0; i < parts.length; i++){
-                    var key = parts[i].match(MATCH_KEYROW);
-                    print(' --- key: ', key);
-                    if(!key){ countNull++; }
+                var countFirst = validateFirst(parts);
+                print(' --- countFirst: ', countFirst);
+                if( (countFirst/parts.length) > 0.2 ){
+                    return false;
                 }
-                if( (countNull/parts.length) > 0.2 ){
+                var countSecond = validateSecond(parts);
+                print(' --- countSecond: ', countSecond);
+                if( (countSecond/parts.length) > 0.4 ){
                     return false;
                 }
             }
             return true;
         };
+
+        function validateFirst (parts) {
+            var countNull = 0;
+            for(var i=0; i < parts.length; i++){
+                var key = parts[i].match(MATCH_KEYROW);
+                print(' --- validateFirst.keys: ', key);
+                if(!key){ countNull++; }
+            }
+            return countNull;
+        }
+
+        function validateSecond(parts) {
+            var countNull = 0;
+            for(var i=0; i < parts.length; i++){
+                var key = parts[i].match(MATCH_KEYROW);
+                if(!key){continue;}
+                print(' --- validateSecond.keys: ', key);
+                if(parts[i].length > 1 && parts[i].indexOf(key[0]) == 0){
+                    var match = parts[i].substr(1, 1).match(MATCH_SUFFIX);
+                    print(' ---- validateSecond.match---: ', match);
+                    print(' ---- validateSecond.part: ', parts[i] );
+                    if(!match){
+                        countNull++;
+                    }
+                }
+            }
+            return countNull;
+        }
 
         this.getLines = function (doHtml,data,linebreak) {
             var lines;

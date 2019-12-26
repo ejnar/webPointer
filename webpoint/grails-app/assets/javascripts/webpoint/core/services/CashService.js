@@ -10,6 +10,17 @@ var app = angular.module('webpoint.core');
 
     function CashService (localStorageService, properties, $log, $filter) {
 
+        this.setRefreshId = function (id) {
+            $log.debug(' ----------------- CashService.setRefreshId: ', id);
+            localStorageService.set('refreshId', id);
+        }
+
+        this.getRefreshId = function () {
+            var id = localStorageService.get('refreshId');
+            localStorageService.set('refreshId', null);
+            return id;
+        }
+
         this.stash = function (key, value) {
             this.stash(key, value, 3);
         }

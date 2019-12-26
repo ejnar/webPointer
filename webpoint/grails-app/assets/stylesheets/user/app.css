@@ -277,6 +277,13 @@ Then just add the alignments Css.
     padding: 0 8px 0 0;
     margin: 2px 0px 10px 0px;
 }
+.table-scroll-smalllist{
+    height: 200px;
+    width: 400px;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+}
 
 .table-fixed tbody {
     height: 200px;

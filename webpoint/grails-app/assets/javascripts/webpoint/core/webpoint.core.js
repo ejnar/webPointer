@@ -209,3 +209,8 @@ String.prototype.rtrim = function( chars ) {
 String.prototype.trim = function( chars ) {
     return this.rtrim(chars).ltrim(chars);
 }
+String.prototype.equalIgnoreCase = function(str) {
+    return (str != null
+            && typeof str === 'string'
+            && this.toUpperCase() === str.toUpperCase());
+}

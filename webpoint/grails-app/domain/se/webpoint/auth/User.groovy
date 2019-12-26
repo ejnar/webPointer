@@ -23,10 +23,12 @@ class User extends BaseDomain{
 	boolean accountLocked = true
 	boolean passwordExpired = true
 
-	static transients = ['springSecurityService']
+    boolean excludePasswordUpdate
+
+	static transients = ['springSecurityService', 'excludePasswordUpdate']
 
 	static constraints = {
-		password blank: false
+        password blank: false, password: true
 		username blank: false, unique: true
 		email nullable: true, blank: true
 		updated nullable: true
@@ -56,14 +58,15 @@ class User extends BaseDomain{
     }
 
 	def beforeInsert() {
-		encodePassword()
+//		encodePassword()
         created = updated = new Date();
 	}
 
 	def beforeUpdate() {
-		if (isDirty('password')) {
-			encodePassword()
-		}
+//        log.error "${password}: beforeUpdate hasChanged:${hasChanged('password')}, getOriginalValue:${getOriginalValue('password')}, isDirty:${isDirty('password')}, getPersistentValue:${getPersistentValue('password')}"
+//		if (isDirty('password') && !excludePasswordUpdate) {
+//			encodePassword()
+//		}
 		updated = new Date();
 	}
 

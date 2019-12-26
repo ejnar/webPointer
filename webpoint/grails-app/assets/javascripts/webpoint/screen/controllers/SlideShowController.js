@@ -12,23 +12,29 @@ var module = angular.module('webpoint.screen');
     function SlideShowCtrl ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath, $interval,
                      $mdDialog, properties, ChangeKeyService, VyApi, localStorageService, PageService,
                     Access, CashService, RemoveKeyService, SectionCashService, BinaryApi, $stomp) {
+
+        var vm = this;
+
+        vm.right = right;
+        vm.left = left;
+        vm.activeSong = {};
+        vm.fontSize = {};
+        vm.pageList = [];
+
+        var tmpSong = {};
         var promiseInterval;
-    	$scope.currentPart = 0;
-    	$scope.currentPage = 0;
-    	$scope.totalPart = 1;
-    	$scope.mainCss = 'vyMainArea';
-    	$scope.fontSize = "vyArea_s1";
+    	var currentPart = 0;
+    	var currentPage = 0;
+    	var totalPart = 1;
 
         (function init() {
             if(Access.isClient()){
                 socket();
             }
-            $scope.activeSong = {};
-            $scope.tmpSong = {};
-            loadData();
+            loadData(false);
         })();
 
-    	function loadData() {
+    	function loadData(forceCleanCash) {
             $log.debug(' --- SlideShowCtrl.loadData:');
 //            $log.debug($routeParams);
             if($routeParams.group){
@@ -37,7 +43,7 @@ var module = angular.module('webpoint.screen');
                         initSlideShow(resp);
                     });
             }else{
-                var exclude = CashService.getSessionStorage('excludeCache', true);
+                var exclude = forceCleanCash ? true : CashService.getSessionStorage('excludeCache', true);
                 $log.debug(' ----------------- pageList: ', exclude);
                 var method = PageService.excludeCache(exclude);
                 PageService.listApi [method] ({Id: $routeParams.pageListId}, function(resp) {
@@ -45,28 +51,56 @@ var module = angular.module('webpoint.screen');
                         initSlideShow(resp);
                     });
 			}
-    	};
+    	}
 
     	function initSlideShow(resp){
             $log.debug(resp);
-            $scope.pageList = resp;
-            addBinary($scope.pageList);
-            $scope.totalPart = $scope.pageList.pageParts.length;
-            if($scope.pageList.pageParts){
-                $scope.activeSong.section = $scope.pageList.pageParts[0].section;
+            vm.pageList = {};
+            vm.pageList = resp;
+            removeKeys(vm.pageList);
+            totalPart = vm.pageList.pageParts.length;
+            if(vm.pageList.pageParts){
+                setActiveSong(vm.pageList.pageParts[0].section);  // <br />
             }
-    	    removeKeys($scope.pageList);
-            spliteColumns($scope.pageList);
+            addBinary(resp);
+            spliteColumns(vm.pageList);
     	}
+
+    	function setActiveSong(song){
+    	    $log.debug(song);
+    	    if($routeParams.withoutkeys){
+    	        setFontSize(song, '\n');
+    	    } else {
+    	        setFontSize(song, '<br />');
+    	    }
+    	    vm.activeSong.section = song;
+    	}
+
+        function setFontSize(section,delimeter){
+            var len = 0;
+            var lines = section.data.split(delimeter);
+            lines.forEach(function(line) {
+                 if(len < line.length){
+                    len = line.length
+                    //$log.debug(len);
+                    //$log.debug(line);
+                 }
+            });
+            size = (82 - len) / 10;
+            size = size < 3 ? 3:size;
+            $log.debug(size);
+            vm.fontSize = {"font-size" : size+"vw" };
+        }
+
         function removeKeys(pageList) {
             if($routeParams.withoutkeys){
                 for(var i=0; i < pageList.pageParts.length; i++){
                     var part = pageList.pageParts[i];
                     pageList.pageParts[i].section.data = RemoveKeyService.removeValidKeyRows(true,pageList.pageParts[i].section.data);
                 }
-                $scope.mainCss = 'vyMainAreaLarge';
             }
         }
+
         function spliteColumns(pageList) {
             for(var i=0; i < pageList.pageParts.length; i++){
                 var part = pageList.pageParts[i];
@@ -98,25 +132,35 @@ var module = angular.module('webpoint.screen');
                     }, {'headers': 'are awesome' });
                });
         }
+
         function updateActiveSong(payload){
-            $scope.tmpSong = payload;
-            $scope.tmpSong.active = true;
-            if($scope.tmpSong.currentSectionId != null){
-                $log.debug($scope.pageList);
-                $scope.pageList.pageParts.forEach(function(entry) {
-                    // TODO test what type of data
-                    if(entry.section.id == $scope.tmpSong.currentSectionId){
-                        $log.debug(entry.section);
-                        $scope.$apply(function () {
-                           $scope.tmpSong.section = entry.section;
-                           $scope.currentPage = entry.counter;
-                           document.getElementById("snackbar").className = "show";
-                        });
-                        showDelay();
-                    }
-                });
+            $log.debug(payload);
+            tmpSong = payload;
+            tmpSong.active = true;
+            if (tmpSong.refresh == 'true') {
+                $log.debug('payload');
+                loadData(true);
+            }else if(tmpSong.currentSectionId != null) {
+                $log.debug('vm.pageList');
+                applySong();
             }
         }
+
+        function applySong(){
+           vm.pageList.pageParts.forEach(function(entry) {
+                // TODO test what type of data
+                if(entry.section.id == tmpSong.currentSectionId){
+                    $log.debug('entry.section');
+                    $scope.$apply(function () {
+                       tmpSong.section = entry.section;
+                       currentPage = entry.counter;
+                       document.getElementById("snackbar").className = "show";
+                    });
+                    showDelay();
+                }
+            });
+        }
+
         var oneTimer;
         function showDelay(){
             $interval.cancel(oneTimer);
@@ -125,7 +169,7 @@ var module = angular.module('webpoint.screen');
                 document.getElementById("snackbar").className = "";
               }
               $interval.cancel(oneTimer);
-              $scope.activeSong = $scope.tmpSong;
+              vm.activeSong = tmpSong;
             }, 2000);
         }
 
@@ -147,31 +191,33 @@ var module = angular.module('webpoint.screen');
             });
         }
         function updateCash(){
-            SectionCashService.updatePageListCach($scope.pageList.id, $scope.pageList.pageParts[$scope.currentPart].section.id, false);
+            SectionCashService.updatePageListCach(vm.pageList.id, vm.pageList.pageParts[currentPart].section.id, false);
         }
 
-    	$scope.slideShowCtrl_right = function() {
+    	function right() {
     		nextData(1);
     	};
 
-    	$scope.slideShowCtrl_left = function() {
+    	function left() {
     		nextData(-1);
     	};
 
         function nextData(index) {
-    		$scope.currentPart = $scope.currentPart + index;
-    		if($scope.currentPart == $scope.totalPart){
-    			$scope.currentPart = 0;
-    		}else if($scope.currentPart < 0){
-    			$scope.currentPart = $scope.totalPart-1;
+    		currentPart = currentPart + index;
+    		if(currentPart == totalPart){
+    			currentPart = 0;
+    		}else if(currentPart < 0){
+    			currentPart = totalPart-1;
     		}
-
-    		angular.forEach($scope.pageList.pageParts, function(s) {
-                if($scope.currentPart === s.counter){
-                    $scope.activeSong.section = s.section;
+    		angular.forEach(vm.pageList.pageParts, function(s) {
+                if(currentPart === s.counter){
+                    setActiveSong(s.section, '\n');
                 }
             });
             updateCash();
+
+
+
       	};
 
         $scope.vyCtrl_goBack = function(){

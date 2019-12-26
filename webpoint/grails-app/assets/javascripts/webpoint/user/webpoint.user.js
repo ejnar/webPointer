@@ -24,7 +24,8 @@ app.constant(
 			USER: '/user',
 			USER_EDIT: '/user/',
 			USER_ADD: '/user/add',
-			ceatePageModal: 'static/webpoint/user/views/page/ceatePageModal.html'
+			ceatePageModal: 'static/webpoint/user/views/page/ceatePageModal.html',
+			ceateEditRoleModal: 'static/webpoint/user/views/user/ceateEditRoleModal.html'
 		});
 
 app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath', 'CONFIG',
@@ -57,11 +58,11 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath', 'CO
             }).
             when( cfgAppPath.PAGE_LIST, {
                 templateUrl: 'static/webpoint/user/views/page/list.html',
-                controller: 'PageListCtrl'
+                controller: 'PageListCtrl as pageList'
             }).
             when( cfgAppPath.PAGE_UPDATE + ':pageListId', {
                 templateUrl: 'static/webpoint/user/views/page/update.html',
-                controller: 'UpdatePageListCtrl'
+                controller: 'UpdatePageListCtrl as updatePageList'
             }).
             when( cfgAppPath.SONGS_VIEW, {
                 templateUrl: 'static/webpoint/user/views/page/viewAll.html',

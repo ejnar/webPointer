@@ -4,16 +4,15 @@
 
 var pageService = angular.module('webpoint.core');
     pageService.factory('PageService', PageService);
-    PageService.$inject = ['$log', 'PageListDataApi', 'PageListApi'];
+    PageService.$inject = ['$log', 'PageListDataApi', 'PageListApi', 'VyApi'];
 
-    function PageService($log, PageListDataApi, PageListApi){
+    function PageService($log, PageListDataApi, PageListApi, VyApi){
         $log.info('PageService');
         var service = {
             addSectionToList: addSectionToList,
             removeSectionInList: removeSectionInList,
             listApi: PageListApi,
             excludeCache: excludeCache
-
         }
         return service;
 
@@ -36,10 +35,10 @@ var pageService = angular.module('webpoint.core');
         }
 
         function removeSectionInList (pageListId, item) {
-            PageListDataApi.remove({pageListId: pageListId, Id: item.key},
-                function (resp) {
-                    $log.debug(resp);
-                });
+            return PageListDataApi.remove({pageListId: pageListId, Id: item.key});
+//                function (resp) {
+//                    $log.debug(resp);
+//                });
         }
 
     }

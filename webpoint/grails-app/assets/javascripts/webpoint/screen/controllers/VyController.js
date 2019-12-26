@@ -22,11 +22,11 @@ var module = angular.module('webpoint.screen');
             if(Access.isClient()){
                 socket();
             }
-            vyCtrl_loadData();
+            loadData();
         })();
 
-    	function vyCtrl_loadData() {
-            $log.debug(' --- VyController.vyCtrl_loadData:');
+    	function loadData() {
+            $log.debug(' --- VyController.loadData:');
 //            $log.debug($routeParams);
             if($routeParams.group){
                 VyApi.get({group: $routeParams.group, pages: $routeParams.pages}).$promise
@@ -34,7 +34,8 @@ var module = angular.module('webpoint.screen');
                         initVy();
                     });
             }else{
-                var exclude = CashService.getSessionStorage('excludeCache', true);
+                var forceCleanCash = $routeParams.pageListId === CashService.getRefreshId();
+                var exclude = forceCleanCash ? true : CashService.getSessionStorage('excludeCache', true);
                 $log.debug(' ----------------- pageList: ', exclude);
                 var method = PageService.excludeCache(exclude);
                 PageService.listApi [method] ({Id: $routeParams.pageListId}, function(resp) {
@@ -52,8 +53,6 @@ var module = angular.module('webpoint.screen');
     	    removeKeys($scope.pageList);
             spliteColumns($scope.pageList);
     	}
-
-
 
         function socket() {
             $stomp.setDebug(function (args) { $log.debug(args) });

@@ -43,11 +43,11 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
             }).
             when( cfgScreenPath.SLIDESHOW  + ':pageListId', {
                 templateUrl: 'static/webpoint/screen/views/slideshow.html',
-                controller: 'SlideShowCtrl'
+                controller: 'SlideShowCtrl as vm'
             }).
             when( cfgScreenPath.SLIDESHOW  + ':pageListId/:withoutkeys', {
                 templateUrl: 'static/webpoint/screen/views/slideshow.html',
-                controller: 'SlideShowCtrl'
+                controller: 'SlideShowCtrl as vm'
             }).
             when( cfgScreenPath.VY  + ':group/:pages', {
                 templateUrl: 'static/webpoint/screen/views/vy.html',
@@ -55,7 +55,7 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
             }).
             when( cfgScreenPath.pagelist, {
                 templateUrl: 'static/webpoint/screen/views/list.html',
-                controller: 'MainViewListCtrl',
+                controller: 'MainViewListCtrl as mainViewList',
                 requireAuth: true,
                 requireRoles: ['ROLE_ADMIN','ROLE_VIEW']
             }).

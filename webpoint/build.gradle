@@ -13,7 +13,7 @@ buildscript {
     }
 }
 
-version "0.9.8.0.5"
+version "0.9.8.2.8"
 group "webpoint"
 
 apply plugin:"eclipse"
@@ -43,8 +43,9 @@ dependencies {
     // Use Jetty
     //compile "org.springframework.boot:spring-boot-starter-jetty"
 
-    compile "org.grails.plugins:spring-security-rest:2.0.0.RC1"
-    compile "org.grails.plugins:spring-security-rest-gorm:2.0.0.RC1"
+    //compile 'org.grails.plugins:spring-security-core:3.2.3'
+    compile "org.grails.plugins:spring-security-rest:2.0.0.RC1"       // 2.0.0.RC1
+    compile "org.grails.plugins:spring-security-rest-gorm:2.0.0.RC1"  // 2.0.0.RC1
     compile "org.grails.plugins:grails-spring-websocket:2.3.0"
     // Apache Camel
     compile "org.apache.camel:camel-core:2.18.3"  // 2.15.3 2.18.3 2.19.0
@@ -79,7 +80,7 @@ dependencies {
     console "org.grails:grails-console"
     profile "org.grails.profiles:angularjs"
     provided "org.grails.plugins:embedded-mongodb:1.0.2"
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.8"
+    runtime "com.bertramlabs.plugins:asset-pipeline-grails:3.0.10"   // 2.15.1 2.14.8 3.0.10
     runtime 'com.google.guava:guava:11.0.1'
 
     testCompile "org.grails:grails-gorm-testing-support"
@@ -201,6 +202,13 @@ karma {
 assets {
     minifyJs = true
     minifyCss = true
+    enableSourceMaps = true
+    maxThreads = 4 //useful for concurrent asset processing during build
+    configOptions = [:] //useful for custom config on extension libraries
+//    minifyOptions = [
+//            optimizationLevel: 'SIMPLE',
+//            angularPass: true // Can use @ngInject annotation for Angular Apps
+//    ]
 }
 
 grails {

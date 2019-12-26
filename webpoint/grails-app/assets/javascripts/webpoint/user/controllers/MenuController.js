@@ -65,10 +65,9 @@ var module = angular.module('webpoint.core');
         function convert(tagg){
             angular.forEach(tagg.values, function(s) {
                 var o = {}
-                o.tagg = s
-                o.check = true
-                vm.otaggs.push(o)
-                console.info(s);
+                o.tagg = s;
+                o.check = true;
+                vm.otaggs.push(o);
             });
         }
 
@@ -76,7 +75,6 @@ var module = angular.module('webpoint.core');
             $log.debug('updateSetting');
             vm.tagg.values = []
             angular.forEach(vm.otaggs, function(s) {
-                console.info(s);
                 if(s.check)
                     vm.tagg.values.push(s.tagg)
             });

@@ -1,68 +1,81 @@
 <div ng-cloak  layout="column">
-
     <md-content  flex>
         <form>
             <div ng-init="hideSongList = true" ng-include="'static/webpoint/screen/views/menu.html'"></div>
             <md-subheader>
                 <div layout="row" layout-xs="column">
-                    <div flex="10">Song list</div>
-                    <div flex="10" flex-sm>
-                        <md-button class="md-button-small" ng-click="vm.toggle_visibility('searchPanel')">Search panel</md-button>
+                    <div class="title-md" layout="column" flex="40" hide-xs>Song list: {{vm.selectedSongList.name}}</div>
+                    <div layout="column" flex="60" ng-show="!vm.activeTabPanel">
+                        <md-button class="button-md" ng-click="vm.toggleTabPanel()">Open adv</md-button>
+                    </div>
+                </div>
+                <div flex="50" layout="row">
+                    <div layout="column" flex="10" hide-xs></div>
+                    <div id="tabPanel" layout="column" flex="*" class="tabSongList" ng-show="vm.activeTabPanel" ng-cloak>
+                        <md-content hide-xs>
+                            <md-tabs md-dynamic-height md-border-bottom>
+                                <md-tab label="Search panel">
+                                    <div layout="row" layout-xs="column">
+                                        <md-input-container flex="40" class="md-input-container-small" flex-sm>
+                                            <label class="active">Search:</label>
+                                            <input mdInput type="search" value="" name="search"
+                                                   ng-model="vm.search"  ng-change="vm.searchByFreeText()"/>
+                                        </md-input-container>
+                                        <md-input-container flex="40" class="md-select-css-small" flex-sm>
+                                            <md-select ng-change="vm.searchByTagg()" placeholder="Select tagg" ng-model="vm.currentTagg" aria-label="tagg">
+                                                <md-option ng-value="" ></md-option>
+                                                <md-option ng-value="tagg" ng-repeat="tagg in vm.taggs">{{tagg}}</md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                        <md-input-container flex="40" class="md-select-css-small" flex-sm>
+                                            <md-select ng-change="vm.searchByLang()" placeholder="Select lang" ng-model="vm.currentLang" aria-label="lang">
+                                                <md-option ng-value="" ></md-option>
+                                                <md-option ng-value="lang" ng-repeat="lang in vm.langs">{{lang}}</md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                    </div>
+                                </md-tab>
+                                <md-tab label="Song List panel" >
+                                    <md-select aria-label="SelectList" ng-show="!vm.onlyView" flex="40" ng-change="vm.selectedSongListChange()" ng-model="vm.selectedSongList"
+                                               md-container-class="md-select-css" class="md-select-css" data-md-container-class="md-container-select-css">
+                                        <md-option ng-value="item" ng-repeat="item in vm.songLists">{{item.name}}</md-option>
+                                    </md-select>
+                                </md-tab>
+                                <md-tab label="Close" ng-click="vm.toggleTabPanel()">
+                                </md-tab>
+                            </md-tabs>
+                        </md-content>
+                        <div layout="column" hide-gt-xs show-xs>
+                            <md-input-container flex-sm class="md-input-container-small" >
+                                <label class="active">Search:</label>
+                                <input mdInput type="search" value="" name="search"
+                                       ng-model="vm.search"  ng-change="vm.searchByFreeText()"/>
+                            </md-input-container>
+                            <md-input-container flex-sm class="md-select-css-small" >
+                                <md-select ng-change="vm.searchByTagg()" placeholder="Select tagg" ng-model="vm.currentTagg" aria-label="tagg">
+                                    <md-option ng-value="" ></md-option>
+                                    <md-option ng-value="tagg" ng-repeat="tagg in taggs">{{tagg}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-button class="md-button" ng-click="vm.toggleTabPanel()">Close adv</md-button>
+                        </div>
                     </div>
                 </div>
             </md-subheader>
-            <div id="searchPanel" layout="row" layout-xs="column" ng-show="activePanel">
-                <div flex="5"></div>
-                <md-input-container flex="20" class="md-input-container-small" flex-sm>
-                    <label class="active">Search:</label>
-                    <input mdInput type="search" value=""
-                           ng-model="search"  ng-change="vm.searchByFreeText(search)"/>
-                </md-input-container>
-                <md-input-container flex="10" class="md-select-css-small" flex-sm>
-                    <md-select ng-change="vm.searchByTagg()" placeholder="Select tagg" ng-model="currentTagg" >
-                        <md-option ng-value="" ></md-option>
-                        <md-option ng-value="tagg" ng-repeat="tagg in taggs">{{tagg}}</md-option>
-                    </md-select>
-                </md-input-container>
-                <md-divider ></md-divider>
-            </div>
-            <!-- div class="md-virtual">
-                <md-virtual-repeat-container id="vertical-container" >
-                    <div md-virtual-repeat="s in infiniteItems" md-on-demand
-                         class="repeated-item" flex>
-                        <h5>
-                            {{s}}
-                        </h5>
-                        <md-divider ></md-divider>
-                    </div>
-                </md-virtual-repeat-container>
-                <md-virtual-repeat-container id="vertical-container" md-top-index="topIndex">
-                    <div md-virtual-repeat="o in alphabeticalList" md-item-size="10"
-                         class="repeated-item" flex>
-                        <h4>{{o.letter}}</h4>
-                        <div ng-repeat="s in o.list | orderBy:'title'">
-                            <div class="songItem">
-                                <a href="" ng-click="showAdvanced($event,s)">{{s.title}}</a>
-                            </div>
-                        </div>
-                    </div>
-                </md-virtual-repeat-container>
-            </div -->
-            <div class="songList" ng-repeat="o in alphabeticalList" flex>
+
+            <div class="songList" ng-repeat="o in vm.alphabeticalList" flex>
                 <h4>{{o.letter}}</h4>
                 <div ng-repeat="s in o.list | orderBy:'title'" layout="row">
                     <div class="songItem" flex="70">
                         <a href="" ng-click="vm.showAdvanced($event,s)">{{s.title}}</a>
                     </div>
-                    <div flex></div>
+                    <div flex hide-xs>
+                        <md-button ng-show="!s.selected && vm.selectedSongList" class="button-sm button-ok" ng-click="vm.addToSongList(s)">Add to list</md-button>
+                        <md-button ng-show="s.selected && vm.selectedSongList" class="button-sm button-disable" ng-click="vm.removeToSongList(s)">Remove from list</md-button>
+                    </div>
                 </div>
             </div>
         </form>
     </md-content>
-    <!-- div>
-        <div infinite-scroll='loadMore()' infinite-scroll-distance='20'>
-            <img ng-repeat='image in images' ng-src='http://placehold.it/225x250&text={{image}}'>
-        </div>
-    </div -->
     <div ng-include="'static/webpoint/screen/views/include/footer.html'"></div>
 </div>

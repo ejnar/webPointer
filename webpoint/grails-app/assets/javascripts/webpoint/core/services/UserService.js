@@ -39,7 +39,21 @@ module.factory('UserApi', ['$resource', '$log',
                     {
                         'list': { method:'GET', isArray:true, cache:false},
                         'get': { method:'GET'}
+                    }),
+                UserRoleGroup: $resource('api/userrolegroup/:Id', {Id: '@Id'},
+                    {
+                        'get': { method:'GET'},
+                        'list': { method:'GET', isArray:true},
+                        'update': { method:'PUT'}
+                    }),
+                RoleGroupRole: $resource('api/rolegrouprole/:Id', {Id: '@Id'},
+                    {
+                        'get': { method:'GET'},
+                        'list': { method:'GET', isArray:true},
+                        'update': { method:'PUT'}
                     })
+
+
 
 			};
 	}

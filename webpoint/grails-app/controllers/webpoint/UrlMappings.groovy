@@ -32,6 +32,8 @@ class UrlMappings {
         "/api/roles"(resources:"Role")
         "/api/userrole"(resources:"UserRole")
         "/api/user"(resources:"UserDetail")
+        "/api/userrolegroup"(resources:"UserRoleGroupDetail")
+        "/api/rolegrouprole"(resources:"RoleGroupRoleDetail")
         "/api/auth/$action?"(controller: "Auth" )
 
         "/api/guest/$action/$value?"(controller: "PasswordToken" )

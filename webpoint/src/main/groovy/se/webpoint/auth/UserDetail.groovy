@@ -33,7 +33,7 @@ class UserDetail extends BaseDomain implements Validateable{
 	}
 	
 	String toString(){
-		"${username}"
+		"${username} : ${authority} : ${authorities} : ${enabled} : ${passwordExpired} : ${accountLocked}"
 	}
 	
 }

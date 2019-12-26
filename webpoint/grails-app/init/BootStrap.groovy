@@ -43,6 +43,13 @@ class BootStrap {
             return output
         }
 
+        JSON.registerObjectMarshaller(RoleGroupRole) {
+            def output = [:]
+            output['role'] = it.role
+            output['roleGroup'] = it.roleGroup
+            return output
+        }
+
         JSON.registerObjectMarshaller(PasswordToken) {
             def output = [:]
             output['token'] = it.token
@@ -86,6 +93,7 @@ class BootStrap {
             return output
         }
 
+
         Setting cashUpdate = Setting.findByKey("cashUpdate") ?: new Setting(key: "cashUpdate", values: [true, new Date()]).save(flush: true, failOnError: true)
         cashUpdate.values = [true, new Date()];
         cashUpdate.save(flush: true, failOnError: true);
@@ -107,6 +115,13 @@ class BootStrap {
             UserRoleGroup.get(admin.id, groupSysAdmin.id) ?: UserRoleGroup.create(admin, groupSysAdmin, true)
             UserRoleGroup.get(admin.id, groupAdmin.id) ?: UserRoleGroup.create(admin, groupAdmin, true)
             UserRoleGroup.get(admin.id, groupPingst.id) ?: UserRoleGroup.create(admin, groupPingst, true)
+
+
+            User user = User.findByUsername("user")
+            user.password = "user"
+            user.encodePassword
+            user.enabled = true
+            user.save(flush: true, failOnError: true)
         }
         if (Environment.current == Environment.PRODUCTION) {
             // insert Production environment specific code here

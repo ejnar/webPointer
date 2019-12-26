@@ -172,8 +172,21 @@ describe("webpoint.core module", function() {
             var result = RemoveKeyService.findValidKeyRow(line);
             expect(false).toEqual(result);
 
+            var line = '[Chorus]';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(false).toEqual(result);
         });
 
+       it("should not validKeyRow 2", function() {
+            var line = 'Beundransvärd,  Halleluja';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(false).toEqual(result);
+
+            var line = 'CBb/DF/A           Am       F C/F#mA';
+            var result = RemoveKeyService.findValidKeyRow(line);
+            expect(true).toEqual(result);
+
+        });
 
     });
 });

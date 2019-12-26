@@ -130,7 +130,6 @@ var app = angular.module('webpoint.core');
             var token = CashService.getSessionStorage ('XSS-Token');
             if(token){
                 config.headers['XSS-Token'] = token;
-                console.info(config);
                 CashService.setSessionStorage('XSS-Token', null);
             }
         }

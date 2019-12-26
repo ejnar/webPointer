@@ -20,17 +20,12 @@
 
 Build project files for IDE
 
-./gradlew idea --refresh-dependencies
-
-./gradlew build
-
-./gradlew assemble --refresh-dependencies
-
-./gradlew -Dgrails.env=prod assemble --refresh-dependencies
-
-./gradlew karmaRun -PkarmaDebug=true --refresh-dependencies
-
-./gradlew karmaRun -PkarmaDebug=true --debug --stacktrace
+* ./gradlew idea --refresh-dependencies
+* ./gradlew build
+* ./gradlew assemble --refresh-dependencies
+* ./gradlew -Dgrails.env=prod assemble --refresh-dependencies
+* ./gradlew karmaRun -PkarmaDebug=true --refresh-dependencies
+* ./gradlew karmaRun -PkarmaDebug=true --debug --stacktrace
 
 #### Grails command
 
@@ -139,5 +134,18 @@ jar -xvf sample.war
   kill -9 <PID<
   
   
-  
+
+#### Type of role and group
+
+   Class    | Group | Role | Description
+     --- | --- | --- | ---   
+User         |  X  | X | User data 
+UserRoleGroup|  X  |   | Binding user and roleGroup  
+RoleGroup    |  X  |   | Group data
+RoleGroupRole|  X  |   | Binding roleGroup and role
+Role         |  X  | X | Role data 
+UserRole     |     | X | Binding user and role
+
+
+
   

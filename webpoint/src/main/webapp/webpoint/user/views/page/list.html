@@ -5,10 +5,10 @@
 				<h4>Song Lists</h4>
 			</div>
 			<div class="col-md-6 col-xs-6 col-middle">
-				<button type="button" class="btn btn-success btn-sm pull-right" ng-click="pageListCtrl_openModel()">
+				<button type="button" class="btn btn-success btn-sm pull-right" ng-click="pageList.openModel()">
 					<span class="glyphicon glyphicon-plus-sign"></span><span>Create</span>
 				</button>
-				<button type="button" class="btn btn-sm pull-right" ng-click="pageListCtrl_goToViewAll()">
+				<button type="button" class="btn btn-sm pull-right" ng-click="pageList.goToViewAll()">
 					<span class="glyphicon glyphicon-plus-sign"></span><span>View</span>
 				</button>
 			</div>
@@ -22,19 +22,25 @@
 		                <!-- th></th -->
 		                <th>Name</th>
 		                <th>Category</th>
+						<th width="12%"></th>
 		                <th width="8%"></th>
 		            </tr>
 		        </thead>
 		        <tbody ng-repeat="g in listOfPages | orderBy:'name'">
-		            <tr ng-click="pageListCtrl_editPageList(g.id)" title="Click to edit" >
+		            <tr ng-click="pageList.editPageList(g.id)" title="Click to edit" >
 		                <!-- td>
 		              		<button ng-if="g.expanded" ng-click="g.expanded = false">-</button>
 		              		<button ng-if="!g.expanded" ng-click="g.expanded = true">+</button>
 		            	</td -->
 		                <td>{{g.name}}</td>
 		                <td>{{g.category}}</td>
+						<td class="not-clickable-cell" ng-click="$event.stopPropagation()" >
+							<button ng-click="pageList.changeName(g.id)">
+								Edit name
+							</button>
+						</td>
 		                <td class="not-clickable-cell" ng-click="$event.stopPropagation()" >
-	                    	<button ng-click="pageListCtrl_delPageList(g.id)" tooltip="Remove">
+	                    	<button ng-click="pageList.delPageList(g.id)">
 	                    		<i class="glyphicon glyphicon-remove-circle"> </i>
 	                    	</button>	
 		                </td>

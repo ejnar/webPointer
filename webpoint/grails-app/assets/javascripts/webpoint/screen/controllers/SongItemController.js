@@ -4,53 +4,54 @@
 
 var module = angular.module('webpoint.screen');
 
-    module.controller('SongItemtCtrl', SongItemtCtrl);
-    SongItemtCtrl.$inject = ['$scope', '$location', '$filter', '$log', '$mdDialog', 'song', 'localStorageService', 'cfgScreenPath',
-        'PageListApi', 'SectionsApi', 'PageService', 'BinaryApi', 'SectionCashService'];
+    module.controller('SongItemCtrl', SongItemCtrl);
+    SongItemCtrl.$inject = ['$scope', '$location', '$filter', '$log', '$mdDialog', 'song', 'localStorageService', 'cfgScreenPath',
+        'PageListApi', 'SectionsApi', 'PageService', 'BinaryApi', 'SectionCashService', 'CashService', 'Access'];
 
-    function SongItemtCtrl($scope, $location, $filter, $log, $mdDialog, song, localStorageService, cfgScreenPath,
-        PageListApi, SectionsApi, PageService, BinaryApi, SectionCashService) {
+    function SongItemCtrl($scope, $location, $filter, $log, $mdDialog, song, localStorageService, cfgScreenPath,
+        PageListApi, SectionsApi, PageService, BinaryApi, SectionCashService, CashService, Access) {
 
         $scope.cancel = cancel;
         $scope.vyCtrl_print = print;
         $scope.vyCtrl_printExcludeKeys = printExcludeKeys;
+        $scope.selectedSongList = selectedSongList;
 
         (function init() {
              load ();
         })();
+
     	function load () {
             $log.debug(' --- SongItemtCtrl.init ' + song.id);
-            $log.debug(song);
             $scope.selectedSongLists = [];
             $scope.song = song;
+            $scope.onlyView = Access.isViewer();
             addBinary($scope.song);
             PageListApi.list2().$promise
                 .then( function(resp) {
-                    $log.debug(resp);
+                    //$log.debug(resp);
                     $scope.songLists = resp;
-                    initSelectedSongLists(resp, $scope.selectedSongLists );
+                    initSelectedSongLists(resp,song);
                 });
             spliteColumns();
         }
 
-        $scope.songItemtCtrl_selectedSongList = function() {
-            $log.debug(' --- SongItemtCtrl.songItemtCtrl_selectedSongList ');
-            console.info($scope.selectedSongLists);
+        function selectedSongList() {
+            $log.debug(' --- SongItemtCtrl.selectedSongList ');
+            // console.info($scope.selectedSongLists);
             angular.forEach($scope.selectedSongLists, function(s) {
-                console.info(s);
-                console.info($scope.song);
                 if(!s.selected){
 //                    SectionCashService.updatePageListCach(s.id, null, true);
+                    CashService.setRefreshId(s.id);
                     PageService.addSectionToList(s.id, $scope.song).$promise
                         .then( function(resp) {
-                            $log.debug(resp);
+                            //$log.debug(resp);
                             s.pageParts.push(resp);
                         });
                     s.selected = true;
                 }
             });
             findRemovedSongInList($scope.song,$scope.songLists,$scope.selectedSongLists);
-        };
+        }
 
         function print () {
             $log.debug("Go to print page: " + $scope.currentPart );
@@ -80,12 +81,13 @@ var module = angular.module('webpoint.screen');
                     var foundSelected = $filter('filter')(selectedSongLists, { id: i.id });
                     if(!foundSelected.length){
                         PageService.removeSectionInList(i.id, found[0]);
+                        CashService.setRefreshId(i.id);
                     }
                 }
             });
         }
 
-        function initSelectedSongLists(songLists, selectedSongLists){
+        function initSelectedSongLists(songLists,song){
             angular.forEach(songLists, function(i) {
                 var found = i.pageParts.filter(function (p) {
                     return p.section.id == song.id;
@@ -123,16 +125,7 @@ var module = angular.module('webpoint.screen');
                   return l;
               };
         };
-
-        $scope.hostname = function(href) {
-            var l = document.createElement("a");
-            l.href = href;
-            return l.hostname;
-        };
-
     }
-
-
     function hostname (href) {
             var l = document.createElement("a");
             l.href = href;

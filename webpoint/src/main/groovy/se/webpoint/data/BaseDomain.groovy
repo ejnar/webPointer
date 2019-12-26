@@ -20,6 +20,6 @@ abstract class BaseDomain implements Serializable {
     }
 
     def getCreateDate(){
-        return id.getDate();
+        return id == null ? new Date() : id.getDate();
     }
 }

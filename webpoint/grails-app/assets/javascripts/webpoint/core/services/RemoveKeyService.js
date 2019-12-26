@@ -17,7 +17,7 @@ var module = angular.module('webpoint.core');
             var linebreak = '\n';
             var lines = UtilService.getLines(doHtml,data,linebreak);
             for(var i=0; i < lines.length; i++){
-                if (/^\s+$/.test(lines[i]) || '' === lines[i]){
+                if (/^\s+$/.test(lines[i]) || '' === lines[i] || lines[i].indexOf('|') >= 0){
                     result += lines[i] + linebreak;
                 }else if(!UtilService.findValidKeyRow(lines[i])) {
                     result += lines[i] + linebreak;

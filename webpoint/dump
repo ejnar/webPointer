@@ -1,3 +1,78 @@
+
+
+var item;
+            for(var i=0; i < vm.selectedSongList.pageParts.length; i++){
+                p = vm.selectedSongList.pageParts[i];
+                if(song.id == p.section.id){
+                    p.section.selected = false;
+                    //item = Object.assign({}, p);
+                }
+            }
+            //vm.selectedSongList.pageParts.push(item);
+            CashService.setStorage("selectedSongList", vm.selectedSongList);
+
+
+
+56 angular.js:14200:24
+Gsus                                 Dm            F   C angular.js:14200:24
+2.9
+
+
+
+if(map.length < 1){
+                return parts;
+            }
+            var count = 0;
+            for(var n=0; n < map.length; n++){
+                count += map[n]['newKey'].length;
+            }
+
+
+
+
+//                    var last = -1;
+//                    var matrix = [];
+//                    for(var k=0; k < keyRow.length; k++){
+//                        var key = keyRow[k];
+//                        key = key.removeLast('/');
+//                        for(var i=0; i < KEYS.length; i++){
+//                            if(isKeyFound(key, KEYS[i])){
+//                                var newKeyindex = 0;
+//                                if(i+keydiff < 0){
+//                                    newKeyindex = KEYS.length + (i+keydiff);
+//                                }else if(i+keydiff > (KEYS.length -1)){
+//                                    newKeyindex = (i+keydiff) - (KEYS.length);
+//                                }else{
+//                                    newKeyindex = i+keydiff;
+//                                }
+//                                var a = [];
+//                                a['oldKey'] = key;  // old key
+//                                a['newKey'] = getIndexValue(KEYS[newKeyindex], getKeyType(section.tokey)); // new key
+//                                a['index'] = last = line.indexLastOf(last, key); // index
+//                                a['addSpace'] = false;
+//                                if(matrix[k-1]){
+//                                    if(matrix[k-1]['oldKey'].length > 1){
+//                                        a['addSpace'] = true;
+//                                    }
+//                                }
+//                                matrix[k] = a;
+//
+//                                try{
+//                                    line = this.replaceAt(line, matrix[k]);
+//                                }catch(err){ $log.info(' ----- ERROR: ', line); }
+//                                // print(' ---  found key: ', KEYS[i] + ':' + i);
+//                                // print(' ---  new key: ', KEYS[newKeyindex] + ':' + newKeyindex);
+//                                break;
+//                            }
+//                        }
+//                        print(' - - - - :', line);
+//                    }
+
+
+
+
+
+
     function ChangeKeyService($log, properties, UtilService) {
         var includePrint = true;
 

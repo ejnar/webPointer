@@ -48,18 +48,31 @@ class AuthController {
 		def user = securityService.currentUser()
 
         Set<Role> allRoles = new HashSet<>(8);
-
         allRoles.addAll( UserRole.findAllByUser(user.id).stream().map({u -> u.role}).collect() );
 
-        List<RoleGroup> roleGroups =  UserRoleGroup.findAllByUser(user.id).stream().map({u -> u.roleGroup}).collect();
-        roleGroups.each {
-            allRoles.addAll(it.authorities);
-        }
-        List<Role> roles = allRoles.stream().filter({ it.system == false }).sorted({a,b ->  a.order.compareTo(b.order) }).collect()
+		List<Role> roles = allRoles.stream().filter({ it.system == false }).collect()
+		Role role = null;
+		if(roles.isEmpty()) {
+			List<RoleGroup> roleGroups = UserRoleGroup.findAllByUser(user.id).stream().map({ u -> u.roleGroup }).collect();
+			roleGroups.each {
+				allRoles.addAll(it.authorities);
+			}
 
-
-        Role role  = !roles.isEmpty() ? roles[0] : new Role(authority: 'ROLE_DEFAULT')
+			roles = allRoles.stream().filter({
+				it.system == false
+			}).sorted({ a, b -> a.order.compareTo(b.order) }).collect()
+			role = !roles.isEmpty() ? roles[0] : new Role(authority: 'ROLE_DEFAULT')
+		} else {
+			role = roles[0];
+		}
 		respond role, [status: OK]
 	}
+
+//    def print(Set<Role> allRoles){
+//        allRoles.each {
+//            println it.authority
+//        }
+//        println '---------';
+//    }
 
 }

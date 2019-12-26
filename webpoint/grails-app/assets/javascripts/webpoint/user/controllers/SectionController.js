@@ -34,12 +34,19 @@ var module = angular.module('webpoint.user');
 
         $scope.updateSectionCtrl_updateToKey = function () {
             $log.debug(' --- SectionController.updateSectionCtrl_updateToKey:');
-            $scope.section.data = ChangeKeyService.changeKey($scope.section, false);
+            var section = copyColumn2();
+            $scope.section.data = ChangeKeyService.changeKey(section, false);
             $scope.section.key = $scope.section.tokey;
+            initColumn();
         };
 
         function initColumn(){
-            if($scope.section.data != null && $scope.section.data.indexOf('-column2-') > 0){
+            if(!$scope.section.data) return;
+
+            var column2 = $scope.section.data.indexOf('-column2-');
+            $log.debug(column2);
+            if($scope.section.data != null && column2 > 0){
+                $log.debug(' --- initColumn:');
                 $scope.column2 = true;
                 splitColumn();
                 var col = $scope.section.data.split('-column2-');
@@ -75,7 +82,7 @@ var module = angular.module('webpoint.user');
             trimRow();
             var section = copyColumn2();
             var promise = SectionsApi.save(section);
-            $q.all([promise]).then(function(data) {  });
+//            $q.all([promise]).then(function(data) {  });
 	    }
 
 	    function copyColumn2(){

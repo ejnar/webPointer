@@ -12,6 +12,7 @@ class UserService {
     SecurityService securityService
 	def passwordEncoder
 
+
     /**
      * Get one User
      *
@@ -52,9 +53,11 @@ class UserService {
 
     private def mapUserDetail(user,token){
         Set<String> rolegroups = user.getAuthoritiesExternal()*.name
+
         Set<UserRole> userRoles = UserRole.findAllByUser(user);
         List<UserRole> oUserRoles = userRoles.stream().filter({ ur ->  !ur.role.system }).collect()
         List<UserRole> sUserRoles = userRoles.stream().filter({ ur ->  ur.role.system }).collect()
+
         String authority = "";
         if(!oUserRoles.isEmpty()){
             authority = oUserRoles[0].role.authority;
@@ -66,11 +69,9 @@ class UserService {
                 sRole = sUserRole.role
             }
         }
-
         Set<String> authorities = new HashSet<>();
-        authorities.addAll(oUserRoles.stream().map({r -> r.authority}).collect())
+        //authorities.addAll(oUserRoles.stream().map({r -> r.authority}).collect())
         authorities.addAll(rolegroups);
-
         return new UserDetail(
                 id: user.id, username: user.username, token: token, authority: authority, authorities: authorities,
                 enabled: user.enabled, passwordExpired: user.passwordExpired, accountLocked: user.accountLocked,
@@ -90,13 +91,7 @@ class UserService {
     }
 
     def update(instance){
-
-        User user = User.findById(instance.id)
-        user.email = instance.email
-        user.enabled = instance.enabled
-        user.accountLocked = instance.accountLocked
-        user.save(failOnError: true)
-
+        User user = updateUserSettings(instance);
         Set<UserRole> userRoles = UserRole.findAllByUser(user);
         Set<UserRole> oUserRoles = userRoles.findAll {it.role.system == false}
         Role role = Role.findByAuthority(instance.authority);
@@ -117,9 +112,15 @@ class UserService {
                 userRole.save(flush: true)
             }
         }
+
         if(oUserRoles.size() > 1){
-            log.fatal(" To many roles ");
+            log.error ' To many roles '
         }
+        updateSystemRole(instance, userRoles)
+        return mapUserDetail(user,null);
+    }
+
+    def updateSystemRole(instance, userRoles){
         Set<UserRole> sysUserRoles = userRoles.findAll {it.role.system == true}
         if(instance.systemRole && sysUserRoles.isEmpty()) {
             if(instance.systemRole.system) {
@@ -135,7 +136,16 @@ class UserService {
                 userRole.delete flush: true
             }
         }
-        return mapUserDetail(user,null);
+    }
+
+    def updateUserSettings(instance){
+        User user = User.findById(instance.id)
+        user.email = instance.email
+        user.enabled = instance.enabled
+        user.accountLocked = instance.accountLocked
+        user.excludePasswordUpdate = true;
+        user.save(failOnError: true)
+        return user
     }
 
 
@@ -157,32 +167,32 @@ class UserService {
 	def saveNewUser(instance){
         log.debug ' --- UserService.saveNewUser - instance: [{}]', instance
 		Role role = Role.findByAuthority(instance.authority);
-        log.debug(role)
+        log.debug ' --- Role: [{}]', role
 
 		RoleGroup group = RoleGroup.findByName(instance.rolegroups[0]);
-        log.debug(group)
+        // log.debug(group)
 
 		User user = User.findByUsername(instance.username)
 		try {
             if (user == null) {
                 user = User.create(instance.username, instance.email, true)
-                log.debug(user)
+                // log.debug(user)
 
 				UserRole userRole = UserRole.get(user.id, role.id) ?: UserRole.create(user, role, true)
-				log.debug(userRole)
+				// log.debug(userRole)
 
 				UserRoleGroup userRoleGroup = UserRoleGroup.get(user.id, group.id) ?: UserRoleGroup.create(user, group, true)
-				log.debug(userRoleGroup)
+				// log.debug(userRoleGroup)
 
                 RoleGroup newGroup = createRoleGroup(instance.username)
-                log.debug(newGroup)
+                // log.debug(newGroup)
 
                 UserRoleGroup newUserRoleGroup = addAuthorityToUserRoleGroup(user, newGroup, 1)
-                log.debug(newUserRoleGroup)
-                log.debug('-------------------------')
+                // log.debug(newUserRoleGroup)
+                // log.debug('-------------------------')
             }
         }catch(All){
-            log.error(All)
+            log.error All;
         }
 		return user
 	}
@@ -288,5 +298,19 @@ class UserService {
         RoleGroupRole.create(newGroup, roleAdmin, true)
     }
 
+
+    def updateUserRoleGroup(UserRoleGroupDetail instance){
+        instance.userGroupItems.each { item ->
+            User user = User.findByUsername(item.username)
+            RoleGroup roleGroup = RoleGroup.findByName(item.roleGroup)
+            UserRoleGroup userRoleGroup = UserRoleGroup.get(user.id, roleGroup.id)
+            log.debug 'item: [{}]', item
+            if(item.selected) {
+                UserRoleGroup.create(user, roleGroup, true)
+            } else {
+                UserRoleGroup.remove(user, roleGroup,true)
+            }
+        }
+    }
 
 }

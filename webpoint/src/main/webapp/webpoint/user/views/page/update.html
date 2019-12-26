@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-2 col-xs-3">
             <input placeholder="Search word" type="search" value="" class="form-control"
-                   ng-model="search"  ng-change="updatePageListCtrl_alphabetFilter(search)"/>
+                   ng-model="search"  ng-change="updatePageList.alphabetFilter(search)"/>
         </div>
         <div class="col-md-1 col-xs-3">
             <div class="btn-group" uib-dropdown is-open="status.isopen">
@@ -23,20 +23,20 @@
                 </button>
                 <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                     <li role="menuitem" ng-repeat="category in filterItems">  <!-- categories -->
-                        <a ng-click="updatePageListCtrl_pickFilterCategory(category)" href>{{category}}</a>
+                        <a ng-click="updatePageList.pickFilterCategory(category)" href>{{category}}</a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="col-md-1 col-xs-1 checkbox">
             <label>
-                <input type="checkbox" ng-model="filterAnd" ng-change="updatePageListCtrl_filterAndChange()">AND
+                <input type="checkbox" ng-model="filterAnd" ng-change="updatePageList.filterAndChange()">AND
             </label>
         </div>
         <div class="col-md-8 col-xs-12">
             <div role="filteritem" ng-repeat="category in choosenCategory">
                 <div class="alert filterItem alert-success"  >
-                    <button type='button' class='close' ng-click="updatePageListCtrl_closeFilterItem(category)"
+                    <button type='button' class='close' ng-click="updatePageList.closeFilterItem(category)"
                             data-dismiss='alert'>&times;</button>
                     <strong>{{category}}</strong>
                 </div>
@@ -46,7 +46,7 @@
 
     <form role="form" name="pageListForm" novalidate>
 		<div class="row">	
-			<div class="table-responsive-sm col-6 col-sm-6 table-scroll-list" data-ng-init="updatePageListCtrl_loadSectionList()" >
+			<div class="table-responsive-sm col-6 col-sm-6 table-scroll-list" data-ng-init="updatePageList.loadSectionList()" >
                 <table class="table table-bordered table-hover" >
                     <thead>
                         <tr>
@@ -55,7 +55,7 @@
                         </tr>
                     </thead>
                     <tbody ng-repeat="s in metaFilteredList | orderBy: 'title'">
-                        <tr ng-click="updatePageListCtrl_addSectionToList(s)" title="Click to add">
+                        <tr ng-click="updatePageList.addSectionToList(s)" title="Click to add">
                             <td>{{s.title}}</td>
                             <td>
                                 <directive-sectiontype sectiontype="{{s.type}}"></directive-sectiontype>
@@ -80,7 +80,7 @@
                                 <directive-sectiontype sectiontype="{{p.section.type}}"></directive-sectiontype>
                             </td>
 			                <td>
-                                <button ng-click="updatePageListCtrl_delPageData(p)" tooltip="Remove">
+                                <button ng-click="updatePageList.delPageData(p)" tooltip="Remove">
                                     <span class="glyphicon glyphicon-remove-circle"/>
                                 </button>
                             </td>

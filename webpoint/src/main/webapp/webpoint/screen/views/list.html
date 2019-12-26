@@ -11,23 +11,27 @@
 
                 <div layout="row"  layout-margin>
                     <div flex="5" flex-offset="5" >
-                        <a href class="expandSign" ng-if="p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">-</a>
-                        <a href class="expandSign" ng-if="!p.expanded" ng-click="mainViewListCtrl_clickExpand(p)">+</a>
+                        <a href class="expandSign" ng-if="p.expanded" ng-click="mainViewList.clickExpand(p)">-</a>
+                        <a href class="expandSign" ng-if="!p.expanded" ng-click="mainViewList.clickExpand(p)">+</a>
                     </div>
-                    <div flex="50" class="rowPart" ng-click="mainViewListCtrl_gotoScreen(p.id)" >{{p.name}}</div>
+                    <div flex="50" class="rowPart" ng-click="mainViewList.gotoScreen(p.id)" >{{p.name}}</div>
 
-                    <div flex="30" flex class="rowPart" md-position-mode = "target-right target"
-                         ng-click="mainViewListCtrl_gotoSlideShow(p.id)">
+                    <div flex="20" flex class="rowPart" md-position-mode = "target-right target"
+                         ng-click="mainViewList.gotoSlideShow(p.id)">
                         <md-icon md-menu-align-target class="material-icons">slideshow</md-icon>
                     </div>
                     <div flex="20" flex class="rowPart" md-position-mode = "target-right target"
-                         ng-click="mainViewListCtrl_gotoSlideShowExludeKeys(p.id)">
+                         ng-click="mainViewList.gotoSlideShowExludeKeys(p.id)">
                         <md-icon md-menu-align-target class="material-icons">slideshow</md-icon> Singers
+                    </div>
+                    <div flex="10" flex class="rowPart" md-position-mode = "target-right target"
+                         ng-click="mainViewList.updateSlideShowList(p.id)" ng-if="mainViewList.isAdmin">
+                        <md-icon md-menu-align-target class="material-icons">slideshow</md-icon> Update
                     </div>
 
                 </div>
                 <div flex-offset="5" ng-if="p.expanded" >
-                    <div ng-repeat="part in pageList.pageParts">&nbsp;&nbsp;&bull;&nbsp;{{part.section.title}}</div>
+                    <div ng-repeat="part in p.pageParts">&nbsp;&nbsp;&bull;&nbsp;{{part.section.title}}</div>
                 </div>
                 <md-divider ></md-divider>
             </div>
