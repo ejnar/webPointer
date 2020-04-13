@@ -35,3 +35,5 @@ SESSIONS.ser
 bower
 node_modules
 bower_components
+
+.gradle

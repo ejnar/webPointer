@@ -7,7 +7,7 @@
             <div class="col-md-2 col-xs-2 col-middle">
                 <button type="button" class="btn btn-success btn-sm"
                         ng-disabled="metaForm.$error.required"
-                        ng-click="updateGroupSectionCtrl_editSection()">
+                        ng-click="vm.editSection()">
                     <span class="glyphicon glyphicon-plus-sign"></span><span>Go To Song</span>
                 </button>
             </div>
@@ -74,11 +74,39 @@
                     <span class="messages" ng-show="metaForm.language.$error.required">Required</span>
                     <div class="controls">
                         <select id="language_id" name="language" ng-model="section.language"
-                                class="form-control" ng-options="language as language for language in languages" required>
+                                class="form-control" ng-options="language as language for language in vm.languages" required>
                             <option value="">Pick a language</option>
                         </select>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-8 col-xs-10">
+                <div class="control-group">
+                    <label class="control-label" for="tagg_id">Add reference</label>
+                    <div class="controls">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <input id="reference" name="reference" type="text" class="form-control" ng-model="vm.reference"/>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-sm btn-primary" ng-click="vm.addReference()"><span>Add</span></button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-10">
+                                <ul role="referenceItem" ng-repeat="ref in section.references">
+                                    <li>{{ref}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
             </div>
         </div>
 
@@ -95,7 +123,7 @@
 								<input id="linkUrl" name="linkUrl" type="text" class="form-control" ng-model="link.url"/>
 							</div>
 							<div class="col-md-3 col-xs-1">
-								<button class="btn btn-sm btn-primary" ng-click="updateGroupSectionCtrl_addLink()"><span>Add</span></button>
+								<button class="btn btn-sm btn-primary" ng-click="vm.addLink()"><span>Add</span></button>
 							</div>
 						</div>
                         <br />
@@ -104,7 +132,7 @@
                                 <ul role="linkItem" ng-repeat="link in section.oLinks">
                                     <li>
                                         <a target="blank" href="{{link.url}}" class="nowrap" >{{link.name}}</a>
-                                        <button type='button' class='btn btn-sm close' ng-click="updateGroupSectionCtrl_closeLinkItem(link)"
+                                        <button type='button' class='btn btn-sm close' ng-click="vm.closeLinkItem(link)"
                                                 data-dismiss='alert'>&times;</button>
                                     </li>
                                 </ul>
@@ -114,7 +142,6 @@
 				</div>
 			</div>
 			<div class="col-md-4">
-
 			</div>
 		</div>
 
@@ -128,13 +155,13 @@
                                 <input id="addTagg_id" name="addTagg" type="text" class="form-control" ng-model="newTagg"/>
                             </div>
                             <div class="col-md-3 col-xs-2">
-                                <button class="btn btn-sm btn-primary" ng-click="updateGroupSectionCtrl_addTagg()"><span>Add</span></button>
+                                <button class="btn btn-sm btn-primary" ng-click="vm.addTagg()"><span>Add</span></button>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-9 col-xs-8">
                                 <select id="tagg_id" name="tagg" ng-model="tagg"
-                                        ng-change="updateGroupSectionCtrl_selectTagg(tagg)"
+                                        ng-change="vm.selectTagg(tagg)"
                                         class="form-control" ng-options="tagg as tagg for tagg in taggs">
                                     <option value="">Pick a tagg</option>
                                 </select>
@@ -144,47 +171,54 @@
                 </div>
             </div>
             <div class="col-md-1"></div>
-            <div class="col-md-6">
+            <div class="col-md-2">
                 <div class="control-group">
-                    <label class="control-label" for="tagg_id">Publish</label>
+                    <label class="control-label">Publish</label>
                     <div class="controls">
                         <input type="checkbox" ng-model="section.publish"/>
                     </div>
                 </div>
             </div>
+            <div class="col-md-2">
+                <div ng-if="!doSave" class="control-group" >
+                    <label class="control-label">Groups</label>
+                    <div class="controls">
+                        <button class="btn btn-sm btn-primary" ng-click="vm.editGroupModal()"><span>Edit</span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
         </div>
-
 		<div class="form-group row">
 			<div class="col-md-12">
 				<label class="control-label" for="tagg_id">Selected taggs</label>
 				<div role="filteritem" ng-repeat="tagg in section.taggs">
 					<div class="alert filterItem alert-success"  >
-						<button type='button' class='btn btn-sm close' ng-click="updateGroupSectionCtrl_closeFilterItem(tagg)"
+						<button type='button' class='btn btn-sm close' ng-click="vm.closeFilterItem(tagg)"
 								data-dismiss='alert'>&times;</button>
 						<strong>{{tagg}}</strong>
 					</div>
 				</div>
 			</div>
 		</div>
-
 		<div class="form-group row">
             <div class="col-md-6 col-xs-5">
                 <div ng-if="doSave"  class="form-actions" > <!-- ng-disabled="!groupForm.modified || groupForm.$invalid" -->
                     <button type="submit" class="btn btn-sm btn-primary"
                         ng-disabled="metaForm.$error.required"
-                        ng-click="saveMeta(metaForm)"><span>Add Song</span></button>
+                        ng-click="vm.saveMeta(metaForm)"><span>Add Song</span></button>
                 </div>
                 <div ng-if="!doSave"  class="form-actions" >
                     <button class="btn btn-sm btn-primary"
                         ng-disabled="metaForm.$error.required"
-                        ng-click="updateMeta(metaForm)"><span>Update Song</span></button>
+                        ng-click="vm.updateMeta(metaForm)"><span>Update Song</span></button>
                 </div>
             </div>
             <div class="col-md-3 col-xs-5">
                 <div ng-if="!doSave" class="form-actions" >
                     <button class="btn btn-sm btn-primary"
                             ng-disabled="metaForm.$error.required"
-                            ng-click="updateGroupSectionCtrl_editSection()"><span>Go To Song</span></button>
+                            ng-click="vm.editSection()"><span>Go To Song</span></button>
                 </div>
             </div>
 		</div>

@@ -27,6 +27,9 @@ Build project files for IDE
 * ./gradlew karmaRun -PkarmaDebug=true --refresh-dependencies
 * ./gradlew karmaRun -PkarmaDebug=true --debug --stacktrace
 
+* ./build/libs/webpoint-0.9.8.3.5.war
+bpoint
+
 #### Grails command
 
  * grails prod war

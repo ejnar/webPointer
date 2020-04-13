@@ -10,7 +10,7 @@
                     <div class="col-md-10">
                         <div class="control-group"
                             ng-class="{ 'has-error' : userForm.username.$invalid && !userForm.username.$pristine }" >
-                            <label class="control-label" for="username">Username:
+                            <label class="control-label" for="username">Username: (Lowercase)
                                 <span ng-messages="userForm.username.$error"
                                     ng-messages-include="common/views/messages/error.html" ></span>
                              </label>
@@ -128,7 +128,7 @@
                                             </td>
                                             <td>{{g.name}}</td>
                                             <td>
-                                                <button ng-click="userCtrl.editRoles(g)" ng-show="!userCtrl.disableGroup(g.name,user) && g.selected" >Edit</button>
+                                                <button ng-click="userCtrl.editRoles(g)" ng-show="!userCtrl.disableGroup(g.name,user) && g.selected" >Authority</button>
                                             </td>
                                         </tr>
                                     </tbody>

@@ -11,8 +11,6 @@ var module = angular.module('webpoint.user');
         var userCtrl = this;
 
     	$scope.doSave = true;
-//		RoleGroupApi.list( function (resp) { $scope.rolegroups = resp; });
-//		RoleApi.list( function (resp) { $log.debug(resp);  $scope.roles = resp; });
         userCtrl.gotoAddUser = gotoAddUser;
         userCtrl.gotoEditUser = gotoEditUser;
         userCtrl.newPassword = newPassword
@@ -88,8 +86,6 @@ var module = angular.module('webpoint.user');
         function editRoles(group){
             $log.debug(' --- UserController.editRoles: ' + group);
             createModal(group);
-
-
         }
 
         function disableGroup(name,user){
@@ -115,14 +111,13 @@ var module = angular.module('webpoint.user');
 
         function createModal(group){
             var modalInstance = $uibModal.open({
-                templateUrl: cfgAppPath.ceateEditRoleModal,
-                controller: 'ModalEditRoleCtrl',
+                templateUrl: cfgAppPath.createViewRoleModal,
+                controller: 'ModalViewRoleCtrl',
                 size: 'lg',
                 resolve: {
                     data: function () {
                         return group;
                     }
-
                 }
             });
             modalInstance.closed.then(function(){
@@ -182,65 +177,48 @@ var module = angular.module('webpoint.user');
         function save() {
             $log.debug(' --- UserController.AddUserCtrl_save:');
             $log.debug($scope.user);
+            var rolegs = userCtrl.rolegroups.filter(function (rolegroup) {
+                return rolegroup.selected
+            });
+            var rolegroups = [];
+            angular.forEach(rolegs, function(rg) {
+                rolegroups.push(rg.name);
+            });
+            $log.debug(rolegroups);
+
             var user = $scope.user;
+            user.email = user.email.toLowerCase();
+            user.username = user.username.toLowerCase();
+            user.rolegroups = rolegroups;
             $log.debug(user);
             UserApi.User.save(user).$promise
                 .then( function(resp) {
                     $log.debug(resp);
-
                 });
         };
         init();
     }
 
 
-    module.controller('ModalEditRoleCtrl', ModalEditRoleCtrl);
-    ModalEditRoleCtrl.$inject = [ '$scope', '$location', '$uibModalInstance', '$log', 'cfgAppPath', 'UserApi', 'data'];
+    module.controller('ModalViewRoleCtrl', ModalViewRoleCtrl);
+    ModalViewRoleCtrl.$inject = [ '$scope', '$location', '$uibModalInstance', '$log', 'cfgAppPath', 'UserApi', 'data'];
 
-    function ModalEditRoleCtrl ($scope, $location, $uibModalInstance, $log, cfgAppPath, UserApi, data) {
+    function ModalViewRoleCtrl ($scope, $location, $uibModalInstance, $log, cfgAppPath, UserApi, data) {
 
 	    function init(){
-            $log.debug(" --- EditUserCtrl.ModalEditRoleCtrl.init: " + data.name);
+            $log.debug(" --- EditUserCtrl.ModalViewRoleCtrl.init: " + data.name);
 
             $scope.group = data.name;
-            $scope.roles = [];
+            $scope.roles = UserApi.Role.list();
             $scope.selectedRoles = [];
-            UserApi.Role.list().$promise
-                .then( function(respRoles) {
-                    $log.debug(respRoles);
-                    UserApi.UserRoleGroup.get({Id: data.name}).$promise
-                        .then( function(resp) {
-                            angular.forEach(resp.roleGroupRoles, function(rolegroup) {
-                                $scope.selectedRoles.push(rolegroup.role);
-                                for(i=0;i<respRoles.length;i++){
-                                    if(respRoles[i].authority === rolegroup.role.authority){
-                                        $log.debug('Test: ' +respRoles[i].authority);
-                                        respRoles.splice(i, 1);
-                                        break;
-                                    }
-                                }
-                            });
-                        });
-                    $scope.roles = respRoles;
+            UserApi.UserRoleGroup.get({Id: data.id}).$promise
+                .then( function(resp) {
+                    angular.forEach(resp.roleGroupRoles, function(rolegroup) {
+                        $scope.selectedRoles.push(rolegroup.role);
+                    });
                 });
         }
-	    $scope.addRole = function (role) {
-	        $log.debug(" --- ModalEditRoleCtrl.addRole: " + role.authority);
-            UserApi.RoleGroupRole.update({Id: data.name}, detail(false,data.name,role)).$promise
-                .then( function(resp) {
-                    $log.debug(resp);
-                    init();
-                });
 
-	    };
-	    $scope.removeRole = function (role) {
-            $log.debug(" --- ModalEditRoleCtrl.removeRole: " + role.authority);
-            UserApi.RoleGroupRole.update({Id: data.name}, detail(true,data.name,role)).$promise
-                .then( function(resp) {
-                    $log.debug(resp);
-                    init();
-                });
-        };
 	    $scope.cancel = function () {
 	        $uibModalInstance.dismiss('cancel');
 	    };

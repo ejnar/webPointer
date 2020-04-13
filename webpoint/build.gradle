@@ -13,7 +13,7 @@ buildscript {
     }
 }
 
-version "0.9.8.2.8"
+version "0.9.8.3.5"
 group "webpoint"
 
 apply plugin:"eclipse"
@@ -25,6 +25,7 @@ apply plugin:"com.craigburke.client-dependencies"
 apply plugin:"asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
 apply plugin:"org.grails.plugins.views-json"
+
 
 repositories {
     mavenLocal()
@@ -88,10 +89,11 @@ dependencies {
     testCompile "org.grails:grails-web-testing-support"
     testCompile "org.springframework.boot:spring-boot-starter-tomcat"
     testCompile "org.apache.commons:commons-compress:1.13"
+    testCompile "io.micronaut:micronaut-http-client:1.0.0"
 }
 
 bootRun {
-    jvmArgs('-Dspring.output.ansi.enabled=always')
+    jvmArgs('-Dspring.output.ansi.enabled=always ')
     addResources = true
     systemProperties = System.properties
     String springProfilesActive = 'spring.profiles.active'
@@ -215,3 +217,21 @@ grails {
     println 'webpoint'
 
 }
+
+//springBoot {
+    // Enable the creation of a fully
+    // executable archive file.
+//    executable = true
+
+    // Set values for variable placeholders
+    // in the default launch script.
+    //embeddedLaunchScriptProperties =
+    //        [initInfoDescription: project.description,
+    //         initInfoShortDescription: project.name,
+    //         initInfoProvides: jar.baseName,
+    //         mode: 'service']
+//}
+
+//jar {
+//    archiveName('webpoint.jar')
+//}

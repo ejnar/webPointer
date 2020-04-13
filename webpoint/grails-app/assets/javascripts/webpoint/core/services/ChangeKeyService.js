@@ -71,11 +71,10 @@ var app = angular.module('webpoint.core');
         var FIND_PARENTHESES_REG = new RegExp(/\((.*)\)/);
         var FIND_KEYROW_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb,^(,^)]", "g");
         function groupKeys(line) {
-            var pKey;
+            //var pKey;
             var parentheses = line.match(FIND_PARENTHESES_REG);
             if(parentheses){
                 line = line.replace(parentheses[0],'');
-                pKey = parentheses[1].replace(/[0-9]/g, '');
             }
             print(' --- groupKeys.line: ', line);
             print(' --- groupKeys.parentheses: ', parentheses);
@@ -86,21 +85,23 @@ var app = angular.module('webpoint.core');
                 if(keys[k] === 'b' || keys[k] === '#'){
                     result[index-1].suffix = keys[k];     //+= keys[k];
                 } else {     // if(keys[k] != '(' && keys[k] != ')')
-                    result[index++] = wrap(keys[k],'','s');
+                    result[index++] = wrap(keys[k],'','','s');
                 }
             }
             if(parentheses){
-                result.splice( 1, 0, wrap(pKey,'','p'));
+                result[0].parentheses = parentheses[0];
+                result[0].type = 'p';
             }
-            print(' --- groupKeys.keys: ', result);
+            print(' --- groupKeys.wraps: ', result);
             return result;
         }
 
-        function wrap(value,suffix,type){
+        function wrap(value,suffix,parentheses,type){
             var uCase = !isLowerCase(value);
             var val = {
               value  : value,
               suffix : suffix,
+              parentheses : parentheses,
               type   : type,
               uCase  : uCase,
               full : function() {
@@ -134,8 +135,9 @@ var app = angular.module('webpoint.core');
                     if(isKeyFound(key, keysArray[i])){
                         var newKey = getIndexValue(keysArray,tokey,i,keydiff);
                         lastIndex = line.indexLastOf(lastIndex, key);
-                        mapItem(key,newKey,lastIndex,k,item);
+                        mapItem(key, newKey, lastIndex, wraps[k], item);
                         line = updateLine(line,item);
+
                         item['lineOffset'] = lineInLen - line.length;
                         print(' -- findKeys.line: ', line);
                         break;
@@ -151,73 +153,69 @@ var app = angular.module('webpoint.core');
             return line;
         }
 
-        function updateLine(line,a){
+        function updateLine(line,item){
             try{
-                return replaceAt(line, a);
+                return replaceAt(line, item);
             }catch(err){ $log.info(' ----- ERROR: ', line); }
         }
 
-        function mapItem(key,newKey,lastIndex,k,a){
-            a['preKey'] = key;  // old key
-            a['newKey'] = newKey; // new key
-            a['index'] = lastIndex;
-            a['offset'] = a['preKey'].length - a['newKey'].length;
-            a['offsetCount'] = k+1;
+        function mapItem(key,newKey,lastIndex,wrap,item){
+            item['preKey'] = key;  // old key
+            item['newKey'] = newKey; // new key
+            item['index'] = lastIndex;
+            // item['offset'] = key.length - newKey.length;
+            item['wrap'] = wrap;
+
+            item['offset'] = newKey.length;
+            if(newKey.length == 1 && key.length > 1){
+                item['offset'] = 2;
+                item['lessThan'] = true;
+            }else if(newKey.length > 1 && key.length == 1){
+                item['offset'] = 1;
+                item['greaterThan'] = true;
+            }else if((newKey.length == 1 && key.length == 1) || (newKey.length == 2 && key.length == 2)){
+                item['equalThan'] = true;
+            }
         }
 
         function replaceAt(line, map){
             var index = map['index'];
-            var oldChar = map['preKey'];
-            var newChar = map['newKey'];
-            print(' - replaceAt.map: ', map);
-            print(' - replaceAt.line: ', line);
-            print(' - replaceAt.index: ', index);
-            print(' - replaceAt.oldChar: ', oldChar);
-            print(' - replaceAt.newChar: ', newChar);
+            var preKey = map['preKey'];
 
-            var nChar = newChar;
-            var offset = newChar.length;
-            if(newChar.length == 1 && oldChar.length > 1){
-                offset = 2;
-            }else if(newChar.length > 1 && oldChar.length == 1){
-                offset = 1;
-            }
+            print(' - replaceAt.line: ', line);
+            print(' - replaceAt.map: ', map);
+            print(' - replaceAt.index: ', index);
+            print(' - replaceAt.preKey: ', preKey);
+            print(' - replaceAt.newKey: ', map['newKey']);
+            print(' - replaceAt.offset: ', map['offset']);
+
             var slash = (line.indexOf('/', index-1) == index) ? 1 : 0;
             var str1 = line.substr(0, index + slash);
-            var str2 = line.substr((index + offset) + slash);
-            // ex oldChar = D newChar = C#
-            if(newChar.length > 1 && oldChar.length == 1){
+            var str2 = line.substr((index + map['offset']) + slash);
+            // ex preKey = D newKey = C#
+            if(map['greaterThan']){
                 // Check last char in string, if not spaces
-                if(str1.substr(-2) == '/'+oldChar){
+                if(str1.substr(-2) == '/'+preKey){
                     str1 = str1.substr(0,str1.length-1);
-                    print('1--',str1);
                 }
-                else if(startSufix(str2)){
+                else if(startSufix(str2) || str2.indexOf('/') == 0 || str2.indexOf(' ') == 0){
                     str2 = delSpace(str2, 1);
                 }
-                else if(str2.indexOf('/') == 0 || str2.indexOf(' ') == 0){
-                    str2 = delSpace(str2, 1);
-                }
-            } // ex oldChar = Bb newChar = A
-            else if(newChar.length == 1 && oldChar.length > 1){
-                if(str2.indexOf('/') == 0){
-                    str2 = addSpace(str2, ' ');
-                }
-                else if(str1.substr(-2) == '/'+oldChar[0]){
+            } // ex preKey = Bb newKey = A
+            else if(map['lessThan']){
+                if(str1.substr(-2) == '/'+preKey[0]){
                     str2 = addSpace(str2, '  ');
                     str1 = str1.substr(0,str1.length-1);
                 }
-                else if((line.length-2) > index){
+                else if((str2.indexOf('/') == 0) || (line.length-2) > index && map['wrap'].type != 'p'){
                     str2 = addSpace(str2, ' ');
                 }
-            } // ex oldChar = E newChar = F
-            else if((newChar.length == 1 && oldChar.length == 1) || (newChar.length == 2 && oldChar.length == 2)){
-                if(str1.substr(-2) == '/'+oldChar[0]){
-                    str2 = addSpace(str2, ' ');
-                    str1 = str1.substr(0,str1.length-1);
-                }
+            } // ex preKey = E newKey = F
+            else if(map['equalThan'] && str1.substr(-2) == '/'+preKey[0]){
+                str2 = addSpace(str2, ' ');
+                str1 = str1.substr(0,str1.length-1);
             }
-            var result = str1 + nChar + str2;
+            var result = str1 + map['newKey'] + str2;
             print(' -- replaceAt.result: ', result);
             return result;
         }
