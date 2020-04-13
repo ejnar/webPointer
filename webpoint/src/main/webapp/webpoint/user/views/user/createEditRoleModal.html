@@ -1,0 +1,72 @@
+
+    <div class="modal-header">
+		<button type="button" class="close" ng-click="cancel()" aria-hidden="true">&times;</button>
+    	<h3 class="modal-title">Edit authority(role) on a group {{group}}</h3>
+    </div>
+	<form role="form" name="listOfPagesForm" novalidate>   
+    	<div class="modal-body">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="control-group"
+					 ng-class="{ 'has-error' : userForm.role.$invalid && !userForm.role.$pristine }" >
+					<label class="control-label" for="role">Authority:
+						<span ng-messages="userForm.role.$error"
+							  ng-messages-include="common/views/messages/error.html" ></span>
+					</label>
+                    <div class="controls">
+                        <table class="table table-bordered" >
+                            <thead>
+                            <tr>
+                                <th>Role</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody ng-repeat="r in roles">
+                            <tr>
+                                <td>{{r.authority}}</td>
+                                <td>
+                                    <button ng-click="addRole(r)" ng-show="true" >
+                                        Add<span class="glyphicon glyphicon-chevron-right"/>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+				</div>
+			</div>
+            <div class="col-md-4">
+                <div class="control-group"
+                     ng-class="{ 'has-error' : userForm.role.$invalid && !userForm.role.$pristine }" >
+                    <label class="control-label" for="role">Selected Authority:
+                        <span ng-messages="userForm.role.$error"
+                              ng-messages-include="common/views/messages/error.html" ></span>
+                    </label>
+                    <div class="controls">
+                        <table class="table table-bordered" >
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Role</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-repeat="r in selectedRoles">
+                            <tr>
+                                <td>
+                                    <button ng-click="removeRole(r)" ng-show="selectedRoles.length > 1" >
+                                        <span class="glyphicon glyphicon-chevron-left"/>Remove
+                                    </button>
+                                </td>
+                                <td>{{r.authority}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+		</div>
+		</div>
+    	<div class="modal-footer">
+        	<button class="btn btn-warning" ng-click="cancel()">Close</button>
+    	</div>
+	</form>  

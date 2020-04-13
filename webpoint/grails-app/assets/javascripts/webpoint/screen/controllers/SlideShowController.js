@@ -144,6 +144,7 @@ var module = angular.module('webpoint.screen');
                 $log.debug('vm.pageList');
                 applySong();
             }
+
         }
 
         function applySong(){
@@ -154,6 +155,7 @@ var module = angular.module('webpoint.screen');
                     $scope.$apply(function () {
                        tmpSong.section = entry.section;
                        currentPage = entry.counter;
+                       document.getElementById("snackbar").innerHTML = tmpSong.section.title;
                        document.getElementById("snackbar").className = "show";
                     });
                     showDelay();
@@ -168,8 +170,8 @@ var module = angular.module('webpoint.screen');
               if(document.getElementById("snackbar") != null){
                 document.getElementById("snackbar").className = "";
               }
-              $interval.cancel(oneTimer);
               vm.activeSong = tmpSong;
+              $interval.cancel(oneTimer);
             }, 2000);
         }
 

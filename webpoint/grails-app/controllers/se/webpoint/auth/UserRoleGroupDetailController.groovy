@@ -32,17 +32,13 @@ class UserRoleGroupDetailController extends BasicRestController<UserRoleGroupDet
         log.debug ' --- UserRoleGroupDetailController.show - params: [{}]', params
 
         UserRoleGroupDetail instance = new UserRoleGroupDetail()
-        RoleGroup roleGroup = RoleGroup.findByName(params.id)
+        RoleGroup roleGroup = RoleGroup.findById(params.id)
         Set<RoleGroupRole> roleGroupRoles = RoleGroupRole.findAllByRoleGroup(roleGroup)
-
-        roleGroupRoles.each { item ->
-            println item;
-        }
 
         instance.roleGroup = roleGroup
         instance.roleGroupRoles = roleGroupRoles
 
-        respond instance, [status: OK] //userService.getUserDetail(params.id, params.token)
+        respond instance, [status: OK]
     }
 
 

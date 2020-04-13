@@ -22,18 +22,29 @@ describe("webpoint.core module", function() {
             section.tokey = 'D';
             section.data = data;
             var result = ChangeKeyService.changeKey(section, false);
-            var test = 'F#m(c#5)/C         H7+  H7';
+            var test = 'F#m(b5)/C          H7+  H7';
             expect(test).toEqual(result);
         });
 
         it("change complex key", function() {
-            var data = 'Em(B5)/Bb          A7+  A7';
+            var data = 'Em(b5)/Bb          A7+  A7';
             var section = {};
             section.key = 'C';
-            section.tokey = 'D';
+            section.tokey = 'C#';
             section.data = data;
             var result = ChangeKeyService.changeKey(section, false);
-            var test = 'F#m(C#5)/C         H7+  H7';
+            var test = 'Fm(b5)/B           Bb7+ Bb7';
+            expect(test).toEqual(result);
+        });
+
+        it("change complex key", function() {
+            var data = 'F#m(b5)/C          H7+  H7';
+            var section = {};
+            section.key = 'D';
+            section.tokey = 'C';
+            section.data = data;
+            var result = ChangeKeyService.changeKey(section, false);
+            var test = 'Em(b5)/Bb          A7+  A7';
             expect(test).toEqual(result);
         });
 

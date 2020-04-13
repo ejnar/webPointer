@@ -31,8 +31,6 @@ environments:
          logging:
             jul:
                usebridge: false
-#      server:
-#         port: 80
 
 ---
 grails:

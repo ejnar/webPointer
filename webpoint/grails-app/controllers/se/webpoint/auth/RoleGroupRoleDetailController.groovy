@@ -55,10 +55,13 @@ class RoleGroupRoleDetailController extends BasicRestController<RoleGroupRoleDet
     def update(RoleGroupRoleDetail instance) {
         log.debug ' --- RoleGroupRoleDetailController.update - RoleGroupRoleDetail: [{}]', instance
 
-        RoleGroup roleGroup = RoleGroup.findByName(instance.roleGroup)
+        println instance
 
+        RoleGroup roleGroup = RoleGroup.findByName(instance.roleGroup)
+        println roleGroup
         instance.roles.each { item ->
             Role role = Role.findByAuthority(item.authority);
+            println role
             if(instance.remove){
                 RoleGroupRole.remove(roleGroup,role, true)
             } else {

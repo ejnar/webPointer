@@ -24,8 +24,12 @@ app.constant(
 			USER: '/user',
 			USER_EDIT: '/user/',
 			USER_ADD: '/user/add',
+			GROUP: '/group',
+			createViewRoleModal: 'static/webpoint/user/views/user/createViewRoleModal.html',
+			createEditRoleModal: 'static/webpoint/user/views/user/createEditRoleModal.html',
+			editGroupModal: 'static/webpoint/user/views/songdata/editGroupModal.html',
 			ceatePageModal: 'static/webpoint/user/views/page/ceatePageModal.html',
-			ceateEditRoleModal: 'static/webpoint/user/views/user/ceateEditRoleModal.html'
+			createAddGroupModal: 'static/common/views/auth/addGroupModal.html'
 		});
 
 app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath', 'CONFIG',
@@ -42,11 +46,11 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath', 'CO
             }).
             when( cfgAppPath.SONGDATA_EDIT + ':groupId', {
                 templateUrl: 'static/webpoint/user/views/songdata/update.html',
-                controller: 'UpdateGroupSectionCtrl'
+                controller: 'UpdateSectionDataCtrl as vm'
             }).
             when( cfgAppPath.SONGDATA_NEW, {
                 templateUrl: 'static/webpoint/user/views/songdata/update.html',
-                controller: 'UpdateGroupSectionCtrl'
+                controller: 'UpdateSectionDataCtrl as vm'
             }).
             when( cfgAppPath.SONG_NEW, {   //  + ':groupId'
                 templateUrl: 'static/webpoint/user/views/song/update.html',
@@ -79,6 +83,10 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgAppPath', 'CO
             when( cfgAppPath.USER, {
                 templateUrl: 'static/webpoint/user/views/user/list.html',
                 controller: 'UserCtrl as userCtrl'
+            }).
+            when( cfgAppPath.GROUP, {
+                templateUrl: 'static/webpoint/user/views/user/group.html',
+                controller: 'GroupCtrl as groupCtrl'
             }).
             when( '/spotify', {
                 templateUrl: 'static/webpoint/user/views/spotify/list.html',

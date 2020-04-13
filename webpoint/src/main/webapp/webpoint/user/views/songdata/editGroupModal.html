@@ -1,0 +1,51 @@
+
+	<div class="modal-header">
+		<button type="button" class="close" ng-click="vm.cancel()" aria-hidden="true">&times;</button>
+    	<h3 class="modal-title">Edit Group</h3>
+    </div>
+	<form role="form" name="addGroupForm" novalidate>   
+    	<div class="modal-body">
+			<div class="row">
+				<div class="col-md-5 table-responsive-sm table-scroll-list">
+                    <table class="table table-bordered" >
+                        <thead>
+                        <tr>
+                            <th>Selected Group</th><th></th>
+                        </tr>
+                        </thead>
+                        <tbody ng-repeat="g in vm.section.roleGroupSet">
+                        <tr>
+                            <td>{{g.name}}</td>
+                            <td>
+                                <button ng-click="vm.removeGroup(g)" ng-show="vm.section.roleGroupSet.length > 2" >Remove</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+				</div>
+                <div class="col-md-7 table-responsive-sm table-scroll-list">
+                    <table class="table table-bordered table-striped" >
+                        <thead>
+                        <tr>
+                            <th></th><th>Group</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-repeat="g in vm.groups">
+                        <tr>
+                            <td>
+                                <button ng-click="vm.addGroup(g)" ng-show="true" >
+                                    <span class="glyphicon glyphicon-chevron-left"/>Add
+                                </button>
+                            </td>
+                            <td>{{g.name}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+			</div>
+		</div>
+    	<div class="modal-footer">
+     		<button class="btn btn-primary" ng-disabled="addGroupForm.$error.required" ng-click="vm.save()">Save</button>
+        	<button class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
+    	</div>
+	</form>  

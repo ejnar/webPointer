@@ -2,7 +2,7 @@
 
 	<div class="modal-header">
 		<button type="button" class="close" ng-click="cancel()" aria-hidden="true">&times;</button>
-    	<h3 class="modal-title">Edit role on roleGroup {{group}}</h3>
+    	<h3 class="modal-title">View authority(role) on a group {{group}}</h3>
     </div>
 	<form role="form" name="listOfPagesForm" novalidate>   
     	<div class="modal-body">
@@ -27,11 +27,6 @@
                             <tbody ng-repeat="r in roles">
                             <tr>
                                 <td>{{r.authority}}</td>
-                                <td>
-                                    <button ng-click="addRole(r)" ng-show="true" >
-                                        Add<span class="glyphicon glyphicon-chevron-right"/>
-                                    </button>
-                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -55,11 +50,6 @@
                             </thead>
                             <tbody ng-repeat="r in selectedRoles">
                             <tr>
-                                <td>
-                                    <button ng-click="removeRole(r)" ng-show="true" >
-                                        <span class="glyphicon glyphicon-chevron-left"/>Remove
-                                    </button>
-                                </td>
                                 <td>{{r.authority}}</td>
                             </tr>
                             </tbody>
@@ -86,7 +76,6 @@
 	
 		</div>
     	<div class="modal-footer">
-     		<button class="btn btn-primary" ng-disabled="listOfPagesForm.$error.required" ng-click="modalInstanceCtrl_addPageList()">Create</button>
         	<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
     	</div>
 	</form>  

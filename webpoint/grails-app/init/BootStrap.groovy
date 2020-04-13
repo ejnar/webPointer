@@ -39,6 +39,7 @@ class BootStrap {
 
         JSON.registerObjectMarshaller(RoleGroup) {
             def output = [:]
+            output['id'] = it.id
             output['name'] = it.name
             return output
         }

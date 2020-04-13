@@ -8,6 +8,7 @@ var module = angular.module('webpoint.core');
     MenuController.$inject = ['$scope', '$uibModal', '$log', 'Access', 'AuthService', 'AppStatusService'];
     function MenuController ($scope, $uibModal, $log, Access, AuthService, AppStatusService) {
 
+        var vm = this;
 
         function init() {
             $log.debug('MenuController.init');
@@ -18,15 +19,6 @@ var module = angular.module('webpoint.core');
 	    	var modalInstance = $uibModal.open({
 	    		templateUrl: 'static/common/views/auth/updatePassModal.html',
 	    		controller: 'ModalInstancePassCtrl as vm',
-	    		size: 'lg'
-	    	});
-	    };
-
-		$scope.openGroupModel = function () {
-			$log.debug('openGroupModel');
-	    	var modalInstance = $uibModal.open({
-	    		templateUrl: 'static/common/views/auth/addGroupModal.html',
-	    		controller: 'ModalInstanceGroupCtrl as vm',
 	    		size: 'lg'
 	    	});
 	    };
@@ -103,30 +95,6 @@ var module = angular.module('webpoint.core');
 				.then( function(resp) {
 					$log.debug(resp);
 					$modalInstance.close('close');
-			});
-		}
-		function cancel () {
-			$log.debug('cancel');
-			$uibModalInstance.dismiss('cancel');
-		}
-    }
-
-    module.controller('ModalInstanceGroupCtrl', ModalInstanceGroupCtrl);
-    ModalInstanceGroupCtrl.$inject = ['$scope', '$location', '$uibModalInstance', '$log', 'UserApi'];
-	function ModalInstanceGroupCtrl ($scope, $location, $uibModalInstance, $log, UserApi ) {
-        var vm = this;
-
-        vm.addGroup = addGroup;
-        vm.cancel = cancel;
-
-		function addGroup() {
-			$log.debug('addGroup');
-		 	$log.debug($scope.group);
-
-		 	UserApi.RoleGroup.save($scope.group).$promise
-		 		.then( function(resp) {
-		 			$log.debug(resp);
-					$uibModalInstance.close('close');
 			});
 		}
 		function cancel () {

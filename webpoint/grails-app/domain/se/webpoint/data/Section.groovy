@@ -15,6 +15,7 @@ class Section extends BaseDomain {
     String category
     String author
     String[] taggs
+    String[] references
 
     String data
 	String type
@@ -36,6 +37,7 @@ class Section extends BaseDomain {
         category nullable: false
         author nullable: true, blank:true
         taggs nullable: true
+        references nullable: true, blank:true
 		data nullable: true, blank:true
         type nullable: true, blank:true
 		key nullable: true, blank:true
