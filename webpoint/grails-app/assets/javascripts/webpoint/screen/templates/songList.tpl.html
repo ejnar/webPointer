@@ -1,7 +1,7 @@
 <div ng-cloak  layout="column">
     <md-content  flex>
         <form>
-            <div ng-init="hideSongList = true" ng-include="'static/webpoint/screen/views/menu.html'"></div>
+            <div ng-init="hideSongList = true" ng-include="'/webpoint/screen/menu.html'"></div>
             <md-subheader>
                 <div layout="row" layout-xs="column">
                     <div class="title-md" layout="column" flex="40" hide-xs>Song list: {{vm.selectedSongList.name}}</div>
@@ -77,5 +77,5 @@
             </div>
         </form>
     </md-content>
-    <div ng-include="'static/webpoint/screen/views/include/footer.html'"></div>
+    <div ng-include="'/webpoint/screen/footer.html'"></div>
 </div>

@@ -5,8 +5,8 @@
 var module = angular.module('webpoint.core');
 
     module.controller('MenuController', MenuController);
-    MenuController.$inject = ['$scope', '$uibModal', '$log', 'Access', 'AuthService', 'AppStatusService'];
-    function MenuController ($scope, $uibModal, $log, Access, AuthService, AppStatusService) {
+    MenuController.$inject = ['$scope', '$uibModal', '$log', 'cfgAppPath', 'Access', 'AuthService', 'AppStatusService'];
+    function MenuController ($scope, $uibModal, $log, cfgAppPath, Access, AuthService, AppStatusService) {
 
         var vm = this;
 
@@ -17,7 +17,7 @@ var module = angular.module('webpoint.core');
 		$scope.openPasswordModel = function () {
 			$log.debug('openPasswordModel');
 	    	var modalInstance = $uibModal.open({
-	    		templateUrl: 'static/common/views/auth/updatePassModal.html',
+	    		templateUrl: cfgAppPath.updatePassModal,
 	    		controller: 'ModalInstancePassCtrl as vm',
 	    		size: 'lg'
 	    	});
@@ -26,7 +26,7 @@ var module = angular.module('webpoint.core');
 	    $scope.openSetting = function () {
             $log.debug('openSetting');
             var modalInstance = $uibModal.open({
-                templateUrl: 'static/common/views/setting/setting.html',
+                templateUrl: cfgAppPath.settingModal,
                 controller: 'ModalInstanceSettingCtrl as vm',
                 size: 'lg'
             });

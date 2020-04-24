@@ -8,7 +8,7 @@ var app = angular.module('webpoint.core');
     ChangeKeyService.$inject = ['$log', 'properties', 'UtilService'];
 
     function ChangeKeyService($log, properties, UtilService) {
-        var includePrint = false;
+        var includePrint = true;
 
         var LINEBREAK = '\n';
         var SPLIT_LINE = /(\s*[ ]\s*)/;
@@ -304,7 +304,7 @@ var app = angular.module('webpoint.core');
             return typ;
         }
 
-        var KEY_SUFIX = ['sus','maj','m','dim'];
+        var KEY_SUFIX = ['sus','maj','m','dim', 'add4'];  //add4
         function startSufix(str){
             for(var i=0; i < KEY_SUFIX.length; i++){
                 var sufix = KEY_SUFIX[i];

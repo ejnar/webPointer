@@ -326,6 +326,31 @@ describe("webpoint.core module", function() {
         });
 
 
+        it("should change key from G to F", function() {
+
+            var data = '\n' +
+                        '          Dadd4               Em\n' +
+                        'Där Jesus led,    och för mig dog';
+
+            var section = {};
+            section.key = 'G';
+            section.tokey = 'F';
+            section.data = data;
+            var result = ChangeKeyService.changeKey(section, false);
+
+            var test = '\n' +
+                        '          Cadd4               Dm\n' +
+                        'Där Jesus led,    och för mig dog';
+            expect(test).toEqual(result);
+
+            section.key = 'F';
+            section.tokey = 'G';
+            section.data = result;
+            var result2 = ChangeKeyService.changeKey(section, false);
+            expect(data).toEqual(result2);
+
+        });
+
 
     });
 });

@@ -1,3 +1,4 @@
+package se.webpoint.data
 //package se.webpoint.data
 //
 //import grails.plugin.springsecurity.SpringSecurityService

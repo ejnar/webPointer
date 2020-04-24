@@ -28,7 +28,7 @@ Build project files for IDE
 * ./gradlew karmaRun -PkarmaDebug=true --debug --stacktrace
 
 * ./build/libs/webpoint-0.9.8.3.5.war
-bpoint
+
 
 #### Grails command
 
@@ -64,10 +64,10 @@ The plugin adds the following tasks to your build:
 https://github.com/craigburke/client-dependencies-gradle
 
 Description
-clientInstall: Installs all the client dependencies you have set in your build.gradle
-clientRefresh: Refreshes client dependencies (if you add or modify your configuration)
-clientClean: Removes client dependencies and clears the cache
-clientReport: Prints a report of all dependencies and the resolved versions
+* ./gradlew clientInstall: Installs all the client dependencies you have set in your build.gradle
+* clientRefresh: Refreshes client dependencies (if you add or modify your configuration)
+* clientClean: Removes client dependencies and clears the cache
+* clientReport: Prints a report of all dependencies and the resolved versions
 
 #### SDK
 Description   |  Command
@@ -151,4 +151,5 @@ UserRole     |     | X | Binding user and role
 
 
 
-  
+
+npm install --package-lock

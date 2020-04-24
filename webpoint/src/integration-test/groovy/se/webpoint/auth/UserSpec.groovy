@@ -1,10 +1,10 @@
 package se.webpoint.auth
 
-import grails.test.mongodb.MongoSpec
+
 import grails.testing.mixin.integration.Integration
-import grails.transaction.Rollback
+import grails.transaction.*
+import spock.lang.*
 import se.webpoint.util.BaseSpecification
-import spock.lang.Specification
 
 @Integration
 @Rollback
@@ -15,6 +15,15 @@ class UserSpec extends BaseSpecification {
     def setup() {
         user = setupUser('UserSpec')
     }
+
+    def cleanup() {
+    }
+
+    void "test something"() {
+        expect:"fix me"
+            true == true
+    }
+
 
     void "test User find"() {
 
@@ -34,8 +43,6 @@ class UserSpec extends BaseSpecification {
         r.authorities.size() == 1
         r.authorities[0].authority.equals('ROLE_ADMIN')
 
-//        cleanup:
-//        cleanUser(user)
     }
 
     void "test User create"() {
@@ -49,7 +56,5 @@ class UserSpec extends BaseSpecification {
         cleanup:
         u.delete flush: true
     }
-
-
 
 }

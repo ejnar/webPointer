@@ -5,7 +5,8 @@
 .launch
 .project
 .settings
-.idea
+*.idea
+*.asscache
 *.launch
 *.tmproj
 ivy*

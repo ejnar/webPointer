@@ -18,7 +18,6 @@ beans = {
         loginAttemptCacheService = ref('loginAttemptCacheService')
     }
 
-
 //    mySecurityEventListener(MySecurityEventListener)
 //    activemq(ActiveMQComponent){
 //        return ActiveMQComponent.activeMQComponent("tcp://localhost:61616")

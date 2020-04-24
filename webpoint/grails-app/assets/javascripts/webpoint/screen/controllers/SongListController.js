@@ -59,7 +59,7 @@ var module = angular.module('webpoint.screen');
             createListObj('0-9', nrList);
 
             MATCH_LETTER.forEach(function(c) {
-                charList = $filter('filter')(list, function(song) {
+                var charList = $filter('filter')(list, function(song) {
                                     return song.title.toLowerCase().indexOf(c) == 0;
                                 });
                 createListObj(c.toUpperCase(), charList);
@@ -91,7 +91,7 @@ var module = angular.module('webpoint.screen');
 
         function createListObj (category, list) {
             if(list.length > 0){
-                listObj = {};
+                var listObj = {};
                 listObj.letter = category;
                 listObj.list = list;
                 alphabeticalList.push(listObj);
@@ -193,7 +193,7 @@ var module = angular.module('webpoint.screen');
         function showAdvanced (ev,s) {
             $mdDialog.show({
               controller: SongItemCtrl,
-              templateUrl: 'static/webpoint/screen/views/songDialog.tmpl.html',
+              templateUrl: '/webpoint/screen/songDialog.html',
               targetEvent: ev,
               clickOutsideToClose:true,
               fullscreen: $scope.customFullscreen,

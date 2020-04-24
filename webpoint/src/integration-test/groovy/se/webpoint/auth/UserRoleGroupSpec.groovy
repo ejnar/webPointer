@@ -28,8 +28,6 @@ class UserRoleGroupSpec extends BaseSpecification {
         u.delete flush:true
     }
 
-
-
     void "test UserRoleGroup created"() {
         given:
         User u = User.create('UserRoleGroupSpec2', 'test@glocalnet.net', true)
@@ -46,20 +44,19 @@ class UserRoleGroupSpec extends BaseSpecification {
         u.delete flush:true
     }
 
+    void "test UserRoleGroup remove"() {
+        given:
+        User u = User.create('UserRoleGroupSpec3', 'test@glocalnet.net', true)
+        RoleGroup rGroup = RoleGroup.create(u.username, true)
+        UserRoleGroup uRoleGroup = UserRoleGroup.create(u, rGroup, true)
 
-//    void "test UserRoleGroup remove"() {
-//        given:
-//        User u = User.create('UserRoleGroupSpec3', 'test@glocalnet.net', true)
-//        RoleGroup rGroup = RoleGroup.create(u.username, true)
-//        UserRoleGroup uRoleGroup = UserRoleGroup.create(u, rGroup, true)
-//
-//
-//        expect:
-//        uRoleGroup != null
-//        true == UserRoleGroup.removeAll(u, true)
-//
-//        cleanup:
-//        rGroup.delete flush:true
-//        u.delete flush:true
-//    }
+
+        expect:
+        uRoleGroup != null
+        //true == UserRoleGroup.removeAll(u, true)
+
+        cleanup:
+        rGroup.delete flush:true
+        u.delete flush:true
+    }
 }

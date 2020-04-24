@@ -21,7 +21,7 @@ var app = angular.module("webpoint.core", [
 
 app.constant(
 		'CONFIG', {
-			DEBUG_LOG: true
+			DEBUG_LOG: false
 		});
 
 app.config(function (localStorageServiceProvider) {

@@ -19,8 +19,10 @@ class UserRoleSpec extends Specification {
         userRole.getUser().username.equals('UserRoleSpec')
         true == UserRole.remove(user, role, true)
 
-//        cleanup:
-//        user.delete flush:true
+        cleanup:
+        userRole.delete flush:true
+        user.delete flush:true
+        role.delete flush:true
 
     }
 

@@ -39,7 +39,7 @@ var module = angular.module('webpoint.core');
 //                    CashService.setSessionStorage("user", user);
                 }).
                 error(function (user) {
-                    $log.error('login error: ' );
+                    $log.error('login error: ');
                     $rootScope.$broadcast('event:auth-loginFailed', user);
                 }).
                 finally(function () {

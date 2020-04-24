@@ -86,7 +86,7 @@ var module = angular.module('webpoint.screen');
                     //$log.debug(line);
                  }
             });
-            size = (82 - len) / 10;
+            var size = (82 - len) / 10;
             size = size < 3 ? 3:size;
             $log.debug(size);
             vm.fontSize = {"font-size" : size+"vw" };

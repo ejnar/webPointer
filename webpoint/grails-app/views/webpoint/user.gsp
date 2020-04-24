@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -24,9 +24,9 @@
 <!-- Add your site or application content here -->
 <div id="wrap" data-ng-controller="AppController">
     <span us-spinner="{radius:20, width:8, length: 10}" spinner-key="spinner-1"></span>
-    <div ng-include="'static/webpoint/user/views/includes/header.html'"></div>
+    <div ng-include="'/webpoint/user/header.html'"></div>
     <div ng-view=""></div>
-    <div ng-include="'static/webpoint/user/views/includes/footer.html'"></div>
+    <div ng-include="'/webpoint/user/footer.html'"></div>
 </div>
 <asset:javascript src="/webpoint/webpoint.user.js"/>
 </body>

@@ -32,7 +32,7 @@ environments:
             jul:
                usebridge: false
 #      server:
-#         port: 80
+#         port: 5000
 
 ---
 grails:
@@ -57,6 +57,8 @@ spring:
     groovy:
         template:
             check-template-location: false
+#    main:
+#        banner-mode: off
 # Spring Actuator Endpoints are Disabled by Default
 endpoints:
     enabled: true

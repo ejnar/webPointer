@@ -10,8 +10,8 @@ class LoggWebEntryInterceptor {
     EventService eventService
 
     public LoggWebEntryInterceptor() {
-        match uri: '/static/webpoint/user/views/auth/login*'
-        match uri: '/static/webpoint/screen/views/auth/login*'
+        match uri: '/webpoint/user/login*'
+        match uri: '/webpoint/screen/login*'
 //        matchAll()  //.excludes(controller: 'auth')
     }
 

@@ -28,43 +28,44 @@ app.constant(
 app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 'CONFIG',
 
     function ($routeProvider, $httpProvider, $logProvider, cfgScreenPath, CONFIG) {
+        // 'static/webpoint/screen/views/auth/login.html'
         $routeProvider.
         	when('/login', {
-        		templateUrl: 'static/webpoint/screen/views/auth/login.html',
+        		templateUrl: '/webpoint/screen/login.html',
         		controller: 'LoginController as vm'
         	}).
             when( cfgScreenPath.SCREEN  + ':pageListId', {
-                templateUrl: 'static/webpoint/screen/views/vy.html',
+                templateUrl: '/webpoint/screen/vy.html',
                 controller: 'VyCtrl'
             }).
             when( cfgScreenPath.SCREEN  + ':pageListId/:withoutkeys', {
-                templateUrl: 'static/webpoint/screen/views/vy.html',
+                templateUrl: '/webpoint/screen/vy.html',
                 controller: 'VyCtrl'
             }).
             when( cfgScreenPath.SLIDESHOW  + ':pageListId', {
-                templateUrl: 'static/webpoint/screen/views/slideshow.html',
+                templateUrl: '/webpoint/screen/slideshow.html',
                 controller: 'SlideShowCtrl as vm'
             }).
             when( cfgScreenPath.SLIDESHOW  + ':pageListId/:withoutkeys', {
-                templateUrl: 'static/webpoint/screen/views/slideshow.html',
+                templateUrl: '/webpoint/screen/slideshow.html',
                 controller: 'SlideShowCtrl as vm'
             }).
             when( cfgScreenPath.VY  + ':group/:pages', {
-                templateUrl: 'static/webpoint/screen/views/vy.html',
+                templateUrl: '/webpoint/screen/vy.html',
                 controller: 'VyCtrl'
             }).
             when( cfgScreenPath.pagelist, {
-                templateUrl: 'static/webpoint/screen/views/list.html',
+                templateUrl: '/webpoint/screen/list.html',
                 controller: 'MainViewListCtrl as mainViewList',
                 requireAuth: true,
                 requireRoles: ['ROLE_ADMIN','ROLE_VIEW']
             }).
             when( cfgScreenPath.print, {
-                templateUrl: 'static/webpoint/screen/views/print.html',
+                templateUrl: '/webpoint/screen/print.html',
                 controller: 'PrintCtrl'
             }).
             when( cfgScreenPath.SONGLIST, {
-                templateUrl: 'static/webpoint/screen/views/songList.html',
+                templateUrl: '/webpoint/screen/songList.html',
                 controller: 'SongListCtrl as vm'
             }).
 //            when( cfgScreenPath.SONG + ':id', {
@@ -72,11 +73,11 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
 //                controller: 'SongCtrl'
 //            }).
             when( cfgScreenPath.ABOUT, {
-                templateUrl: 'static/webpoint/screen/views/about.html',
+                templateUrl: '/webpoint/screen/about.tpl.html',
                 controller: 'MenuCtrl'
             }).
             when( cfgScreenPath.ADDPASS  + ':token', {
-                templateUrl: 'static/webpoint/screen/views/auth/addpass.html',
+                templateUrl: '/webpoint/screen/addpass.tpl.html',
                 controller: 'AddPassCtrl as vm'
             }).
             otherwise({

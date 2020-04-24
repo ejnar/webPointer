@@ -5,15 +5,15 @@ buildscript {
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "gradle.plugin.com.craigburke.gradle:karma-gradle:1.4.3"
+        classpath "gradle.plugin.com.craigburke.gradle:karma-gradle:1.4.4"
         classpath "com.craigburke.gradle:client-dependencies:1.3.1"
         classpath "org.grails.plugins:angularjs-scaffolding:1.0.3"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.8"
-        classpath "org.grails.plugins:views-gradle:1.1.6"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.15.1"
+        classpath "org.grails.plugins:views-gradle:1.2.9"
     }
 }
 
-version "0.9.8.3.5"
+version "0.9.8.3.8"
 group "webpoint"
 
 apply plugin:"eclipse"
@@ -32,6 +32,16 @@ repositories {
     maven { url "https://repo.grails.org/grails/core" }
 }
 
+node {
+    // Version of node to use.
+    version = '8.12.0'
+    // Version of npm to use.
+    //npmVersion = '6.4.1'
+    // If true, it will download node using above parameters.
+    // If false, it will try to use globally installed node.
+    //download = true
+}
+
 dependencies {
     assets "com.craigburke.angular:angular-template-asset-pipeline:2.3.0"
     assets "com.craigburke.angular:angular-annotate-asset-pipeline:2.4.0"
@@ -40,9 +50,16 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
+
+    //compile "org.springframework.boot:spring-boot-starter-tomcat"
     // Use Jetty
     //compile "org.springframework.boot:spring-boot-starter-jetty"
+    //compile ("org.springframework.boot:spring-boot-starter-jetty"){
+    //       exclude group: 'org.eclipse.jetty.websocket', module: 'x'
+    //}
+    // Use Undertow                                                   
+    compile "org.springframework.boot:spring-boot-starter-undertow"
+    
 
     //compile 'org.grails.plugins:spring-security-core:3.2.3'
     compile "org.grails.plugins:spring-security-rest:2.0.0.RC1"       // 2.0.0.RC1
@@ -81,19 +98,22 @@ dependencies {
     profile "org.grails.profiles:angularjs"
     provided "org.grails.plugins:embedded-mongodb:1.0.2"
 
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:3.0.10"   // 2.15.1 2.14.8 3.0.10
-    runtime 'com.google.guava:guava:11.0.1'
+    runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.15.1"   // 2.15.1 2.14.8 3.0.10
+    //runtime 'com.google.guava:guava:11.0.1'
 
     testCompile "org.grails:grails-gorm-testing-support"
     testCompile "org.grails:grails-datastore-rest-client"
     testCompile "org.grails:grails-web-testing-support"
+
     testCompile "org.springframework.boot:spring-boot-starter-tomcat"
     testCompile "org.apache.commons:commons-compress:1.13"
-    testCompile "io.micronaut:micronaut-http-client:1.0.0"
+    // testCompile "io.micronaut:micronaut-http-client:1.3.4"
+
+
 }
 
 bootRun {
-    jvmArgs('-Dspring.output.ansi.enabled=always ')
+    jvmArgs('-Dspring.output.ansi.enabled=always -server -Xms256m -Xmx256m -XX:+UseConcMarkSweepGC -XX:+UseStringDeduplication')
     addResources = true
     systemProperties = System.properties
     String springProfilesActive = 'spring.profiles.active'
@@ -178,7 +198,7 @@ clientDependencies {
 karma {
     dependencies([
         'karma-wrap-preprocessor',
-//        'karma-sinon',
+        //'karma-sinon',
         // 'phantomjs@1.9.7-14',
         //Needed because karma 3.x depended on log4js 3.x which had a breaking change.
         // It was in log4js/lib/layouts.js:69 with util.format(...loggingEvent.data)
@@ -217,21 +237,3 @@ grails {
     println 'webpoint'
 
 }
-
-//springBoot {
-    // Enable the creation of a fully
-    // executable archive file.
-//    executable = true
-
-    // Set values for variable placeholders
-    // in the default launch script.
-    //embeddedLaunchScriptProperties =
-    //        [initInfoDescription: project.description,
-    //         initInfoShortDescription: project.name,
-    //         initInfoProvides: jar.baseName,
-    //         mode: 'service']
-//}
-
-//jar {
-//    archiveName('webpoint.jar')
-//}

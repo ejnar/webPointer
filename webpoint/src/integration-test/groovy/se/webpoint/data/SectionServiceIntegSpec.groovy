@@ -48,12 +48,12 @@ class SectionServiceIntegSpec extends Specification  {
 ////        cleanUser(user)  //
 //    }
 
-    void "test getSection"() {
-        when:
-        section.save flush: true
-
-
-        then:
-        service.getSection(section.id).key.equals('F')
-    }
+//    void "test getSection"() {
+//        when:
+//        section.save flush: true
+//
+//
+//        then:
+//        service.getSection(section.id).key.equals('F')
+//    }
 }

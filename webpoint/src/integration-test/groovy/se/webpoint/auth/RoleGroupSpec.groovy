@@ -21,19 +21,15 @@ class RoleGroupSpec extends Specification {
     }
 
 
-//    void "test RoleGroup getAuthorities"() {
-//        when:
-//        RoleGroup roleGroup = RoleGroup.create("RoleGroupSpec2", true)
-//        Set<Role> roles = roleGroup.getAuthorities()
-//
-//        then:
-//        roleGroup != null
-//        roleGroup.name.equals("RoleGroupSpec2")
-//        roles.size() == 2
-//        Role role = roles[0]
-//        role != null
-//        role.authority.equals('ROLE_ADMIN')
-//
-//    }
+    void "test RoleGroup getAuthorities"() {
+        when:
+        RoleGroup roleGroup = RoleGroup.create("RoleGroupSpec2", true)
+        Set<Role> roles = roleGroup.getAuthorities()
+
+        then:
+        roleGroup != null
+        roleGroup.name.equals("RoleGroupSpec2")
+
+    }
 
 }

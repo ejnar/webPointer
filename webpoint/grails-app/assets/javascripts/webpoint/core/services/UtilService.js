@@ -7,10 +7,8 @@ var module = angular.module('webpoint.core');
     UtilService.$inject = [];
 
     function UtilService() {
-        var includePrint = false;
-        var MATCH_KEYROW = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "g");
+        var includePrint = true;
         var MATCH_WORDS = new RegExp("(Chorus|Bridge|Verse)", "g");
-        var MATCH_SUFFIX = new RegExp("(m|7|s|b|#|9|/)", "g");
         this.findValidKeyRow = function (line) {
             print(' - line: ', line);
             if(line.split("|").length > 1){
@@ -38,6 +36,7 @@ var module = angular.module('webpoint.core');
             return true;
         };
 
+        var MATCH_KEYROW = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb]", "g");
         function validateFirst (parts) {
             var countNull = 0;
             for(var i=0; i < parts.length; i++){
@@ -48,6 +47,7 @@ var module = angular.module('webpoint.core');
             return countNull;
         }
 
+        var MATCH_SUFFIX = new RegExp("(m|7|s|b|a|#|9|/)", "g");
         function validateSecond(parts) {
             var countNull = 0;
             for(var i=0; i < parts.length; i++){
