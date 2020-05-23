@@ -217,9 +217,6 @@ var module = angular.module('webpoint.screen');
                 }
             });
             updateCash();
-
-
-
       	};
 
         $scope.vyCtrl_goBack = function(){

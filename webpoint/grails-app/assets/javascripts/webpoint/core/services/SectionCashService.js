@@ -12,12 +12,10 @@ var module = angular.module('webpoint.core');
         var service = {
             sectionCashApi: SectionCashApi,
             updatePageListCach: updatePageListCach,
-
         }
-        return service;
 
         function updatePageListCach (pageListId, currentSectionId, refresh){
-           if(Access.isAdmin()){
+           if(Access.isUAdmin()){
                 var sectionCash = {};
                 sectionCash.pageListId = pageListId
                 sectionCash.currentSectionId = currentSectionId
@@ -27,6 +25,7 @@ var module = angular.module('webpoint.core');
                 });
             }
         }
+        return service;
 
     }
 

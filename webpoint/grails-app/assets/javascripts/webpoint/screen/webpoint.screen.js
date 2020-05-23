@@ -73,11 +73,11 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
 //                controller: 'SongCtrl'
 //            }).
             when( cfgScreenPath.ABOUT, {
-                templateUrl: '/webpoint/screen/about.tpl.html',
+                templateUrl: '/webpoint/screen/about.html',
                 controller: 'MenuCtrl'
             }).
             when( cfgScreenPath.ADDPASS  + ':token', {
-                templateUrl: '/webpoint/screen/addpass.tpl.html',
+                templateUrl: '/webpoint/screen/addpass.html',
                 controller: 'AddPassCtrl as vm'
             }).
             otherwise({

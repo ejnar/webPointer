@@ -20,6 +20,7 @@ var app = angular.module('webpoint.core');
             // "we know who you are, and your profile does not allow you to access this resource"
             FORBIDDEN: 403,
             isAdmin: isAdmin,
+            isUAdmin: isUAdmin,
             isClient: isClient,
             hasRole: hasRole,
             hasAnyRole: hasAnyRole,
@@ -31,6 +32,7 @@ var app = angular.module('webpoint.core');
         return access;
 
         function isAdmin(){return hasRole("ROLE_ADMIN");}
+        function isUAdmin(){return hasURole("ROLE_ADMIN");}
         function isViewer(){return hasURole("ROLE_VIEW");}
         function isClient(){return hasURole("ROLE_CLIENT");}
 
@@ -46,7 +48,6 @@ var app = angular.module('webpoint.core');
 
         function hasRole(role) {
             var roles = CashService.getSessionStorage("roles");
-
             return roles != null && roles.indexOf(role) >= 0;
         }
 
