@@ -153,3 +153,6 @@ UserRole     |     | X | Binding user and role
 
 
 npm install --package-lock
+
+#### Other
+https://www.desmos.com/calculator/onfy0dzx2o

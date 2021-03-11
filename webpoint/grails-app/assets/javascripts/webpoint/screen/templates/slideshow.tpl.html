@@ -1,21 +1,21 @@
-<div layout="column" ng-cloak>
+<div id='slideFrame' class="slideFrameShowCss" layout="column" ng-cloak>
     <div id="snackbar"></div>
     <div id="wrap">
-        <div ng-if="vm.pageList.pageParts[currentPart].section.type == 'IMAGE'"
+        <!-- div id='slideImageFrame' ng-if="vm.pageList.pageParts[currentPart].section.type == 'IMAGE'"
              class="vyImgArea">
             <img class="stretch" alt=""
                  src="data:image/JPG;base64,{{pageList.pageParts[currentPart].section.binary.$$state.value[currentPage].base64}}">
-        </div>
-        <div ng-if="vm.activeSong.section.type == 'TEXT'
+        </div -->
+        <div id='slideTextFrame' ng-if="vm.activeSong.section.type == 'TEXT'
                             || vm.activeSong.section.type == 'TEXTCHORDS'"
              class="slideShowMainArea" layout="row" ng-style="vm.fontSize"
              ng-bind-html="vm.activeSong.section.fdata" >
         </div>
     </div>
-    <div hide-xs class="sideLeftBtn sideBtn" ng-click="vm.left()" keyleft>
-        <i class="material-icons md-28">chevron_left</i>
+    <div id='slideArrowLeft' hide-xs class="sideLeftBtn sideBtn" ng-click="vm.left()" keyleft>
+        <i class="material-icons md-24">chevron_left</i>
     </div>
-    <div hide-xs class="sideRightBtn sideBtn" ng-click="vm.right()" keyright>
-        <i class="material-icons md-28">chevron_right</i>
+    <div id='slideArrowRight' hide-xs class="sideRightBtn sideBtn" ng-click="vm.right()" keyright>
+        <i class="material-icons md-24">chevron_right</i>
     </div>
 </div>

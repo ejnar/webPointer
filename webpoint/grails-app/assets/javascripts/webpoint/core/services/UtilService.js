@@ -7,10 +7,10 @@ var module = angular.module('webpoint.core');
     UtilService.$inject = [];
 
     function UtilService() {
-        var includePrint = true;
+        var includePrint = false;
         var MATCH_WORDS = new RegExp("(Chorus|Bridge|Verse)", "g");
         this.findValidKeyRow = function (line) {
-            print(' - line: ', line);
+            print(' - UtilService.findValidKeyRow line: ', line);
             if(line.split("|").length > 1){
                 return true;
             }
@@ -47,7 +47,7 @@ var module = angular.module('webpoint.core');
             return countNull;
         }
 
-        var MATCH_SUFFIX = new RegExp("(m|7|s|b|a|#|9|/)", "g");
+        var MATCH_SUFFIX = new RegExp("(m|7|s|b|a|#|9|/|2)", "g");
         function validateSecond(parts) {
             var countNull = 0;
             for(var i=0; i < parts.length; i++){
@@ -55,6 +55,7 @@ var module = angular.module('webpoint.core');
                 if(!key){continue;}
                 print(' --- validateSecond.keys: ', key);
                 if(parts[i].length > 1 && parts[i].indexOf(key[0]) == 0){
+                    print(' ---- validateSecond.parts[i]: ', parts[i]);
                     var match = parts[i].substr(1, 1).match(MATCH_SUFFIX);
                     print(' ---- validateSecond.match---: ', match);
                     print(' ---- validateSecond.part: ', parts[i] );

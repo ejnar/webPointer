@@ -1,34 +1,32 @@
 <div layout="column" ng-cloak>
     <div id="snackbar">{{activeSong.section.title}}</div>
-
     <div id="wrap">
-
-        <div class="sideLeftPageBtn" ng-click="vyCtrl_leftPage()"
+        <div id='slideArrowLeft' class="sideLeftPageBtn" ng-click="vyCtrl_leftPage()"
              ng-if="pageList.pageParts[currentPart].section.binary.$$state.value.length > 0">
             <i class="material-icons md-24">chevron_left</i>
         </div>
-        <div ng-if="pageList.pageParts[currentPart].section.type == 'IMAGE'"
+        <!-- div ng-if="pageList.pageParts[currentPart].section.type == 'IMAGE'"
              class="vyImgArea">
             <img class="stretch" alt=""
                  src="data:image/JPG;base64,{{pageList.pageParts[currentPart].section.binary.$$state.value[currentPage].base64}}">
-        </div>
-        <div class="sideRightPageBtn" ng-click="vyCtrl_rightPage()"
+        </div -->
+        <div id='slideArrowRight' class="sideRightPageBtn" ng-click="vyCtrl_rightPage()"
             ng-if="pageList.pageParts[currentPart].section.binary.$$state.value.length > 0">
             <i class="material-icons md-24">chevron_right</i>
         </div>
-        <div ng-if="pageList.pageParts[currentPart].section.type == 'TEXT'
+        <div id='slideTextFrame' ng-if="pageList.pageParts[currentPart].section.type == 'TEXT'
                             || pageList.pageParts[currentPart].section.type == 'TEXTCHORDS'"
              class="vyMainArea"  ng-class="fontSize" layout="row"
              ng-bind-html="pageList.pageParts[currentPart].section.fdata" >
         </div>
     </div>
-    <div hide-xs class="sideLeftBtn sideBtn" ng-click="vyCtrl_left()" keyleft>
+    <div id='slideXsArrowLeft' hide-xs class="sideLeftBtn sideBtn" ng-click="vyCtrl_left()" keyleft>
         <i class="material-icons md-48">chevron_left</i>
     </div>
-    <div class="menuToggleSideNav" ng-click="vyCtrl_toggleSideNavRight1()" aria-label="List">
-        <i class="material-icons md-28">menu</i>
+    <div id='menuToggle' class="menuToggleSideNav" ng-click="vyCtrl_toggleSideNavRight1()" aria-label="List">
+        <i class="material-icons md-36">menu</i>
     </div>
-    <div hide-xs class="sideRightBtn sideBtn" ng-click="vyCtrl_right()" keyright>
+    <div id='slideXsArrowRight' hide-xs class="sideRightBtn sideBtn" ng-click="vyCtrl_right()" keyright>
         <i class="material-icons md-48">chevron_right</i>
     </div>
     <div>
@@ -36,19 +34,14 @@
                     md-component-id="sidenav-right_1"
                     md-whiteframe="10">
             <md-content>
-                <md-subheader class="md-primary">Song list</md-subheader>
+                <md-subheader class="md-primary">
+                    <md-button href="#songList"> Song song </md-button>
+                </md-subheader>
                 <md-list layout="column">
-                    <md-list-item ng-repeat="p in pageList.pageParts" class="sidenav-list-item" layout="row" >
-                        <span ng-click="vyCtrl_clickLNavList($index)"
-                              class="mdl-list_item-primary-content" flex="90">
-                            {{p.section.title}}
-                            <md-divider></md-divider>
-                        </span>
-                        <!-- span ng-click="vyCtrl_moveUpward($index)"
-                              class="mdl-list_item-secondary-action" >
-                            <i ng-if="$index > 0" class="material-icons md-20">arrow_upward</i>
-                            <md-divider></md-divider>
-                        </span -->
+                    <md-list-item ng-repeat="p in pageList.pageParts" ng-click="vyCtrl_clickLNavList($index)"
+                                  class="sidenav-list-item" layout="row" >
+                        {{p.section.title}}
+                        <md-divider></md-divider>
                     </md-list-item>
                 </md-list>
                 <md-button ng-click="vyCtrl_toggleSideNavRight2()"  class="toggleSideNav" aria-label="List">
@@ -123,30 +116,3 @@
         </md-sidenav>
     </div>
 </div>
-
-
-<!-- div class="vyMainArea">
-    <table>
-        <tbody>
-        <tr class="vyRow">
-            <td class="sideLeftPageBtn" ng-click="vyCtrl_leftPage()"
-                ng-if="pageList.pageParts[currentPart].section.binary.$$state.value.length > 1">
-                <i class="material-icons md-22">chevron_left</i>
-            </td>
-            <td class="vyArea"
-                md-swipe-left="vyCtrl_left()" md-swipe-right="vyCtrl_right()">
-                <div class="vyImgArea"
-                     ng-if="pageList.pageParts[currentPart].section.type == 'IMAGE'" >
-
-                    <img class="stretch" alt=""
-                         src="data:image/JPG;base64,{{pageList.pageParts[currentPart].section.binary.$$state.value[currentPage].base64}}">
-                </div>
-            </td>
-            <td class="sideRightPageBtn" ng-click="vyCtrl_rightPage()"
-                ng-if="pageList.pageParts[currentPart].section.binary.$$state.value.length > 1">
-                <i class="material-icons md-22">chevron_right</i>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div -->

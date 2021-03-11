@@ -96,10 +96,13 @@ md-virtual-repeat-container {
 
 md-sidenav,
 md-sidenav.md-locked-open-add-active,
+md-sidenav.md-locked-open-add-visited,
 md-sidenav.md-closed.md-locked-open-add-active,
+md-sidenav.md-closed.md-locked-open-add-visited,
 md-sidenav.md-locked-open {
   min-width: 280px;
-  max-width: 320px;
+  max-width: 300px;
+  background: white !important;
 }
 .md-subheader{
     font-size: 0.9em;
@@ -110,7 +113,7 @@ md-sidenav.md-locked-open {
     color:gray;
 }
 .title-md{
-    font-size: 1.1em;
+    font-size: 1.2vh;
     font-weight: bold;
     color:gray;
 }
@@ -119,10 +122,11 @@ md-sidenav.md-locked-open {
 }
 
 md-list-item.sidenav-list-item  {
-    font-size: 1.0em;
+    font-size: 0.95em;
+    margin:0 0;
 }
 md-list-item.sidenav-list-item span.mdl-list_item-primary-content  {
-    margin:0 0.2em;
+    margin:0 0;
 }
 md-list-item.sidenav-list-item span.mdl-list_item-secondary-action{
     margin-right:0.2em;
@@ -369,22 +373,22 @@ div.vyMainArea {
 }
 div.slideShowMainArea {
     height:100%;
-    width:92%;
+    width:96%;
     white-space: pre;
-    padding: 0.05em 0 0 0;
+    padding: 0 0 0 0;
     margin: 0;
     position: fixed;
     top: 0;
-    left: 4.2vw;
+    left: 3.6vw;
     overflow-y: auto;
-    line-height: 150%;
+    line-height: 140%;
 }
 div.vyColumn {
     font-size: 0.70em;
     height:100%;
-    width:49%;
-    padding: 0;
-    margin: 0;
+    width:50%;
+    padding: -1;
+    margin: -1;
     vertical-align: top;
 }
 @media (max-width: 400px ) {
@@ -449,7 +453,7 @@ div.vyColumn {
         right: 6.4vw;
         color: black;
         font-size:5.8vw;
-        padding: 0.2em;
+        padding: 0.4em 0.2em;
     }
     .container-sm-height {
         display:table;
@@ -475,7 +479,7 @@ div.vyColumn {
     	right: 8.6vw;
     	color: black;
     	font-size:5.0vw;
-    	padding: 0.2em;
+    	padding: 0.4em 0.2em;
     }
     .container-md-height {
         display:table;

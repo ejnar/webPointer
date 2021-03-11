@@ -194,7 +194,7 @@ var module = angular.module('webpoint.screen');
         $scope.vyCtrl_clickLNavList = function (index) {
 //            $log.debug('Click in list: ', index);
             $scope.currentPart = index;
-            $scope.vyCtrl_closeSidenav('sidenav-right_1');
+            //$scope.vyCtrl_closeSidenav('sidenav-right_1');
             updateCash();
         };
 
@@ -289,10 +289,9 @@ var module = angular.module('webpoint.screen');
             if(!section.data) return;
             section.tokey = $scope.selectedKey;
             $log.debug(" Section: ", section);
-            $scope.pageList.pageParts[$scope.currentPart].section.data = ChangeKeyService.changeKey(section, true);
+            $scope.pageList.pageParts[$scope.currentPart].section.fdata = ChangeKeyService.changeKey(section, true);
             section.key = $scope.selectedKey;
-            $log.debug(" Data: ", $scope.pageList.pageParts[$scope.currentPart].section.data);
-            formatText();
+            $log.debug(" Data: ", $scope.pageList.pageParts[$scope.currentPart].section.fdata);
         };
 
         $scope.vyCtrl_print = function() {

@@ -8,7 +8,7 @@ var app = angular.module('webpoint.core');
     ChangeKeyService.$inject = ['$log', 'properties', 'UtilService'];
 
     function ChangeKeyService($log, properties, UtilService) {
-        var includePrint = true;
+        var includePrint = false;
 
         var LINEBREAK = '\n';
         var SPLIT_LINE = /(\s*[ ]\s*)/;
@@ -29,7 +29,7 @@ var app = angular.module('webpoint.core');
                 print(' -- line: ', lines[l]);
                 var validKeyRow = UtilService.findValidKeyRow(line);
                 var keyRow = line.match(MATCH_KEYROW_REG);
-                // print(' -- keyRow: ', keyRow);
+                print(' -- keyRow: ', keyRow);
                 if(validKeyRow && keyRow != null){  //
                     var parts = line.split(SPLIT_LINE);
                     print(' -- parts: ', parts);
@@ -69,7 +69,7 @@ var app = angular.module('webpoint.core');
         }
 
         var FIND_PARENTHESES_REG = new RegExp(/\((.*)\)/);
-        var FIND_KEYROW_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,Cb,^(,^)]", "g");
+        var FIND_KEYROW_REG = new RegExp("[C,C#,Db,D,D#,Eb,E,F,F#,Gb,G,G#,Ab,A,A#,Bb,H,B,B#,Cb,^(,^)]", "g");
         function groupKeys(line) {
             //var pKey;
             var parentheses = line.match(FIND_PARENTHESES_REG);
@@ -78,14 +78,23 @@ var app = angular.module('webpoint.core');
             }
             print(' --- groupKeys.line: ', line);
             print(' --- groupKeys.parentheses: ', parentheses);
-            var keys = line.match(FIND_KEYROW_REG);
-            var index = 0;
+
             var result = [];
-            for(var k=0; k < keys.length; k++){
-                if(keys[k] === 'b' || keys[k] === '#'){
-                    result[index-1].suffix = keys[k];     //+= keys[k];
-                } else {     // if(keys[k] != '(' && keys[k] != ')')
-                    result[index++] = wrap(keys[k],'','','s');
+            var index = 0;
+            var spliteLine = line.split('/');
+            print(' --- groupKeys.spliteLine: ', spliteLine);
+            for(var i=0; i < spliteLine.length; i++){
+                var keys = spliteLine[i].match(FIND_KEYROW_REG);
+                if(keys){
+                    for(var k=0; k < keys.length; k++){
+                        print(' --- groupKeys.keys: ', keys[k]);
+                        if((keys[k] === 'b' && spliteLine[i].indexOf("b") == 1) || (keys[k] === '#' && spliteLine[i].indexOf("#") == 1)  ){
+                        //if((keys[k] === 'b') || (keys[k] === '#')  ){
+                            result[index-1].suffix = keys[k];     //+= keys[k];
+                        } else {     // if(keys[k] != '(' && keys[k] != ')')
+                            result[index++] = wrap(keys[k],'','','s');
+                        }
+                    }
                 }
             }
             if(parentheses){

@@ -7,11 +7,11 @@ var module = angular.module('webpoint.screen');
     module.controller('SlideShowCtrl', SlideShowCtrl);  // '$timeout'
     SlideShowCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', '$mdSidenav', '$log', 'cfgScreenPath', '$interval',
                       '$mdDialog', 'properties', 'ChangeKeyService', 'VyApi', 'localStorageService', 'PageService',
-                      'Access', 'CashService', 'RemoveKeyService', 'SectionCashService', 'BinaryApi', '$stomp'];
+                      'Access', 'CashService', 'RemoveKeyService', 'SectionCashService', 'BinaryApi', '$stomp', '$window'];
 
     function SlideShowCtrl ($scope, $routeParams, $location, $timeout, $mdSidenav, $log, cfgScreenPath, $interval,
                      $mdDialog, properties, ChangeKeyService, VyApi, localStorageService, PageService,
-                    Access, CashService, RemoveKeyService, SectionCashService, BinaryApi, $stomp) {
+                    Access, CashService, RemoveKeyService, SectionCashService, BinaryApi, $stomp, $window) {
 
         var vm = this;
 
@@ -77,6 +77,9 @@ var module = angular.module('webpoint.screen');
     	}
 
         function setFontSize(section,delimeter){
+            $log.debug('---------------setFontSize');
+            $log.debug($window.innerWidth);
+
             var len = 0;
             var lines = section.data.split(delimeter);
             lines.forEach(function(line) {
@@ -86,9 +89,13 @@ var module = angular.module('webpoint.screen');
                     //$log.debug(line);
                  }
             });
-            var size = (82 - len) / 10;
-            size = size < 3 ? 3:size;
+            $log.debug(len);
+            //var size = 17.2 + (Math.exp(len * 0.004) * -10.8);
+            var size = 7.1 + 0.0001 * (len*len) - 0.068 * len;
             $log.debug(size);
+            //size = size < 2 ? 2:size;
+            if(section.twoColumn){ size=3.1;}
+
             vm.fontSize = {"font-size" : size+"vw" };
         }
 
@@ -111,9 +118,12 @@ var module = angular.module('webpoint.screen');
                         pageList.pageParts[i].section.fdata += '<p>' + columns[0] + '</p>';
                         pageList.pageParts[i].section.fdata += '</div>';
 
+                        columns[1] = columns[1].substring(columns[1].indexOf("\n") + 1);
                         pageList.pageParts[i].section.fdata += '<div class="vyColumn">';
                         pageList.pageParts[i].section.fdata += '<p>' + columns[1] + '</p>';
                         pageList.pageParts[i].section.fdata += '</div>';
+                        pageList.pageParts[i].section.twoColumn = 'true';
+
                     }else{
                         pageList.pageParts[i].section.fdata = '<p>' + pageList.pageParts[i].section.data + '</p>';
                     }
@@ -127,14 +137,14 @@ var module = angular.module('webpoint.screen');
             $stomp.connect('/stomp', headers)
                 .then(function (frame) {
                     var subscription = $stomp.subscribe('/topic/'+$routeParams.pageListId, function (payload, headers, res) {
-//                        $log.debug(payload)
+                        //$log.debug(payload)
                         updateActiveSong(payload);
                     }, {'headers': 'are awesome' });
                });
         }
 
         function updateActiveSong(payload){
-            $log.debug(payload);
+            //$log.debug(payload);
             tmpSong = payload;
             tmpSong.active = true;
             if (tmpSong.refresh == 'true') {
@@ -170,7 +180,8 @@ var module = angular.module('webpoint.screen');
               if(document.getElementById("snackbar") != null){
                 document.getElementById("snackbar").className = "";
               }
-              vm.activeSong = tmpSong;
+              //vm.activeSong = tmpSong;
+              setActiveSong(tmpSong.section)
               $interval.cancel(oneTimer);
             }, 2000);
         }
