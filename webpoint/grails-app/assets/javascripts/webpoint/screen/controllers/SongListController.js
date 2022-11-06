@@ -116,16 +116,16 @@ var module = angular.module('webpoint.screen');
         }
 
         function removeToSongList(song){
-            var item;
+            var part;
             var index;
             for(var i=0; i < vm.selectedSongList.pageParts.length; i++){
-                item = vm.selectedSongList.pageParts[i];
-                if(song.id == item.section.id){
+                part = vm.selectedSongList.pageParts[i];
+                if(song.id == part.section.id){
                     index = i;
                     break;
                 }
             }
-            PageService.removeSectionInList(vm.selectedSongList.id, item).$promise
+            PageService.removeSectionInList(vm.selectedSongList.id, part).$promise
                 .then( function(resp) {
                     $log.debug(resp);
                     song.selected = false;

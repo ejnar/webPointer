@@ -36,7 +36,6 @@ class PageService {
 
     def PageList getPageList(id) {
         PageList pageList = PageList.findById(id);
-
         return getPageListByList(pageList);
     }
 
@@ -57,6 +56,24 @@ class PageService {
         pageList.pageParts.addAll(list.pageParts)
         pageList.test = true
         return pageList;
+    }
+
+    def  PageList sortPageList(PageListUtil pageList) {
+        log.debug ' --- Sort PageList - pageList: [{}]', pageList
+        if(pageList == null || pageList.parts == null || pageList.parts.empty)
+            return pageList;
+
+        PageList instance = PageList.findById(pageList.id);
+        log.debug ' PageList: [{}]', instance
+        List<PageItem> pageParts = new ArrayList()
+        for (key in pageList.parts) {
+            PageItem item = instance.getPageParts().find { it.key == key  }
+            pageParts.add(item);
+        }
+        instance.pageParts.clear()
+        instance.pageParts.addAll(pageParts)
+        instance.save flush: true;
+        return instance
     }
 
 

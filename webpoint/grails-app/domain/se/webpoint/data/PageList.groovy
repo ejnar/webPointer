@@ -44,6 +44,10 @@ class PageList extends BaseDomain {
         PageList.withCriteria { and { eq("name", name) inList('groups', group) } }[0]
     }
 
+    PageItem findPageParts(String key) {
+        pageParts.find {it -> it.key == key }
+    }
+
 
     static boolean removeByName(String n, boolean flush = false) {
         if (n == null) return false

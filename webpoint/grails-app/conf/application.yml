@@ -116,6 +116,16 @@ twitter:
     oauth:
       accesstoken: "${TWITTER_ACCESS_TOKEN}"
       accesstokensecret: "${TWITTER_ACCESS_TOKEN_SECRET}"
+
+#server:
+#  port: 8443
+#  ssl:
+#    enabled: true
+#    keyStore: ./certificates/keystore.p12
+#    #keyStore: /Users/sdelamo/git/grails-samples/grails-ssl/certificates/keystore.jks
+#    keyStorePassword: exportpassword
+#    keyStoreType: PKCS12
+#    keyAlias: undertow
 ---
 # YOUR_MAX_SIZE_IN_MB * 1024 * 1024 = BYTES
 #server:

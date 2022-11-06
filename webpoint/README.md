@@ -68,11 +68,16 @@ Description
 * clientRefresh: Refreshes client dependencies (if you add or modify your configuration)
 * clientClean: Removes client dependencies and clears the cache
 * clientReport: Prints a report of all dependencies and the resolved versions
+  
+https://github.com/craigburke/client-dependencies-gradle
 
 #### SDK
 Description   |  Command
 --- | --- 
 Update Grails  |   sdk list grails
+
+#### Gradle
+Use gradle version 3.5
 
 
 #### JBoss modifications
@@ -89,6 +94,7 @@ Add: src/main/webapp/WEB-INF/jboss-deployment-structure.xml
  - mongorestore
 
 mongodump --db database_name
+
 mongorestore --db database_name path_to_bson_file
 
 mongodump -h 127.0.0.1 -u user -p pass --db webpoint --port 00000 --out /Users/admin/dump/fold
@@ -156,3 +162,7 @@ npm install --package-lock
 
 #### Other
 https://www.desmos.com/calculator/onfy0dzx2o
+
+https://github.com/grails-samples/grails-ssl
+https://grails.org/blog/2017-06-28.html
+https://dominicmotuka.com/posts/mongodump-and-mongorestore-mongodb-database/

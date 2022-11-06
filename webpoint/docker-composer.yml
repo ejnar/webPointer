@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   mongo-db:
-    image: mongo
+    image: mongo:4
     container_name: webpoint
     ports:  # for demo/debug purpose only
       - 27017:27017

@@ -195,7 +195,7 @@ var module = angular.module('webpoint.user');
 		// Limit number for pagination size.
 		$scope.maxSize = 1000;
 		// Maximum number of items per page. A value less than one indicates all items on one page.
-		$scope.itemsPerPage = 20;
+		$scope.itemsPerPage = 40;
 		$scope.items = [];
 		$scope.groups = [];
 		$scope.predicate = 'title';

@@ -1,0 +1,34 @@
+<div layout="column" ng-cloak>
+	<div ng-include="'/webpoint/screen/menu.html'"></div>
+	<md-content layout-padding>
+		<md-subheader class="md-no-sticky">Page lists </md-subheader>
+		<form name="userForm">
+			<div layout="row">
+				<md-input-container flex-offset="10" flex="20" class="md-block">
+					<label>Name</label>
+					<input ng-model="vm.pageName"/>
+				</md-input-container>
+				<md-button ng-click="vm.update()" class="toggleSideNav" aria-label="List">
+					<div class="icon-wrapper">
+						<i class="material-icons md-20">update</i><p class="icon-text">Update</p>
+					</div>
+				</md-button>
+			</div>
+		</form>
+		<md-list layout="column">
+			<md-list-item ng-repeat="p in vm.list" class="sidenav-list-item" layout="row" layout-margin>
+				<div flex-offset="10" flex="50" class="mdl-list_item-primary-content"
+					 ng-click="vm.clickList($index)" >{{p.name}}
+					<md-divider flex-offset="10"></md-divider>
+				</div>
+			</md-list-item>
+		</md-list>
+
+		<md-button ng-click="vm.back()" class="toggleSideNav" aria-label="List">
+			<div class="icon-wrapper">
+				<i class="material-icons md-20">arrow_back</i><p class="icon-text">Back</p>
+			</div>
+		</md-button>
+	</md-content>
+	<div ng-include="'/webpoint/screen/footer.html'"></div>
+</div>

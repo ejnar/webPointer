@@ -1,0 +1,168 @@
+<div layout="column" ng-cloak>
+    <div id="snackbar">{{vm.activeSong.section.title}}</div>
+    <div id="wrap">
+        <div id='slideArrowLeft' class="sideLeftPageBtn" ng-click="vm.leftPage()"
+             ng-if="pageList.pageParts[vm.currentPart].section.binary.$$state.value.length > 0">
+            <i class="material-icons md-24">chevron_left</i>
+        </div>
+        <!-- div ng-if="pageList.pageParts[vm.currentPart].section.type == 'IMAGE'"
+             class="vyImgArea">
+            <img class="stretch" alt=""
+                 src="data:image/JPG;base64,{{pageList.pageParts[vm.currentPart].section.binary.$$state.value[vm.currentPage].base64}}">
+        </div -->
+        <div id='slideArrowRight' class="sideRightPageBtn" ng-click="vm.rightPage()"
+            ng-if="pageList.pageParts[vm.currentPart].section.binary.$$state.value.length > 0">
+            <i class="material-icons md-24">chevron_right</i>
+        </div>
+        <div id='slideTextFrame' ng-if="pageList.pageParts[vm.currentPart].section.type == 'TEXT'
+                            || pageList.pageParts[vm.currentPart].section.type == 'TEXTCHORDS'"
+             class="vyMainArea"  ng-class="vm.fontSize" layout="row"
+             ng-click="vm.closeSidenav('sidenav-right_1')"
+             ng-bind-html="pageList.pageParts[vm.currentPart].section.fdata" >
+        </div>
+    </div>
+    <div id='menuXsLeft' hide-xs class="menuToggleLeftSideNav" ng-click="vm.toggle(1,2)">
+        <i class="material-icons md-22">menu</i>
+    </div>
+    <div id='slideXsArrowLeft' hide-xs class="sideLeftBtn sideBtn" ng-click="vm.left()" keyleft>
+        <i class="material-icons middleLeft md-48">chevron_left</i>
+    </div>
+    <div id='menuToggle' class="menuToggleSideNav" ng-click="vm.toggle(1,2)" aria-label="List">
+        <i class="material-icons md-28">menu</i>
+    </div>
+    <div id='slideXsArrowRight' hide-xs class="sideRightBtn sideBtn" ng-click="vm.right()" keyright>
+        <i class="material-icons middleRight md-48">chevron_right</i>
+    </div>
+    <div>
+        <md-sidenav class="md-sidenav-right"
+                    md-component-id="sidenav-right_1"
+                    md-whiteframe="10">
+            <md-content>
+                <div layout="row">
+                    <md-button href="#songList" class="md-primary" flex="70" layout="column">
+                        <div class="icon-wrapper"><p class="icon-text md-20">Song List</p></div>
+                    </md-button>
+                    <md-button class="md-primary" ng-click="vm.closeSidenav('sidenav-right_1')" layout="column">
+                        <div class="icon-wrapper"><i class="material-icons md-20">close</i></div>
+                    </md-button>
+                </div>
+                <md-divider></md-divider>
+                <md-list layout="column">
+                    <md-list-item ng-repeat="p in pageList.pageParts" ng-click="vm.clickLNavList($index)"
+                                  class="sidenav-list-item" layout="row" >
+                        {{p.section.title}}
+                        <md-divider></md-divider>
+                    </md-list-item>
+                </md-list>
+                <md-button hide-xs ng-click="vm.toggle(2,1)"  class="toggleSideNav" aria-label="List">
+                    <div class="icon-wrapper">
+                        <i class="material-icons md-20">settings</i><p class="icon-text">Edit list</p>
+                    </div>
+                </md-button>
+                <md-button ng-click="vm.toggle(3,1)"  class="toggleSideNav" aria-label="List">
+                    <div class="icon-wrapper">
+                        <i class="material-icons md-20">settings</i><p class="icon-text">Settings</p>
+                    </div>
+                </md-button>
+            </md-content>
+        </md-sidenav>
+
+        <md-sidenav class="md-sidenav-right right-edit"
+                    md-component-id="sidenav-right_2"
+                    md-whiteframe="10">
+            <md-content>
+                <div layout="row">
+                    <md-button href="#songList" class="md-primary" flex="75" layout="column">
+                        <div class="icon-wrapper"><p class="icon-text md-20">Song List</p></div>
+                    </md-button>
+                    <md-button flex="25" class="md-primary" ng-click="vm.closeSidenav('sidenav-right_2')" layout="column">
+                        <div class="icon-wrapper"><i class="material-icons md-22">close</i></div>
+                    </md-button>
+                </div>
+                <md-divider></md-divider>
+                <md-list layout="column">
+                    <md-list-item ng-repeat="p in pageList.pageParts" class="sidenav-list-item" layout="row">
+                        <span ng-click="vm.clickLNavList($index)"
+                              class="mdl-list_item-primary-content" flex="55">
+                            {{p.section.title}}
+                            <md-divider></md-divider>
+                        </span>
+                        <span ng-click="vm.moveUpward($index)" flex="15"
+                              class="mdl-list_item-secondary-action">
+                            <i ng-if="$index > 0" class="material-icons md-22">arrow_upward</i>
+                        </span>
+                        <span ng-click="vm.moveLast($index)" flex="20"
+                              class="mdl-list_item-secondary-action">
+                            <i ng-if="$index < (vm.totalPart - 1)" class="material-icons md-22">arrow_downward</i>
+                        </span>
+                        <span ng-click="vm.removeSong($index)" flex="10"
+                              class="mdl-list_item-secondary-action">
+                            <i class="material-icons md-20">delete</i>
+                        </span>
+                    </md-list-item>
+                </md-list>
+                <md-button ng-click="vm.closeUpdateList()" class="toggleSideNav" aria-label="List">
+                    <div class="icon-wrapper">
+                        <i class="material-icons md-20">menu</i><p class="icon-text">Back</p>
+                    </div>
+                </md-button>
+            </md-content>
+        </md-sidenav>
+
+        <md-sidenav class="md-sidenav-right"
+                    md-component-id="sidenav-right_3"
+                    md-whiteframe="10">
+            <md-content>
+                <md-button ng-click="vm.goBack()" class="md-primary">
+                    <div class="icon-wrapper">
+                        <i class="material-icons md-20">view_list</i><p class="icon-text">Back to list</p>
+                    </div>
+                </md-button>
+                <md-button ng-click="vm.closeSidenav('sidenav-right_3')" class="md-primary float-right">
+                    <div class="icon-wrapper"><i class="material-icons md-22">close</i></div>
+                </md-button>
+                <md-divider></md-divider>
+                <md-input-container class="md-title">
+                    <label>Text size:</label>
+                    <md-select md-selected-text="vm.changeSize()" ng-model="vm.selectedSize"
+                               class="md-no-underline md-select">
+                        <md-option ng-repeat="size in [0,1,2,3]" ng-value="size">Size {{size}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-divider></md-divider>
+                <md-input-container class="md-title">
+                    <label>Key:</label>
+                    <md-select ng-model="vm.selectedKey" md-selected-text="vm.getSelectedKey()"
+                               class="md-no-underline md-select">
+                        <md-optgroup>
+                            <md-option ng-value="key" ng-repeat="key in vm.keys">{{key}}</md-option>
+                        </md-optgroup>
+                    </md-select>
+                </md-input-container>
+                <md-button ng-click="vm.changeKey()">
+                    <div class="icon-wrapper">
+                        <i class="material-icons md-20">straighten</i><p class="icon-text">Change key</p>
+                    </div>
+                </md-button>
+                <md-divider ></md-divider>
+                <md-button ng-click="vm.print()">
+                    <div class="icon-wrapper">
+                        <i class="material-icons md-20">local_printshop</i><p class="icon-text">Print current</p>
+                    </div>
+                </md-button>
+                <md-divider ></md-divider>
+                <md-button ng-click="vm.cleanCash()">
+                    <div class="icon-wrapper">
+                        <i class="material-icons md-20">cached</i><p class="icon-text">Clean cash</p>
+                    </div>
+                </md-button>
+                <md-divider ></md-divider>
+                <md-button ng-click="vm.toggle(1,3)" class="toggleSideNav" aria-label="List">
+                    <div class="icon-wrapper">
+                        <i class="material-icons md-20">menu</i><p class="icon-text">Back</p>
+                    </div>
+                </md-button>
+            </md-content>
+        </md-sidenav>
+    </div>
+</div>

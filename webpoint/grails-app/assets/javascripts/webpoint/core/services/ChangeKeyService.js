@@ -288,13 +288,18 @@ var app = angular.module('webpoint.core');
         }
 
         function getIndexValue(keyArr,tokey,index,keydiff){
-            // print(' - getIndexValue.arr: ', arr);
-            // print(' - getIndexValue.cross: ', cross);
+            //print(' - getIndexValue.keyArr: ', keyArr);
+            //print(' - getIndexValue.tokey: ', tokey);
+            //print(' - getIndexValue.index: ', index);
+            //print(' - getIndexValue.keydiff: ', keydiff);
             var newKeyindex = newIndex(index,keydiff);
             var key = keyArr[newKeyindex];
             var cross = getKeyType(tokey);
             var sA = key.split(':');
-            if(sA.length > 1){
+            print(' - getIndexValue.key: ', key);
+            if(key.match(tokey)){
+                return tokey;
+            } else if(sA.length > 1){
                 return cross ? sA[0] : sA[1];
             }
             else { return sA[0];}

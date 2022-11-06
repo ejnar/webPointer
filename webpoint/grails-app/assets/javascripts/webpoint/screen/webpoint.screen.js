@@ -15,14 +15,15 @@ var app = angular.module("webpoint.screen", ['webpoint.core', 'ngMaterial', 'ngA
 app.constant(
 		'cfgScreenPath', {
 			SCREEN:  '/screen/',
-			pagelist:  '/pagelist',
+			PAGELIST:  '/pagelist',
 			print:  '/print',
             VY:  '/vy/',
             SONGLIST:  '/songList',
             SONG: '/song/',
             ABOUT: '/about',
             ADDPASS: '/pass/',
-            SLIDESHOW: '/slideshow/'
+            SLIDESHOW: '/slideshow/',
+            PAGELISTS: '/pagetLists'
 		});
 
 app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 'CONFIG',
@@ -35,12 +36,12 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
         		controller: 'LoginController as vm'
         	}).
             when( cfgScreenPath.SCREEN  + ':pageListId', {
-                templateUrl: '/webpoint/screen/vy.html',
-                controller: 'VyCtrl'
+                templateUrl: '/webpoint/screen/screen.html',
+                controller: 'ScreenCtrl as vm'
             }).
             when( cfgScreenPath.SCREEN  + ':pageListId/:withoutkeys', {
-                templateUrl: '/webpoint/screen/vy.html',
-                controller: 'VyCtrl'
+                templateUrl: '/webpoint/screen/screen.html',
+                controller: 'ScreenCtrl as vm'
             }).
             when( cfgScreenPath.SLIDESHOW  + ':pageListId', {
                 templateUrl: '/webpoint/screen/slideshow.html',
@@ -51,10 +52,10 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
                 controller: 'SlideShowCtrl as vm'
             }).
             when( cfgScreenPath.VY  + ':group/:pages', {
-                templateUrl: '/webpoint/screen/vy.html',
-                controller: 'VyCtrl'
+                templateUrl: '/webpoint/screen/screen.html',
+                controller: 'ScreenCtrl as vm'
             }).
-            when( cfgScreenPath.pagelist, {
+            when( cfgScreenPath.PAGELIST, {
                 templateUrl: '/webpoint/screen/list.html',
                 controller: 'MainViewListCtrl as mainViewList',
                 requireAuth: true,
@@ -74,14 +75,18 @@ app.config(['$routeProvider', '$httpProvider', '$logProvider', 'cfgScreenPath', 
 //            }).
             when( cfgScreenPath.ABOUT, {
                 templateUrl: '/webpoint/screen/about.html',
-                controller: 'MenuCtrl'
+                controller: 'MenuCtrl as vm'
             }).
             when( cfgScreenPath.ADDPASS  + ':token', {
                 templateUrl: '/webpoint/screen/addpass.html',
                 controller: 'AddPassCtrl as vm'
             }).
+            when( cfgScreenPath.PAGELISTS , {
+                templateUrl: '/webpoint/screen/pageLists.html',
+                controller: 'PageListsCtrl as vm'
+            }).
             otherwise({
-                redirectTo: cfgScreenPath.pagelist
+                redirectTo: cfgScreenPath.PAGELIST
             });
 
         $logProvider.debugEnabled(CONFIG.DEBUG_LOG);

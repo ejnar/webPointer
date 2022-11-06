@@ -1,6 +1,6 @@
 <div layout="column" ng-cloak>
+    <div ng-include="'/webpoint/screen/menu.html'"></div>
     <md-content>
-        <div ng-include="'/webpoint/screen/menu.html'"></div>
         <md-list>
             <md-subheader class="md-no-sticky">List of songs collections
                 <span flex-offset="0" flex-offset-gt-xs="5">
@@ -8,7 +8,6 @@
                 </span>
             </md-subheader>
             <div ng-repeat="p in items">
-
                 <div layout="row"  layout-margin>
                     <div flex="5" flex-offset="5" >
                         <a href class="expandSign" ng-if="p.expanded" ng-click="mainViewList.clickExpand(p)">-</a>
@@ -18,7 +17,7 @@
 
                     <div flex="20" flex class="rowPart" md-position-mode = "target-right target"
                          ng-click="mainViewList.gotoSlideShow(p.id)">
-                        <md-icon md-menu-align-target class="material-icons">slideshow</md-icon>
+                        <md-icon md-menu-align-target class="material-icons">slideshow</md-icon> Musician
                     </div>
                     <div flex="20" flex class="rowPart" md-position-mode = "target-right target"
                          ng-click="mainViewList.gotoSlideShowExludeKeys(p.id)">
@@ -28,7 +27,6 @@
                          ng-click="mainViewList.updateSlideShowList(p.id)" ng-if="mainViewList.isAdmin">
                         <md-icon md-menu-align-target class="material-icons">slideshow</md-icon> Update
                     </div>
-
                 </div>
                 <div flex-offset="5" ng-if="p.expanded" >
                     <div ng-repeat="part in p.pageParts">&nbsp;&nbsp;&bull;&nbsp;{{part.section.title}}</div>
@@ -36,7 +34,6 @@
                 <md-divider ></md-divider>
             </div>
         </md-list>
-
     </md-content>
     <div ng-include="'/webpoint/screen/footer.html'"></div>
 </div>

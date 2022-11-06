@@ -38,6 +38,8 @@ class UrlMappings {
 
         "/api/guest/$action/$value?"(controller: "PasswordToken" )
 
+        "/api/pagelistutil/$action/$value?"(controller: "PageListUtil" )
+
         "/api/sections"(resources:"Section")
         "/api/sections/upload/$id"(controller: "Section", action: "upload")
         "/api/binarydoc"(resources:"BinaryDoc")

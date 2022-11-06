@@ -99,11 +99,22 @@ class BootStrap {
         cashUpdate.values = [true, new Date()];
         cashUpdate.save(flush: true, failOnError: true);
 
+        Role roleSysAdmin = Role.findByAuthority("SYS_ROLE_ADMIN") ?: new Role(authority: "SYS_ROLE_ADMIN", system: true, order: 0).save(flush: true, failOnError: true)
+        Role roleAdmin = Role.findByAuthority("ROLE_ADMIN") ?: new Role(authority: "ROLE_ADMIN", system: false, order: 1).save(flush: true, failOnError: true)
+        Role roleView = Role.findByAuthority("ROLE_VIEW") ?: new Role(authority: "ROLE_VIEW", system: false, order: 5).save(flush: true, failOnError: true)
+        Role.findByAuthority("ROLE_USER") ?: new Role(authority: "ROLE_USER", system: false, order: 3).save(flush: true, failOnError: true)
+        Role.findByAuthority("ROLE_CLIENT") ?: new Role(authority: "ROLE_CLIENT", system: false, order: 4).save(flush: true, failOnError: true)
+
         if (Environment.current == Environment.DEVELOPMENT) {
 
             RoleGroup groupSysAdmin = RoleGroup.findByName("SYS_GROUP_ADMIN") ?: new RoleGroup(name: "SYS_GROUP_ADMIN", system: true).save(flush: true, failOnError: true)
             RoleGroup groupAdmin = RoleGroup.findByName("GROUP_ADMIN") ?: new RoleGroup(name: "GROUP_ADMIN", system: false).save(flush: true, failOnError: true)
             RoleGroup groupPingst = RoleGroup.findByName("GROUP_PINGST_TRELLEBORG") ?: new RoleGroup(name: "GROUP_PINGST_TRELLEBORG", system: false).save(flush: true, failOnError: true)
+
+            RoleGroupRole.get(groupSysAdmin.id, roleSysAdmin.id) ?: RoleGroupRole.create(groupSysAdmin, roleSysAdmin, true)
+            RoleGroupRole.get(groupAdmin.id, roleAdmin.id) ?: RoleGroupRole.create(groupAdmin, roleAdmin, true)
+            RoleGroupRole.get(groupAdmin.id, roleView.id) ?: RoleGroupRole.create(groupAdmin, roleView, true)
+            RoleGroupRole.get(groupPingst.id, roleView.id) ?: RoleGroupRole.create(groupPingst, roleView, true)
 
             User admin = User.findByUsername("super") ?: new User(username: 'super', password: '123', email: 'eaakerman@gmail.com').save(flush: true, failOnError: true)
             admin.password = "super"
@@ -113,16 +124,17 @@ class BootStrap {
             admin.accountLocked = false
             admin.passwordExpired = false
             admin.save(flush: true, failOnError: true)
+
             UserRoleGroup.get(admin.id, groupSysAdmin.id) ?: UserRoleGroup.create(admin, groupSysAdmin, true)
             UserRoleGroup.get(admin.id, groupAdmin.id) ?: UserRoleGroup.create(admin, groupAdmin, true)
             UserRoleGroup.get(admin.id, groupPingst.id) ?: UserRoleGroup.create(admin, groupPingst, true)
 
 
-            User user = User.findByUsername("user")
-            user.password = "user"
-            user.encodePassword
-            user.enabled = true
-            user.save(flush: true, failOnError: true)
+//            User user = User.findByUsername("user")
+//            user.password = "user"
+//            user.encodePassword
+//            user.enabled = true
+//            user.save(flush: true, failOnError: true)
         }
         if (Environment.current == Environment.PRODUCTION) {
             // insert Production environment specific code here
